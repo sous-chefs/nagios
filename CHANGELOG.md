@@ -1,3 +1,8 @@
+## v1.2.4:
+
+* [COOK-1119] - attributes for command_timeout / dont_blame_nrpe options
+* [COOK-1120] - allow monitoring from servers in multiple chef_environments
+
 ## v1.2.2:
 
 * [COOK-991] - NRPE LWRP No Longer Requires a Template
