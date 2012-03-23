@@ -1,0 +1,37 @@
+server {
+
+  listen <%= @listen_port %>;
+
+<% if @https %>
+  ssl on;
+  ssl_certificate <%= @cert_file %>;
+  ssl_certificate_key <%= @cert_key %>;
+  ssl_ciphers HIGH;
+  ssl_protocols SSLv3 TLSv1;
+  ssl_prefer_server_ciphers on;
+<% end %>
+
+<%= 
+cgi_dispatch(
+  :custom => %q(
+    fastcgi_param AUTH_USER $remote_user;
+    fastcgi_param REMOTE_USER $remote_user;
+  )
+)
+%>
+
+  location /nagios3/stylesheets {
+    alias /etc/nagios3/stylesheets;
+  }
+
+  location /nagios3 {
+    alias <%= @docroot %>;
+  }
+
+  location / {
+    auth_basic "Nagios Server";
+    auth_basic_user_file /etc/nagios3/htpasswd.users;
+    root <%= @docroot %>;
+  }
+
+}
