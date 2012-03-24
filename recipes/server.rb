@@ -24,13 +24,19 @@
 include_recipe "nagios::server_#{node['nagios']['server']['install_method']}"
 web_srv = node['nagios']['web_server'].to_sym
 
+
+
 case web_srv
 when :nginx
   Chef::Log.info "Setting up nagios server via NGINX"
   include_recipe 'nagios::nginx'
+  web_user = node[:nginx][:user]
+  web_group = node[:nginx][:group] || web_user
 when :apache
   Chef::Log.info "Setting up nagios server via Apache2"
   include_recipe 'nagios::apache'
+  web_user = node[:apache][:user]
+  web_group = node[:apache][:group] || web_user
 else
   Chef::Log.fatal("Unknown web server option provided for nagios server: " <<
     "#{node['nagios']['web_server']} provided. Allowed: :nginx or :apache"
@@ -51,7 +57,7 @@ else
   template "#{node['nagios']['conf_dir']}/htpasswd.users" do
     source "htpasswd.users.erb"
     owner node['nagios']['user']
-    group web_srv == :apache ? node['apache']['user'] : node['nginx']['user']
+    group web_group
     mode 0640
     variables(
       :sysadmins => sysadmins
@@ -130,13 +136,9 @@ execute "archive-default-nagios-object-definitions" do
   not_if { Dir.glob("#{node['nagios']['config_dir']}/*_nagios*.cfg").empty? }
 end
 
-file "#{node['apache']['dir']}/conf.d/nagios3.conf" do
-  action :delete
-end
-
 directory "#{node['nagios']['conf_dir']}/certificates" do
-  owner node['apache']['user']
-  group node['apache']['user']
+  owner web_user
+  group web_group
   mode "700"
 end
 
