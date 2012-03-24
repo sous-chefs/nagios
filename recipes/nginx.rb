@@ -2,6 +2,7 @@ include_recipe "nginx"
 
 nginx_site "default" do
   enable false
+  notifies :reload, "service[nginx]"
 end
 
 if node['public_domain']
@@ -25,15 +26,20 @@ template File.join(node['nginx']['dir'], *%w(sites-available nagios3.conf)) do
     :cert_file => pem,
     :cert_key => pem,
     :docroot => node['nagios']['docroot'],
+    :log_dir => node['nagios']['log_dir'],
+    :fqdn => node['fqdn'],
+    :chef_env =>  node.chef_environment == '_default' ? 'default' : node.chef_environment,
     :htpasswd_file => File.join(
       node['nagios']['conf_dir'],
       'htpasswd.users'
     )
   )
   if(File.symlink?(File.join(node['nginx']['dir'], 'sites-enabled', 'nagios3.conf')))
-    notifies :reload, 'service[nginx]'
+    notifies :reload, 'service[nginx]', :immediately
   end
 end
 
-nginx_site "nagios3.conf"
+nginx_site "nagios3.conf" do
+  notifies :reload, "service[nginx]"
+end
 
