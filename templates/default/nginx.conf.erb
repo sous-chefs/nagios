@@ -1,6 +1,9 @@
 server {
 
   listen <%= @listen_port %>;
+  server_name nagios nagios.<%= @chef_env %>.<%= @public_domain %> <%= @fqdn %>;
+  access_log <%= File.join(@log_dir, 'nginx_access.log') %>;
+  error_log <%= File.join(@log_dir, 'nginx_error.log') %>;
 
 <% if @https %>
   ssl on;
@@ -11,8 +14,20 @@ server {
   ssl_prefer_server_ciphers on;
 <% end %>
 
+<% if @cgi %>
 <%= 
 cgi_dispatch(
+  :custom => %q(
+    fastcgi_param AUTH_USER $remote_user;
+    fastcgi_param REMOTE_USER $remote_user;
+  )
+)
+%>
+<% end %>
+
+<% if @php %>
+<%=
+php_dispatch(
   :custom => %q(
     fastcgi_param AUTH_USER $remote_user;
     fastcgi_param REMOTE_USER $remote_user;
