@@ -16,7 +16,7 @@ server {
 
 <% if @cgi %>
 <%= 
-cgi_dispatch(
+dispatch(:cgi,
   :custom => %q(
     fastcgi_param AUTH_USER $remote_user;
     fastcgi_param REMOTE_USER $remote_user;
@@ -27,13 +27,14 @@ cgi_dispatch(
 
 <% if @php %>
 <%=
-php_dispatch(
+dispatch(:php,
   :custom => %q(
     fastcgi_param AUTH_USER $remote_user;
     fastcgi_param REMOTE_USER $remote_user;
   )
 )
 %>
+<% end %>
 
   location /nagios3/stylesheets {
     alias /etc/nagios3/stylesheets;
@@ -45,7 +46,7 @@ php_dispatch(
 
   location / {
     auth_basic "Nagios Server";
-    auth_basic_user_file /etc/nagios3/htpasswd.users;
+    auth_basic_user_file <%= @htpasswd_file %>;
     root <%= @docroot %>;
   }
 
