@@ -21,10 +21,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-include_recipe "nagios::server_#{node['nagios']['server']['install_method']}"
 web_srv = node['nagios']['web_server'].to_sym
-
-
 
 case web_srv
 when :nginx
@@ -44,6 +41,7 @@ else
   raise 'Unknown web server option provided for nagios server'
 end
 
+include_recipe "nagios::server_#{node['nagios']['server']['install_method']}"
 sysadmins = search(:users, 'groups:sysadmin')
 
 case node['nagios']['server_auth_method']
@@ -64,8 +62,6 @@ else
     )
   end
 end
-
-include_recipe "nagios::client"
 
 sysadmins = search(:users, 'groups:sysadmin')
 
@@ -127,7 +123,7 @@ end
 
 directory "#{node['nagios']['state_dir']}/rw" do
   owner node['nagios']['user']
-  group node['apache']['user']
+  group web_group
   mode "2710"
 end
 
