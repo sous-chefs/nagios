@@ -1,6 +1,6 @@
 include_recipe "nginx"
 
-nginx_site "default" do
+nginx_site "000-default" do
   enable false
   notifies :reload, "service[nginx]"
 end
