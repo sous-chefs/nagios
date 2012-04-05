@@ -183,6 +183,39 @@ Installs and configures pagerduty plugin for nagios.  You need to set a `node['n
 
 This recipe was written based on the [Nagios Integration Guide](http://www.pagerduty.com/docs/guides/nagios-integration-guide) from PagerDuty which explains how to get an API key for your nagios server.
 
+email notifications
+--------------
+
+You need to set `default['nagios']['notifications_enabled'] = 1` attribute on your nagios server to enable email notifications.
+
+For email notifications to work an appropriate mail program package and local MTA need to be installed so that /usr/bin/mail or /bin/mail is available on the system. 
+
+Example:
+
+Include [postfix cookbook](https://github.com/opscode-cookbooks/postfix) to be installed on your nagios server node.
+
+Add override_attributes to your `monitoring` role:
+
+    % cat roles/monitoring.rb
+
+    name "monitoring"
+    description "Monitoring Server"
+    run_list(
+      "recipe[nagios::server]",
+      "recipe[postfix]"
+    )
+
+    override_attributes(
+      "nagios" => { "notifications_enabled" => "1" },
+      "postfix" => { "myhostname":"your_hostname", "mydomain":"example.com" }
+    )
+
+    default_attributes(
+      "nagios" => { "server_auth_method" => "htauth" }
+    )
+
+    % knife role from file monitoring.rb
+
 Data Bags
 =========
 
