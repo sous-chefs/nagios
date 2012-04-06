@@ -1,3 +1,7 @@
+## v1.2.6:
+
+* [COOK-860] - set mail command with an attribute by platform
+
 ## v1.2.4:
 
 * [COOK-1119] - attributes for command_timeout / dont_blame_nrpe options
