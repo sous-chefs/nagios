@@ -1,8 +1,10 @@
 include_recipe "nginx"
 
-nginx_site "000-default" do
-  enable false
-  notifies :reload, "service[nginx]"
+%w(default 000-default).each do |disable_site|
+  nginx_site disable_site do
+    enable false
+    notifies :reload, "service[nginx]"
+  end
 end
 
 if node['public_domain']
