@@ -13,7 +13,18 @@ else
   public_domain = node['domain']
 end
 
-template File.join(node['nginx']['dir'], *%w(sites-available nagios3.conf)) do
+case dispatch_type = node['nagios']['nginx_dispatch'].to_sym
+when :cgi
+  node.set[:nginx_simplecgi][:cgi] = true
+  include_recipe 'nginx_simplecgi::setup'
+when :php
+  node.set[:nginx_simplecgi][:php] = true
+  include_recipe 'nginx_simplecgi::setup'
+else
+  Chef::Log.warn "NAGIOS: NGINX setup does not have a dispatcher provided"
+end
+
+template File.join(node['nginx']['dir'], 'sites-available', 'nagios3.conf') do
   source 'nginx.conf.erb'
   mode 0644
   pem = File.join(
@@ -34,7 +45,9 @@ template File.join(node['nginx']['dir'], *%w(sites-available nagios3.conf)) do
     :htpasswd_file => File.join(
       node['nagios']['conf_dir'],
       'htpasswd.users'
-    )
+    ),
+    :cgi => dispatch_type == :cgi,
+    :php => dispatch_type == :php
   )
   if(File.symlink?(File.join(node['nginx']['dir'], 'sites-enabled', 'nagios3.conf')))
     notifies :reload, 'service[nginx]', :immediately
