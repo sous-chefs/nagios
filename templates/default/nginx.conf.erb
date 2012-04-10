@@ -16,7 +16,7 @@ server {
 
 <% if @cgi %>
 <%= 
-dispatch(:cgi,
+nginx_dispatch(:cgi,
   :custom => %q(
     fastcgi_param AUTH_USER $remote_user;
     fastcgi_param REMOTE_USER $remote_user;
@@ -27,7 +27,7 @@ dispatch(:cgi,
 
 <% if @php %>
 <%=
-dispatch(:php,
+nginx_dispatch(:php,
   :custom => %q(
     fastcgi_param AUTH_USER $remote_user;
     fastcgi_param REMOTE_USER $remote_user;
