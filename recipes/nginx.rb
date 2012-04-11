@@ -1,3 +1,7 @@
+service 'apache2' do
+  action :stop
+end
+
 include_recipe "nginx"
 
 %w(default 000-default).each do |disable_site|
