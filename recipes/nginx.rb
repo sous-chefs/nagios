@@ -53,7 +53,7 @@ template File.join(node['nginx']['dir'], 'sites-available', 'nagios3.conf') do
     :cgi => dispatch_type == :cgi,
     :php => dispatch_type == :php
   )
-  if(File.symlink?(File.join(node['nginx']['dir'], 'sites-enabled', 'nagios3.conf')))
+  if(::File.symlink?(File.join(node['nginx']['dir'], 'sites-enabled', 'nagios3.conf')))
     notifies :reload, 'service[nginx]', :immediately
   end
 end
