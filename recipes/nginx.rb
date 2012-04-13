@@ -2,6 +2,19 @@ service 'apache2' do
   action :stop
 end
 
+
+via_pkg = value_for_platform(
+  %w(centos redhat scientific fedora) => {
+    %w(5.0 5.1 5.2 5.3 5.4 5.5 5.6 5.7 5.8) => false,
+    "default" => true
+  },
+  "default" => true
+)
+
+unless(via_pkg)
+  node.set[:nginx][:install_method] = 'source'
+  node.set['nagios']['nginx_dispatch'] = :both
+end
 include_recipe "nginx"
 
 %w(default 000-default).each do |disable_site|
@@ -23,6 +36,10 @@ when :cgi
   include_recipe 'nginx_simplecgi::setup'
 when :php
   node.set[:nginx_simplecgi][:php] = true
+  include_recipe 'nginx_simplecgi::setup'
+when :both
+  node.set[:nginx_simplecgi][:php] = true
+  node.set[:nginx_simplecgi][:cgi] = true
   include_recipe 'nginx_simplecgi::setup'
 else
   Chef::Log.warn "NAGIOS: NGINX setup does not have a dispatcher provided"
@@ -50,8 +67,8 @@ template File.join(node['nginx']['dir'], 'sites-available', 'nagios3.conf') do
       node['nagios']['conf_dir'],
       'htpasswd.users'
     ),
-    :cgi => dispatch_type == :cgi,
-    :php => dispatch_type == :php
+    :cgi => [:cgi, :both].include?(dispatch_type.to_sym),
+    :php => [:php, :both].include?(dispatch_type.to_sym)
   )
   if(::File.symlink?(File.join(node['nginx']['dir'], 'sites-enabled', 'nagios3.conf')))
     notifies :reload, 'service[nginx]', :immediately
