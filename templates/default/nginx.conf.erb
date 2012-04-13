@@ -4,6 +4,8 @@ server {
   server_name nagios nagios.<%= @chef_env %>.<%= @public_domain %> <%= @fqdn %>;
   access_log <%= File.join(@log_dir, 'nginx_access.log') %>;
   error_log <%= File.join(@log_dir, 'nginx_error.log') %>;
+  root <%= @docroot %>;
+  index index.php index.html index.cgi;
 
 <% if @https %>
   ssl on;
@@ -28,6 +30,7 @@ nginx_dispatch(:cgi,
 <% if @php %>
 <%=
 nginx_dispatch(:php,
+  :docroot => @docroot,
   :custom => %q(
     fastcgi_param AUTH_USER $remote_user;
     fastcgi_param REMOTE_USER $remote_user;
