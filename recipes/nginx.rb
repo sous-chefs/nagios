@@ -1,5 +1,8 @@
-service 'apache2' do
-  action :stop
+
+if(node[:nagios][:server][:stop_apache])
+  service 'apache2' do
+    action :stop
+  end
 end
 
 

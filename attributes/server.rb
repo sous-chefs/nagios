@@ -84,3 +84,4 @@ default['nagios']['default_service']['notification_interval'] = 1200
 
 default['nagios']['web_server'] = :apache
 default['nagios']['nginx_dispatch'] = :cgi
+default['nagios']['server']['stop_apache'] = false
