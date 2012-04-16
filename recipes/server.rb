@@ -21,7 +21,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-web_srv = node['nagios']['web_server'].to_sym
+web_srv = node['nagios']['server']['web_server'].to_sym
 
 case web_srv
 when :nginx
@@ -36,7 +36,7 @@ when :apache
   web_group = node[:apache][:group] || web_user
 else
   Chef::Log.fatal("Unknown web server option provided for nagios server: " <<
-    "#{node['nagios']['web_server']} provided. Allowed: :nginx or :apache"
+    "#{node['nagios']['server']['web_server']} provided. Allowed: :nginx or :apache"
   )
   raise 'Unknown web server option provided for nagios server'
 end

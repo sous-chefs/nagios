@@ -15,10 +15,10 @@ via_pkg = value_for_platform(
 )
 
 if(via_pkg.nil?)
-  node.set['nagios']['nginx_dispatch'] = :both
+  node.set['nagios']['server']['nginx_dispatch'] = :both
 elsif(via_pkg == false)
   node.set[:nginx][:install_method] = 'source'
-  node.set['nagios']['nginx_dispatch'] = :both
+  node.set['nagios']['server']['nginx_dispatch'] = :both
 end
 include_recipe "nginx"
 
@@ -35,7 +35,7 @@ else
   public_domain = node['domain']
 end
 
-case dispatch_type = node['nagios']['nginx_dispatch'].to_sym
+case dispatch_type = node['nagios']['server']['nginx_dispatch'].to_sym
 when :cgi
   node.set[:nginx_simplecgi][:cgi] = true
   include_recipe 'nginx_simplecgi::setup'

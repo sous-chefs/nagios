@@ -25,7 +25,7 @@ include_recipe "nagios::client_source"
 include_recipe "php"
 include_recipe "php::module_gd"
 
-web_srv = node['nagios']['web_server'].to_sym
+web_srv = node['nagios']['server']['web_server'].to_sym
 
 case web_srv
 when :apache
