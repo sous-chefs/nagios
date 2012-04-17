@@ -45,7 +45,7 @@ case "$1" in
   stop)
   # Stop daemons.
   echo -n "Shutting down nagios-nrpe-server: "
-  killproc nagios-nrpe-server
+  killproc nrpe
   echo
   rm -f $LockFile
   ;;
@@ -54,7 +54,7 @@ case "$1" in
   $0 start
   ;;
   status)
-  status nagios-nrpe-server
+  status nrpe
   ;;
   *)
   echo "Usage: nagios-nrpe-server {start|stop|restart|status}"
