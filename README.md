@@ -33,6 +33,8 @@ Cookbooks
 * apache2
 * build-essential
 * php
+* nginx
+* nginx_simplecgi
 
 Attributes
 ==========
@@ -76,6 +78,9 @@ Default directory locations are based on FHS. Change to suit your preferences.
 
 * `node['nagios']['server']['install_method']` - whether to install from package or source. Default chosen by platform based on known packages available for Nagios 3: debian/ubuntu 'package', redhat/centos/fedora/scientific: source
 * `node['nagios']['server']['service_name']` - name of the service used for nagios, default chosen by platform, debian/ubuntu "nagios3", redhat family "nagios", all others, "nagios"
+* `node['nagios']['server']['web_server']` - web server to use. supports apache or nginx, default "nginx"
+* `node['nagios']['server']['nginx_dispatch']` - nginx dispatch method. support cgi or php, default "cgi"
+* `node['nagios']['server']['stop_apache']` - stop apache service if using nginx, default false
 * `node['nagios']['home']` - nagios main home directory, default "/usr/lib/nagios3"
 * `node['nagios']['conf_dir']` - location where main nagios config lives, default "/etc/nagios3"
 * `node['nagios']['config_dir']` - location where included configuration files live, default "/etc/nagios3/conf.d"
