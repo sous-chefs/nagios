@@ -25,3 +25,5 @@
 }.each do |pkg|
   package pkg
 end
+
+include_recipe "nagios::client"
