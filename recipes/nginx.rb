@@ -52,7 +52,7 @@ end
 
 template File.join(node['nginx']['dir'], 'sites-available', 'nagios3.conf') do
   source 'nginx.conf.erb'
-  mode 0644
+  mode 00644
   pem = File.join(
     node['nagios']['conf_dir'],
     'certificates',

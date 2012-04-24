@@ -10,7 +10,7 @@ else
     source "htpasswd.users.erb"
     owner node['nagios']['user']
     group node['apache']['user']
-    mode 0640
+    mode 00640
     variables(
       :sysadmins => sysadmins
     )
@@ -29,7 +29,7 @@ end
 
 template "#{node['apache']['dir']}/sites-available/nagios3.conf" do
   source "apache2.conf.erb"
-  mode 0644
+  mode 00644
   variables :public_domain => public_domain
   if ::File.symlink?("#{node['apache']['dir']}/sites-enabled/nagios3.conf")
     notifies :reload, "service[apache2]"
