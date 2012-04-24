@@ -76,19 +76,19 @@ end
 directory "#{node['nagios']['conf_dir']}/dist" do
   owner node['nagios']['user']
   group node['nagios']['group']
-  mode "0755"
+  mode 00755
 end
 
 directory node['nagios']['state_dir'] do
   owner node['nagios']['user']
   group node['nagios']['group']
-  mode "0751"
+  mode 00751
 end
 
 directory "#{node['nagios']['state_dir']}/rw" do
   owner node['nagios']['user']
   group node['apache']['user']
-  mode "2710"
+  mode 02710
 end
 
 execute "archive-default-nagios-object-definitions" do
@@ -108,7 +108,7 @@ else
     source "htpasswd.users.erb"
     owner node['nagios']['user']
     group node['apache']['user']
-    mode 0640
+    mode 00640
     variables(
       :sysadmins => sysadmins
     )
@@ -122,7 +122,7 @@ end
 directory "#{node['nagios']['conf_dir']}/certificates" do
   owner node['apache']['user']
   group node['apache']['user']
-  mode "700"
+  mode 00700
 end
 
 bash "Create SSL Certificates" do
@@ -138,7 +138,7 @@ end
 
 template "#{node['apache']['dir']}/sites-available/nagios3.conf" do
   source "apache2.conf.erb"
-  mode 0644
+  mode 00644
   variables :public_domain => public_domain
   if ::File.symlink?("#{node['apache']['dir']}/sites-enabled/nagios3.conf")
     notifies :reload, "service[apache2]"
