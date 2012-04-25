@@ -29,6 +29,11 @@ define :nagios_conf, :variables => {}, :config_subdir => true do
     owner "nagios"
     group "nagios"
     source "#{params[:name]}.cfg.erb"
+    if (defined? params[:mode]) && params[:mode] && params[:mode].integer?
+      mode params[:mode]
+    else
+      mode 0644
+    end
     mode 0644
     variables params[:variables]
     notifies :reload, "service[nagios]"
