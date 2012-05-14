@@ -21,7 +21,7 @@
 include_recipe "build-essential"
 
 pkgs = value_for_platform(
-    ["redhat","centos","fedora","scientific"] =>
+    ["redhat","centos","fedora","scientific","amazon"] =>
         {"default" => %w{ openssl-devel gd-devel }},
     [ "debian", "ubuntu" ] =>
         {"default" => %w{ libssl-dev libgd2-xpm-dev }},
@@ -94,11 +94,11 @@ template "/etc/init.d/nagios-nrpe-server" do
   source "nagios-nrpe-server.erb"
   owner "root"
   group "root"
-  mode "0755"
+  mode 00755
 end
 
 directory node['nagios']['nrpe']['conf_dir'] do
   owner "root"
   group "root"
-  mode "0755"
+  mode 00755
 end

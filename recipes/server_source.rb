@@ -27,7 +27,7 @@ include_recipe "php"
 include_recipe "php::module_gd"
 
 pkgs = value_for_platform(
-    ["redhat","centos","fedora","scientific"] =>
+    ["redhat","centos","fedora","scientific", "amazon"] =>
         {"default" => %w{ openssl-devel gd-devel }},
     [ "debian", "ubuntu" ] =>
         {"default" => %w{ libssl-dev libgd2-xpm-dev }},
@@ -95,7 +95,7 @@ end
 directory "#{node['nagios']['conf_dir']}/conf.d" do
   owner "root"
   group "root"
-  mode "0755"
+  mode 00755
 end
 
 %w{ cache_dir log_dir run_dir }.each do |dir|
@@ -103,7 +103,7 @@ end
   directory node['nagios'][dir] do 
     owner node['nagios']['user']
     group node['nagios']['group']
-    mode "0755"
+    mode 00755
   end
 
 end
@@ -111,7 +111,7 @@ end
 directory "/usr/lib/nagios3" do
   owner node['nagios']['user']
   group node['nagios']['group']
-  mode "0755"
+  mode 00755
 end
 
 link "#{node['nagios']['conf_dir']}/stylesheets" do
