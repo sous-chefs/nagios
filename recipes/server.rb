@@ -21,10 +21,47 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-include_recipe "apache2"
-include_recipe "apache2::mod_ssl"
-include_recipe "apache2::mod_rewrite"
-include_recipe "nagios::client"
+web_srv = node['nagios']['server']['web_server'].to_sym
+
+case web_srv
+when :nginx
+  Chef::Log.info "Setting up nagios server via NGINX"
+  include_recipe 'nagios::nginx'
+  web_user = node[:nginx][:user]
+  web_group = node[:nginx][:group] || web_user
+when :apache
+  Chef::Log.info "Setting up nagios server via Apache2"
+  include_recipe 'nagios::apache'
+  web_user = node[:apache][:user]
+  web_group = node[:apache][:group] || web_user
+else
+  Chef::Log.fatal("Unknown web server option provided for nagios server: " <<
+    "#{node['nagios']['server']['web_server']} provided. Allowed: :nginx or :apache"
+  )
+  raise 'Unknown web server option provided for nagios server'
+end
+
+include_recipe "nagios::server_#{node['nagios']['server']['install_method']}"
+sysadmins = search(:users, 'groups:sysadmin')
+
+case node['nagios']['server_auth_method']
+when "openid"
+  if(web_srv == :apache)
+    include_recipe "apache2::mod_auth_openid"
+  else
+    raise "OpenID is not supported on NGINX"
+  end
+else
+  template "#{node['nagios']['conf_dir']}/htpasswd.users" do
+    source "htpasswd.users.erb"
+    owner node['nagios']['user']
+    group web_group
+    mode 0640
+    variables(
+      :sysadmins => sysadmins
+    )
+  end
+end
 
 sysadmins = search(:users, 'groups:sysadmin')
 
@@ -67,7 +104,6 @@ else
   public_domain = node['domain']
 end
 
-include_recipe "nagios::server_#{node['nagios']['server']['install_method']}"
 
 nagios_conf "nagios" do
   config_subdir false
@@ -87,7 +123,7 @@ end
 
 directory "#{node['nagios']['state_dir']}/rw" do
   owner node['nagios']['user']
-  group node['apache']['user']
+  group web_group
   mode "2710"
 end
 
@@ -96,32 +132,9 @@ execute "archive-default-nagios-object-definitions" do
   not_if { Dir.glob("#{node['nagios']['config_dir']}/*_nagios*.cfg").empty? }
 end
 
-file "#{node['apache']['dir']}/conf.d/nagios3.conf" do
-  action :delete
-end
-
-case node['nagios']['server_auth_method']
-when "openid"
-  include_recipe "apache2::mod_auth_openid"
-else
-  template "#{node['nagios']['conf_dir']}/htpasswd.users" do
-    source "htpasswd.users.erb"
-    owner node['nagios']['user']
-    group node['apache']['user']
-    mode 0640
-    variables(
-      :sysadmins => sysadmins
-    )
-  end
-end
-
-apache_site "000-default" do
-  enable false
-end
-
 directory "#{node['nagios']['conf_dir']}/certificates" do
-  owner node['apache']['user']
-  group node['apache']['user']
+  owner web_user
+  group web_group
   mode "700"
 end
 
@@ -135,17 +148,6 @@ bash "Create SSL Certificates" do
   EOH
   not_if { ::File.exists?("#{node['nagios']['conf_dir']}/certificates/nagios-server.pem") }
 end
-
-template "#{node['apache']['dir']}/sites-available/nagios3.conf" do
-  source "apache2.conf.erb"
-  mode 0644
-  variables :public_domain => public_domain
-  if ::File.symlink?("#{node['apache']['dir']}/sites-enabled/nagios3.conf")
-    notifies :reload, "service[apache2]"
-  end
-end
-
-apache_site "nagios3.conf"
 
 %w{ nagios cgi }.each do |conf|
   nagios_conf conf do

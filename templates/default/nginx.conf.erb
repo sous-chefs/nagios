@@ -1,0 +1,56 @@
+server {
+
+  listen <%= @listen_port %>;
+  server_name nagios nagios.<%= @chef_env %>.<%= @public_domain %> <%= @fqdn %>;
+  access_log <%= File.join(@log_dir, 'nginx_access.log') %>;
+  error_log <%= File.join(@log_dir, 'nginx_error.log') %>;
+  root <%= @docroot %>;
+  index index.php index.html index.cgi;
+
+<% if @https %>
+  ssl on;
+  ssl_certificate <%= @cert_file %>;
+  ssl_certificate_key <%= @cert_key %>;
+  ssl_ciphers HIGH;
+  ssl_protocols SSLv3 TLSv1;
+  ssl_prefer_server_ciphers on;
+<% end %>
+
+<% if @cgi %>
+<%= 
+nginx_dispatch(:cgi,
+  :custom => %q(
+    fastcgi_param AUTH_USER $remote_user;
+    fastcgi_param REMOTE_USER $remote_user;
+  )
+)
+%>
+<% end %>
+
+<% if @php %>
+<%=
+nginx_dispatch(:php,
+  :docroot => @docroot,
+  :custom => %q(
+    fastcgi_param AUTH_USER $remote_user;
+    fastcgi_param REMOTE_USER $remote_user;
+  )
+)
+%>
+<% end %>
+
+  location /nagios3/stylesheets {
+    alias /etc/nagios3/stylesheets;
+  }
+
+  location /nagios3 {
+    alias <%= @docroot %>;
+  }
+
+  location / {
+    auth_basic "Nagios Server";
+    auth_basic_user_file <%= @htpasswd_file %>;
+    root <%= @docroot %>;
+  }
+
+}
