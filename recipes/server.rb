@@ -21,6 +21,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+include_recipe "nagios::server_#{node['nagios']['server']['install_method']}"
+sysadmins = search(:users, 'groups:sysadmin')
+
 web_srv = node['nagios']['server']['web_server'].to_sym
 
 case web_srv
@@ -40,9 +43,6 @@ else
   )
   raise 'Unknown web server option provided for nagios server'
 end
-
-include_recipe "nagios::server_#{node['nagios']['server']['install_method']}"
-sysadmins = search(:users, 'groups:sysadmin')
 
 case node['nagios']['server_auth_method']
 when "openid"
