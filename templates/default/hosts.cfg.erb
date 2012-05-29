@@ -3,7 +3,7 @@
 
 define host {
   use server
-  address <%= node['ipaddress'] %>
+  address <%= node['hostname'] %>
   host_name <%= node['hostname'] %>
   hostgroups <%= node['nagios']['server_role'] %>
 }
@@ -12,12 +12,12 @@ define host {
 <% unless n.name == node.name -%>
 define host {
   use server
-  address <%= n['ipaddress'] %>
+  address <%= n['hostname'] %>
   host_name <%= n['hostname'] %>
 <% if n.run_list.roles.nil? || n.run_list.roles.length == 0 -%>
   hostgroups all
 <% else -%>
-  hostgroups <%= n.run_list.roles.to_a.join(",") %>
+  hostgroups <%= n.run_list.expand(n.chef_environment, 'disk').roles.to_a.join(",") %>
 <% end -%>
 }
 <% end -%>

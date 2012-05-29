@@ -63,9 +63,7 @@ else
   end
 end
 
-sysadmins = search(:users, 'groups:sysadmin')
-
-nodes = search(:node, "hostname:[* TO *] AND chef_environment:#{node.chef_environment}")
+nodes = search(:node, "hostname:* AND chef_environment:#{node.chef_environment}")
 
 begin
   services = search(:nagios_services, '*:*')
@@ -90,20 +88,15 @@ sysadmins.each do |s|
 end
 
 role_list = Array.new
-service_hosts= Hash.new
-search(:role, "*:*") do |r|
-  role_list << r.name
-  search(:node, "role:#{r.name} AND chef_environment:#{node.chef_environment}") do |n|
-    service_hosts[r.name] = n['hostname']
+service_hosts = Hash.new
+
+search(:node, "hostname:* AND chef_environment:#{node.chef_environment}") do |n|
+  n.run_list.expand(n.chef_environment, 'disk').roles.each do |r|
+    role_list << r
+    service_hosts[r] = n["hostname"]
   end
 end
-
-if node['public_domain']
-  public_domain = node['public_domain']
-else
-  public_domain = node['domain']
-end
-
+role_list.uniq!
 
 nagios_conf "nagios" do
   config_subdir false
