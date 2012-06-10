@@ -53,17 +53,12 @@ end
 template File.join(node['nginx']['dir'], 'sites-available', 'nagios3.conf') do
   source 'nginx.conf.erb'
   mode 0644
-  pem = File.join(
-    node['nagios']['conf_dir'],
-    'certificates',
-    'nagios-server.pem'
-  )
   variables(
     :public_domain => public_domain,
     :listen_port => node['nagios']['http_port'],
-    :https => node['nagios']['https'],
-    :cert_file => pem,
-    :cert_key => pem,
+    :https => node['nagios']['enable_ssl'],
+    :cert_file => node['nagios']['ssl_crt'],
+    :cert_key => node['nagios']['ssl_key'],
     :docroot => node['nagios']['docroot'],
     :log_dir => node['nagios']['log_dir'],
     :fqdn => node['fqdn'],

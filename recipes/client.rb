@@ -81,7 +81,8 @@ nagios_nrpecheck "check_all_disks" do
   command "#{node['nagios']['plugin_dir']}/check_disk"
   warning_condition "8%"
   critical_condition "5%"
-  parameters "-A -x /dev/shm -X nfs -i /boot"
+  ignore_param = node.nagios.checks.disks.ignored.map {|x| " -i #{x}"}
+  parameters "-A -x /dev/shm -X nfs #{ignore_param.join}"
   action :add
 end
 

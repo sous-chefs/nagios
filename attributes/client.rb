@@ -49,6 +49,7 @@ default['nagios']['nrpe']['url']      = 'http://prdownloads.sourceforge.net/sour
 default['nagios']['nrpe']['version']  = '2.12'
 default['nagios']['nrpe']['checksum'] = '7e8d093abef7d7ffc7219ad334823bdb612121df40de2dbaec9c6d0adeb04cfc'
 
+default['nagios']['checks']['disks']['ignored'] = ['/boot']
 default['nagios']['checks']['memory']['critical'] = 150
 default['nagios']['checks']['memory']['warning']  = 250
 default['nagios']['checks']['load']['critical']   = "30,20,10"

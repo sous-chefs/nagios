@@ -21,6 +21,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+include_recipe "nagios::server_#{node['nagios']['server']['install_method']}"
+sysadmins = search(:users, 'groups:sysadmin')
+
 web_srv = node['nagios']['server']['web_server'].to_sym
 
 case web_srv
@@ -41,9 +44,6 @@ else
   raise 'Unknown web server option provided for nagios server'
 end
 
-include_recipe "nagios::server_#{node['nagios']['server']['install_method']}"
-sysadmins = search(:users, 'groups:sysadmin')
-
 case node['nagios']['server_auth_method']
 when "openid"
   if(web_srv == :apache)
@@ -63,9 +63,7 @@ else
   end
 end
 
-sysadmins = search(:users, 'groups:sysadmin')
-
-nodes = search(:node, "hostname:[* TO *] AND chef_environment:#{node.chef_environment}")
+nodes = search(:node, "hostname:* AND chef_environment:#{node.chef_environment}")
 
 begin
   services = search(:nagios_services, '*:*')
@@ -90,20 +88,15 @@ sysadmins.each do |s|
 end
 
 role_list = Array.new
-service_hosts= Hash.new
-search(:role, "*:*") do |r|
-  role_list << r.name
-  search(:node, "role:#{r.name} AND chef_environment:#{node.chef_environment}") do |n|
-    service_hosts[r.name] = n['hostname']
+service_hosts = Hash.new
+
+search(:node, "hostname:* AND chef_environment:#{node.chef_environment}") do |n|
+  n.run_list.expand(n.chef_environment, 'disk').roles.each do |r|
+    role_list << r
+    service_hosts[r] = n["hostname"]
   end
 end
-
-if node['public_domain']
-  public_domain = node['public_domain']
-else
-  public_domain = node['domain']
-end
-
+role_list.uniq!
 
 nagios_conf "nagios" do
   config_subdir false
@@ -138,15 +131,23 @@ directory "#{node['nagios']['conf_dir']}/certificates" do
   mode "700"
 end
 
-bash "Create SSL Certificates" do
+bash "Create SSL Key" do
   cwd "#{node['nagios']['conf_dir']}/certificates"
   code <<-EOH
   umask 077
   openssl genrsa 2048 > nagios-server.key
-  openssl req -subj "#{node['nagios']['ssl_req']}" -new -x509 -nodes -sha1 -days 3650 -key nagios-server.key > nagios-server.crt
-  cat nagios-server.key nagios-server.crt > nagios-server.pem
   EOH
-  not_if { ::File.exists?("#{node['nagios']['conf_dir']}/certificates/nagios-server.pem") }
+  not_if { ::File.exists?("#{node['nagios']['ssl_key']}") }
+end
+
+bash "Create SSL Certificates" do
+  cwd "#{node['nagios']['conf_dir']}/certificates"
+  code <<-EOH
+  umask 077
+  openssl req -subj "#{node['nagios']['ssl_req']}" -new -x509 -nodes -sha1 \
+          -days 3650 -key #{node['nagios']['ssl_key']} > #{node['nagios']['ssl_crt']}
+  EOH
+  not_if { ::File.exists?("#{node['nagios']['ssl_crt']}") }
 end
 
 %w{ nagios cgi }.each do |conf|

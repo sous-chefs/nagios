@@ -12,10 +12,10 @@
   Alias /nagios3/stylesheets /etc/nagios3/stylesheets
   Alias /nagios3 <%= node['nagios']['docroot'] %>
 
-  <% if node['nagios']['https'] -%>
+  <% if node['nagios']['enable_ssl'] -%>
   SSLEngine On
-  SSLCertificateFile <%= node['nagios']['conf_dir'] %>/certificates/nagios-server.pem
-  SSLCertificateKeyFile <%= node['nagios']['conf_dir'] %>/certificates/nagios-server.pem
+  SSLCertificateFile <%= node['nagios']['ssl_crt'] %>
+  SSLCertificateKeyFile <%= node['nagios']['ssl_key'] %>
   <% end -%>
 
 
