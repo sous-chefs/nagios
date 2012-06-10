@@ -63,6 +63,7 @@ The following attributes are used for the client NRPE checks for warning and cri
 * `node['nagios']['nrpe']['url']` - url to retrieve nrpe source
 * `node['nagios']['nrpe']['version']` - version of nrpe to download
 * `node['nagios']['nrpe']['checksum']` - checksum of the nrpe source tarball
+* `node['nagios']['checks']['disks']['ignored']` - collection of patterns to ignore for disk checks, default ['/boot']
 * `node['nagios']['checks']['memory']['critical']` - threshold of critical memory usage, default 150
 * `node['nagios']['checks']['memory']['warning']` - threshold of warning memory usage, default 250
 * `node['nagios']['checks']['load']['critical']` - threshold of critical load average, default 30,20,10
@@ -93,7 +94,8 @@ Default directory locations are based on FHS. Change to suit your preferences.
 * `node['nagios']['http_port']` - port that the apache server should listen on, determined whether ssl is enabled (443 if so, otherwise 80)
 * `node['nagios']['server_name']` - common name to use in a server cert, default "nagios"
 * `node['nagios']['ssl_req']` - info to use in a cert, default `/C=US/ST=Several/L=Locality/O=Example/OU=Operations/CN=#{node['nagios']['server_name']}/emailAddress=ops@#{node['nagios']['server_name']}`
-
+* `node['nagios']['ssl_key']` - SSL key - automatically generated if missing, default #{node['nagios']['conf_dir']}/certificates/nagios-server.key
+* `node['nagios']['ssl_crt']` - SSL cert - automatically generated if missing, default #{node['nagios']['conf_dir']}/certificates/nagios-server.pem
 * `node['nagios']['notifications_enabled']` - set to 1 to enable notification.
 * `node['nagios']['check_external_commands']`
 * `node['nagios']['default_contact_groups']`
