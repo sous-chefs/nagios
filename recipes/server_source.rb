@@ -48,10 +48,6 @@ pkgs.each do |pkg|
   end
 end
 
-# %w{php gd gd-devel}.each do |pkg|
-#   package pkg
-# end
-
 group node['nagios']['group'] do
   members [
     node['nagios']['user'],
