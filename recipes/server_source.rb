@@ -22,7 +22,7 @@
 
 include_recipe "build-essential"
 include_recipe "apache2"
-include_recipe "nagios::client_source"
+include_recipe "nagios::client"
 include_recipe "php"
 include_recipe "php::module_gd"
 
