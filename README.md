@@ -19,6 +19,10 @@ Because of the heavy use of search, this recipe will not work with Chef Solo, as
 
 By default NRPE clients can only be monitored by Nagios servers in the same environment. To change this set the multi_environment_monitoring attribute. See __Attributes__ below.
 
+*Verticloud Changes*
+
+Verticloud changes to accomodate chef-solo. The configuration information is not obtained using search. They are supplied using attributes.
+
 Platform
 --------
 
@@ -71,6 +75,8 @@ The following attributes are used for the client NRPE checks for warning and cri
 * `node['nagios']['server_role']` - the role that the nagios server will have in its run list that the clients can search for.
 * `node['nagios']['multi_environment_monitoring']` - Allow Nagios servers in any Chef environment to monitor NRPE
 
+*Verticloud addition*
+* `node['nagios']['nrpe']['mon_host']` - The list of addresses of the monitoring hosts
 server
 ------
 
