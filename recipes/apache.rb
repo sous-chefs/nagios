@@ -6,6 +6,7 @@ case node['nagios']['server_auth_method']
 when "openid"
   include_recipe "apache2::mod_auth_openid"
 else
+  sysadmins = node['nagios']['sysadmins'] || search(:users, 'groups:sysadmin')
   template "#{node['nagios']['conf_dir']}/htpasswd.users" do
     source "htpasswd.users.erb"
     owner node['nagios']['user']

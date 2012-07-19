@@ -22,18 +22,23 @@
 # limitations under the License.
 #
 
-mon_host = ['127.0.0.1']
-
-if node.run_list.roles.include?(node['nagios']['server_role'])
-  mon_host << node['ipaddress']
-elsif node['nagios']['multi_environment_monitoring']
-  search(:node, "role:#{node['nagios']['server_role']}") do |n|
-   mon_host << n['ipaddress']
+if node['nagios']['server_addresses'].nil?
+  mon_host = ['127.0.0.1']
+  
+  if node.run_list.roles.include?(node['nagios']['server_role'])
+    mon_host << node['ipaddress']
+  elsif node['nagios']['multi_environment_monitoring']
+    search(:node, "role:#{node['nagios']['server_role']}") do |n|
+     mon_host << n['ipaddress']
+    end
+  else
+    search(:node, "role:#{node['nagios']['server_role']} AND chef_environment:#{node.chef_environment}") do |n|
+      mon_host << n['ipaddress']
+    end
   end
 else
-  search(:node, "role:#{node['nagios']['server_role']} AND chef_environment:#{node.chef_environment}") do |n|
-    mon_host << n['ipaddress']
-  end
+  mon_host = node['nagios']['server_addresses']
+  mon_host << '127.0.0.1'
 end
 
 include_recipe "nagios::client_#{node['nagios']['client']['install_method']}"
