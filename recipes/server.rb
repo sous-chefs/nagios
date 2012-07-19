@@ -42,7 +42,8 @@ else
 end
 
 include_recipe "nagios::server_#{node['nagios']['server']['install_method']}"
-sysadmins = search(:users, 'groups:sysadmin')
+sysadmins = node['nagios']['sysadmins'] || search(:users, 'groups:sysadmin')
+  
 
 case node['nagios']['server_auth_method']
 when "openid"
@@ -63,12 +64,13 @@ else
   end
 end
 
-sysadmins = search(:users, 'groups:sysadmin')
+sysadmins = node['nagios']['sysadmins'] || search(:users, 'groups:sysadmin')
 
-nodes = search(:node, "hostname:[* TO *] AND chef_environment:#{node.chef_environment}")
+nodes = node['nagios']['client_addresses'] ||
+  search(:node, "hostname:[* TO *] AND chef_environment:#{node.chef_environment}")
 
 begin
-  services = search(:nagios_services, '*:*')
+  services = node['nagios']['services'] || search(:nagios_services, '*:*')
 rescue Net::HTTPServerException
   Chef::Log.info("Search for nagios_services data bag failed, so we'll just move on.")
 end
@@ -79,22 +81,33 @@ if services.nil? || services.empty?
 end
 
 if nodes.empty?
-  Chef::Log.info("No nodes returned from search, using this node so hosts.cfg has data")
+  Chef::Log.info("No nodes specified, using this node so hosts.cfg has data")
   nodes = Array.new
   nodes << node
 end
 
 members = Array.new
+
 sysadmins.each do |s|
   members << s['id']
 end
 
 role_list = Array.new
 service_hosts= Hash.new
-search(:role, "*:*") do |r|
-  role_list << r.name
-  search(:node, "role:#{r.name} AND chef_environment:#{node.chef_environment}") do |n|
-    service_hosts[r.name] = n['hostname']
+
+if node['nagios']['hostgroups'].nil?
+  search(:role, "*:*") do |r|
+    role_list << r.name
+    search(:node, "role:#{r.name} AND chef_environment:#{node.chef_environment}") do |n|
+      service_hosts[r.name] = n['hostname']
+    end
+  end
+else
+  node['nagios']['hostgroups'].each do |s|
+    role_list << s['name']
+    s['hosts'].each do |n|
+        service_hosts[s.name] = n['hostname']
+    end
   end
 end
 
