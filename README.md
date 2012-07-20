@@ -1,7 +1,7 @@
 Description
 ===========
 
-Installs and configures Nagios 3 for a server and NRPE for clients using Chef search capabilities.
+Installs and configures Nagios 3 for a server and NRPE for clients either using Chef search capabilities or using the supplied attributes.
 
 Requirements
 ============
@@ -14,8 +14,6 @@ Chef version 0.10.0+ is required for chef environment usage. See __Environments_
 A data bag named 'users' should exist, see __Data Bag__ below.
 
 The monitoring server that uses this recipe should have a role named 'monitoring' or similar, this is settable via an attribute. See __Attributes__ below.
-
-Because of the heavy use of search, this recipe will not work with Chef Solo, as it cannot do any searches without a server.
 
 By default NRPE clients can only be monitored by Nagios servers in the same environment. To change this set the multi_environment_monitoring attribute. See __Attributes__ below.
 
@@ -47,6 +45,7 @@ The following attributes are used by both client and server recipes.
 * `node['nagios']['user']` - nagios user, default 'nagios'.
 * `node['nagios']['group']` - nagios group, default 'nagios'.
 * `node['nagios']['plugin_dir']` - location where nagios plugins go,
+* node['nagios']['server_addresses'] - if specified, is the array of addresses of the monitoring hosts. If not specified, the monitoring hosts are obtained by searching for the hosts with the 'server_role'. Please see below.
 * default '/usr/lib/nagios/plugins'.
 
 client
@@ -71,6 +70,9 @@ The following attributes are used for the client NRPE checks for warning and cri
 * `node['nagios']['server_role']` - the role that the nagios server will have in its run list that the clients can search for.
 * `node['nagios']['multi_environment_monitoring']` - Allow Nagios servers in any Chef environment to monitor NRPE
 
+* `node['nagios']['server_role']` - the role that the nagios server will have in its run list that the clients can search for. Used only when node['nagios']['server_addresses'] is not defined.
+* `node['nagios']['multi_environment_monitoring']` - Allow Nagios servers in any Chef environment to monitor NRPE. Used only when node['nagios']['server_addresses'] is not defined.
+* 
 server
 ------
 
@@ -110,6 +112,11 @@ Default directory locations are based on FHS. Change to suit your preferences.
 * `node['nagios']['default_service']['retry_interval']`
 * `node['nagios']['default_service']['max_check_attempts']`
 * `node['nagios']['default_service']['notification_interval']`
+* `node['nagios']['sysadmins'] - The list of sysadmin userids, their email ids and optionally their passwords. If this is not specified, the sysadmins are obtained from chef server using search.
+* `node['nagios']['client_addresses'] - The list addresses for Nagios client hosts which need to be monitored. These hosts should be configured to be nagios clients with this nagios server as a monitoring hosts for them. If this is not specified, thei nformation is obtained from the Chef server using search.
+* `node['nagios']['services'] - The list of services to be monitored and their command-lines. If this is not specified, thei nformation is obtained from the Chef server using search.
+* `node['nagios']['hostgroups'] - The hostgroups and their members. If this is not specified, thei nformation is obtained from the Chef server by searching roles.
+
 
 Recipes
 =======

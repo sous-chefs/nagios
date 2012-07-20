@@ -22,19 +22,38 @@
 # limitations under the License.
 #
 
-mon_host = ['127.0.0.1']
-
-if node.run_list.roles.include?(node['nagios']['server_role'])
-  mon_host << node['ipaddress']
-elsif node['nagios']['multi_environment_monitoring']
-  search(:node, "role:#{node['nagios']['server_role']}") do |n|
-   mon_host << n['ipaddress']
+if node['nagios']['server_addresses'].nil?
+  mon_host = ['127.0.0.1']
+  
+  if node.run_list.roles.include?(node['nagios']['server_role'])
+    mon_host << node['ipaddress']
+  elsif node['nagios']['multi_environment_monitoring']
+    search(:node, "role:#{node['nagios']['server_role']}") do |n|
+     mon_host << n['ipaddress']
+    end
+  else
+    search(:node, "role:#{node['nagios']['server_role']} AND chef_environment:#{node.chef_environment}") do |n|
+      mon_host << n['ipaddress']
+    end
   end
 else
-  search(:node, "role:#{node['nagios']['server_role']} AND chef_environment:#{node.chef_environment}") do |n|
-    mon_host << n['ipaddress']
-  end
+  mon_host = node['nagios']['server_addresses']
+  mon_host << '127.0.0.1'
 end
+
+node['nagios']['nrpe']['mon_host'] << '127.0.0.1'
+
+# if node.run_list.roles.include?(node['nagios']['server_role'])
+#   mon_host << node['ipaddress']
+# elsif node['nagios']['multi_environment_monitoring']
+#   search(:node, "role:#{node['nagios']['server_role']}") do |n|
+#    mon_host << n['ipaddress']
+#   end
+# else
+#   search(:node, "role:#{node['nagios']['server_role']} AND chef_environment:#{node.chef_environment}") do |n|
+#     mon_host << n['ipaddress']
+#   end
+# end
 
 include_recipe "nagios::client_#{node['nagios']['client']['install_method']}"
 
@@ -52,17 +71,7 @@ directory "#{node['nagios']['nrpe']['conf_dir']}/nrpe.d" do
   mode 00755
 end
 
-template "#{node['nagios']['nrpe']['conf_dir']}/nrpe.cfg" do
-  source "nrpe.cfg.erb"
-  owner "root"
-  group "root"
-  mode 00644
-  variables(
-    :mon_host => mon_host,
-    :nrpe_directory => "#{node['nagios']['nrpe']['conf_dir']}/nrpe.d"
-  )
-  notifies :restart, "service[nagios-nrpe-server]"
-end
+include_recipe "nagios::client_conf"
 
 service "nagios-nrpe-server" do
   action [:start, :enable]
