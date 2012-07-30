@@ -106,7 +106,7 @@ else
   node['nagios']['hostgroups'].each do |s|
     role_list << s['name']
     s['hosts'].each do |n|
-        service_hosts[s.name] = n['hostname']
+        service_hosts[s['name']] = n['hostname']
     end
   end
 end
