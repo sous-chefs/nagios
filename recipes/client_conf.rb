@@ -1,5 +1,3 @@
-puts "debug:  #{node['nagios']['nrpe']['mon_host']}"
-
 template "#{node['nagios']['nrpe']['conf_dir']}/nrpe.cfg" do
   source "nrpe.cfg.erb"
   owner "root"
