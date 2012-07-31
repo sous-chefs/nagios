@@ -7,10 +7,22 @@ when "openid"
   include_recipe "apache2::mod_auth_openid"
 else
   sysadmins = node['nagios']['sysadmins'] || search(:users, 'groups:sysadmin')
-  template "#{node['nagios']['conf_dir']}/htpasswd.users" do
+  
+  dir = "#{node['nagios']['conf_dir']}"
+  owner = node['nagios']['user']
+  group = node['apache']['user']
+  
+  directory dir do
+    owner owner
+    group group
+    mode 00750
+    action :create
+  end
+      
+  template "#{dir}/htpasswd.users" do
     source "htpasswd.users.erb"
-    owner node['nagios']['user']
-    group node['apache']['user']
+    owner owner
+    group group
     mode 00640
     variables(
       :sysadmins => sysadmins

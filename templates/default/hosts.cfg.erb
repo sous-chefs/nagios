@@ -10,15 +10,15 @@ define host {
 }
 
 <% @nodes.each do |n| -%>
-<% unless n.name == node.name -%>
+<% unless n["name"] == node["name"] -%>
 define host {
   use server
   address <%= n['ipaddress'] %>
   host_name <%= n['hostname'] %>
-<% if n.run_list.roles.nil? || n.run_list.roles.length == 0 -%>
+<% if !n.has_key? 'hostgroups' || n['hostgroups'].length == 0 -%>
   hostgroups all
 <% else -%>
-  hostgroups <%= n.run_list.roles.to_a.join(",") %>
+  hostgroups <%= n['hostgroups'].join(",") %>
 <% end -%>
 }
 <% end -%>
