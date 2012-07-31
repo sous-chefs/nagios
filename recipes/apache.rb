@@ -8,7 +8,7 @@ when "openid"
 else
   sysadmins = node['nagios']['sysadmins'] || search(:users, 'groups:sysadmin')
   
-  dir = "#{node['nagios']['conf_dir']}"
+  dir = node['nagios']['conf_dir']
   owner = node['nagios']['user']
   group = node['apache']['user']
   
