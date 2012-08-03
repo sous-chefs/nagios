@@ -21,7 +21,7 @@
 # Package pre-reqs
 
 include_recipe "build-essential"
-include_recipe "nagios::client_source"
+include_recipe "nagios::client"
 include_recipe "php"
 include_recipe "php::module_gd"
 
@@ -54,8 +54,8 @@ end
 
 group node['nagios']['group'] do
   members [
-    node['nagios']['user'], 
-    web_srv == :nginx ? node['nginx']['user'] : node['apache']['user'] 
+    node['nagios']['user'],
+    web_srv == :nginx ? node['nginx']['user'] : node['apache']['user']
   ]
   action :modify
 end
@@ -109,8 +109,8 @@ directory "#{node['nagios']['conf_dir']}/conf.d" do
 end
 
 %w{ cache_dir log_dir run_dir }.each do |dir|
-  
-  directory node['nagios'][dir] do 
+
+  directory node['nagios'][dir] do
     owner node['nagios']['user']
     group node['nagios']['group']
     mode 00755
@@ -133,4 +133,3 @@ if(web_srv == :apache)
     enable :true
   end
 end
-
