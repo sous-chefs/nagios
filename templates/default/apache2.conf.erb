@@ -23,10 +23,22 @@
 
 <% case node['nagios']['server_auth_method'] -%>
 <% when "openid" -%>
+  <% openid = node['nagios']['openid'] -%>
   <Location />
     AuthName "Nagios Server"
     AuthType OpenID
-    require user <%= node['apache']['allowed_openids'].join(' ') %>
+    <% if openid['profile-url'] -%>
+      AuthOpenIDSingleIdP https://www.google.com/accounts/o8/id
+    <% end -%>
+    <% if openid['use-email-as-userid'] -%>
+      AuthOpenIDAXUsername email 
+    <% end -%>
+    <% if openid['email-pattern'] -%>
+      AuthOpenIDAXRequire email http://axschema.org/contact/email <%= openid['email-pattern'] %>
+      require valid-user
+    <% else -%>
+      require user <%= node['apache']['allowed_openids'].join(' ') %>
+    <% end -%>
     AuthOpenIDDBLocation <%= node['apache']['mod_auth_openid']['dblocation'] %>
   </Location>
 <% else -%>
