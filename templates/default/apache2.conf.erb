@@ -16,8 +16,11 @@
 
   <% if node['nagios']['https'] -%>
   SSLEngine On
-  SSLCertificateFile <%= node['nagios']['conf_dir'] %>/certificates/nagios-server.pem
-  SSLCertificateKeyFile <%= node['nagios']['conf_dir'] %>/certificates/nagios-server.pem
+  SSLCertificateFile <%= @ssl_certificate_file %>
+  SSLCertificateKeyFile <%= @ssl_certificate_key_file %>
+    <% if @ssl_certificate_chain_file != nil -%>
+  SSLCertificateChainFile <%= @ssl_certificate_chain_file %>
+    <% end -%>
   <% end -%>
 
 
