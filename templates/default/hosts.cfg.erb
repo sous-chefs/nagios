@@ -6,7 +6,7 @@ define host {
   use server
   address <%= node['ipaddress'] %>
   host_name <%= node['hostname'] %>
-  hostgroups <%= node['nagios']['server_role'] %>
+  hostgroups <%= node['nagios']['server_role'] %>,<%= n.os %>
 }
 
 <% @nodes.each do |n| -%>
@@ -16,9 +16,9 @@ define host {
   address <%= n['ipaddress'] %>
   host_name <%= n['hostname'] %>
 <% if n.run_list.roles.nil? || n.run_list.roles.length == 0 -%>
-  hostgroups all
+  hostgroups all,<%= n.os %>
 <% else -%>
-  hostgroups <%= n.run_list.roles.to_a.join(",") %>
+  hostgroups <%= n.run_list.roles.to_a.join(",") %>,<%= n.os %>
 <% end -%>
 }
 <% end -%>
