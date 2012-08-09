@@ -54,8 +54,8 @@ end
 
 group node['nagios']['group'] do
   members [
-    node['nagios']['user'], 
-    web_srv == :nginx ? node['nginx']['user'] : node['apache']['user'] 
+    node['nagios']['user'],
+    web_srv == :nginx ? node['nginx']['user'] : node['apache']['user']
   ]
   action :modify
 end
@@ -103,14 +103,14 @@ bash "compile-nagios" do
 end
 
 directory "#{node['nagios']['conf_dir']}/conf.d" do
-  owner "root"
-  group "root"
+  owner node['nagios']['user']
+  group node['nagios']['group']
   mode 00755
 end
 
 %w{ cache_dir log_dir run_dir }.each do |dir|
-  
-  directory node['nagios'][dir] do 
+
+  directory node['nagios'][dir] do
     owner node['nagios']['user']
     group node['nagios']['group']
     mode 00755
