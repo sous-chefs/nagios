@@ -193,7 +193,7 @@ email notifications
 
 You need to set `default['nagios']['notifications_enabled'] = 1` attribute on your nagios server to enable email notifications.
 
-For email notifications to work an appropriate mail program package and local MTA need to be installed so that /usr/bin/mail or /bin/mail is available on the system. 
+For email notifications to work an appropriate mail program package and local MTA need to be installed so that /usr/bin/mail or /bin/mail is available on the system.
 
 Example:
 
@@ -263,6 +263,20 @@ Here's an example of a service check for sshd that you could apply to all hostgr
     "hostgroup_name": "all",
     "command_line": "$USER1$/check_ssh $HOSTADDRESS$"
     }
+
+Search Defined Hostgroups
+-------------
+
+Create a nagios\_hostgroups data bag that will contain definitions for Nagios hostgroups populated via search.  These data bags include a Chef node search query that will populate the Nagios hostgroup with nodes based on the search.
+
+Here's an example to find all HP hardware systems for an "hp_systems" hostgroup:
+
+		{
+		"search_query": "dmi_system_manufacturer:HP",
+		"hostgroup_name": "hp_systems",
+		"id": "hp_systems"
+		}
+
 
 Roles
 =====
@@ -372,9 +386,11 @@ Author:: Joshua Sierles <joshua@37signals.com>
 Author:: Nathan Haneysmith <nathan@opscode.com>
 Author:: Joshua Timberman <joshua@opscode.com>
 Author:: Seth Chisamore <schisamo@opscode.com>
+Author:: Tim Smith <tim.smith@webtrends.com>
 
 Copyright 2009, 37signals
 Copyright 2009-2011, Opscode, Inc
+Copyright 2012, Webtrends Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
