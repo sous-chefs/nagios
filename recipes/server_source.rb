@@ -38,8 +38,8 @@ pkgs = value_for_platform(
     ["redhat","centos","fedora","scientific", "amazon"] =>
         {"default" => %w{ openssl-devel gd-devel }},
     [ "debian", "ubuntu" ] =>
-        {"default" => %w{ libssl-dev libgd2-xpm-dev }},
-    "default" => %w{ libssl-dev libgd2-xpm-dev }
+        {"default" => %w{ libssl-dev libgd2-xpm-dev bsd-mailx}},
+    "default" => %w{ libssl-dev libgd2-xpm-dev bsd-mailx }
   )
 
 pkgs.each do |pkg|
@@ -47,10 +47,6 @@ pkgs.each do |pkg|
     action :install
   end
 end
-
-# %w{php gd gd-devel}.each do |pkg|
-#   package pkg
-# end
 
 group node['nagios']['group'] do
   members [
