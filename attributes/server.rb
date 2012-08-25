@@ -82,6 +82,6 @@ default['nagios']['default_service']['retry_interval']     = 15
 default['nagios']['default_service']['max_check_attempts'] = 3
 default['nagios']['default_service']['notification_interval'] = 1200
 
-default['nagios']['server']['web_server'] = :apache
+default['nagios']['server']['web_server'] = :nginx
 default['nagios']['server']['nginx_dispatch'] = :cgi
 default['nagios']['server']['stop_apache'] = false
