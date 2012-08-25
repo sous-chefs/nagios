@@ -24,20 +24,20 @@
 
 case node['platform']
 when "ubuntu","debian"
-  set['nagios']['client']['install_method'] = 'package'
-  set['nagios']['nrpe']['pidfile'] = '/var/run/nagios/nrpe.pid'
+  default['nagios']['client']['install_method'] = 'package'
+  default['nagios']['nrpe']['pidfile'] = '/var/run/nagios/nrpe.pid'
 when "redhat","centos","fedora","scientific","amazon"
-  set['nagios']['client']['install_method'] = 'source'
-  set['nagios']['nrpe']['pidfile'] = '/var/run/nrpe.pid'
+  default['nagios']['client']['install_method'] = 'source'
+  default['nagios']['nrpe']['pidfile'] = '/var/run/nrpe.pid'
 else
-  set['nagios']['client']['install_method'] = 'source'
-  set['nagios']['nrpe']['pidfile'] = '/var/run/nrpe.pid'
+  default['nagios']['client']['install_method'] = 'source'
+  default['nagios']['nrpe']['pidfile'] = '/var/run/nrpe.pid'
 end
 
-set['nagios']['nrpe']['home']              = "/usr/lib/nagios"
-set['nagios']['nrpe']['conf_dir']          = "/etc/nagios"
-set['nagios']['nrpe']['dont_blame_nrpe']   = "0"
-set['nagios']['nrpe']['command_timeout']   = "60"
+default['nagios']['nrpe']['home']              = "/usr/lib/nagios"
+default['nagios']['nrpe']['conf_dir']          = "/etc/nagios"
+default['nagios']['nrpe']['dont_blame_nrpe']   = "0"
+default['nagios']['nrpe']['command_timeout']   = "60"
 
 # for plugin from source installation
 default['nagios']['plugins']['url']      = 'http://prdownloads.sourceforge.net/sourceforge/nagiosplug'
