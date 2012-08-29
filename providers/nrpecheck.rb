@@ -31,6 +31,7 @@ action :add do
     content file_contents
     notifies :restart, resources(:service => "nagios-nrpe-server")
   end
+  new_resource.updated_by_last_action(true)
 end
 
 action :remove do
@@ -40,5 +41,6 @@ action :remove do
       action :delete
       notifies :restart, resources(:service => "nagios-nrpe-server")
     end
+    new_resource.updated_by_last_action(true)
   end
 end
