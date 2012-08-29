@@ -27,7 +27,7 @@ action :add do
   file "#{node['nagios']['nrpe']['conf_dir']}/nrpe.d/#{new_resource.command_name}.cfg" do
     owner "root"
     group "root"
-    mode 0644
+    mode 00644
     content file_contents
     notifies :restart, resources(:service => "nagios-nrpe-server")
   end
