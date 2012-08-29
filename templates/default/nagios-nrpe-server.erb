@@ -23,7 +23,7 @@ elif [ -f /etc/rc.d/functions ]; then
 . /etc/rc.d/functions
 fi
 
-<% if platform?("redhat", "centos", "fedora", "scientific", "amazon") -%>
+<% if ["redhat", "centos", "fedora", "scientific", "amazon"].include?(node['platform']) -%>
 # Source networking configuration.
 . /etc/sysconfig/network
 
