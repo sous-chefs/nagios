@@ -220,3 +220,10 @@ service "nagios" do
   supports :status => true, :restart => true, :reload => true
   action [ :enable, :start ]
 end
+
+# Add the NRPE check to monitor the Nagios server
+nagios_nrpecheck "check_nagios" do
+  command "#{node['nagios']['plugin_dir']}/check_nagios"
+  parameters "-F #{node[:nagios][:cache_dir]}/status.dat -e 4 -C /usr/sbin/#{node['nagios']['server']['service_name']}"
+  action :add
+end
