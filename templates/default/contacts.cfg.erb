@@ -30,7 +30,7 @@ define contactgroup {
 define contact {
   use          default-contact
   contact_name <%= a['id'] %>
-  email        <%= a['nagios']['email'] %>
+  <%= "email  #{a['nagios']['email']}" unless a['nagios'].nil? || a['nagios']['email'].nil? %>
 }
 
 <% end -%>
