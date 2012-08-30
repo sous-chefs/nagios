@@ -21,6 +21,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# Install nagios either from source of package
+include_recipe "nagios::server_#{node['nagios']['server']['install_method']}"
+
 web_srv = node['nagios']['server']['web_server'].to_sym
 
 case web_srv
@@ -40,9 +43,6 @@ else
   )
   raise 'Unknown web server option provided for Nagios server'
 end
-
-# Install nagios either from source of package
-include_recipe "nagios::server_#{node['nagios']['server']['install_method']}"
 
 sysadmins = search(:users, 'groups:sysadmin')
 
@@ -72,9 +72,9 @@ nodes = search(:node, "hostname:[* TO *] AND chef_environment:#{node.chef_enviro
 # find all unique platforms to create hostgroups
 os_list = Array.new
 nodes.each do |n|
-	if !os_list.include?(n.os)
-		os_list << n.os
-	end
+  if !os_list.include?(n.os)
+    os_list << n.os
+  end
 end
 
 # Load Nagios services from the nagios_services data bag
