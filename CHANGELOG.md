@@ -1,4 +1,33 @@
-## v1.2.6:
+## v1.3.0:
+
+* [COOK-715] - don't source /etc/sysconfig/network on non-RHEL
+  platforms
+* [COOK-769] - don't use nagios specific values in users data bag
+  items if they don't exist
+* [COOK-1206] - add nginx support
+* [COOK-1225] - corrected inconsistencies (mode, user/group, template
+  headers)
+* [COOK-1281] - add support for amazon linux
+* [COOK-1365] - nagios_conf does not use nagios user/group attributes
+* [COOK-1410] - remvoe deprecated package resource
+* [COOK-1411] - Nagios server source installs should not necessarily
+  install the NRPE client from source
+* [COOK-1412] - Nagios installs from source do not install a mail
+  client so notifications fail
+* [COOK-1413] - install nagios 3.4.1 instead of 3.2.3
+* [COOK-1518] - missing sysadmins variable in apache recipe
+* [COOK-1541] - support environments that have windows systems
+* [COOK-1542] - allow setting flap detection via attribute
+* [COOK-1545] - add support for defining host groups using search in
+  data bags
+* [COOK-1553] - check_nagios command doesn't work from source install
+* [COOK-1555] - include service template for monitoring logs
+* [COOK-1557] - check-nagios command only works in environments with
+  single nagios server
+* [COOK-1587] - use default attributes instead of normal in cookbook
+  attributes files
+
+## V1.2.6:
 
 * [COOK-860] - set mail command with an attribute by platform
 

@@ -22,10 +22,12 @@ By default NRPE clients can only be monitored by Nagios servers in the same envi
 Platform
 --------
 
-* Debian, Ubuntu
-* RHEL, CentOS, Fedora
+* Debian 6
+* Ubuntu 10.04, 12.04
+* Red Hat Enterprise Linux (CentOS) 5.8, 6.3
 
-Tested on Ubuntu 10.04 and CentOS 5.5
+**Notes**: This cookbook has been tested on the listed platforms. It
+  may work on other platforms with or without modification.
 
 Cookbooks
 ---------
@@ -131,12 +133,12 @@ Searches are confined to the node's `chef_environment`.
 Client commands for NRPE can be modified by editing the nrpe.cfg.erb template.
 
 client\_package
---------------
+---------------
 
 Installs the Nagios client libraries from packages. Default for Debian / Ubuntu systems.
 
 client\_source
--------------
+--------------
 
 Installs the Nagios client libraries from source. Default for Red Hat / CentOS / Fedora systems as native packages of Nagios 3 are not available in the default repositories.
 
@@ -172,24 +174,24 @@ To add custom commands for service checks, these can be done on a per-role basis
 * database\_master - check\_mysql\_server with NRPE for a MySQL database master.
 
 server\_package
---------------
+---------------
 
 Installs the Nagios server libraries from packages. Default for Debian / Ubuntu systems.
 
 server\_source
--------------
+--------------
 
 Installs the Nagios server libraries from source. Default for Red Hat / CentOS / Fedora systems as native packages of Nagios 3 are not available in the default repositories.
 
 pagerduty
---------------
+---------
 
 Installs and configures pagerduty plugin for nagios.  You need to set a `node['nagios']['pagerduty_key']` attribute on your server for this to work.  This can be set through environments so that you can use different API keys for servers in production vs staging for instance.
 
 This recipe was written based on the [Nagios Integration Guide](http://www.pagerduty.com/docs/guides/nagios-integration-guide) from PagerDuty which explains how to get an API key for your nagios server.
 
 email notifications
---------------
+--------------------
 
 You need to set `default['nagios']['notifications_enabled'] = 1` attribute on your nagios server to enable email notifications.
 
@@ -225,7 +227,7 @@ Data Bags
 =========
 
 Users
--------------
+-----
 
 Create a `users` data bag that will contain the users that will be able to log into the Nagios webui. Each user can use htauth with a specified password, or an openid. Users that should be able to log in should be in the sysadmin group. Example user data bag item:
 
@@ -252,7 +254,7 @@ The openid must have the http:// and trailing /. The htpasswd must be the hashed
 For example use the `{SHA}oCagzV4lMZyS7jl2Z0WlmLxEkt4=` value in the data bag.
 
 Services
--------------
+--------
 
 Create a nagios\_services data bag that will contain definitions for services to be monitored.  This allows you to add monitoring rules without mucking about in the services and commands templates.  Each service will be named based on the id of the data bag and the command will be named withe the same id prepended with "check\_".  Just make sure the id in your data bag doesn't conflict with a service or command already defined in the templates.
 
@@ -265,7 +267,7 @@ Here's an example of a service check for sshd that you could apply to all hostgr
     }
 
 Search Defined Hostgroups
--------------
+-------------------------
 
 Create a nagios\_hostgroups data bag that will contain definitions for Nagios hostgroups populated via search.  These data bags include a Chef node search query that will populate the Nagios hostgroup with nodes based on the search.
 
