@@ -20,21 +20,6 @@ include_recipe "apache2::mod_rewrite"
 
 sysadmins = search(:users, 'groups:sysadmin')
 
-case node['nagios']['server_auth_method']
-when "openid"
-  include_recipe "apache2::mod_auth_openid"
-else
-  template "#{node['nagios']['conf_dir']}/htpasswd.users" do
-    source "htpasswd.users.erb"
-    owner node['nagios']['user']
-    group node['apache']['user']
-    mode 00640
-    variables(
-      :sysadmins => sysadmins
-    )
-  end
-end
-
 apache_site "000-default" do
   enable false
 end

@@ -11,7 +11,7 @@ define contact {
        host_notification_options                d,r
        service_notification_commands            notify-service-by-pagerduty
        host_notification_commands               notify-host-by-pagerduty
-       pager                                    <%= node[:nagios][:pagerduty_key] %>
+       pager                                    <%= node["nagios"]["pagerduty_key"] %>
 }
 
 define command {

@@ -68,7 +68,7 @@ bash "compile-nagios" do
   cwd Chef::Config[:file_cache_path]
   code <<-EOH
     tar zxvf nagios-#{version}.tar.gz
-    cd nagios-#{version}
+    cd nagios
     ./configure --prefix=/usr \
         --mandir=/usr/share/man \
         --bindir=/usr/sbin \
@@ -124,7 +124,7 @@ link "#{node['nagios']['conf_dir']}/stylesheets" do
   to "#{node['nagios']['docroot']}/stylesheets"
 end
 
-if(web_srv == :apache)
+if web_srv == :apache
   apache_module "cgi" do
     enable :true
   end
