@@ -105,7 +105,7 @@ directory "#{node['nagios']['conf_dir']}/conf.d" do
 end
 
 cookbook_file "#{node['nagios']['plugin_dir']}/check_nrpe" do
-  source "check_nrpe"
+  source "plugins/check_nrpe"
   owner "root"
   group "root"
   mode 00755
