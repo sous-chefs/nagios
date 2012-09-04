@@ -44,7 +44,8 @@ end
 # Install nagios either from source of package
 include_recipe "nagios::server_#{node['nagios']['server']['install_method']}"
 
-sysadmins = search(:users, 'groups:sysadmin')
+group = "#{node['nagios']['users_databag_group']}"
+sysadmins = search(:users, "groups:#{group}")
 
 case node['nagios']['server_auth_method']
 when "openid"

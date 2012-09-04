@@ -101,6 +101,7 @@ Default directory locations are based on FHS. Change to suit your preferences.
 * `node['nagios']['default_contact_groups']`
 * `node['nagios']['sysadmin_email']` - default notification email.
 * `node['nagios']['sysadmin_sms_email']` - default notification sms.
+* `node['nagios']['users_databag_group']` - Users databag group considered Nagios admins.  Defaults to sysadmins
 * `node['nagios']['server_auth_method']` - authentication with the server can be done with openid (using `apache2::mod_auth_openid`), or htauth (basic). The default is openid, any other value will use htauth (basic).
 * `node['nagios']['templates']`
 * `node['nagios']['interval_length']` - minimum interval.
