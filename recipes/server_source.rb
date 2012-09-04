@@ -104,6 +104,13 @@ directory "#{node['nagios']['conf_dir']}/conf.d" do
   mode 00755
 end
 
+cookbook_file "#{node['nagios']['plugin_dir']}/check_nrpe" do
+  source "check_nrpe"
+  owner "root"
+  group "root"
+  mode 00755
+end
+
 %w{ cache_dir log_dir run_dir }.each do |dir|
 
   directory node['nagios'][dir] do
