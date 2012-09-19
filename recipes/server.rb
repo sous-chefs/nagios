@@ -67,7 +67,7 @@ else
   end
 end
 
-nodes = search(:node, "hostname:[* TO *] AND chef_environment:#{node.chef_environment}")
+nodes = search(:node, "hostname:[* TO *] AND app_environment:#{node[:app_environment]}")
 
 if nodes.empty?
   Chef::Log.info("No nodes returned from search, using this node so hosts.cfg has data")
@@ -122,7 +122,7 @@ role_list = Array.new
 service_hosts= Hash.new
 search(:role, "*:*") do |r|
   role_list << r.name
-  search(:node, "role:#{r.name} AND chef_environment:#{node.chef_environment}") do |n|
+  search(:node, "role:#{r.name} AND app_environment:#{node[:app_environment]}") do |n|
     service_hosts[r.name] = n['hostname']
   end
 end

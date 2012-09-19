@@ -43,6 +43,13 @@ define service {
 }
 
 define service {
+    service_description HTTP Processes
+    hostgroup_name      all
+    check_command       check_http
+    use                 default-service
+}
+
+define service {
     service_description Load Average
     hostgroup_name      linux
     check_command       check_load
