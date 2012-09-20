@@ -67,7 +67,7 @@ else
   end
 end
 
-nodes = search(:node, "hostname:[* TO *] AND app_environment:#{node[:app_environment]}")
+nodes = search(:node, "hostname:[* TO *] AND app_environment:#{node[:app_environment]} AND domain:#{node[:domain]}")
 
 if nodes.empty?
   Chef::Log.info("No nodes returned from search, using this node so hosts.cfg has data")
