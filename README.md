@@ -279,6 +279,19 @@ Here's an example to find all HP hardware systems for an "hp_systems" hostgroup:
 		"id": "hp_systems"
 		}
 
+Monitoring Systems Not In Chef
+------------------------------
+
+Create a nagios\_unmanagedhosts data bag that will contain definitions for hosts that present in Chef that you would like to manage.  "hostgroups" can be an existing Chef role (every Chef role gets a Nagios hostgroup) or a new hostgroup.
+Here's an example host definition:
+
+		{
+		"address": "webserver1.mydmz.dmz",
+		"hostgroups": ["web_servers","production_servers"],
+		"id": "webserver1",
+		"notifications": 1
+		}
+
 
 Roles
 =====
