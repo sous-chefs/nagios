@@ -96,6 +96,26 @@ if services.nil? || services.empty?
   services = Array.new
 end
 
+# find all unique hostgroups in the nagios_unmanagedhosts data bag
+begin
+  unmanaged_hosts = search(:nagios_unmanagedhosts, '*:*')
+rescue Net::HTTPServerException
+  Chef::Log.info("Search for nagios_unmanagedhosts data bag failed, so we'll just move on.")
+end
+
+# Add unmanaged host hostgroups to the role_list if they're not already present
+if unmanaged_hosts.nil? || unmanaged_hosts.empty?
+  Chef::Log.info("No unmanaged hosts returned from data bag search.")
+else
+  unmanaged_hosts.each do |host|
+    host['hostgroup'].each do |nested_hostgroup|
+      if !role_list.include?(nested_hostgroup) and !os_list.include?(nested_hostgroup)
+        role_list << nested_hostgroup
+      end
+    end
+  end
+end
+
 # Load search defined Nagios hostgroups from the nagios_hostgroups data bag and find nodes
 begin
   hostgroup_nodes= Hash.new
@@ -209,11 +229,14 @@ nagios_conf "hostgroups" do
     :os => os_list,
     :search_hostgroups => hostgroup_list,
     :search_nodes => hostgroup_nodes
-    )
+  )
 end
 
 nagios_conf "hosts" do
-  variables :nodes => nodes
+  variables(
+    :nodes => nodes,
+    :unmanaged_hosts => unmanaged_hosts
+  )
 end
 
 service "nagios" do
