@@ -41,13 +41,13 @@ default['nagios']['nrpe']['command_timeout']   = "60"
 
 # for plugin from source installation
 default['nagios']['plugins']['url']      = 'http://prdownloads.sourceforge.net/sourceforge/nagiosplug'
-default['nagios']['plugins']['version']  = '1.4.15'
-default['nagios']['plugins']['checksum'] = '51136e5210e3664e1351550de3aff4a766d9d9fea9a24d09e37b3428ef96fa5b'
+default['nagios']['plugins']['version']  = '1.4.16'
+default['nagios']['plugins']['checksum'] = 'b0caf07e0084e9b7f10fdd71cbd3ebabcd85ad78df64da360b51233b0e73b2bd'
 
 # for nrpe from source installation
 default['nagios']['nrpe']['url']      = 'http://prdownloads.sourceforge.net/sourceforge/nagios'
-default['nagios']['nrpe']['version']  = '2.12'
-default['nagios']['nrpe']['checksum'] = '7e8d093abef7d7ffc7219ad334823bdb612121df40de2dbaec9c6d0adeb04cfc'
+default['nagios']['nrpe']['version']  = '2.13'
+default['nagios']['nrpe']['checksum'] = 'bac8f7eb9daddf96b732a59ffc5762b1cf073fb70f6881d95216ebcd1254a254'
 
 default['nagios']['checks']['memory']['critical'] = 150
 default['nagios']['checks']['memory']['warning']  = 250
