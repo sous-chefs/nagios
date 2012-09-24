@@ -108,7 +108,7 @@ if unmanaged_hosts.nil? || unmanaged_hosts.empty?
   Chef::Log.info("No unmanaged hosts returned from data bag search.")
 else
   unmanaged_hosts.each do |host|
-    host['hostgroup'].each do |nested_hostgroup|
+    host['hostgroups'].each do |nested_hostgroup|
       if !role_list.include?(nested_hostgroup) and !os_list.include?(nested_hostgroup)
         role_list << nested_hostgroup
       end
@@ -152,7 +152,6 @@ if node['public_domain']
 else
   public_domain = node['domain']
 end
-
 
 nagios_conf "nagios" do
   config_subdir false

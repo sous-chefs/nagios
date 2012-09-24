@@ -30,7 +30,7 @@ define host {
   use server
   address <%= n['address'] %>
   host_name <%= n['id'] %>
-  hostgroups <%= n['hostgroup'].join(",") %>
+  hostgroups <%= n['hostgroups'].join(",") %>
   notifications_enabled <%= n['notifications'] %>
 }
 <% end -%>
