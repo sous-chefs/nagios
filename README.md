@@ -282,7 +282,7 @@ Here's an example to find all HP hardware systems for an "hp_systems" hostgroup:
 Monitoring Systems Not In Chef
 ------------------------------
 
-Create a nagios\_unmanagedhosts data bag that will contain definitions for hosts that present in Chef that you would like to manage.  "hostgroups" can be an existing Chef role (every Chef role gets a Nagios hostgroup) or a new hostgroup.
+Create a nagios\_unmanagedhosts data bag that will contain definitions for hosts not in Chef that you would like to manage.  "hostgroups" can be an existing Chef role (every Chef role gets a Nagios hostgroup) or a new hostgroup.
 Here's an example host definition:
 
 		{
