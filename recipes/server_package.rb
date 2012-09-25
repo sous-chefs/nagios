@@ -24,10 +24,10 @@ if platform?(%w{debian ubuntu})
   # We generate it randomly as it's overwritten later in the config templates
   random_initial_password = rand(36**16).to_s(36)
 
-  %w{adminpassword adminpassword-password}.each do |setting|
+  %w{adminpassword adminpassword-repeat}.each do |setting|
     execute "preseed nagiosadmin password" do
-      command "echo nagios3-cgi nagios3/#{setting} password '#{random_initial_password}' | debconf-set-selections"
-      not_if Chef::Resource::Package.new('nagios3', run_context).provider_for_action(:install).load_current_resource.version.nil?
+      command "echo nagios3-cgi nagios3/#{setting} password #{random_initial_password} | debconf-set-selections"
+      not_if 'dpkg -l nagios3'
     end
   end
 
