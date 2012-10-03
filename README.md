@@ -266,6 +266,8 @@ Here's an example of a service check for sshd that you could apply to all hostgr
     "command_line": "$USER1$/check_ssh $HOSTADDRESS$"
     }
 
+You may optionally define the service template for your service by including service_template and a valid template name.  Example:  "service_template": "special_service_template"
+
 Search Defined Hostgroups
 -------------------------
 

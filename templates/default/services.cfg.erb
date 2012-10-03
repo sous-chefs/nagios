@@ -134,7 +134,7 @@ define service {
   service_description <%= service['id'] %>
   hostgroup_name <%= service['hostgroup_name'] %>
   check_command check_<%= service['id'] %>
-  use default-service
+  use <% if service['service_template'].nil? -%>default-service<% else -%><%= service['service_template'] %> <% end -%>
 }
   <% end -%>
 <% end -%>
