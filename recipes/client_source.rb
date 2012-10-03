@@ -73,7 +73,7 @@ remote_file "#{Chef::Config[:file_cache_path]}/nrpe-#{nrpe_version}.tar.gz" do
   action :create_if_missing
 end
 
-bash "compile-nagios-plugins" do
+bash "compile-nagios-nrpe" do
   cwd Chef::Config[:file_cache_path]
   code <<-EOH
     tar zxvf nrpe-#{nrpe_version}.tar.gz
