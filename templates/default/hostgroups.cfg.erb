@@ -16,6 +16,15 @@ define hostgroup {
 
 <% end -%>
 
+<% if node['nagios']['multi_environment_monitoring'] -%>
+<% @environments.each do |e| -%>
+define hostgroup {
+  hostgroup_name <%= e %>
+  alias <%= e %>
+}
+<% end -%>
+<% end -%>
+
 <% @os.each do |o| -%>
 define hostgroup {
   hostgroup_name <%= o %>
