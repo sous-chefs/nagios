@@ -167,6 +167,7 @@ search(:role, "*:*") do |r|
     search(:node, "roles:#{r.name} AND chef_environment:#{node.chef_environment}") do |n|
       service_hosts[r.name] = n['hostname']
     end
+  end
 end
 
 if node['public_domain']
