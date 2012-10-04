@@ -81,38 +81,6 @@ if nodes.empty?
   nodes << node
 end
 
-# if using multi environment monitoring then grab the list of environments
-if node['nagios']['multi_environment_monitoring']
-  environment_list = Array.new
-  search(:environment, "*:*") do |e|
-    role_list << e.name
-    search(:node, "chef_environment:#{e.name}") do |n|
-      service_hosts[e.name] = n['hostname']
-    end
-  end
-end
-
-# find all unique platforms to create hostgroups
-os_list = Array.new
-
-nodes.each do |n|
-	if !os_list.include?(n['os'])
-		os_list << n['os']
-	end
-end
-
-# load Nagios services from the nagios_services data bag
-begin
-  services = search(:nagios_services, '*:*')
-rescue Net::HTTPServerException
-  Chef::Log.info("Could not search for nagios_service data bag items, skipping dynamically generated service checks")
-end
-
-if services.nil? || services.empty?
-  Chef::Log.info("No services returned from data bag search.")
-  services = Array.new
-end
-
 # maps nodes into nagios hostgroups
 role_list = Array.new
 service_hosts= Hash.new
@@ -128,6 +96,39 @@ search(:role, "*:*") do |r|
     end
   end
 end
+
+# if using multi environment monitoring then grab the list of environments
+if node['nagios']['multi_environment_monitoring']
+  environment_list = Array.new
+  search(:environment, "*:*") do |e|
+    role_list << e.name
+    search(:node, "chef_environment:#{e.name}") do |n|
+      service_hosts[e.name] = n['hostname']
+    end
+  end
+end
+
+# find all unique platforms to create hostgroups
+os_list = Array.new
+
+nodes.each do |n|
+  if !os_list.include?(n['os'])
+    os_list << n['os']
+  end
+end
+
+# load Nagios services from the nagios_services data bag
+begin
+  services = search(:nagios_services, '*:*')
+rescue Net::HTTPServerException
+  Chef::Log.info("Could not search for nagios_service data bag items, skipping dynamically generated service checks")
+end
+
+if services.nil? || services.empty?
+  Chef::Log.info("No services returned from data bag search.")
+  services = Array.new
+end
+
 
 # find all unique hostgroups in the nagios_unmanagedhosts data bag
 begin
