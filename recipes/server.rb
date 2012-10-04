@@ -113,6 +113,22 @@ if services.nil? || services.empty?
   services = Array.new
 end
 
+# maps nodes into nagios hostgroups
+role_list = Array.new
+service_hosts= Hash.new
+search(:role, "*:*") do |r|
+  role_list << r.name
+  if node['nagios']['multi_environment_monitoring']
+    search(:node, "roles:#{r.name}") do |n|
+      service_hosts[r.name] = n['hostname']
+    end
+  else
+    search(:node, "roles:#{r.name} AND chef_environment:#{node.chef_environment}") do |n|
+      service_hosts[r.name] = n['hostname']
+    end
+  end
+end
+
 # find all unique hostgroups in the nagios_unmanagedhosts data bag
 begin
   unmanaged_hosts = search(:nagios_unmanagedhosts, '*:*')
@@ -152,22 +168,6 @@ end
 members = Array.new
 sysadmins.each do |s|
   members << s['id']
-end
-
-# maps nodes into nagios hostgroups
-role_list = Array.new
-service_hosts= Hash.new
-search(:role, "*:*") do |r|
-  role_list << r.name
-  if node['nagios']['multi_environment_monitoring']
-    search(:node, "roles:#{r.name}") do |n|
-      service_hosts[r.name] = n['hostname']
-    end
-  else
-    search(:node, "roles:#{r.name} AND chef_environment:#{node.chef_environment}") do |n|
-      service_hosts[r.name] = n['hostname']
-    end
-  end
 end
 
 if node['public_domain']
