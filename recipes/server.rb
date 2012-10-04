@@ -61,19 +61,35 @@ else
     source "htpasswd.users.erb"
     owner node['nagios']['user']
     group web_group
-    mode 0640
+    mode 00640
     variables(
       :sysadmins => sysadmins
     )
   end
 end
 
-nodes = search(:node, "hostname:[* TO *] AND chef_environment:#{node.chef_environment}")
+# find nodes to monitor.  Search in all environments if multi_environment_monitoring is enabled
+if node['nagios']['multi_environment_monitoring']
+  nodes = search(:node, "hostname:[* TO *]")
+else
+  nodes = search(:node, "hostname:[* TO *] AND chef_environment:#{node.chef_environment}")
+end
 
 if nodes.empty?
   Chef::Log.info("No nodes returned from search, using this node so hosts.cfg has data")
   nodes = Array.new
   nodes << node
+end
+
+# if using multi environment monitoring then grab the list of environments
+if node['nagios']['multi_environment_monitoring']
+  environment_list = Array.new
+  search(:environment, "*:*") do |e|
+    role_list << e.name
+    search(:node, "chef_environment:#{e.name}") do |n|
+      service_hosts[e.name] = n['hostname']
+    end
+  end
 end
 
 # find all unique platforms to create hostgroups
@@ -85,7 +101,7 @@ nodes.each do |n|
 	end
 end
 
-# Load Nagios services from the nagios_services data bag
+# load Nagios services from the nagios_services data bag
 begin
   services = search(:nagios_services, '*:*')
 rescue Net::HTTPServerException
@@ -143,9 +159,14 @@ role_list = Array.new
 service_hosts= Hash.new
 search(:role, "*:*") do |r|
   role_list << r.name
-  search(:node, "role:#{r.name} AND chef_environment:#{node.chef_environment}") do |n|
-    service_hosts[r.name] = n['hostname']
-  end
+  if node['nagios']['multi_environment_monitoring']
+    search(:node, "roles:#{r.name}") do |n|
+      service_hosts[r.name] = n['hostname']
+    end
+  else
+    search(:node, "roles:#{r.name} AND chef_environment:#{node.chef_environment}") do |n|
+      service_hosts[r.name] = n['hostname']
+    end
 end
 
 if node['public_domain']
@@ -226,6 +247,7 @@ end
 nagios_conf "hostgroups" do
   variables(
     :roles => role_list,
+    :environments => environment_list,
     :os => os_list,
     :search_hostgroups => hostgroup_list,
     :search_nodes => hostgroup_nodes
