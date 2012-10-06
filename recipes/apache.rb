@@ -17,10 +17,8 @@
 include_recipe "apache2"
 include_recipe "apache2::mod_ssl"
 include_recipe "apache2::mod_rewrite"
-include_recipe "apache2::mod_php5"
 
-group = "#{node['nagios']['users_databag_group']}"
-sysadmins = search(:users, "groups:#{group}")
+sysadmins = search(:users, 'groups:sysadmin')
 
 apache_site "000-default" do
   enable false
@@ -35,7 +33,9 @@ end
 template "#{node['apache']['dir']}/sites-available/nagios3.conf" do
   source "apache2.conf.erb"
   mode 00644
-  variables :public_domain => public_domain
+  variables( :public_domain => public_domain,
+      :nagios_url => node['nagios']['url']
+      )
   if ::File.symlink?("#{node['apache']['dir']}/sites-enabled/nagios3.conf")
     notifies :reload, "service[apache2]"
   end
