@@ -22,11 +22,11 @@
 # limitations under the License.
 #
 
-case node['platform']
-when "ubuntu","debian"
+case node['platform_family']
+when "debian"
   default['nagios']['client']['install_method'] = 'package'
   default['nagios']['nrpe']['pidfile'] = '/var/run/nagios/nrpe.pid'
-when "redhat","centos","fedora","scientific","amazon"
+when "rhel","fedora"
   default['nagios']['client']['install_method'] = 'source'
   default['nagios']['nrpe']['pidfile'] = '/var/run/nrpe.pid'
 else
