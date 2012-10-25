@@ -81,6 +81,7 @@ Default directory locations are based on FHS. Change to suit your preferences.
 * `node['nagios']['server']['install_method']` - whether to install from package or source. Default chosen by platform based on known packages available for Nagios 3: debian/ubuntu 'package', redhat/centos/fedora/scientific: source
 * `node['nagios']['server']['service_name']` - name of the service used for nagios, default chosen by platform, debian/ubuntu "nagios3", redhat family "nagios", all others, "nagios"
 * `node['nagios']['server']['web_server']` - web server to use. supports apache or nginx, default "nginx"
+* `node['nagios']['server']['stop_default_website']` - disable the default apache or nginx site.  Defaults to true
 * `node['nagios']['server']['nginx_dispatch']` - nginx dispatch method. support cgi or php, default "cgi"
 * `node['nagios']['server']['stop_apache']` - stop apache service if using nginx, default false
 * `node['nagios']['home']` - nagios main home directory, default "/usr/lib/nagios3"

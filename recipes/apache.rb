@@ -24,6 +24,7 @@ sysadmins = search(:users, "groups:#{group}")
 
 apache_site "000-default" do
   enable false
+  only_if {default['nagios']['server']['stop_default_website']}
 end
 
 if node['public_domain']

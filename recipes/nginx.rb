@@ -40,6 +40,7 @@ include_recipe "nginx"
   nginx_site disable_site do
     enable false
     notifies :reload, "service[nginx]"
+    only_if {default['nagios']['server']['stop_default_website']}
   end
 end
 
