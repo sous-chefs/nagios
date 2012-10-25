@@ -17,7 +17,9 @@ The monitoring server that uses this recipe should have a role named 'monitoring
 
 Because of the heavy use of search, this recipe will not work with Chef Solo, as it cannot do any searches without a server.
 
-By default NRPE clients can only be monitored by Nagios servers in the same environment. To change this set the multi_environment_monitoring attribute. See __Attributes__ below.
+By default NRPE clients can only be monitored by Nagios servers in the same environment. To change this set the multi\_environment\_monitoring attribute. See __Attributes__ below.
+
+Out of the box Nagios is setup with no base monitors.  To change this you will need to define servers in the nagios\_services databag.  See  __Services__ under __Data Bag__ below.
 
 Platform
 --------
