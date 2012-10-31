@@ -22,6 +22,7 @@
 # limitations under the License.
 #
 
+# determine hosts that NRPE will allow monitoring from
 mon_host = ['127.0.0.1']
 
 if node.run_list.roles.include?(node['nagios']['server_role'])
