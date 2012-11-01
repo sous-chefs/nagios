@@ -17,6 +17,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+def whyrun_supported?
+  true
+end
+
 action :add do
   Chef::Log.info "Adding #{new_resource.command_name} to #{node['nagios']['nrpe']['conf_dir']}/nrpe.d/"
   command = new_resource.command || "#{node['nagios']['plugin_dir']}/#{new_resource.command_name}"
