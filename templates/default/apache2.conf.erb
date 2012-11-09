@@ -39,7 +39,7 @@
 <% end -%>
 
   RewriteEngine On
-  <% if node['nagios']['redirect_root'] -%>
+  <% if node['nagios']['server'][redirect_root'] -%>
   RewriteRule ^/$ /nagios3 [R=301,L]
   <% end -%>
   RewriteCond %{THE_REQUEST} ^[A-Z]{3,9}\ /.*index\.html\ HTTP/
