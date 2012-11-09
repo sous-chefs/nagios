@@ -39,6 +39,9 @@
 <% end -%>
 
   RewriteEngine On
+  <% if node['nagios']['server']['redirect_root'] -%>
+  RewriteRule ^/$ /nagios3 [R=301,L]
+  <% end -%>
   RewriteCond %{THE_REQUEST} ^[A-Z]{3,9}\ /.*index\.html\ HTTP/
   RewriteRule ^(.*)index\.html$ $1 [R=301,L]
 </VirtualHost>
