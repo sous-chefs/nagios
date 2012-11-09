@@ -137,6 +137,16 @@ rescue Net::HTTPServerException
   Chef::Log.info("Search for nagios_unmanagedhosts data bag failed, so we'll just move on.")
 end
 
+# maps nodes into nagios hostgroups
+role_list = Array.new
+service_hosts= Hash.new
+search(:role, "*:*") do |r|
+  role_list << r.name
+  search(:node, "role:#{r.name} AND chef_environment:#{node.chef_environment}") do |n|
+    service_hosts[r.name] = n['hostname']
+  end
+end
+
 # Add unmanaged host hostgroups to the role_list if they're not already present
 if unmanaged_hosts.nil? || unmanaged_hosts.empty?
   Chef::Log.info("No unmanaged hosts returned from data bag search.")
