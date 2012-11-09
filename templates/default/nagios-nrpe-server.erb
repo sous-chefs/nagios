@@ -23,7 +23,7 @@ elif [ -f /etc/rc.d/functions ]; then
 . /etc/rc.d/functions
 fi
 
-<% if ["redhat", "centos", "fedora", "scientific", "amazon"].include?(node['platform']) -%>
+<% if ['rhel', 'fedora'].include?(node['platform_family']) -%>
 # Source networking configuration.
 . /etc/sysconfig/network
 
@@ -64,4 +64,3 @@ case "$1" in
 esac
 
 exit 0
-
