@@ -22,14 +22,14 @@
 # limitations under the License.
 #
 
-default['nagios']['pagerduty_key'] = ""
+default['nagios']['pagerduty_key'] = ''
 
-case node['platform']
-when "ubuntu","debian"
+case node['platform_family']
+when 'debian'
   default['nagios']['server']['install_method'] = 'package'
   default['nagios']['server']['service_name']   = 'nagios3'
   default['nagios']['server']['mail_command']   = '/usr/bin/mail'
-when "redhat","centos","fedora","scientific","amazon"
+when 'rhel','fedora'
   default['nagios']['server']['install_method'] = 'source'
   default['nagios']['server']['service_name']   = 'nagios'
   default['nagios']['server']['mail_command']   = '/bin/mail'
@@ -39,19 +39,19 @@ else
   default['nagios']['server']['mail_command']   = '/bin/mail'
 end
 
-default['nagios']['home']       = "/usr/lib/nagios3"
-default['nagios']['conf_dir']   = "/etc/nagios3"
-default['nagios']['config_dir'] = "/etc/nagios3/conf.d"
-default['nagios']['log_dir']    = "/var/log/nagios3"
-default['nagios']['cache_dir']  = "/var/cache/nagios3"
-default['nagios']['state_dir']  = "/var/lib/nagios3"
-default['nagios']['run_dir']    = "/var/run/nagios3"
-default['nagios']['docroot']    = "/usr/share/nagios3/htdocs"
+default['nagios']['home']       = '/usr/lib/nagios3'
+default['nagios']['conf_dir']   = '/etc/nagios3'
+default['nagios']['config_dir'] = '/etc/nagios3/conf.d'
+default['nagios']['log_dir']    = '/var/log/nagios3'
+default['nagios']['cache_dir']  = '/var/cache/nagios3'
+default['nagios']['state_dir']  = '/var/lib/nagios3'
+default['nagios']['run_dir']    = '/var/run/nagios3'
+default['nagios']['docroot']    = '/usr/share/nagios3/htdocs'
 default['nagios']['enable_ssl'] = false
-default['nagios']['http_port']  = node['nagios']['enable_ssl'] ? "443" : "80"
-default['nagios']['server_name'] = node.has_key?(:domain) ? "nagios.#{domain}" : "nagios"
-default['nagios']['ssl_req'] = "/C=US/ST=Several/L=Locality/O=Example/OU=Operations/" +
-  "CN=#{node['nagios']['server_name']}/emailAddress=ops@#{node['nagios']['server_name']}"
+default['nagios']['http_port']  = node['nagios']['enable_ssl'] ? '443' : '80'
+default['nagios']['server_name'] = node.has_key?(:domain) ? 'nagios.#{domain}' : 'nagios'
+default['nagios']['ssl_req'] = '/C=US/ST=Several/L=Locality/O=Example/OU=Operations/' +
+  'CN=#{node['nagios']['server_name']}/emailAddress=ops@#{node['nagios']['server_name']}'
 
 # for server from source installation
 default['nagios']['server']['url']      = 'http://prdownloads.sourceforge.net/sourceforge/nagios'

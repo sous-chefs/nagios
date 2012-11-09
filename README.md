@@ -9,7 +9,7 @@ Requirements
 Chef
 ----
 
-Chef version 0.10.0+ is required for chef environment usage. See __Environments__ under __Usage__ below.
+Chef version 0.10.10+ and Ohai 0.6.12+ are required for chef environment usage. See __Environments__ under __Usage__ below.
 
 A data bag named 'users' should exist, see __Data Bag__ below.
 
@@ -24,7 +24,7 @@ Platform
 
 * Debian 6
 * Ubuntu 10.04, 12.04
-* Red Hat Enterprise Linux (CentOS) 5.8, 6.3
+* Red Hat Enterprise Linux (CentOS/Amazon/Scientific/Oracle) 5.8, 6.3
 
 **Notes**: This cookbook has been tested on the listed platforms. It
   may work on other platforms with or without modification.
