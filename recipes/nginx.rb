@@ -14,7 +14,7 @@
 # limitations under the License.
 #
 
-if node["nagios"]["server"]["stop_apache"]
+if node['nagios']['server']['stop_apache']
   service 'apache2' do
     action :stop
   end
@@ -31,7 +31,7 @@ via_pkg = value_for_platform_family(
 if(via_pkg.nil?)
   node.set['nagios']['server']['nginx_dispatch'] = :both
 elsif(via_pkg == false)
-  node.set["nginx"]["install_method"] = 'source'
+  node.set['nginx']['install_method'] = 'source'
   node.set['nagios']['server']['nginx_dispatch'] = :both
 end
 include_recipe "nginx"
@@ -51,14 +51,14 @@ end
 
 case dispatch_type = node['nagios']['server']['nginx_dispatch'].to_sym
 when :cgi
-  node.set["nginx_simplecgi"]["cgi"] = true
+  node.set['nginx_simplecgi']['cgi'] = true
   include_recipe 'nginx_simplecgi::setup'
 when :php
-  node.set["nginx_simplecgi"]["php"] = true
+  node.set['nginx_simplecgi']['php'] = true
   include_recipe 'nginx_simplecgi::setup'
 when :both
-  node.set["nginx_simplecgi"]["php"] = true
-  node.set["nginx_simplecgi"]["cgi"] = true
+  node.set['nginx_simplecgi']['php'] = true
+  node.set['nginx_simplecgi']['cgi'] = true
   include_recipe 'nginx_simplecgi::setup'
 else
   Chef::Log.warn "NAGIOS: NGINX setup does not have a dispatcher provided"

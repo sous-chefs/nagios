@@ -27,13 +27,13 @@ case web_srv
 when :nginx
   Chef::Log.info "Setting up Nagios server via NGINX"
   include_recipe 'nagios::nginx'
-  web_user = node["nginx"]["user"]
-  web_group = node["nginx"]["group"] || web_user
+  web_user = node['nginx']['user']
+  web_group = node['nginx']['group'] || web_user
 when :apache
   Chef::Log.info "Setting up Nagios server via Apache2"
   include_recipe 'nagios::apache'
-  web_user = node["apache"]["user"]
-  web_group = node["apache"]["group"] || web_user
+  web_user = node['apache']['user']
+  web_group = node['apache']['group'] || web_user
 else
   Chef::Log.fatal("Unknown web server option provided for Nagios server: " <<
     "#{node['nagios']['server']['web_server']} provided. Allowed: :nginx or :apache"
@@ -272,6 +272,6 @@ end
 # Add the NRPE check to monitor the Nagios server
 nagios_nrpecheck "check_nagios" do
   command "#{node['nagios']['plugin_dir']}/check_nagios"
-  parameters "-F #{node["nagios"]["cache_dir"]}/status.dat -e 4 -C /usr/sbin/#{node['nagios']['server']['service_name']}"
+  parameters "-F #{node['nagios']['cache_dir']}/status.dat -e 4 -C /usr/sbin/#{node['nagios']['server']['service_name']}"
   action :add
 end
