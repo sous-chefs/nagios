@@ -49,9 +49,9 @@ default['nagios']['run_dir']    = '/var/run/nagios3'
 default['nagios']['docroot']    = '/usr/share/nagios3/htdocs'
 default['nagios']['enable_ssl'] = false
 default['nagios']['http_port']  = node['nagios']['enable_ssl'] ? '443' : '80'
-default['nagios']['server_name'] = node.has_key?(:domain) ? 'nagios.#{domain}' : 'nagios'
-default['nagios']['ssl_req'] = '/C=US/ST=Several/L=Locality/O=Example/OU=Operations/' +
-  'CN=#{node['nagios']['server_name']}/emailAddress=ops@#{node['nagios']['server_name']}'
+default['nagios']['server_name'] = node.has_key?(:domain) ? "nagios.#{domain}" : "nagios"
+default['nagios']['ssl_req'] = "/C=US/ST=Several/L=Locality/O=Example/OU=Operations/" +
+  "CN=#{node['nagios']['server_name']}/emailAddress=ops@#{node['nagios']['server_name']}"
 
 # for server from source installation
 default['nagios']['server']['url']      = 'http://prdownloads.sourceforge.net/sourceforge/nagios'
