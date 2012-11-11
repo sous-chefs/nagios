@@ -129,6 +129,17 @@ if services.nil? || services.empty?
   services = Array.new
 end
 
+# Load Nagios event handlers from the nagios_eventhandlers data bag
+begin
+  eventhandlers = search(:nagios_eventhandlers, '*:*')
+rescue Net::HTTPServerException
+  Chef::Log.info("Search for nagios_eventhandlers data bag failed, so we'll just move on.")
+end
+
+if eventhandlers.nil? || eventhandlers.empty?
+  Chef::Log.info("No Event Handlers returned from data bag search.")
+  eventhandlers = Array.new
+end
 
 # find all unique hostgroups in the nagios_unmanagedhosts data bag
 begin
@@ -232,7 +243,10 @@ end
 end
 
 nagios_conf "commands" do
-  variables :services => services
+  variables(
+    :services => services,
+    :eventhandlers => eventhandlers
+  )
 end
 
 nagios_conf "services" do
