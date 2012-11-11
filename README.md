@@ -9,11 +9,11 @@ Requirements
 Chef
 ----
 
-Chef version 0.10.10+ and Ohai 0.6.12+ are required for chef environment usage. See __Environments__ under __Usage__ below.
+Chef version 0.10.10+ and Ohai 0.6.12+ are required.
 
 A data bag named 'users' should exist, see __Data Bag__ below.
 
-The monitoring server that uses this recipe should have a role named 'monitoring' or similar, this is settable via an attribute. See __Attributes__ below.
+The monitoring server that uses this recipe should have a role named 'monitoring' or similar, the role name is configurable via an attribute. See __Attributes__ below.
 
 Because of the heavy use of search, this recipe will not work with Chef Solo, as it cannot do any searches without a server.
 
@@ -48,8 +48,8 @@ The following attributes are used by both client and server recipes.
 
 * `node['nagios']['user']` - nagios user, default 'nagios'.
 * `node['nagios']['group']` - nagios group, default 'nagios'.
-* `node['nagios']['plugin_dir']` - location where nagios plugins go,
-* default '/usr/lib/nagios/plugins'.
+* `node['nagios']['plugin_dir']` - location where nagios plugins go, default '/usr/lib/nagios/plugins'.
+* `node['nagios']['multi_environment_monitoring']` - Chef server will monitor hosts in all environments, not just its own, default 'false'
 
 client
 ------
@@ -71,7 +71,6 @@ The following attributes are used for the client NRPE checks for warning and cri
 * `node['nagios']['checks']['load']['warning']` - threshold of warning load average, default 15,10,5
 * `node['nagios']['checks']['smtp_host']` - default relayhost to check for connectivity. Default is an empty string, set via an attribute in a role.
 * `node['nagios']['server_role']` - the role that the nagios server will have in its run list that the clients can search for.
-* `node['nagios']['multi_environment_monitoring']` - Allow Nagios servers in any Chef environment to monitor NRPE
 
 server
 ------
