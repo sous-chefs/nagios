@@ -315,6 +315,29 @@ Create a role to use for the monitoring server. The role name should match the v
 
     % knife role from file monitoring.rb
 
+
+Event Handlers
+=====
+
+You can optionally define event handlers to trigger on service alerts by creating a nagios\_eventhandlers data bag that will contain definitions of event handlers for services monitored via Nagios.
+
+This example event handler data bags restarts chef-client.  Note: This assumes you have already defined a NRPE job restart\_chef-client on the host where this command will run.  You can use the NRPE LWRP to add commands to your local NRPE configs from within your cookbooks.
+
+{
+    "command_line": "$USER1$/check_nrpe -H $HOSTADDRESS$ -t 45 -c restart_chef-client",
+    "id": "restart_chef-client"
+}
+
+Once you've defined an event handler you will need to add the event handler to a service definition in order to trigger the action.  See the example service definition below.
+
+{
+    "command_line": "$USER1$/check_nrpe -H $HOSTADDRESS$ -t 45 -c check_chef_client",
+    "hostgroup_name": "linux",
+    "id": "chef-client",
+    "event_handler": "restart_chef-client"
+}
+
+
 Definitions
 ===========
 
