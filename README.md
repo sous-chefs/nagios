@@ -131,7 +131,7 @@ The client recipe searches for servers allowed to connect via NRPE that have a r
 
 Searches are confined to the node's `chef_environment`.
 
-Client commands for NRPE can be modified by editing the nrpe.cfg.erb template.
+Client commands for NRPE can be installed using the nrpecheck resource. (See __Resources/Providers__ below.)
 
 client\_package
 ---------------
