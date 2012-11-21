@@ -49,9 +49,9 @@ default['nagios']['run_dir']    = '/var/run/nagios3'
 default['nagios']['docroot']    = '/usr/share/nagios3/htdocs'
 default['nagios']['enable_ssl'] = false
 default['nagios']['http_port']  = node['nagios']['enable_ssl'] ? '443' : '80'
-default['nagios']['server_name'] = node.has_key?(:domain) ? 'nagios.#{domain}' : 'nagios'
-default['nagios']['ssl_req'] = '/C=US/ST=Several/L=Locality/O=Example/OU=Operations/' +
-  'CN=#{node['nagios']['server_name']}/emailAddress=ops@#{node['nagios']['server_name']}'
+default['nagios']['server_name'] = node.has_key?(:domain) ? "nagios.#{domain}" : "nagios"
+default['nagios']['ssl_req'] = "/C=US/ST=Several/L=Locality/O=Example/OU=Operations/" +
+  "CN=#{node['nagios']['server_name']}/emailAddress=ops@#{node['nagios']['server_name']}"
 
 # for server from source installation
 default['nagios']['server']['url']      = 'http://prdownloads.sourceforge.net/sourceforge/nagios'
@@ -61,10 +61,10 @@ default['nagios']['server']['checksum'] = 'a5c693f9af22410cc17d6da9c0df9bd65c47d
 default['nagios']['notifications_enabled']   = 0
 default['nagios']['check_external_commands'] = true
 default['nagios']['default_contact_groups']  = %w(admins)
-default['nagios']['sysadmin_email']          = "root@localhost"
-default['nagios']['sysadmin_sms_email']      = "root@localhost"
-default['nagios']['server_auth_method']      = "openid"
-default['nagios']['users_databag_group']     = "sysadmin"
+default['nagios']['sysadmin_email']          = 'root@localhost'
+default['nagios']['sysadmin_sms_email']      = 'root@localhost'
+default['nagios']['server_auth_method']      = 'openid'
+default['nagios']['users_databag_group']     = 'sysadmin'
 
 # This setting is effectively sets the minimum interval (in seconds) nagios can handle.
 # Other interval settings provided in seconds will calculate their actual from this value, since nagios works in 'time units' rather than allowing definitions everywhere in seconds
