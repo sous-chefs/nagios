@@ -171,11 +171,7 @@ sysadmins.each do |s|
   members << s['id']
 end
 
-if node['public_domain']
-  public_domain = node['public_domain']
-else
-  public_domain = node['domain']
-end
+public_domain = node['public_domain'] || node['domain']
 
 nagios_conf "nagios" do
   config_subdir false
