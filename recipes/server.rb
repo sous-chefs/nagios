@@ -21,6 +21,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# configure either Apache2 or NGINX
 web_srv = node['nagios']['server']['web_server'].to_sym
 
 case web_srv
@@ -41,7 +42,7 @@ else
   raise 'Unknown web server option provided for Nagios server'
 end
 
-# Install nagios either from source of package
+# install nagios service either from source of package
 include_recipe "nagios::server_#{node['nagios']['server']['install_method']}"
 
 group = "#{node['nagios']['users_databag_group']}"
