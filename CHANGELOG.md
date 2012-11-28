@@ -1,3 +1,23 @@
+## v2.0.0:
+
+* [COOK-1543] - Nagios cookbook needs to be able to monitor environments
+* [COOK-1556] - Nagios: Add ability to define service template to be used in the
+  `nagios_services` data bag
+* [COOK-1618] - Users data bag group allowed to log into Nagios should
+  be configurable
+* [COOK-1696] - Nagios: Support defining non-Chef managed hosts via
+  data bag items
+* [COOK-1697] - nagios: Source installs should install the latest NRPE
+  and Nagios plugins
+* [COOK-1717] - Nagios: nagios server web page under Apache2 fails to
+  load out of the box
+* [COOK-1723] - Amazon missing as a supported OS in the Nagios metadata
+* [COOK-1732] - `nagios::client_source` includes duplicate resources
+* [COOK-1815] - Switch Nagios to use platform_family not platform
+* [COOK-1816] - Nagios: mod ssl shouldn't get installed if SSL isn't being used
+* [COOK-1887] - `value_for_platform_family` use in Nagios cookbook is
+  broken
+
 ## v1.3.0:
 
 * [COOK-715] - don't source /etc/sysconfig/network on non-RHEL
