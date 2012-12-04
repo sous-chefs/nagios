@@ -341,3 +341,13 @@ define command {
   command_line <%= service ['command_line'] %>
 }
 <% end -%>
+
+<% if !@eventhandlers.empty? -%>
+# Event Handlers added through nagios_eventhandlers data bags
+<% @eventhandlers.each do |eventhandlers| -%>
+define command {
+  command_name <%= eventhandlers['id'] %>
+  command_line <%= eventhandlers['command_line'] %>
+}
+<% end -%>
+<% end -%>
