@@ -29,11 +29,7 @@ apache_site "000-default" do
   enable false
 end
 
-if node['public_domain']
-  public_domain = node['public_domain']
-else
-  public_domain = node['domain']
-end
+public_domain = node['public_domain'] || node['domain']
 
 template "#{node['apache']['dir']}/sites-available/nagios3.conf" do
   source "apache2.conf.erb"
