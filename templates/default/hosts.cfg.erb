@@ -12,7 +12,7 @@ define host {
 <% @nodes.each do |n| -%>
 <% unless n.name == node.name -%>
 define host {
-  use server
+  use uconnect
   address <%= n['ipaddress'] %>
   host_name <%= n['hostname'] %>
 <% if n.run_list.roles.nil? || n.run_list.roles.length == 0 -%>

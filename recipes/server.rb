@@ -67,7 +67,11 @@ else
   end
 end
 
-nodes = search(:node, "hostname:[* TO *] AND app_environment:#{node[:app_environment]} AND domain:#{node[:domain]}")
+#region = node[:ec2][:placement_availability_zone].match(/^(.*-\d+)[^-]+$/)[0]
+region = node[:ec2][:placement_availability_zone].match(/^(.*-\d+)[^-]+$/)[1]
+
+#nodes = search(:node, "hostname:[* TO *] AND app_environment:#{node[:app_environment]} AND domain:#{node[:domain]}")
+nodes = search(:node, "hostname:[* TO *] AND app_environment:#{node[:app_environment]} AND placement_availability_zone:#{region}*")
 
 if nodes.empty?
   Chef::Log.info("No nodes returned from search, using this node so hosts.cfg has data")
