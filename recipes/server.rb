@@ -248,7 +248,8 @@ end
 nagios_conf "services" do
   variables(
     :service_hosts => service_hosts,
-    :services => services
+    :services => services,
+    :hostgroups => hostgroups
   )
 end
 
@@ -267,7 +268,8 @@ end
 nagios_conf "hosts" do
   variables(
     :nodes => nodes,
-    :unmanaged_hosts => unmanaged_hosts
+    :unmanaged_hosts => unmanaged_hosts,
+    :hostgroups => hostgroups
   )
 end
 
