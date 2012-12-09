@@ -44,8 +44,7 @@ end
 # Install nagios either from source of package
 include_recipe "nagios::server_#{node['nagios']['server']['install_method']}"
 
-group = "#{node['nagios']['users_databag_group']}"
-sysadmins = search(:users, "groups:#{group}")
+sysadmins = search(:users, 'groups:sysadmin')
 
 case node['nagios']['server_auth_method']
 when "openid"
@@ -61,19 +60,14 @@ else
     source "htpasswd.users.erb"
     owner node['nagios']['user']
     group web_group
-    mode 00640
+    mode 0640
     variables(
       :sysadmins => sysadmins
     )
   end
 end
 
-# find nodes to monitor.  Search in all environments if multi_environment_monitoring is enabled
-if node['nagios']['multi_environment_monitoring']
-  nodes = search(:node, "hostname:[* TO *]")
-else
-  nodes = search(:node, "hostname:[* TO *] AND chef_environment:#{node.chef_environment}")
-end
+nodes = search(:node, "hostname:[* TO *] AND chef_environment:#{node.chef_environment}")
 
 if nodes.empty?
   Chef::Log.info("No nodes returned from search, using this node so hosts.cfg has data")
@@ -81,43 +75,16 @@ if nodes.empty?
   nodes << node
 end
 
-# maps nodes into nagios hostgroups
-role_list = Array.new
-service_hosts= Hash.new
-search(:role, "*:*") do |r|
-  role_list << r.name
-  if node['nagios']['multi_environment_monitoring']
-    search(:node, "roles:#{r.name}") do |n|
-      service_hosts[r.name] = n['hostname']
-    end
-  else
-    search(:node, "roles:#{r.name} AND chef_environment:#{node.chef_environment}") do |n|
-      service_hosts[r.name] = n['hostname']
-    end
-  end
-end
-
-# if using multi environment monitoring then grab the list of environments
-if node['nagios']['multi_environment_monitoring']
-  environment_list = Array.new
-  search(:environment, "*:*") do |e|
-    role_list << e.name
-    search(:node, "chef_environment:#{e.name}") do |n|
-      service_hosts[e.name] = n['hostname']
-    end
-  end
-end
-
 # find all unique platforms to create hostgroups
 os_list = Array.new
 
 nodes.each do |n|
-  if !os_list.include?(n['os'])
-    os_list << n['os']
-  end
+	if !os_list.include?(n['os'])
+		os_list << n['os']
+	end
 end
 
-# load Nagios services from the nagios_services data bag
+# Load Nagios services from the nagios_services data bag
 begin
   services = search(:nagios_services, '*:*')
 rescue Net::HTTPServerException
@@ -129,25 +96,16 @@ if services.nil? || services.empty?
   services = Array.new
 end
 
-
-# find all unique hostgroups in the nagios_unmanagedhosts data bag
+# Load Nagios templates from the nagios_templates data bag
 begin
-  unmanaged_hosts = search(:nagios_unmanagedhosts, '*:*')
+  templates = search(:nagios_templates, '*:*')
 rescue Net::HTTPServerException
-  Chef::Log.info("Search for nagios_unmanagedhosts data bag failed, so we'll just move on.")
+  Chef::Log.info("Could not search for nagios_template data bag items, skipping dynamically generated template checks")
 end
 
-# Add unmanaged host hostgroups to the role_list if they're not already present
-if unmanaged_hosts.nil? || unmanaged_hosts.empty?
-  Chef::Log.info("No unmanaged hosts returned from data bag search.")
-else
-  unmanaged_hosts.each do |host|
-    host['hostgroups'].each do |nested_hostgroup|
-      if !role_list.include?(nested_hostgroup) and !os_list.include?(nested_hostgroup)
-        role_list << nested_hostgroup
-      end
-    end
-  end
+if templates.nil? || templates.empty?
+  Chef::Log.info("No templates returned from data bag search.")
+  templates = Array.new
 end
 
 # Load search defined Nagios hostgroups from the nagios_hostgroups data bag and find nodes
@@ -171,11 +129,22 @@ sysadmins.each do |s|
   members << s['id']
 end
 
+# maps nodes into nagios hostgroups
+role_list = Array.new
+service_hosts= Hash.new
+search(:role, "*:*") do |r|
+  role_list << r.name
+  search(:node, "role:#{r.name} AND chef_environment:#{node.chef_environment}") do |n|
+    service_hosts[r.name] = n['hostname']
+  end
+end
+
 if node['public_domain']
   public_domain = node['public_domain']
 else
   public_domain = node['domain']
 end
+
 
 nagios_conf "nagios" do
   config_subdir false
@@ -227,8 +196,12 @@ end
   end
 end
 
-%w{ templates timeperiods}.each do |conf|
+%w{timeperiods}.each do |conf|
   nagios_conf conf
+end
+
+nagios_conf "templates" do
+  variables :templates => templates
 end
 
 nagios_conf "commands" do
@@ -249,18 +222,14 @@ end
 nagios_conf "hostgroups" do
   variables(
     :roles => role_list,
-    :environments => environment_list,
     :os => os_list,
     :search_hostgroups => hostgroup_list,
     :search_nodes => hostgroup_nodes
-  )
+    )
 end
 
 nagios_conf "hosts" do
-  variables(
-    :nodes => nodes,
-    :unmanaged_hosts => unmanaged_hosts
-  )
+  variables :nodes => nodes
 end
 
 service "nagios" do

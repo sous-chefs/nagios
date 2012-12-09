@@ -9,7 +9,7 @@ Requirements
 Chef
 ----
 
-Chef version 0.10.10+ and Ohai 0.6.12+ are required for chef environment usage. See __Environments__ under __Usage__ below.
+Chef version 0.10.0+ is required for chef environment usage. See __Environments__ under __Usage__ below.
 
 A data bag named 'users' should exist, see __Data Bag__ below.
 
@@ -24,7 +24,7 @@ Platform
 
 * Debian 6
 * Ubuntu 10.04, 12.04
-* Red Hat Enterprise Linux (CentOS/Amazon/Scientific/Oracle) 5.8, 6.3
+* Red Hat Enterprise Linux (CentOS) 5.8, 6.3
 
 **Notes**: This cookbook has been tested on the listed platforms. It
   may work on other platforms with or without modification.
@@ -101,7 +101,6 @@ Default directory locations are based on FHS. Change to suit your preferences.
 * `node['nagios']['default_contact_groups']`
 * `node['nagios']['sysadmin_email']` - default notification email.
 * `node['nagios']['sysadmin_sms_email']` - default notification sms.
-* `node['nagios']['users_databag_group']` - Users databag group considered Nagios admins.  Defaults to sysadmins
 * `node['nagios']['server_auth_method']` - authentication with the server can be done with openid (using `apache2::mod_auth_openid`), or htauth (basic). The default is openid, any other value will use htauth (basic).
 * `node['nagios']['templates']`
 * `node['nagios']['interval_length']` - minimum interval.
@@ -257,17 +256,38 @@ For example use the `{SHA}oCagzV4lMZyS7jl2Z0WlmLxEkt4=` value in the data bag.
 Services
 --------
 
-Create a nagios\_services data bag that will contain definitions for services to be monitored.  This allows you to add monitoring rules without mucking about in the services and commands templates.  Each service will be named based on the id of the data bag and the command will be named withe the same id prepended with "check\_".  Just make sure the id in your data bag doesn't conflict with a service or command already defined in the templates.
+Create a nagios\_services data bag that will contain definitions for services to be monitored.  This allows you to add monitoring rules without mucking about in the services and commands templates.  Each service will be named based on the id of the data bag and the command will be named withe the same id prepended with "check\_".  Just make sure the id in your data bag doesn't conflict with a service or command already defined in the templates.  id, hostgroup\_name, and command\_line are required, but any other parameters you need to override can be added into the service.
 
-Here's an example of a service check for sshd that you could apply to all hostgroups:
+Here's an example of a service to check for sshd every 120 seconds that you could apply to all hostgroups:
 
     {
     "id": "ssh",
     "hostgroup_name": "all",
-    "command_line": "$USER1$/check_ssh $HOSTADDRESS$"
+    "command_line": "$USER1$/check_ssh $HOSTADDRESS$",
+    "check_interval": "120"
     }
 
-You may optionally define the service template for your service by including service_template and a valid template name.  Example:  "service_template": "special_service_template"
+Templates
+---------
+
+Templates are optional, but allow you to specify combinations of attributes to apply to a service.  Create a nagios_templates\ data bag that will contain definitions for templates to be used.  Each template need only specify id and whichever parameters you want to override.
+
+Here's an example of a template that reduces the check frequency to once per day and changes the retry interval to 1 hour.
+
+    {
+    "id": "dailychecks",
+    "check_interval": "86400",
+    "retry": "3600"
+    }
+
+You then use the template in your service data bag as follows:
+
+    {
+    "id": "expensive_service_check",
+    "hostgroup_name": "all",
+    "command_line": "$USER1$/check_example $HOSTADDRESS$",
+    "use_template": "dailychecks"
+    }
 
 Search Defined Hostgroups
 -------------------------
@@ -280,19 +300,6 @@ Here's an example to find all HP hardware systems for an "hp_systems" hostgroup:
 		"search_query": "dmi_system_manufacturer:HP",
 		"hostgroup_name": "hp_systems",
 		"id": "hp_systems"
-		}
-
-Monitoring Systems Not In Chef
-------------------------------
-
-Create a nagios\_unmanagedhosts data bag that will contain definitions for hosts not in Chef that you would like to manage.  "hostgroups" can be an existing Chef role (every Chef role gets a Nagios hostgroup) or a new hostgroup.
-Here's an example host definition:
-
-		{
-		"address": "webserver1.mydmz.dmz",
-		"hostgroups": ["web_servers","production_servers"],
-		"id": "webserver1",
-		"notifications": 1
 		}
 
 
