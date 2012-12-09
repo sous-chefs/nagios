@@ -83,18 +83,18 @@ define service {
 
 # Define the log monitoring template (monitoring logs is very different)
 define service{
-	name                            default-logfile
-	use                             default-service
-	check_period                    24x7
-	max_check_attempts              1
+  name                            default-logfile
+  use                             default-service
+  check_period                    24x7
+  max_check_attempts              1
   check_interval                  <%= nagios_interval(nagios_attr(:default_service)[:check_interval]) %>
   retry_interval                  <%= nagios_interval(nagios_attr(:default_service)[:retry_interval]) %>
   contact_groups                  <%= nagios_attr(:default_contact_groups).join(",") %>
-	notification_options            w,u,c,r
-	notification_period             24x7
-	register                        0
+  notification_options            w,u,c,r
+  notification_period             24x7
+  register                        0
   is_volatile                     1
-	}
+  }
 
 # Templates defined by data bags
 <% @templates.each do |template| -%>
