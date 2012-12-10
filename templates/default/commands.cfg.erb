@@ -10,43 +10,8 @@ define command {
 
 # Service checks
 define command {
-  command_name    check_ec2_count
-  command_line    $USER1$/count_ec2_instances.sh
-}
-
-define command {
-  command_name    check_solr_proc
-  command_line    $USER1$/check_nrpe -H $HOSTADDRESS$ -c check_solr_proc -t 20
-}
-
-define command {
-  command_name    check_stompserver
-  command_line    $USER1$/check_nrpe -H $HOSTADDRESS$ -c check_stompserver -t 20
-}
-
-define command {
   command_name    check_chef_client
   command_line    $USER1$/check_nrpe -H $HOSTADDRESS$ -c check_chef_client -t 20
-}
-
-define command {
-  command_name    check_collectd_client
-  command_line    $USER1$/check_nrpe -H $HOSTADDRESS$ -c check_collectd_client -t 20
-}
-
-define command {
-  command_name    check_rabbitmq
-  command_line    $USER1$/check_nrpe -H $HOSTADDRESS$ -c check_rabbitmq -t 20
-}
-
-define command {
-  command_name    check_authz
-  command_line    $USER1$/check_nrpe -H $HOSTADDRESS$ -c check_authz -t 20
-}
-
-define command {
-  command_name    check_audit
-  command_line    $USER1$/check_nrpe -H $HOSTADDRESS$ -c check_audit -t 20
 }
 
 define command {
@@ -213,17 +178,7 @@ define command {
 	command_line	$USER1$/check_mysql -H $ARG1$ -u nagios -p $ARG2$
 }
 
-define command {
-  command_name	check_mysql_master
-	command_line	$USER1$/check_nrpe -H $HOSTADDRESS$ -u $ARG1$ -p $ARG2$
-}
-
 # 'check_mysqlrep' command for mysql replication status
-define command {
-	command_name    check_replication
-	command_line    $USER1$/check_nrpe -c check_replication -H $HOSTADDRESS$ -t 20
-}
-
 define command {
 	command_name	check_mysqlrep
 	command_line	$USER1$/check-mysql-slave.pl --host $HOSTADDRESS$ --port $ARG1$ --user replcheck --password $ARG2$ --warn $ARG3$ --crit $ARG4$
@@ -246,28 +201,8 @@ define command {
 }
 
 define command {
-	command_name    check_dynomite_proc
-	command_line    $USER1$/check_nrpe -H $HOSTADDRESS$ -c check_dynomite_proc -t 20
-}
-
-define command {
-	command_name    check_couchdb_proc
-	command_line    $USER1$/check_nrpe -H $HOSTADDRESS$ -c check_couchdb_proc -t 20
-}
-
-define command {
-	command_name    check_disk
-	command_line    $USER1$/check_nrpe -H $HOSTADDRESS$ -c check_$ARG1$ -t 20
-}
-
-define command {
 	command_name    check_all_disks
 	command_line    $USER1$/check_nrpe -H $HOSTADDRESS$ -c check_all_disks -t 20
-}
-
-define command {
-	command_name    check_traffic
-	command_line    $USER1$/check_nrpe -H $HOSTADDRESS$ -c traffic -t 20
 }
 
 define command {
@@ -276,23 +211,8 @@ define command {
 }
 
 define command {
-	command_name    check_iowait_time
-	command_line    $USER1$/check_nrpe -H $HOSTADDRESS$ -c check_iowait_time -t 20
-}
-
-define command {
-	command_name    check_tps
-	command_line    $USER1$/check_nrpe -H $HOSTADDRESS$ -c check_tps -t 20
-}
-
-define command {
 	command_name    check_swap
 	command_line    $USER1$/check_nrpe -H $HOSTADDRESS$ -c check_swap -t 20
-}
-
-define command {
-	command_name    check_solr_index
-	command_line    $USER1$/check_nrpe -H $HOSTADDRESS$ -c check_$ARG1$_solr_index -t 20
 }
 
 # dummy commands for passive checks
