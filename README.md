@@ -82,6 +82,7 @@ Default directory locations are based on FHS. Change to suit your preferences.
 * `node['nagios']['server']['web_server']` - web server to use. supports apache or nginx, default "nginx"
 * `node['nagios']['server']['nginx_dispatch']` - nginx dispatch method. support cgi or php, default "cgi"
 * `node['nagios']['server']['stop_apache']` - stop apache service if using nginx, default false
+* `node['nagios']['server']['redirect_root']` - if using apache, should http://server/ redirect to http://server//nagios3 automatically, default true
 * `node['nagios']['home']` - nagios main home directory, default "/usr/lib/nagios3"
 * `node['nagios']['conf_dir']` - location where main nagios config lives, default "/etc/nagios3"
 * `node['nagios']['config_dir']` - location where included configuration files live, default "/etc/nagios3/conf.d"
@@ -130,7 +131,7 @@ The client recipe searches for servers allowed to connect via NRPE that have a r
 
 Searches are confined to the node's `chef_environment`.
 
-Client commands for NRPE can be modified by editing the nrpe.cfg.erb template.
+Client commands for NRPE can be installed using the nrpecheck resource. (See __Resources/Providers__ below.)
 
 client\_package
 ---------------
