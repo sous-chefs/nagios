@@ -22,7 +22,7 @@
 # limitations under the License.
 #
 
-mon_host = ['127.0.0.1']
+mon_host = ['10.168.54.255']
 
 if node.run_list.roles.include?(node['nagios']['server_role'])
   mon_host << node['ipaddress']
