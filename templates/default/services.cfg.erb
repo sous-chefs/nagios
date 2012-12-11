@@ -44,7 +44,7 @@ define service {
 
 define service {
     service_description HTTP Processes
-    hostgroup_name      all, !nagios
+    hostgroup_name      all, !nagios, !urest, !mongodb
     check_command       check_http
     use                 default-service
 }
