@@ -44,8 +44,15 @@ define service {
 
 define service {
     service_description HTTP Processes
-    hostgroup_name      all
+    hostgroup_name      all, !nagios
     check_command       check_http
+    use                 default-service
+}
+
+define service {
+    service_description HTTP Processes Auth
+    hostgroup_name      nagios
+    check_command       check_http_auth
     use                 default-service
 }
 

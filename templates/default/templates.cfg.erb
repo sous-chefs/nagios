@@ -55,22 +55,6 @@ define host {
 }
 
 
-### Added by Jack 11-29 ###
-define host {
-  name                    uconnect
-  use                     default-host
-  check_period            24x7
-  check_interval          <%= nagios_interval(nagios_attr(:default_host)[:check_interval]) %>
-  retry_interval          <%= nagios_interval(nagios_attr(:default_host)[:retry_interval]) %>
-  max_check_attempts      <%= nagios_attr(:default_host)[:max_check_attempts] %>
-  check_command           check-host-alive
-  notification_interval   <%= nagios_interval(nagios_attr(:default_host)[:notification_interval]) %>
-  notification_options    d,u,r
-  contact                 jjacobs
-  register                0
-}
-
-
 define service {
   name                            default-service
   active_checks_enabled           1

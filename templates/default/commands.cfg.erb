@@ -143,6 +143,11 @@ define command {
 }
 
 define command {
+  command_name    check_http_auth
+  command_line    $USER1$/check_http -I $HOSTADDRESS$ $ARG1$ -a nagiosadmin:nagios
+}
+
+define command {
   command_name    check_http_content
   command_line    $USER1$/check_http -I $HOSTADDRESS$ -H $ARG1$ -u $ARG2$ -s $ARG3$
 }
