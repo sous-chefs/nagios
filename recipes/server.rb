@@ -128,14 +128,14 @@ end
 
 # Load Nagios templates from the nagios_templates data bag
 begin
-    templates = search(:nagios_templates, '*:*')
-    rescue Net::HTTPServerException
-    Chef::Log.info("Could not search for nagios_template data bag items, skipping dynamically generated template checks")
+  templates = search(:nagios_templates, '*:*')
+  rescue Net::HTTPServerException
+  Chef::Log.info("Could not search for nagios_template data bag items, skipping dynamically generated template checks")
 end
 
 if templates.nil? || templates.empty?
-    Chef::Log.info("No templates returned from data bag search.")
-    templates = Array.new
+  Chef::Log.info("No templates returned from data bag search.")
+  templates = Array.new
 end
 
 # Load Nagios event handlers from the nagios_eventhandlers data bag
@@ -178,7 +178,7 @@ begin
     hostgroup_list << hg['hostgroup_name']
     temp_hostgroup_array= Array.new
     search(:node, "#{hg['search_query']}") do |n|
-       temp_hostgroup_array << n['hostname']
+      temp_hostgroup_array << n['hostname']
     end
     hostgroup_nodes[hg['hostgroup_name']] = temp_hostgroup_array.join(",")
   end
