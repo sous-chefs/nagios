@@ -44,7 +44,7 @@ define service {
 
 define service {
     service_description HTTP Processes
-    hostgroup_name      all, !nagios, !urest, !mongodb
+    hostgroup_name      all, !nagios, !urest, !mongodb, !rabbitmq, !production_nexus, !jenkins
     check_command       check_http
     use                 default-service
 }
