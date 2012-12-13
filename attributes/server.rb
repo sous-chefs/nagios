@@ -86,6 +86,7 @@ default['nagios']['default_service']['notification_interval'] = 1200
 default['nagios']['default_service']['flap_detection'] = true
 
 default['nagios']['server']['web_server'] = :apache
+default['nagios']['server']['stop_default_website'] = true
 default['nagios']['server']['nginx_dispatch'] = :cgi
 default['nagios']['server']['stop_apache'] = false
 default['nagios']['server']['redirect_root'] = false
