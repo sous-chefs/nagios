@@ -269,6 +269,28 @@ Here's an example of a service check for sshd that you could apply to all hostgr
 
 You may optionally define the service template for your service by including service_template and a valid template name.  Example:  "service_template": "special_service_template"
 
+Templates
+---------
+
+Templates are optional, but allow you to specify combinations of attributes to apply to a service.  Create a nagios_templates\ data bag that will contain definitions for templates to be used.  Each template need only specify id and whichever parameters you want to override.
+
+Here's an example of a template that reduces the check frequency to once per day and changes the retry interval to 1 hour.
+
+    {
+    "id": "dailychecks",
+    "check_interval": "86400",
+    "retry": "3600"
+    }
+
+You then use the template in your service data bag as follows:
+
+    {
+    "id": "expensive_service_check",
+    "hostgroup_name": "all",
+    "command_line": "$USER1$/check_example $HOSTADDRESS$",
+    "service_template": "dailychecks"
+    }
+
 Search Defined Hostgroups
 -------------------------
 
