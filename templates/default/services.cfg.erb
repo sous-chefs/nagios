@@ -131,7 +131,7 @@ define service {
 <% @services.each do |service| -%>
   <% unless service['hostgroup_name'].nil? || !@hostgroups.include?(service['hostgroup_name']) -%>
 define service {
-  service_description <%= service['id'] %>
+  service_description <%= service['description'] || service['id'] %>
   hostgroup_name <%= service['hostgroup_name'] %>
   check_command check_<%= service['id'] %>
   use <% if service['service_template'].nil? -%>default-service<% else -%><%= service['service_template'] %> <% end -%>
