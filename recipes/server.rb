@@ -129,6 +129,18 @@ if services.nil? || services.empty?
   services = Array.new
 end
 
+# Load Nagios templates from the nagios_templates data bag
+begin
+    templates = search(:nagios_templates, '*:*')
+    rescue Net::HTTPServerException
+    Chef::Log.info("Could not search for nagios_template data bag items, skipping dynamically generated template checks")
+end
+
+if templates.nil? || templates.empty?
+    Chef::Log.info("No templates returned from data bag search.")
+    templates = Array.new
+end
+
 # Load Nagios event handlers from the nagios_eventhandlers data bag
 begin
   eventhandlers = search(:nagios_eventhandlers, '*:*')
@@ -234,8 +246,10 @@ end
   end
 end
 
-%w{ templates timeperiods}.each do |conf|
-  nagios_conf conf
+nagios_conf "timeperiods"
+
+nagios_conf "templates" do
+    variables :templates => templates
 end
 
 nagios_conf "commands" do
