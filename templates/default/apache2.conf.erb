@@ -11,7 +11,7 @@
   ScriptAlias /cgi-bin/nagios3 /usr/lib/cgi-bin/nagios3
   ScriptAlias /nagios3/cgi-bin /usr/lib/cgi-bin/nagios3
 
-  Alias /nagios3/stylesheets /etc/nagios3/stylesheets
+  Alias /stylesheets /etc/nagios3/stylesheets
   Alias /nagios3 <%= node['nagios']['docroot'] %>
 
   <% if node['nagios']['https'] -%>
