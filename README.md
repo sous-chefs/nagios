@@ -79,10 +79,10 @@ Default directory locations are based on FHS. Change to suit your preferences.
 
 * `node['nagios']['server']['install_method']` - whether to install from package or source. Default chosen by platform based on known packages available for Nagios 3: debian/ubuntu 'package', redhat/centos/fedora/scientific: source
 * `node['nagios']['server']['service_name']` - name of the service used for nagios, default chosen by platform, debian/ubuntu "nagios3", redhat family "nagios", all others, "nagios"
-* `node['nagios']['server']['web_server']` - web server to use. supports apache or nginx, default "nginx"
+* `node['nagios']['server']['web_server']` - web server to use. supports apache or nginx, default "apache"
 * `node['nagios']['server']['nginx_dispatch']` - nginx dispatch method. support cgi or php, default "cgi"
 * `node['nagios']['server']['stop_apache']` - stop apache service if using nginx, default false
-* `node['nagios']['server']['redirect_root']` - if using apache, should http://server/ redirect to http://server//nagios3 automatically, default true
+* `node['nagios']['server']['redirect_root']` - if using apache, should http://server/ redirect to http://server//nagios3 automatically, default false
 * `node['nagios']['home']` - nagios main home directory, default "/usr/lib/nagios3"
 * `node['nagios']['conf_dir']` - location where main nagios config lives, default "/etc/nagios3"
 * `node['nagios']['config_dir']` - location where included configuration files live, default "/etc/nagios3/conf.d"
@@ -267,7 +267,7 @@ Here's an example of a service check for sshd that you could apply to all hostgr
     "command_line": "$USER1$/check_ssh $HOSTADDRESS$"
     }
 
-You may optionally define the service template for your service by including service_template and a valid template name.  Example:  "service_template": "special_service_template"
+You may optionally define the service template for your service by including service_template and a valid template name.  Example:  "service_template": "special_service_template".  You may also optionally add a service description that will be displayed in the Nagios UI using "description": "My Service Name".  If this is not present the databag name will be used.
 
 Templates
 ---------
