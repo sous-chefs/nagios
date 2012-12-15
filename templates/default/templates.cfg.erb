@@ -100,7 +100,7 @@ define service{
 <% @templates.each do |template| -%>
 define service {
   name <%= template['id'] %>
-  use <% if service['use'].nil? -%>default-service<% else -%><%= service['use'] %><% end -%>
+  use <% if template['use'].nil? -%>default-service<% else -%><%= template['use'] %><% end -%>
   register 0
   <% %w{passive_checks_enabled parallelize_check obsess_over_service check_freshness notifications_enabled event_handler_enabled flap_detection_enabled failure_prediction_enabled process_perf_data retain_status_information retain_nonstatus_information is_volatile check_period max_check_attempts check_interval retry_interval contact_groups notification_options notification_interval notification_period}.each do |conf| %>
     <% unless template[conf].nil? %>
