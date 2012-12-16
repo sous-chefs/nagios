@@ -129,12 +129,19 @@ define service {
 
 # Services defined by data bags
 <% @services.each do |service| -%>
-  <% unless @service_hosts[service['hostgroup_name'].nil? && service['hostgroup_name'] != 'all' ] -%>
+  <% unless service['hostgroup_name'].nil? || !@hostgroups.include?(service['hostgroup_name']) -%>
 define service {
-  service_description <%= service['id'] %>
+  service_description <%= service['description'] || service['id'] %>
   hostgroup_name <%= service['hostgroup_name'] %>
   check_command check_<%= service['id'] %>
   use <% if service['service_template'].nil? -%>default-service<% else -%><%= service['service_template'] %> <% end -%>
+  <% unless service['event_handler'].nil? -%>event_handler <%= service['event_handler'] %><% end -%>
+  #per-databag overrides:
+  <% %w{passive_checks_enabled parallelize_check obsess_over_service check_freshness notifications_enabled event_handler_enabled flap_detection_enabled failure_prediction_enabled process_perf_data retain_status_information retain_nonstatus_information is_volatile check_period max_check_attempts check_interval retry_interval contact_groups notification_options notification_interval notification_period}.each do |conf| %>
+    <% unless service[conf].nil? %>
+  <%= conf %> <%= service[conf] %>
+    <% end %>
+  <% end %>
 }
   <% end -%>
 <% end -%>

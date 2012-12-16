@@ -22,11 +22,11 @@
 # limitations under the License.
 #
 
-case node['platform']
-when "ubuntu","debian"
+case node['platform_family']
+when 'debian'
   default['nagios']['client']['install_method'] = 'package'
   default['nagios']['nrpe']['pidfile'] = '/var/run/nagios/nrpe.pid'
-when "redhat","centos","fedora","scientific","amazon"
+when 'rhel','fedora'
   default['nagios']['client']['install_method'] = 'source'
   default['nagios']['nrpe']['pidfile'] = '/var/run/nrpe.pid'
 else
@@ -34,10 +34,10 @@ else
   default['nagios']['nrpe']['pidfile'] = '/var/run/nrpe.pid'
 end
 
-default['nagios']['nrpe']['home']              = "/usr/lib/nagios"
-default['nagios']['nrpe']['conf_dir']          = "/etc/nagios"
-default['nagios']['nrpe']['dont_blame_nrpe']   = "0"
-default['nagios']['nrpe']['command_timeout']   = "60"
+default['nagios']['nrpe']['home']              = '/usr/lib/nagios'
+default['nagios']['nrpe']['conf_dir']          = '/etc/nagios'
+default['nagios']['nrpe']['dont_blame_nrpe']   = 0
+default['nagios']['nrpe']['command_timeout']   = 60
 
 # for plugin from source installation
 default['nagios']['plugins']['url']      = 'http://prdownloads.sourceforge.net/sourceforge/nagiosplug'
@@ -51,9 +51,8 @@ default['nagios']['nrpe']['checksum'] = 'bac8f7eb9daddf96b732a59ffc5762b1cf073fb
 
 default['nagios']['checks']['memory']['critical'] = 150
 default['nagios']['checks']['memory']['warning']  = 250
-default['nagios']['checks']['load']['critical']   = "30,20,10"
-default['nagios']['checks']['load']['warning']    = "15,10,5"
+default['nagios']['checks']['load']['critical']   = '30,20,10'
+default['nagios']['checks']['load']['warning']    = '15,10,5'
 default['nagios']['checks']['smtp_host'] = String.new
 
-default['nagios']['server_role'] = "monitoring"
-default['nagios']['multi_environment_monitoring'] = false
+default['nagios']['server_role'] = 'monitoring'

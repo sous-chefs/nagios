@@ -9,11 +9,11 @@ Requirements
 Chef
 ----
 
-Chef version 0.10.0+ is required for chef environment usage. See __Environments__ under __Usage__ below.
+Chef version 0.10.10+ and Ohai 0.6.12+ are required.
 
 A data bag named 'users' should exist, see __Data Bag__ below.
 
-The monitoring server that uses this recipe should have a role named 'monitoring' or similar, this is settable via an attribute. See __Attributes__ below.
+The monitoring server that uses this recipe should have a role named 'monitoring' or similar, the role name is configurable via an attribute. See __Attributes__ below.
 
 Because of the heavy use of search, this recipe will not work with Chef Solo, as it cannot do any searches without a server.
 
@@ -24,7 +24,7 @@ Platform
 
 * Debian 6
 * Ubuntu 10.04, 12.04
-* Red Hat Enterprise Linux (CentOS) 5.8, 6.3
+* Red Hat Enterprise Linux (CentOS/Amazon/Scientific/Oracle) 5.8, 6.3
 
 **Notes**: This cookbook has been tested on the listed platforms. It
   may work on other platforms with or without modification.
@@ -48,8 +48,8 @@ The following attributes are used by both client and server recipes.
 
 * `node['nagios']['user']` - nagios user, default 'nagios'.
 * `node['nagios']['group']` - nagios group, default 'nagios'.
-* `node['nagios']['plugin_dir']` - location where nagios plugins go,
-* default '/usr/lib/nagios/plugins'.
+* `node['nagios']['plugin_dir']` - location where nagios plugins go, default '/usr/lib/nagios/plugins'.
+* `node['nagios']['multi_environment_monitoring']` - Chef server will monitor hosts in all environments, not just its own, default 'false'
 
 client
 ------
@@ -71,7 +71,6 @@ The following attributes are used for the client NRPE checks for warning and cri
 * `node['nagios']['checks']['load']['warning']` - threshold of warning load average, default 15,10,5
 * `node['nagios']['checks']['smtp_host']` - default relayhost to check for connectivity. Default is an empty string, set via an attribute in a role.
 * `node['nagios']['server_role']` - the role that the nagios server will have in its run list that the clients can search for.
-* `node['nagios']['multi_environment_monitoring']` - Allow Nagios servers in any Chef environment to monitor NRPE
 
 server
 ------
@@ -80,9 +79,10 @@ Default directory locations are based on FHS. Change to suit your preferences.
 
 * `node['nagios']['server']['install_method']` - whether to install from package or source. Default chosen by platform based on known packages available for Nagios 3: debian/ubuntu 'package', redhat/centos/fedora/scientific: source
 * `node['nagios']['server']['service_name']` - name of the service used for nagios, default chosen by platform, debian/ubuntu "nagios3", redhat family "nagios", all others, "nagios"
-* `node['nagios']['server']['web_server']` - web server to use. supports apache or nginx, default "nginx"
+* `node['nagios']['server']['web_server']` - web server to use. supports apache or nginx, default "apache"
 * `node['nagios']['server']['nginx_dispatch']` - nginx dispatch method. support cgi or php, default "cgi"
 * `node['nagios']['server']['stop_apache']` - stop apache service if using nginx, default false
+* `node['nagios']['server']['redirect_root']` - if using apache, should http://server/ redirect to http://server//nagios3 automatically, default false
 * `node['nagios']['home']` - nagios main home directory, default "/usr/lib/nagios3"
 * `node['nagios']['conf_dir']` - location where main nagios config lives, default "/etc/nagios3"
 * `node['nagios']['config_dir']` - location where included configuration files live, default "/etc/nagios3/conf.d"
@@ -132,7 +132,7 @@ The client recipe searches for servers allowed to connect via NRPE that have a r
 
 Searches are confined to the node's `chef_environment`.
 
-Client commands for NRPE can be modified by editing the nrpe.cfg.erb template.
+Client commands for NRPE can be installed using the nrpecheck resource. (See __Resources/Providers__ below.)
 
 client\_package
 ---------------
@@ -268,7 +268,29 @@ Here's an example of a service check for sshd that you could apply to all hostgr
     "command_line": "$USER1$/check_ssh $HOSTADDRESS$"
     }
 
-You may optionally define the service template for your service by including service_template and a valid template name.  Example:  "service_template": "special_service_template"
+You may optionally define the service template for your service by including service_template and a valid template name.  Example:  "service_template": "special_service_template".  You may also optionally add a service description that will be displayed in the Nagios UI using "description": "My Service Name".  If this is not present the databag name will be used.
+
+Templates
+---------
+
+Templates are optional, but allow you to specify combinations of attributes to apply to a service.  Create a nagios_templates\ data bag that will contain definitions for templates to be used.  Each template need only specify id and whichever parameters you want to override.
+
+Here's an example of a template that reduces the check frequency to once per day and changes the retry interval to 1 hour.
+
+    {
+    "id": "dailychecks",
+    "check_interval": "86400",
+    "retry": "3600"
+    }
+
+You then use the template in your service data bag as follows:
+
+    {
+    "id": "expensive_service_check",
+    "hostgroup_name": "all",
+    "command_line": "$USER1$/check_example $HOSTADDRESS$",
+    "service_template": "dailychecks"
+    }
 
 Search Defined Hostgroups
 -------------------------
@@ -316,6 +338,29 @@ Create a role to use for the monitoring server. The role name should match the v
     )
 
     % knife role from file monitoring.rb
+
+
+Event Handlers
+=====
+
+You can optionally define event handlers to trigger on service alerts by creating a nagios\_eventhandlers data bag that will contain definitions of event handlers for services monitored via Nagios.
+
+This example event handler data bags restarts chef-client.  Note: This assumes you have already defined a NRPE job restart\_chef-client on the host where this command will run.  You can use the NRPE LWRP to add commands to your local NRPE configs from within your cookbooks.
+
+{
+    "command_line": "$USER1$/check_nrpe -H $HOSTADDRESS$ -t 45 -c restart_chef-client",
+    "id": "restart_chef-client"
+}
+
+Once you've defined an event handler you will need to add the event handler to a service definition in order to trigger the action.  See the example service definition below.
+
+{
+    "command_line": "$USER1$/check_nrpe -H $HOSTADDRESS$ -t 45 -c check_chef_client",
+    "hostgroup_name": "linux",
+    "id": "chef-client",
+    "event_handler": "restart_chef-client"
+}
+
 
 Definitions
 ===========

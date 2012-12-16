@@ -8,22 +8,15 @@ define hostgroup {
   members *
 }
 
-<% @roles.each do |r| -%>
+<% @hostgroups.sort.each do |h| -%>
 define hostgroup {
-  hostgroup_name <%= r %>
-  alias <%= r %>
+  hostgroup_name <%= h %>
+  alias <%= h %>
 }
 
 <% end -%>
 
-<% @os.each do |o| -%>
-define hostgroup {
-  hostgroup_name <%= o %>
-  alias <%= o %>
-}
-<% end -%>
-
-<% @search_hostgroups.each do |hostgroup| -%>
+<% @search_hostgroups.sort.each do |hostgroup| -%>
 define hostgroup {
   hostgroup_name <%= hostgroup %>
   alias <%= hostgroup %>
@@ -33,4 +26,5 @@ define hostgroup {
   members        empty
 <% end -%>
 }
+
 <% end -%>

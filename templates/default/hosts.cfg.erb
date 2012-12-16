@@ -13,18 +13,26 @@ define host {
 <% unless n.name == node.name -%>
 define host {
   use server
-  address <%= n['ipaddress'] %>
+  address <%= (!n['cloud'].nil? && n['cloud'] != node['cloud']) ? n['cloud']['public_ipv4'] : n['ipaddress'] %>
   host_name <%= n['hostname'] %>
-<% if n.run_list.roles.nil? || n.run_list.roles.length == 0 -%>
+  <% if node['nagios']['multi_environment_monitoring'] -%>
+  <% if n.run_list.roles.nil? || n.run_list.roles.length == 0 -%>
+  hostgroups all,<%= n.os %><% if n.chef_environment != '_default' -%>, <%= n.chef_environment %> <% end -%>
+  <% else -%>
+  hostgroups <%= (n.run_list.roles.to_a & @hostgroups).join(",") %>,<%= n.os %><% if n.chef_environment != '_default' -%>, <%= n.chef_environment %> <% end -%>
+  <% end -%>
+  <% elsif -%>
+  <% if n.run_list.roles.nil? || n.run_list.roles.length == 0 -%>
   hostgroups all,<%= n.os %>
-<% else -%>
-  hostgroups <%= n.run_list.roles.to_a.join(",") %>,<%= n['os'] %>
-<% end -%>
+  <% else -%>
+  hostgroups <%= (n.run_list.roles.to_a & @hostgroups).join(",") %>,<%= n['os'] %>
+  <% end -%>
+  <% end -%>
 }
 <% end -%>
-
 <% end -%>
 
+<% unless @unmanaged_hosts.nil? -%>
 <% @unmanaged_hosts.each do |n| -%>
 define host {
   use server
@@ -33,4 +41,5 @@ define host {
   hostgroups <%= n['hostgroups'].join(",") %>
   notifications_enabled <%= n['notifications'] %>
 }
+<% end -%>
 <% end -%>

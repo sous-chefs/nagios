@@ -18,10 +18,10 @@
 # limitations under the License.
 
 package "libwww-perl" do
-  case node["platform"]
-  when "redhat", "centos", "scientific", "fedora", "suse", "amazon"
+  case node["platform_family"]
+  when "rhel", "fedora"
     package_name "perl-libwww-perl"
-  when "debian","ubuntu"
+  when "debian"
     package_name "libwww-perl"
   when "arch"
     package_name "libwww-perl"
@@ -30,10 +30,10 @@ package "libwww-perl" do
 end
 
 package "libcrypt-ssleay-perl" do
-  case node["platform"]
-  when "redhat", "centos", "scientific", "fedora", "suse", "amazon"
+  case node["platform_family"]
+  when "rhel", "fedora"
     package_name "perl-Crypt-SSLeay"
-  when "debian","ubuntu"
+  when "debian"
     package_name "libcrypt-ssleay-perl"
   when "arch"
     package_name "libcrypt-ssleay-perl"
@@ -41,9 +41,9 @@ package "libcrypt-ssleay-perl" do
   action :install
 end
 
-template "#{node['nagios']['config_dir']}/pagerduty_nagios.cfg" do
-  owner "nagios"
-  group "nagios"
+template "#{node['nagios']['config_dir']}/pagerduty.cfg" do
+  owner node['nagios']['user']
+  group node['nagios']['group']
   mode 00644
   source "pagerduty_nagios.cfg.erb"
 end
@@ -57,7 +57,7 @@ remote_file "#{node['nagios']['plugin_dir']}/pagerduty_nagios.pl" do
 end
 
 cron "Flush Pagerduty" do
-  user "nagios"
+  user node['nagios']['user']
   mailto "root@localhost"
   command "#{node['nagios']['plugin_dir']}/pagerduty_nagios.pl flush"
 end

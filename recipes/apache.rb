@@ -15,20 +15,21 @@
 #
 
 include_recipe "apache2"
-include_recipe "apache2::mod_ssl"
 include_recipe "apache2::mod_rewrite"
+include recipe "apache2::mod_php5"
 
-sysadmins = search(:users, 'groups:sysadmin')
+if node['nagios']['enable_ssl']
+  include_recipe "apache2::mod_ssl"
+end
+
+group = "#{node['nagios']['users_databag_group']}"
+sysadmins = search(:users, "groups:#{group}")
 
 apache_site "000-default" do
   enable false
 end
 
-if node['public_domain']
-  public_domain = node['public_domain']
-else
-  public_domain = node['domain']
-end
+public_domain = node['public_domain'] || node['domain']
 
 template "#{node['apache']['dir']}/sites-available/nagios3.conf" do
   source "apache2.conf.erb"

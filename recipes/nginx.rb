@@ -20,8 +20,8 @@ if node["nagios"]["server"]["stop_apache"]
   end
 end
 
-via_pkg = value_for_platform(
-  %w(centos redhat scientific fedora) => {
+via_pkg = value_for_platform_family(
+  %w(rhel fedora) => {
     %w(5.0 5.1 5.2 5.3 5.4 5.5 5.6 5.7 5.8) => false,
     "default" => nil
   },

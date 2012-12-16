@@ -18,6 +18,21 @@
 # limitations under the License.
 #
 
+if node['platform_family'] == 'debian'
+
+  # Nagios package requires to enter the admin password
+  # We generate it randomly as it's overwritten later in the config templates
+  random_initial_password = rand(36**16).to_s(36)
+
+  %w{adminpassword adminpassword-repeat}.each do |setting|
+    execute "preseed nagiosadmin password" do
+      command "echo nagios3-cgi nagios3/#{setting} password #{random_initial_password} | debconf-set-selections"
+      not_if 'dpkg -l nagios3'
+    end
+  end
+
+end
+
 %w{ 
   nagios3
   nagios-nrpe-plugin
