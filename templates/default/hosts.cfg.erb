@@ -13,7 +13,19 @@ define host {
 <% unless n.name == node.name -%>
 define host {
   use server
-  address <%= (!n['cloud'].nil? && n['cloud'] != node['cloud']) ? n['cloud']['public_ipv4'] : n['ipaddress'] %>
+  <% # decide whether to use internal or external IP addresses for this node
+  # if the nagios server is not in the cloud, always use public IP addresses for cloud nodes.
+  # if the nagios server is in the cloud, use private IP addresses for any
+  #   cloud servers in the same cloud, public IPs for servers in other clouds
+  #   (where other is defined by node['cloud']['provider']
+  if node['cloud'].nil? && !n['cloud'].nil?
+    ip = n['cloud']['public_ipv4']
+  elsif !node['cloud'].nil? && n['cloud']['provider'] != node['cloud']['provider']
+    ip = n['cloud']['public_ipv4']
+  else
+    ip = n['ipaddress']
+  end %>
+  address <%= ip %>
   host_name <%= n['hostname'] %>
   <% if node['nagios']['multi_environment_monitoring'] -%>
   <% if n.run_list.roles.nil? || n.run_list.roles.length == 0 -%>
