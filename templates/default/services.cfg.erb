@@ -42,12 +42,12 @@ define service {
     use                 default-service
 }
 
-define service {
-    service_description HTTP Processes
-    hostgroup_name      all, !nagios, !urest, !mongodb, !rabbitmq, !production_nexus, !jenkins
-    check_command       check_http
-    use                 default-service
-}
+#define service {
+#    service_description HTTP Processes
+#    hostgroup_name      all, !nagios, !urest, !mongodb, !rabbitmq, !production_nexus, !jenkins
+#    check_command       check_http
+#    use                 default-service
+#}
 
 define service {
     service_description HTTP Processes Auth
