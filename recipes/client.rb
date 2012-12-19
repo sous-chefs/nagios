@@ -22,7 +22,8 @@
 # limitations under the License.
 #
 
-mon_host = ['10.168.121.10,10.234.65.118,10.176.22.116,10.211.10.26']
+#mon_host = ['10.168.121.10,10.234.65.118,10.176.22.116,10.211.10.26']
+mon_host = []
 
 if node.run_list.roles.include?(node['nagios']['server_role'])
   mon_host << node['ipaddress']
@@ -31,7 +32,12 @@ elsif node['nagios']['multi_environment_monitoring']
    mon_host << n['ipaddress']
   end
 else
-  search(:node, "role:#{node['nagios']['server_role']} AND chef_environment:#{node.chef_environment}") do |n|
+  # Need to add availability zone to the search paramater.
+  region = node[:ec2][:placement_availability_zone].match(/^(.*-\d+)[^-]+$/)[1]
+  search = "role:#{node['nagios']['server_role']} AND app_environment:#{node[:app_environment]} AND placement_availability_zone:#{region}*" 
+  Chef::Log.info( "Searching for Nagios Servers -- Search is: #{search}" );
+  search(:node, search ) do |n|
+    Chef::Log.info( "Found node #{n['ipaddress']}" )
     mon_host << n['ipaddress']
   end
 end
