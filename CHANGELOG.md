@@ -1,3 +1,10 @@
+## v3.1.0:
+
+* [COOK-2032] - Use public IP address for inter-cloud checks and
+  private for intra-cloud checks
+* [COOK-2081] - add support for `notes_url` to `nagios_services` data
+  bags
+
 ## v3.0.0:
 
 This is a major release due to some dramatic refactoring to the
