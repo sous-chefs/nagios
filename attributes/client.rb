@@ -46,8 +46,8 @@ default['nagios']['plugins']['checksum'] = 'b0caf07e0084e9b7f10fdd71cbd3ebabcd85
 
 # for nrpe from source installation
 default['nagios']['nrpe']['url']      = 'http://prdownloads.sourceforge.net/sourceforge/nagios'
-default['nagios']['nrpe']['version']  = '2.13'
-default['nagios']['nrpe']['checksum'] = 'bac8f7eb9daddf96b732a59ffc5762b1cf073fb70f6881d95216ebcd1254a254'
+default['nagios']['nrpe']['version']  = '2.14'
+default['nagios']['nrpe']['checksum'] = '808c7c4a82d0addf15449663e4712b5018c8bbd668e46723139f731f1ac44431'
 
 default['nagios']['checks']['memory']['critical'] = 150
 default['nagios']['checks']['memory']['warning']  = 250
