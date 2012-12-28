@@ -21,9 +21,9 @@
 include_recipe "build-essential"
 
 pkgs = value_for_platform_family(
-    ["rhel","fedora"] => %w{ openssl-devel gd-devel },
-    "debian" => %w{ libssl-dev libgd2-xpm-dev },
-    "default" => %w{ libssl-dev libgd2-xpm-dev }
+    ["rhel","fedora"] => "openssl-devel" ,
+    "debian" => "libssl-dev",
+    "default" => "libssl-dev"
   )
 
 pkgs.each do |pkg|
