@@ -47,12 +47,12 @@ show_context_help=1
 # have to be tweaked a bit, as different versions of the plugin
 # use different command line arguments/syntaxes.
 
-nagios_check_command=<%= node['nagios']['plugin_dir'] %>/check_nagios <%= node['nagios']['cache_dir'] %>/status.dat 5 '/usr/sbin/nagios3'
+nagios_check_command=<%= node['nagios']['plugin_dir'] %>/check_nagios <%= node['nagios']['cache_dir'] %>/status.dat 5 '/usr/sbin/<%= node['nagios']['server']['service_name'] %>'
 
 # AUTHENTICATION USAGE
 # This option controls whether or not the CGIs will use any 
 # authentication when displaying host and service information, as
-# well as committing commands to Nagios for processing.  
+# well as committing commands to Nagios for processing.
 #
 # Read the HTML documentation to learn how the authorization works!
 #
@@ -81,7 +81,7 @@ use_authentication=1
 # access to the CGIs has been authenticated in some manner!  If you
 # define this variable, anyone who has not authenticated to the web
 # server will inherit all rights you assign to this user!
- 
+
 #default_user_name=guest
 
 # SYSTEM/PROCESS INFORMATION ACCESS
@@ -201,7 +201,7 @@ ping_syntax=/bin/ping -n -U -c 5 $HOSTADDRESS$
 
 # REFRESH RATE
 # This option allows you to specify the refresh rate in seconds
-# of various CGIs (status, statusmap, extinfo, and outages).  
+# of various CGIs (status, statusmap, extinfo, and outages).
 
 refresh_rate=90
 
