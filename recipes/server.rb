@@ -21,6 +21,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# save the node so we can ensure it's available in a search.  See COOK-1554
+node.save
+
 # configure either Apache2 or NGINX
 web_srv = node['nagios']['server']['web_server'].to_sym
 
