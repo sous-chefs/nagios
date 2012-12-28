@@ -93,7 +93,7 @@ service_hosts= Hash.new
 search(:role, "*:*") do |r|
   hostgroups << r.name
   nodes.select {|n| n['roles'].include?(r.name) }.each do |n|
-    service_hosts[r.name] = n['hostname']
+    service_hosts[r.name] = n[node['nagios']['host_name_attribute']]
   end
 end
 
@@ -102,7 +102,7 @@ if node['nagios']['multi_environment_monitoring']
   search(:environment, "*:*") do |e|
     hostgroups << e.name
     nodes.select {|n| n.chef_environment == e.name }.each do |n|
-      service_hosts[e.name] = n['hostname']
+      service_hosts[e.name] = n[node['nagios']['host_name_attribute']]
     end
   end
 end
@@ -178,7 +178,7 @@ begin
     hostgroup_list << hg['hostgroup_name']
     temp_hostgroup_array= Array.new
     search(:node, "#{hg['search_query']}") do |n|
-      temp_hostgroup_array << n['hostname']
+      temp_hostgroup_array << n[node['nagios']['host_name_attribute']]
     end
     hostgroup_nodes[hg['hostgroup_name']] = temp_hostgroup_array.join(",")
   end
