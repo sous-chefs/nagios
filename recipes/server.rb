@@ -177,8 +177,14 @@ begin
   search(:nagios_hostgroups, '*:*') do |hg|
     hostgroup_list << hg['hostgroup_name']
     temp_hostgroup_array= Array.new
-    search(:node, "#{hg['search_query']}") do |n|
-      temp_hostgroup_array << n['hostname']
+    if node['nagios']['multi_environment_monitoring']
+      search(:node, "#{hg['search_query']}") do |n|
+        temp_hostgroup_array << n['hostname']
+      end
+    else
+      search(:node, "#{hg['search_query']} AND chef_environment:#{node.chef_environment}") do |n|
+        temp_hostgroup_array << n['hostname']
+      end
     end
     hostgroup_nodes[hg['hostgroup_name']] = temp_hostgroup_array.join(",")
   end
