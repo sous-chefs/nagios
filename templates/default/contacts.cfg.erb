@@ -34,3 +34,42 @@ define contact {
 }
 
 <% end -%>
+
+# Contacts from data bags
+<% @contacts.each do |contact| -%>
+define contact {
+  name <%= contact['id'] %>
+  contact_name <%= contact['id'] %>
+  <% %w{use alias service_notification_period host_notification_period service_notification_options host_notification_options service_notification_commands host_notification_commands email pager register}.each do |conf| %>
+  <% unless contact[conf].nil? %>
+  <%= conf %> <%= contact[conf] %>
+  <% end %>
+  <% end %>
+}
+<% end %>
+
+# Contact Groupss from data bags
+<% @contactgroups.each do |contactgroup| -%>
+define contactgroup {
+  contactgroup_name <%= contactgroup['id'] %>
+  <% %w{alias members contactgroup_members}.each do |conf| %>
+  <% unless contactgroup[conf].nil? %>
+  <%= conf %> <%= contactgroup[conf] %>
+  <% end %>
+  <% end %>
+}
+<% end %>
+
+# Service escalations defined by data bags
+<% @serviceescalations.each do |serviceescalation| -%>
+define serviceescalation {
+  name <%= serviceescalation['id'] %>
+  register 0
+  <% %w{use contact_groups first_notification last_notification escalation_period notification_interval}.each do |conf| %>
+  <% unless serviceescalation[conf].nil? %>
+  <%= conf %> <%= serviceescalation[conf] %>
+  <% end %>
+  <% end %>
+}
+<% end -%>
+
