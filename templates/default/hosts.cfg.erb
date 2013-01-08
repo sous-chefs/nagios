@@ -29,9 +29,9 @@ define host {
   host_name <%= n[node['nagios']['host_name_attribute']] %>
   <% if node['nagios']['multi_environment_monitoring'] -%>
   <% if n.run_list.roles.nil? || n.run_list.roles.length == 0 -%>
-  hostgroups all,<%= n.os %><% if n.chef_environment != '_default' -%>, <%= n.chef_environment %> <% end -%>
+  hostgroups all,<%= n.os %>, <%= n.chef_environment %>
   <% else -%>
-  hostgroups <%= (n.run_list.roles.to_a & @hostgroups).join(",") %>,<%= n.os %><% if n.chef_environment != '_default' -%>, <%= n.chef_environment %> <% end -%>
+  hostgroups <%= (n.run_list.roles.to_a & @hostgroups).join(",") %>,<%= n.os %>, <%= n.chef_environment %>
   <% end -%>
   <% elsif -%>
   <% if n.run_list.roles.nil? || n.run_list.roles.length == 0 -%>
