@@ -24,17 +24,23 @@
 
 case node['platform_family']
 when 'debian'
-  default['nagios']['client']['install_method'] = 'package'
-  default['nagios']['nrpe']['pidfile'] = '/var/run/nagios/nrpe.pid'
+  default['nagios']['client']['install_method']  = 'package'
+  default['nagios']['nrpe']['pidfile']           = '/var/run/nagios/nrpe.pid'
+  default['nagios']['nrpe']['home']              = '/usr/lib/nagios'
 when 'rhel','fedora'
-  default['nagios']['client']['install_method'] = 'source'
-  default['nagios']['nrpe']['pidfile'] = '/var/run/nrpe.pid'
+  default['nagios']['client']['install_method']  = 'source'
+  default['nagios']['nrpe']['pidfile']           = '/var/run/nrpe.pid'
+  if node['kernel']['machine'] == "i686"
+    default['nagios']['nrpe']['home']            = '/usr/lib/nagios'  
+  else
+    default['nagios']['nrpe']['home']            = '/usr/lib64/nagios'
+  end  
 else
-  default['nagios']['client']['install_method'] = 'source'
-  default['nagios']['nrpe']['pidfile'] = '/var/run/nrpe.pid'
+  default['nagios']['client']['install_method']  = 'source'
+  default['nagios']['nrpe']['pidfile']           = '/var/run/nrpe.pid'
+  default['nagios']['nrpe']['home']              = '/usr/lib/nagios'
 end
 
-default['nagios']['nrpe']['home']              = '/usr/lib/nagios'
 default['nagios']['nrpe']['conf_dir']          = '/etc/nagios'
 default['nagios']['nrpe']['dont_blame_nrpe']   = 0
 default['nagios']['nrpe']['command_timeout']   = 60
