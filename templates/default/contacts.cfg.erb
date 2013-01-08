@@ -17,7 +17,7 @@ define contact {
 define contactgroup {
   contactgroup_name admins
   alias             Nagios Administrators
-  members           <%= @members.join(',') %><%= ",pagerduty" unless node['nagios']['pagerduty_key'].empty? %>
+  members           <%= @members.join(',') %><%= ",pagerduty-urgent,pagerduty-business_hours" unless node['nagios']['pagerduty_key'].empty? %>
 }
 
 define contactgroup {
