@@ -81,7 +81,9 @@ bash "compile-nagios-nrpe" do
                 --localstatedir=/var \
                 --libexecdir=#{node['nagios']['plugin_dir']} \
                 --libdir=#{node['nagios']['nrpe']['home']} \
-                --enable-command-args
+                --enable-command-args \
+                --with-nagios-user=#{node['nagios']['user']} \
+                --with-nagios-group=#{node['nagios']['group']}
     make -s
     make install
   EOH
