@@ -255,6 +255,11 @@ The openid must have the http:// and trailing /. The htpasswd must be the hashed
 
 For example use the `{SHA}oCagzV4lMZyS7jl2Z0WlmLxEkt4=` value in the data bag.
 
+Contacts and Contact Groups
+---------------------------
+
+For contacts that aren't people or to define contact templates, put items in the nagios_contacts and nagios_contactgroups data bags.
+
 Services
 --------
 
@@ -268,7 +273,7 @@ Here's an example of a service check for sshd that you could apply to all hostgr
     "command_line": "$USER1$/check_ssh $HOSTADDRESS$"
     }
 
-You may optionally define the service template for your service by including service_template and a valid template name.  Example:  "service_template": "special_service_template".  You may also optionally add a service description that will be displayed in the Nagios UI using "description": "My Service Name".  If this is not present the databag name will be used.
+You may optionally define the service template for your service by including service_template and a valid template name.  Example:  "service_template": "special_service_template".  You may also optionally add a service description that will be displayed in the Nagios UI using "description": "My Service Name".  If this is not present the databag name will be used.  You can define escalations for this service by defining an escalation data bag and then adding 'use_escalation' with the escalation name.
 
 Templates
 ---------
@@ -319,6 +324,28 @@ Here's an example host definition:
 		}
 
 
+Service Escalations
+-------------------
+
+You can optionally define service escalations for the data bag defined services.  Doing so involves two steps - creating the escalation data bag and invoking it from the service.  For example, to create an escalation to page managers on a 15 minute period after the 3rd page:
+
+{
+    "name": "15-minute-escalation",
+    "contact_groups": "managers",
+    "first_notification": "3",
+    "last_notification": "0",
+    "escalation_period": "24x7",
+    "notification_interval": "900"
+}
+
+Then, in the service data bag,
+
+{
+    "id": "my-service",
+    ... 
+    "use_escalation": "15-minute-escalation"
+}
+
 Roles
 =====
 
@@ -360,7 +387,6 @@ Once you've defined an event handler you will need to add the event handler to a
     "id": "chef-client",
     "event_handler": "restart_chef-client"
 }
-
 
 Definitions
 ===========
