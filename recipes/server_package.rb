@@ -33,7 +33,8 @@ if node['platform_family'] == 'debian'
 
 end
 
-%w{ 
+%w{
+  make
   nagios3
   nagios-nrpe-plugin
   nagios-images
