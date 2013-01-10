@@ -4,7 +4,7 @@ server {
   <% if @nagios_url %>
   server_name <%= @nagios_url %>;
   <% else %>
-  server_name nagios nagios.<%= @chef_env %>.<%= @public_domain %> <%= @fqdn %> <;
+  server_name nagios nagios.<%= @chef_env %>.<%= @public_domain %> <%= @fqdn %>;
   <% end %>
   access_log <%= File.join(@log_dir, 'nginx_access.log') %>;
   error_log <%= File.join(@log_dir, 'nginx_error.log') %>;
@@ -21,7 +21,7 @@ server {
 <% end %>
 
 <% if @cgi %>
-<%= 
+<%=
 nginx_dispatch(:cgi,
   :custom => %q(
     fastcgi_param AUTH_USER $remote_user;
