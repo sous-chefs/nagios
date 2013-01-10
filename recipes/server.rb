@@ -192,6 +192,39 @@ rescue Net::HTTPServerException
   Chef::Log.info("Search for nagios_hostgroups data bag failed, so we'll just move on.")
 end
 
+# Load Nagios service escalations from the nagios_serviceescalations data bag
+begin
+    serviceescalations = search(:nagios_serviceescalations, '*:*')
+    rescue Net::HTTPServerException
+    Chef::Log.info("Search for nagios_serviceescalations data bag failed, so we'll just move on.")
+end
+if serviceescalations.nil? || serviceescalations.empty?
+    Chef::Log.info("No service escalations returned from data bag search.")
+    serviceescalations = Array.new
+end
+
+# load Nagios contacts from the nagios_contacts data bag
+begin
+    contacts = search(:nagios_contacts, '*:*')
+    rescue Net::HTTPServerException
+    Chef::Log.info("Could not search for nagios_contacts data bag items, skipping dynamically generated service checks")
+end
+if contacts.nil? || contacts.empty?
+    Chef::Log.info("No contacts returned from data bag search.")
+    contacts = Array.new
+end
+# load Nagios contactgroups from the nagios_contactgroups data bag
+begin
+    contactgroups = search(:nagios_contactgroups, '*:*')
+    rescue Net::HTTPServerException
+    Chef::Log.info("Could not search for nagios_contactgroups data bag items, skipping dynamically generated service checks")
+end
+if contactgroups.nil? || contactgroups.empty?
+    Chef::Log.info("No contactgroups returned from data bag search.")
+    contactgroups = Array.new
+end
+
+# pick up base contacts
 members = Array.new
 sysadmins.each do |s|
   members << s['id']
@@ -271,7 +304,13 @@ nagios_conf "services" do
 end
 
 nagios_conf "contacts" do
-  variables :admins => sysadmins, :members => members
+  variables(
+    :admins => sysadmins,
+    :members => members,
+    :contacts => contacts,
+    :contactgroups => contactgroups,
+    :serviceescalations => serviceescalations
+  )
 end
 
 nagios_conf "hostgroups" do

@@ -143,5 +143,12 @@ define service {
     <% end %>
   <% end %>
 }
+<% if service['use_escalation'] %>define serviceescalation {
+  # this should be an escalation defined in the nagios_serviceescalation data bag
+  use <%= service['use_escalation'] %>
+  service_description <%= service['id'] %>
+  hostgroup_name <%= service['hostgroup_name'] %>
+}
+<% end %>
   <% end -%>
 <% end -%>
