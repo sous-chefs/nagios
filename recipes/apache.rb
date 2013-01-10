@@ -34,7 +34,9 @@ public_domain = node['public_domain'] || node['domain']
 template "#{node['apache']['dir']}/sites-available/nagios3.conf" do
   source "apache2.conf.erb"
   mode 00644
-  variables :public_domain => public_domain
+  variables( :public_domain => public_domain,
+      :nagios_url => node['nagios']['url']
+      )
   if ::File.symlink?("#{node['apache']['dir']}/sites-enabled/nagios3.conf")
     notifies :reload, "service[apache2]"
   end

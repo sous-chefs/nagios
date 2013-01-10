@@ -114,6 +114,7 @@ Default directory locations are based on FHS. Change to suit your preferences.
 * `node['nagios']['default_service']['retry_interval']`
 * `node['nagios']['default_service']['max_check_attempts']`
 * `node['nagios']['default_service']['notification_interval']`
+*  node['nagios']['url'] - URL to host nagios from
 
 Recipes
 =======
