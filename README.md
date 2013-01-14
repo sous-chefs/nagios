@@ -118,7 +118,6 @@ Default directory locations are based on FHS. Change to suit your preferences.
 * `node['nagios']['default_service']['max_check_attempts']`
 * `node['nagios']['default_service']['notification_interval']`
 
-
 * `node['nagios']['server']['web_server']` - web server to use. supports Apache or Nginx, default "apache"
 * `node['nagios']['server']['nginx_dispatch']` - nginx dispatch method. support cgi or php, default "cgi"
 * `node['nagios']['server']['stop_apache']` - stop apache service if using nginx, default false
@@ -269,9 +268,9 @@ Create a nagios\_services data bag that will contain definitions for services to
 Here's an example of a service check for sshd that you could apply to all hostgroups:
 
     {
-    "id": "ssh",
-    "hostgroup_name": "all",
-    "command_line": "$USER1$/check_ssh $HOSTADDRESS$"
+	  "id": "ssh",
+      "hostgroup_name": "all",
+	  "command_line": "$USER1$/check_ssh $HOSTADDRESS$"
     }
 
 You may optionally define the service template for your service by including service_template and a valid template name.  Example:  "service_template": "special_service_template".  You may also optionally add a service description that will be displayed in the Nagios UI using "description": "My Service Name".  If this is not present the databag name will be used.  You can define escalations for this service by defining an escalation data bag and then adding 'use_escalation' with the escalation name.
@@ -284,18 +283,18 @@ Templates are optional, but allow you to specify combinations of attributes to a
 Here's an example of a template that reduces the check frequency to once per day and changes the retry interval to 1 hour.
 
     {
-    "id": "dailychecks",
-    "check_interval": "86400",
-    "retry": "3600"
+      "id": "dailychecks",
+      "check_interval": "86400",
+      "retry": "3600"
     }
 
 You then use the template in your service data bag as follows:
 
     {
-    "id": "expensive_service_check",
-    "hostgroup_name": "all",
-    "command_line": "$USER1$/check_example $HOSTADDRESS$",
-    "service_template": "dailychecks"
+      "id": "expensive_service_check",
+      "hostgroup_name": "all",
+      "command_line": "$USER1$/check_example $HOSTADDRESS$",
+      "service_template": "dailychecks"
     }
 
 Search Defined Hostgroups
@@ -305,11 +304,11 @@ Create a nagios\_hostgroups data bag that will contain definitions for Nagios ho
 
 Here's an example to find all HP hardware systems for an "hp_systems" hostgroup:
 
-		{
-		"search_query": "dmi_system_manufacturer:HP",
-		"hostgroup_name": "hp_systems",
-		"id": "hp_systems"
-		}
+	{
+	  "search_query": "dmi_system_manufacturer:HP",
+	  "hostgroup_name": "hp_systems",
+	  "id": "hp_systems"
+	}
 
 Monitoring Systems Not In Chef
 ------------------------------
@@ -317,38 +316,59 @@ Monitoring Systems Not In Chef
 Create a nagios\_unmanagedhosts data bag that will contain definitions for hosts not in Chef that you would like to manage.  "hostgroups" can be an existing Chef role (every Chef role gets a Nagios hostgroup) or a new hostgroup.
 Here's an example host definition:
 
-		{
-		"address": "webserver1.mydmz.dmz",
-		"hostgroups": ["web_servers","production_servers"],
-		"id": "webserver1",
-		"notifications": 1
-		}
-
+	{
+	  "address": "webserver1.mydmz.dmz",
+	  "hostgroups": ["web_servers","production_servers"],
+	  "id": "webserver1",
+	  "notifications": 1
+	}
 
 Service Escalations
 -------------------
 
 You can optionally define service escalations for the data bag defined services.  Doing so involves two steps - creating the escalation data bag and invoking it from the service.  For example, to create an escalation to page managers on a 15 minute period after the 3rd page:
 
-{
-    "name": "15-minute-escalation",
-    "contact_groups": "managers",
-    "first_notification": "3",
-    "last_notification": "0",
-    "escalation_period": "24x7",
-    "notification_interval": "900"
-}
+	{
+      "name": "15-minute-escalation",
+      "contact_groups": "managers",
+      "first_notification": "3",
+      "last_notification": "0",
+      "escalation_period": "24x7",
+      "notification_interval": "900"
+	}
 
 Then, in the service data bag,
 
-{
-    "id": "my-service",
-    ... 
-    "use_escalation": "15-minute-escalation"
-}
+	{
+      "id": "my-service",
+      ... 
+      "use_escalation": "15-minute-escalation"
+	}
 
-Roles
-=====
+Event Handlers
+--------------
+
+You can optionally define event handlers to trigger on service alerts by creating a nagios\_eventhandlers data bag that will contain definitions of event handlers for services monitored via Nagios.
+
+This example event handler data bags restarts chef-client.  Note: This assumes you have already defined a NRPE job restart\_chef-client on the host where this command will run.  You can use the NRPE LWRP to add commands to your local NRPE configs from within your cookbooks.
+
+	{
+      "command_line": "$USER1$/check_nrpe -H $HOSTADDRESS$ -t 45 -c restart_chef-client",
+      "id": "restart_chef-client"
+	}
+
+Once you've defined an event handler you will need to add the event handler to a service definition in order to trigger the action.  See the example service definition below.
+
+	{
+      "command_line": "$USER1$/check_nrpe -H $HOSTADDRESS$ -t 45 -c check_chef_client",
+      "hostgroup_name": "linux",
+      "id": "chef-client",
+      "event_handler": "restart_chef-client"
+	}
+
+
+Monitoring Role
+===============
 
 Create a role to use for the monitoring server. The role name should match the value of the attribute "nagios[:server_role]". By default, this is 'monitoring'. For example:
 
@@ -367,27 +387,6 @@ Create a role to use for the monitoring server. The role name should match the v
 
     % knife role from file monitoring.rb
 
-
-Event Handlers
-=====
-
-You can optionally define event handlers to trigger on service alerts by creating a nagios\_eventhandlers data bag that will contain definitions of event handlers for services monitored via Nagios.
-
-This example event handler data bags restarts chef-client.  Note: This assumes you have already defined a NRPE job restart\_chef-client on the host where this command will run.  You can use the NRPE LWRP to add commands to your local NRPE configs from within your cookbooks.
-
-{
-    "command_line": "$USER1$/check_nrpe -H $HOSTADDRESS$ -t 45 -c restart_chef-client",
-    "id": "restart_chef-client"
-}
-
-Once you've defined an event handler you will need to add the event handler to a service definition in order to trigger the action.  See the example service definition below.
-
-{
-    "command_line": "$USER1$/check_nrpe -H $HOSTADDRESS$ -t 45 -c check_chef_client",
-    "hostgroup_name": "linux",
-    "id": "chef-client",
-    "event_handler": "restart_chef-client"
-}
 
 Definitions
 ===========
@@ -444,8 +443,6 @@ The nrpecheck LWRP provides an easy way to add and remove NRPE checks from withi
 
 Usage
 =====
-
-See below under __Environments__ for how to set up Chef 0.10 environment for use with this cookbook.
 
 For a Nagios server, create a role named 'monitoring', and add the following recipe to the run_list:
 
