@@ -11,13 +11,13 @@ Chef
 
 Chef version 0.10.10+ and Ohai 0.6.12+ are required.
 
-A data bag named 'users' should exist, see __Data Bag__ below.
-
-The monitoring server that uses this recipe should have a role named 'monitoring' or similar, the role name is configurable via an attribute. See __Attributes__ below.
-
 Because of the heavy use of search, this recipe will not work with Chef Solo, as it cannot do any searches without a server.
 
-By default NRPE clients can only be monitored by Nagios servers in the same environment. To change this set the multi_environment_monitoring attribute. See __Attributes__ below.
+A data bag named 'users' should exist, see __Data Bag__ below.
+
+The system running the 'server' recipe should have a role named 'monitoring' so that NRPE clients can authorize monitoring from that system.  This role name is configurable via an attribute. See __Attributes__ below.
+
+By default the Nagios server will only monitor systems in its same environment. To change this set the multi_environment_monitoring attribute. See __Attributes__ below.
 
 Platform
 --------
@@ -46,9 +46,9 @@ default
 
 The following attributes are used by both client and server recipes.
 
-* `node['nagios']['user']` - nagios user, default 'nagios'.
-* `node['nagios']['group']` - nagios group, default 'nagios'.
-* `node['nagios']['plugin_dir']` - location where nagios plugins go, default '/usr/lib/nagios/plugins'.
+* `node['nagios']['user']` - Nagios user, default 'nagios'.
+* `node['nagios']['group']` - Nagios group, default 'nagios'.
+* `node['nagios']['plugin_dir']` - location where Nagios plugins go, default '/usr/lib/nagios/plugins'.
 * `node['nagios']['multi_environment_monitoring']` - Chef server will monitor hosts in all environments, not just its own, default 'false'
 
 client
@@ -62,15 +62,15 @@ The following attributes are used for the client NRPE checks for warning and cri
 * `node['nagios']['plugins']['checksum']` - checksum of the plugins source tarball
 * `node['nagios']['nrpe']['home']` - home directory of nrpe, default /usr/lib/nagios
 * `node['nagios']['nrpe']['conf_dir']` - location of the nrpe configuration, default /etc/nagios
-* `node['nagios']['nrpe']['url']` - url to retrieve nrpe source
-* `node['nagios']['nrpe']['version']` - version of nrpe to download
+* `node['nagios']['nrpe']['url']` - url to retrieve NRPE source
+* `node['nagios']['nrpe']['version']` - version of NRPE to download
 * `node['nagios']['nrpe']['checksum']` - checksum of the nrpe source tarball
 * `node['nagios']['checks']['memory']['critical']` - threshold of critical memory usage, default 150
 * `node['nagios']['checks']['memory']['warning']` - threshold of warning memory usage, default 250
 * `node['nagios']['checks']['load']['critical']` - threshold of critical load average, default 30,20,10
 * `node['nagios']['checks']['load']['warning']` - threshold of warning load average, default 15,10,5
 * `node['nagios']['checks']['smtp_host']` - default relayhost to check for connectivity. Default is an empty string, set via an attribute in a role.
-* `node['nagios']['server_role']` - the role that the nagios server will have in its run list that the clients can search for.
+* `node['nagios']['server_role']` - the role that the Nagios server will have in its run list that the clients can search for.
 
 server
 ------
@@ -78,43 +78,51 @@ server
 Default directory locations are based on FHS. Change to suit your preferences.
 
 * `node['nagios']['server']['install_method']` - whether to install from package or source. Default chosen by platform based on known packages available for Nagios 3: debian/ubuntu 'package', redhat/centos/fedora/scientific: source
-* `node['nagios']['server']['service_name']` - name of the service used for nagios, default chosen by platform, debian/ubuntu "nagios3", redhat family "nagios", all others, "nagios"
-* `node['nagios']['server']['web_server']` - web server to use. supports apache or nginx, default "apache"
-* `node['nagios']['server']['nginx_dispatch']` - nginx dispatch method. support cgi or php, default "cgi"
-* `node['nagios']['server']['stop_apache']` - stop apache service if using nginx, default false
-* `node['nagios']['server']['redirect_root']` - if using apache, should http://server/ redirect to http://server//nagios3 automatically, default false
-* `node['nagios']['home']` - nagios main home directory, default "/usr/lib/nagios3"
-* `node['nagios']['conf_dir']` - location where main nagios config lives, default "/etc/nagios3"
+* `node['nagios']['server']['service_name']` - name of the service used for Nagios, default chosen by platform, debian/ubuntu "nagios3", redhat family "nagios", all others, "nagios"
+* `node['nagios']['home']` - Nagios main home directory, default "/usr/lib/nagios3"
+* `node['nagios']['conf_dir']` - location where main Nagios config lives, default "/etc/nagios3"
 * `node['nagios']['config_dir']` - location where included configuration files live, default "/etc/nagios3/conf.d"
-* `node['nagios']['log_dir']` - location of nagios logs, default "/var/log/nagios3"
+* `node['nagios']['log_dir']` - location of Nagios logs, default "/var/log/nagios3"
 * `node['nagios']['cache_dir']` - location of cached data, default "/var/cache/nagios3"
-* `node['nagios']['state_dir']` - nagios runtime state information, default "/var/lib/nagios3"
+* `node['nagios']['state_dir']` - Nagios runtime state information, default "/var/lib/nagios3"
 * `node['nagios']['run_dir']` - where pidfiles are stored, default "/var/run/nagios3"
-* `node['nagios']['docroot']` - nagios webui docroot, default "/usr/share/nagios3/htdocs"
-* `node['nagios']['enable_ssl]` - boolean for whether nagios web server should be https, default false
-* `node['nagios']['http_port']` - port that the apache server should listen on, determined whether ssl is enabled (443 if so, otherwise 80)
+* `node['nagios']['docroot']` - Nagios webui docroot, default "/usr/share/nagios3/htdocs"
+* `node['nagios']['enable_ssl]` - boolean for whether Nagios web server should be https, default false
+* `node['nagios']['http_port']` - port that the Apache server should listen on, determined whether ssl is enabled (443 if so, otherwise 80)
 * `node['nagios']['server_name']` - common name to use in a server cert, default "nagios"
 * `node['nagios']['ssl_req']` - info to use in a cert, default `/C=US/ST=Several/L=Locality/O=Example/OU=Operations/CN=#{node['nagios']['server_name']}/emailAddress=ops@#{node['nagios']['server_name']}`
+
+*  `node['nagios']['server']['url']` - url to download the server source from if installing from source
+*  `node['nagios']['server']['version']` - version of the server source to download
+*  `node['nagios']['server']['checksum']` - checksum of the source files
+*  `node['nagios']['url']` - URL to host nagios from - defaults to nil and instead uses  FQDN
 
 * `node['nagios']['notifications_enabled']` - set to 1 to enable notification.
 * `node['nagios']['check_external_commands']`
 * `node['nagios']['default_contact_groups']`
 * `node['nagios']['sysadmin_email']` - default notification email.
 * `node['nagios']['sysadmin_sms_email']` - default notification sms.
-* `node['nagios']['users_databag_group']` - Users databag group considered Nagios admins.  Defaults to sysadmins
-* `node['nagios']['host_name_attribute']` - node attribute to use for naming the host. Must be unique across monitored nodes. Defaults to hostname
 * `node['nagios']['server_auth_method']` - authentication with the server can be done with openid (using `apache2::mod_auth_openid`), or htauth (basic). The default is openid, any other value will use htauth (basic).
+* `node['nagios']['users_databag_group']` - users databag group considered Nagios admins.  defaults to sysadmins
+* `node['nagios']['host_name_attribute']` - node attribute to use for naming the host. Must be unique across monitored nodes. Defaults to hostname
 * `node['nagios']['templates']`
 * `node['nagios']['interval_length']` - minimum interval.
+
 * `node['nagios']['default_host']['check_interval']`
 * `node['nagios']['default_host']['retry_interval']`
 * `node['nagios']['default_host']['max_check_attempts']`
 * `node['nagios']['default_host']['notification_interval']`
+
 * `node['nagios']['default_service']['check_interval']`
 * `node['nagios']['default_service']['retry_interval']`
 * `node['nagios']['default_service']['max_check_attempts']`
 * `node['nagios']['default_service']['notification_interval']`
-*  node['nagios']['url'] - URL to host nagios from
+
+* `node['nagios']['server']['web_server']` - web server to use. supports Apache or Nginx, default "apache"
+* `node['nagios']['server']['nginx_dispatch']` - nginx dispatch method. support cgi or php, default "cgi"
+* `node['nagios']['server']['stop_apache']` - stop apache service if using nginx, default false
+* `node['nagios']['server']['redirect_root']` - if using Apache, should http://server/ redirect to http://server//nagios3 automatically, default false
+
 
 Recipes
 =======
@@ -127,64 +135,55 @@ Includes the `nagios::client` recipe.
 client
 ------
 
-Includes the correct client installation recipe based on platform, either `nagios::client_package` or `nagios::client_source`.
+Includes the correct NRPE client installation recipe based on platform, either `nagios::client_package` or `nagios::client_source`.
 
 The client recipe searches for servers allowed to connect via NRPE that have a role named in the `node['nagios']['server_role']` attribute. The recipe will also install the required packages and start the NRPE service. A custom plugin for checking memory is also added.
 
-Searches are confined to the node's `chef_environment`.
+Searches are confined to the node's `chef_environment` unless multi-environment monitoring has been enabled via attribute.
 
-Client commands for NRPE can be installed using the nrpecheck resource. (See __Resources/Providers__ below.)
+Client commands for NRPE can be installed using the nrpecheck lwrp. (See __Resources/Providers__ below.)
 
 client\_package
 ---------------
 
-Installs the Nagios client libraries from packages. Default for Debian / Ubuntu systems.
+Installs the NRPE client and plugins from packages. Default for Debian / Ubuntu systems.
 
 client\_source
 --------------
 
-Installs the Nagios client libraries from source. Default for Red Hat / CentOS / Fedora systems as native packages of Nagios 3 are not available in the default repositories.
+Installs the NRPE client and plugins from source. Default for Redhat and Fedora based systems, as native packages for NRPE are not available in the default repositories.
 
 server
 ------
 
 Includes the correct client installation recipe based on platform, either `nagios::server_package` or `nagios::server_source`.
 
-The server recipe sets up Apache as the web front end. The nagios::client recipe is also included. This recipe also does a number of searches to dynamically build the hostgroups to monitor, hosts that belong to them and admins to notify of events/alerts.
+The server recipe sets up Apache as the web front end by default. The nagios::client recipe is also included. This recipe also does a number of searches to dynamically build the hostgroups to monitor, hosts that belong to them and admins to notify of events/alerts.
 
-Searches are confined to the node's `chef_environment`.
+Searches are confined to the node's `chef_environment` unless multi-environment monitoring is enabled.
 
 The recipe does the following:
 
 1. Searches for members of the sysadmins group by searching through 'users' data bag and adds them to a list for notification/contacts.
-2. Search all nodes for a role matching the app_environment.
-3. Search all available roles and build a list which will be the Nagios hostgroups.
-4. Search for all nodes of each role and add the hostnames to the hostgroups.
-5. Installs various packages required for the server.
-6. Sets up some configuration directories.
-7. Moves the package-installed Nagios configuration to a 'dist' directory.
-8. Disables the 000-default VirtualHost present on Debian/Ubuntu Apache2 package installations.
-9. Enables the Nagios web front end configuration.
-10. Sets up the configuration templates for services, contacts, hostgroups and hosts.
+2. Search all available roles and build a list which will be the Nagios hostgroups.
+3. Search for all nodes of each role and add the hostnames to the hostgroups.
+4. Installs various packages required for the server.
+5. Sets up some configuration directories.
+6. Moves the package-installed Nagios configuration to a 'dist' directory.
+7. Disables the 000-default VirtualHost present on Debian/Ubuntu Apache2 package installations.
+8. Enables the Nagios web front end configuration.
+9. Sets up the configuration templates for services, contacts, hostgroups and hosts.
 
-*NOTE*: You will probably need to change the services.cfg.erb template for your environment.
-
-To add custom commands for service checks, these can be done on a per-role basis by editing the 'services.cfg.erb' template. This template has some pre-configured checks that use role names used in an example infrastructure. Here's a brief description:
-
-* monitoring - check_smtp (e.g., postfix relayhost) w/ NRPE and tcp port 514 (e.g., rsyslog)
-* load\_balancer - check_nginx with NRPE.
-* appserver - check_unicorn with NRPE, e.g. a Rails application using Unicorn.
-* database\_master - check\_mysql\_server with NRPE for a MySQL database master.
 
 server\_package
 ---------------
 
-Installs the Nagios server libraries from packages. Default for Debian / Ubuntu systems.
+Installs the Nagios server from packages. Default for Debian / Ubuntu systems.
 
 server\_source
 --------------
 
-Installs the Nagios server libraries from source. Default for Red Hat / CentOS / Fedora systems as native packages of Nagios 3 are not available in the default repositories.
+Installs the Nagios server from source. Default for Red Hat / Fedora based systems as native packages for Nagios 3 are not available in the default repositories.
 
 pagerduty
 ---------
@@ -269,9 +268,9 @@ Create a nagios\_services data bag that will contain definitions for services to
 Here's an example of a service check for sshd that you could apply to all hostgroups:
 
     {
-    "id": "ssh",
-    "hostgroup_name": "all",
-    "command_line": "$USER1$/check_ssh $HOSTADDRESS$"
+	  "id": "ssh",
+      "hostgroup_name": "all",
+	  "command_line": "$USER1$/check_ssh $HOSTADDRESS$"
     }
 
 You may optionally define the service template for your service by including service_template and a valid template name.  Example:  "service_template": "special_service_template".  You may also optionally add a service description that will be displayed in the Nagios UI using "description": "My Service Name".  If this is not present the databag name will be used.  You can define escalations for this service by defining an escalation data bag and then adding 'use_escalation' with the escalation name.
@@ -284,18 +283,18 @@ Templates are optional, but allow you to specify combinations of attributes to a
 Here's an example of a template that reduces the check frequency to once per day and changes the retry interval to 1 hour.
 
     {
-    "id": "dailychecks",
-    "check_interval": "86400",
-    "retry": "3600"
+      "id": "dailychecks",
+      "check_interval": "86400",
+      "retry": "3600"
     }
 
 You then use the template in your service data bag as follows:
 
     {
-    "id": "expensive_service_check",
-    "hostgroup_name": "all",
-    "command_line": "$USER1$/check_example $HOSTADDRESS$",
-    "service_template": "dailychecks"
+      "id": "expensive_service_check",
+      "hostgroup_name": "all",
+      "command_line": "$USER1$/check_example $HOSTADDRESS$",
+      "service_template": "dailychecks"
     }
 
 Search Defined Hostgroups
@@ -305,11 +304,11 @@ Create a nagios\_hostgroups data bag that will contain definitions for Nagios ho
 
 Here's an example to find all HP hardware systems for an "hp_systems" hostgroup:
 
-		{
-		"search_query": "dmi_system_manufacturer:HP",
-		"hostgroup_name": "hp_systems",
-		"id": "hp_systems"
-		}
+	{
+	  "search_query": "dmi_system_manufacturer:HP",
+	  "hostgroup_name": "hp_systems",
+	  "id": "hp_systems"
+	}
 
 Monitoring Systems Not In Chef
 ------------------------------
@@ -317,38 +316,59 @@ Monitoring Systems Not In Chef
 Create a nagios\_unmanagedhosts data bag that will contain definitions for hosts not in Chef that you would like to manage.  "hostgroups" can be an existing Chef role (every Chef role gets a Nagios hostgroup) or a new hostgroup.
 Here's an example host definition:
 
-		{
-		"address": "webserver1.mydmz.dmz",
-		"hostgroups": ["web_servers","production_servers"],
-		"id": "webserver1",
-		"notifications": 1
-		}
-
+	{
+	  "address": "webserver1.mydmz.dmz",
+	  "hostgroups": ["web_servers","production_servers"],
+	  "id": "webserver1",
+	  "notifications": 1
+	}
 
 Service Escalations
 -------------------
 
 You can optionally define service escalations for the data bag defined services.  Doing so involves two steps - creating the escalation data bag and invoking it from the service.  For example, to create an escalation to page managers on a 15 minute period after the 3rd page:
 
-{
-    "name": "15-minute-escalation",
-    "contact_groups": "managers",
-    "first_notification": "3",
-    "last_notification": "0",
-    "escalation_period": "24x7",
-    "notification_interval": "900"
-}
+	{
+      "name": "15-minute-escalation",
+      "contact_groups": "managers",
+      "first_notification": "3",
+      "last_notification": "0",
+      "escalation_period": "24x7",
+      "notification_interval": "900"
+	}
 
 Then, in the service data bag,
 
-{
-    "id": "my-service",
-    ... 
-    "use_escalation": "15-minute-escalation"
-}
+	{
+      "id": "my-service",
+      ... 
+      "use_escalation": "15-minute-escalation"
+	}
 
-Roles
-=====
+Event Handlers
+--------------
+
+You can optionally define event handlers to trigger on service alerts by creating a nagios\_eventhandlers data bag that will contain definitions of event handlers for services monitored via Nagios.
+
+This example event handler data bags restarts chef-client.  Note: This assumes you have already defined a NRPE job restart\_chef-client on the host where this command will run.  You can use the NRPE LWRP to add commands to your local NRPE configs from within your cookbooks.
+
+	{
+      "command_line": "$USER1$/check_nrpe -H $HOSTADDRESS$ -t 45 -c restart_chef-client",
+      "id": "restart_chef-client"
+	}
+
+Once you've defined an event handler you will need to add the event handler to a service definition in order to trigger the action.  See the example service definition below.
+
+	{
+      "command_line": "$USER1$/check_nrpe -H $HOSTADDRESS$ -t 45 -c check_chef_client",
+      "hostgroup_name": "linux",
+      "id": "chef-client",
+      "event_handler": "restart_chef-client"
+	}
+
+
+Monitoring Role
+===============
 
 Create a role to use for the monitoring server. The role name should match the value of the attribute "nagios[:server_role]". By default, this is 'monitoring'. For example:
 
@@ -367,27 +387,6 @@ Create a role to use for the monitoring server. The role name should match the v
 
     % knife role from file monitoring.rb
 
-
-Event Handlers
-=====
-
-You can optionally define event handlers to trigger on service alerts by creating a nagios\_eventhandlers data bag that will contain definitions of event handlers for services monitored via Nagios.
-
-This example event handler data bags restarts chef-client.  Note: This assumes you have already defined a NRPE job restart\_chef-client on the host where this command will run.  You can use the NRPE LWRP to add commands to your local NRPE configs from within your cookbooks.
-
-{
-    "command_line": "$USER1$/check_nrpe -H $HOSTADDRESS$ -t 45 -c restart_chef-client",
-    "id": "restart_chef-client"
-}
-
-Once you've defined an event handler you will need to add the event handler to a service definition in order to trigger the action.  See the example service definition below.
-
-{
-    "command_line": "$USER1$/check_nrpe -H $HOSTADDRESS$ -t 45 -c check_chef_client",
-    "hostgroup_name": "linux",
-    "id": "chef-client",
-    "event_handler": "restart_chef-client"
-}
 
 Definitions
 ===========
@@ -445,8 +444,6 @@ The nrpecheck LWRP provides an easy way to add and remove NRPE checks from withi
 Usage
 =====
 
-See below under __Environments__ for how to set up Chef 0.10 environment for use with this cookbook.
-
 For a Nagios server, create a role named 'monitoring', and add the following recipe to the run_list:
 
     recipe[nagios::server]
@@ -459,16 +456,6 @@ To install Nagios and NRPE on a client node:
 
 This is a fairly complicated cookbook. For a walkthrough and example usage please see [Opscode's Nagios Quick Start](http://help.opscode.com/kb/otherhelp/nagios-quick-start).
 
-Environments
-------------
-
-The searches used are confined to the node's `chef_environment`. If you do not use any environments (Chef 0.10+ feature) the `_default` environment is used, which is applied to all nodes in the Chef Server that are not in another defined role. To use environments, create them as files in your chef-repo, then upload them to the Chef Server.
-
-    % cat environments/production.rb
-    name "production"
-    description "Systems in the Production Environment"
-
-    % knife environment from file production.rb
 
 License and Author
 ==================
