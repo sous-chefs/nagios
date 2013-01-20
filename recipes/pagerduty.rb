@@ -48,16 +48,16 @@ template "#{node['nagios']['config_dir']}/pagerduty.cfg" do
   source "pagerduty_nagios.cfg.erb"
 end
 
-remote_file "#{node['nagios']['plugin_dir']}/pagerduty_nagios.pl" do
+remote_file "#{node['nagios']['plugin_dir']}/pagerduty_#{node['nagios']['server']['engine']}.pl" do
   owner "root"
   group "root"
   mode 00755
-  source "http://www.pagerduty.com/configs/pagerduty_nagios.pl"
+  source "http://www.pagerduty.com/configs/pagerduty_#{node['nagios']['server']['engine']}.pl"
   action :create_if_missing
 end
 
 cron "Flush Pagerduty" do
   user node['nagios']['user']
   mailto "root@localhost"
-  command "#{node['nagios']['plugin_dir']}/pagerduty_nagios.pl flush"
+  command "#{node['nagios']['plugin_dir']}/pagerduty_#{node['nagios']['server']['engine']}.pl flush"
 end

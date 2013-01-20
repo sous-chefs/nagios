@@ -26,19 +26,54 @@ if node['platform_family'] == 'debian'
 
   %w{adminpassword adminpassword-repeat}.each do |setting|
     execute "preseed nagiosadmin password" do
-      command "echo nagios3-cgi nagios3/#{setting} password #{random_initial_password} | debconf-set-selections"
-      not_if 'dpkg -l nagios3'
+      command "echo #{node['nagios']['basename']}-cgi #{node['nagios']['basename']}/#{setting} password #{random_initial_password} | debconf-set-selections"
+      not_if "dpkg -l #{node['nagios']['basename']}"
     end
   end
-
 end
 
-%w{ 
-  nagios3
-  nagios-nrpe-plugin
-  nagios-images
-}.each do |pkg|
-  package pkg
+if node['nagios']['server']['engine'] == 'icinga'
+  case node['platform']
+  when 'ubuntu'
+    apt_repository "icinga_ppa" do
+      uri "http://ppa.launchpad.net/formorer/icinga/ubuntu"
+      distribution node['lsb']['codename']
+      components ["main"]
+      keyserver "keyserver.ubuntu.com"
+      key "36862847"
+      deb_src true
+    end
+
+  when 'debian'
+    apt_repository 'backports' do
+      uri 'http://backports.debian.org/debian-backports'
+      distribution 'squeeze-backports'
+      components ['main']
+      only_if { node['lsb']['codename'] == 'squeeze' }
+    end
+
+    apt_repository "debmon" do
+      uri 'http://debmon.org/debmon'
+      distribution "debmon-#{node['lsb']['codename']}"
+      components ['main']
+      key 'http://debmon.org/debmon/repo.key'
+    end
+
+  else
+    raise "Platform #{node['platform']} doesn't support Icinga packages yet."
+
+  end
+end
+
+package node['nagios']['basename']
+package 'nagios-images'
+package 'nagios-nrpe-plugin' do
+  # Debian/Ubuntu nagios-nrpe-plugin package recommends nagios3
+  # package, and at least some base systems follow recommendations
+  # automatically. In effect, if we want to use Icinga, we end up with
+  # both Icinga and an unconfigured Nagios. We want to prevent Apt
+  # from doing that.
+  options '--no-install-recommends' if node['platform_family'] == 'debian'
 end
 
 include_recipe "nagios::client"

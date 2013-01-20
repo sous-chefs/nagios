@@ -23,6 +23,7 @@
 #
 
 default['nagios']['pagerduty_key'] = ''
+default['nagios']['server']['engine'] = 'nagios'
 
 case node['platform_family']
 when 'debian'
@@ -39,6 +40,7 @@ else
   default['nagios']['server']['mail_command']   = '/bin/mail'
 end
 
+default['nagios']['basename']   = 'nagios3'
 default['nagios']['home']       = '/usr/lib/nagios3'
 default['nagios']['conf_dir']   = '/etc/nagios3'
 default['nagios']['config_dir'] = '/etc/nagios3/conf.d'
@@ -54,9 +56,11 @@ default['nagios']['ssl_req'] = '/C=US/ST=Several/L=Locality/O=Example/OU=Operati
   "CN=#{node['nagios']['server_name']}/emailAddress=ops@#{node['nagios']['server_name']}"
 
 # for server from source installation
-default['nagios']['server']['url']      = 'http://prdownloads.sourceforge.net/sourceforge/nagios'
-default['nagios']['server']['version']  = '3.4.3'
-default['nagios']['server']['checksum'] = '2d5c0cc56bafb08a71840a6efa349afc1eebb2761fea0d403e1b929e7c801b10'
+default['nagios']['server']['nagios']['version']  = '3.4.3'
+default['nagios']['server']['nagios']['checksum'] = '2d5c0cc56bafb08a71840a6efa349afc1eebb2761fea0d403e1b929e7c801b10'
+
+default['nagios']['server']['icinga']['version']      = '1.8.4'
+default['nagios']['server']['icinga']['checksum'] = 'e1ecbc6c83bb8b2d4d29934182b101f305c8d45873b0cefe452dd913ee5b6de1'
 
 default['nagios']['notifications_enabled']   = 0
 default['nagios']['check_external_commands'] = true

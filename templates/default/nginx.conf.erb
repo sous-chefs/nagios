@@ -4,7 +4,7 @@ server {
   <% if @nagios_url %>
   server_name <%= @nagios_url %>;
   <% else %>
-  server_name nagios nagios.<%= @chef_env %>.<%= @public_domain %> <%= @fqdn %>;
+  server_name <%= node['nagios']['server']['engine'] %> <%= node['nagios']['server']['engine'] %>.<%= @chef_env %>.<%= @public_domain %> <%= @fqdn %>;
   <% end %>
   access_log <%= File.join(@log_dir, 'nginx_access.log') %>;
   error_log <%= File.join(@log_dir, 'nginx_error.log') %>;
@@ -43,16 +43,20 @@ nginx_dispatch(:php,
 %>
 <% end %>
 
-  location /nagios3/stylesheets {
-    alias /etc/nagios3/stylesheets;
+  location /<%= node['nagios']['basename'] %>/stylesheets {
+    alias /etc/<%= node['nagios']['basename'] %>/stylesheets;
   }
 
-  location /nagios3 {
+  location /<%= node['nagios']['basename'] %> {
     alias <%= @docroot %>;
   }
 
+  location /stylesheets {
+    alias /etc/<%= node['nagios']['basename'] %>/stylesheets;
+  }
+
   location / {
-    auth_basic "Nagios Server";
+    auth_basic "<%= node['nagios']['server']['engine'].capitalize %> Server";
     auth_basic_user_file <%= @htpasswd_file %>;
     root <%= @docroot %>;
   }
