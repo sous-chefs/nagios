@@ -13,17 +13,17 @@ precached_object_file=<%= node['nagios']['cache_dir'] %>/objects.precache
 resource_file=<%= node['nagios']['conf_dir'] %>/resource.cfg
 status_file=<%= node['nagios']['cache_dir'] %>/status.dat
 status_update_interval=10
-nagios_user=<%= node['nagios']['user'] %>
-nagios_group=<%= node['nagios']['group'] %>
+<%= node['nagios']['server']['engine'] %>_user=<%= node['nagios']['user'] %>
+<%= node['nagios']['server']['engine'] %>_group=<%= node['nagios']['group'] %>
 check_external_commands=<%= nagios_boolean(node['nagios']['check_external_commands']) %>
 
 # NOTE: Setting this value to -1 causes Nagios to check the external command file as often as possible.
 command_check_interval=-1
 
-command_file=<%= node['nagios']['state_dir'] %>/rw/nagios.cmd
+command_file=<%= node['nagios']['state_dir'] %>/rw/<%= node['nagios']['server']['engine'] %>.cmd
 external_command_buffer_slots=4096
-lock_file=<%= node['nagios']['run_dir'] %>/nagios3.pid
-temp_file=<%= node['nagios']['cache_dir'] %>/nagios.tmp
+lock_file=<%= node['nagios']['run_dir'] %>/<%= node['nagios']['basename'] %>.pid
+temp_file=<%= node['nagios']['cache_dir'] %>/<%= node['nagios']['server']['engine'] %>.tmp
 temp_path=/tmp
 event_broker_options=-1
 
@@ -152,5 +152,5 @@ enable_environment_macros=1
 
 debug_level=0
 debug_verbosity=1
-debug_file=<% node["nagios"]["state_dir"] %>/nagios.debug
+debug_file=<% node["nagios"]["state_dir"] %>/<%= node['nagios']['server']['engine'] %>.debug
 max_debug_file_size=1000000

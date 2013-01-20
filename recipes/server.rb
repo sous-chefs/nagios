@@ -21,6 +21,30 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# configure engine
+case node['nagios']['server']['engine']
+when 'icinga'
+  # Override default settings for Icinga
+  node.default['nagios']['basename']                 = 'icinga'
+  node.default['nagios']['server']['service_name']   = 'icinga'
+  node.default['nagios']['home']                     = "/usr/lib/icinga"
+  node.default['nagios']['conf_dir']                 = "/etc/icinga"
+  node.default['nagios']['config_dir']               = "/etc/icinga/objects"
+  node.default['nagios']['log_dir']                  = "/var/log/icinga"
+  node.default['nagios']['cache_dir']                = "/var/cache/icinga"
+  node.default['nagios']['state_dir']                = "/var/lib/icinga"
+  node.default['nagios']['run_dir']                  = "/var/run/icinga"
+  node.default['nagios']['docroot']                  = "/usr/share/icinga/htdocs"
+  node.default['nagios']['server']['nagios_command'] = '/usr/sbin/icinga'
+when 'nagios'
+  # pass
+else
+  Chef::Log.fatal("Unknown engine option provided for Nagios server: " <<
+    "#{node['nagios']['server']['engine']} provided. Allowed: 'nagios' or 'icinga'"
+  )
+  raise 'Unknown engine option provided for Nagios server'
+end
+
 # configure either Apache2 or NGINX
 web_srv = node['nagios']['server']['web_server'].to_sym
 
@@ -44,6 +68,14 @@ end
 
 # install nagios service either from source of package
 include_recipe "nagios::server_#{node['nagios']['server']['install_method']}"
+
+file "#{node['apache']['dir']}/conf.d/#{node['nagios']['basename']}.conf" do
+  action :delete
+  notifies :reload, 'service[apache2]'
+  only_if { web_srv == :apache }
+end
+
+directory node['nagios']['config_dir']
 
 group = "#{node['nagios']['users_databag_group']}"
 sysadmins = search(:users, "groups:#{group}")
@@ -232,10 +264,6 @@ end
 
 public_domain = node['public_domain'] || node['domain']
 
-nagios_conf "nagios" do
-  config_subdir false
-end
-
 directory "#{node['nagios']['conf_dir']}/dist" do
   owner node['nagios']['user']
   group node['nagios']['group']
@@ -255,8 +283,8 @@ directory "#{node['nagios']['state_dir']}/rw" do
 end
 
 execute "archive-default-nagios-object-definitions" do
-  command "mv #{node['nagios']['config_dir']}/*_nagios*.cfg #{node['nagios']['conf_dir']}/dist"
-  not_if { Dir.glob("#{node['nagios']['config_dir']}/*_nagios*.cfg").empty? }
+  command "mv #{node['nagios']['config_dir']}/*_#{node['nagios']['server']['engine']}*.cfg #{node['nagios']['conf_dir']}/dist"
+  not_if { Dir.glob("#{node['nagios']['config_dir']}/*_#{node['nagios']['server']['engine']}*.cfg").empty? }
 end
 
 directory "#{node['nagios']['conf_dir']}/certificates" do
@@ -276,10 +304,14 @@ bash "Create SSL Certificates" do
   not_if { ::File.exists?("#{node['nagios']['conf_dir']}/certificates/nagios-server.pem") }
 end
 
-%w{ nagios cgi }.each do |conf|
-  nagios_conf conf do
-    config_subdir false
-  end
+nagios_conf node['nagios']['server']['engine'] do
+  source 'nagios.cfg.erb'
+  config_subdir false
+  restart_nagios true
+end
+
+nagios_conf 'cgi' do
+  config_subdir false
 end
 
 nagios_conf "timeperiods"

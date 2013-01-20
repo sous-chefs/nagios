@@ -31,19 +31,15 @@ end
 
 public_domain = node['public_domain'] || node['domain']
 
-template "#{node['apache']['dir']}/sites-available/nagios3.conf" do
+template "#{node['apache']['dir']}/sites-available/#{node['nagios']['basename']}.conf" do
   source "apache2.conf.erb"
   mode 00644
   variables( :public_domain => public_domain,
       :nagios_url => node['nagios']['url']
       )
-  if ::File.symlink?("#{node['apache']['dir']}/sites-enabled/nagios3.conf")
+  if ::File.symlink?("#{node['apache']['dir']}/sites-enabled/#{node['nagios']['basename']}.conf")
     notifies :reload, "service[apache2]"
   end
 end
 
-file "#{node['apache']['dir']}/conf.d/nagios3.conf" do
-  action :delete
-end
-
-apache_site "nagios3.conf"
+apache_site "#{node['nagios']['basename']}.conf"

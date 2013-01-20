@@ -1,7 +1,7 @@
 Description
 ===========
 
-Installs and configures Nagios 3 for a server and NRPE for clients using Chef search capabilities.
+Installs and configures Nagios 3 or Icinga for a server and NRPE for clients using Chef search capabilities.
 
 Requirements
 ============
@@ -33,6 +33,7 @@ Cookbooks
 ---------
 
 * apache2
+* apt
 * build-essential
 * php
 * nginx
@@ -77,6 +78,7 @@ server
 
 Default directory locations are based on FHS. Change to suit your preferences.
 
+* `node['nagios']['server']['engine']` - "nagios" (default) or "icinga"
 * `node['nagios']['server']['install_method']` - whether to install from package or source. Default chosen by platform based on known packages available for Nagios 3: debian/ubuntu 'package', redhat/centos/fedora/scientific: source
 * `node['nagios']['server']['service_name']` - name of the service used for nagios, default chosen by platform, debian/ubuntu "nagios3", redhat family "nagios", all others, "nagios"
 * `node['nagios']['server']['web_server']` - web server to use. supports apache or nginx, default "apache"

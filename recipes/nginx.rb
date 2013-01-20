@@ -64,7 +64,7 @@ else
   Chef::Log.warn "NAGIOS: NGINX setup does not have a dispatcher provided"
 end
 
-template File.join(node['nginx']['dir'], 'sites-available', 'nagios3.conf') do
+template File.join(node['nginx']['dir'], 'sites-available', "#{node['nagios']['basename']}.conf") do
   source 'nginx.conf.erb'
   mode 00644
   pem = File.join(
@@ -90,12 +90,12 @@ template File.join(node['nginx']['dir'], 'sites-available', 'nagios3.conf') do
     :cgi => [:cgi, :both].include?(dispatch_type.to_sym),
     :php => [:php, :both].include?(dispatch_type.to_sym)
   )
-  if(::File.symlink?(File.join(node['nginx']['dir'], 'sites-enabled', 'nagios3.conf')))
+  if(::File.symlink?(File.join(node['nginx']['dir'], 'sites-enabled', "#{node['nagios']['basename']}.conf")))
     notifies :reload, 'service[nginx]', :immediately
   end
 end
 
-nginx_site "nagios3.conf" do
+nginx_site "#{node['nagios']['basename']}.conf" do
   notifies :reload, "service[nginx]"
 end
 

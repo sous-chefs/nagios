@@ -6,17 +6,18 @@
   ServerName <%= @nagios_url %>
   <% else %>
   ServerName      <%= node['fqdn'] %>
-  ServerAlias     nagios nagios.<%= node.chef_environment =~ /^_default$/ ? "default" : node.chef_environment%>.<%= @public_domain %>
+  ServerAlias     <%= node['nagios']['server']['engine'] %> <%= node['nagios']['server']['engine'] %>.<%= node.chef_environment =~ /^_default$/ ? "default" : node.chef_environment%>.<%= @public_domain %>
   <% end %>
   DocumentRoot    <%= node['nagios']['docroot'] %>
   CustomLog       <%= node['nagios']['log_dir'] %>/apache_access.log combined
   ErrorLog        <%= node['nagios']['log_dir'] %>/apache_error.log
 
-  ScriptAlias /cgi-bin/nagios3 /usr/lib/cgi-bin/nagios3
-  ScriptAlias /nagios3/cgi-bin /usr/lib/cgi-bin/nagios3
+  ScriptAlias /cgi-bin/<%= node['nagios']['basename'] %> /usr/lib/cgi-bin/<%= node['nagios']['basename'] %>
+  ScriptAlias /<%= node['nagios']['basename'] %>/cgi-bin /usr/lib/cgi-bin/<%= node['nagios']['basename'] %>
 
-  Alias /nagios3/stylesheets /etc/nagios3/stylesheets
-  Alias /nagios3 <%= node['nagios']['docroot'] %>
+  Alias /<%= node['nagios']['basename'] %>/stylesheets /etc/<%= node['nagios']['basename'] %>/stylesheets
+  Alias /<%= node['nagios']['basename'] %> <%= node['nagios']['docroot'] %>
+  Alias /stylesheets /etc/<%= node['nagios']['basename'] %>/stylesheets
 
   <% if node['nagios']['https'] -%>
   SSLEngine On
@@ -27,15 +28,17 @@
 
 <% case node['nagios']['server_auth_method'] -%>
 <% when "openid" -%>
-  <Location />
-    AuthName "Nagios Server"
-    AuthType OpenID
-    require user <%= node['apache']['allowed_openids'].join(' ') %>
-    AuthOpenIDDBLocation <%= node['apache']['mod_auth_openid']['dblocation'] %>
-  </Location>
+  <ifModule authopenid_module>
+    <Location />
+      AuthName "<%= node['nagios']['server']['engine'].capitalize %> Server"
+      AuthType OpenID
+      require user <%= node['apache']['allowed_openids'].join(' ') %>
+      AuthOpenIDDBLocation <%= node['apache']['mod_auth_openid']['dblocation'] %>
+    </Location>
+  </ifModule>
 <% else -%>
   <Location />
-    AuthName "Nagios Server"
+    AuthName "<%= node['nagios']['server']['engine'].capitalize %> Server"
     AuthType Basic
     AuthUserFile "<%= node['nagios']['conf_dir'] %>/htpasswd.users"
     require valid-user
@@ -44,7 +47,7 @@
 
   RewriteEngine On
   <% if node['nagios']['server']['redirect_root'] -%>
-  RewriteRule ^/$ /nagios3 [R=301,L]
+  RewriteRule ^/$ /<%= node['nagios']['basename'] %> [R=301,L]
   <% end -%>
   RewriteCond %{THE_REQUEST} ^[A-Z]{3,9}\ /.*index\.html\ HTTP/
   RewriteRule ^(.*)index\.html$ $1 [R=301,L]

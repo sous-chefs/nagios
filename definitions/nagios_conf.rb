@@ -21,17 +21,17 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-define :nagios_conf, :variables => {}, :config_subdir => true do
-
+define :nagios_conf, :source => nil, :variables => {}, :config_subdir => true, :restart_nagios => false do
+  params[:source] ||= "#{params[:name]}.cfg.erb"
   conf_dir = params[:config_subdir] ? node['nagios']['config_dir'] : node['nagios']['conf_dir']
 
   template "#{conf_dir}/#{params[:name]}.cfg" do
     owner node['nagios']['user']
     group node['nagios']['group']
-    source "#{params[:name]}.cfg.erb"
+    source params[:source]
     mode 00644
     variables params[:variables]
-    notifies :reload, "service[nagios]"
+    notifies (params[:restart_nagios] ? :restart : :reload), "service[nagios]"
     backup 0
   end
 end

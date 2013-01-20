@@ -5,7 +5,7 @@
 # The CGIs will read the main and host config files for any other
 # data they might need.
 
-main_config_file=<%= node['nagios']['conf_dir'] %>/nagios.cfg
+main_config_file=<%= node['nagios']['conf_dir'] %>/<%= node['nagios']['server']['engine'] %>.cfg
 
 # PHYSICAL HTML PATH
 # This is the path where the HTML files for Nagios reside.  This
@@ -22,7 +22,7 @@ physical_html_path=<%= node['nagios']['docroot'] %>
 # http://www.myhost.com/nagios, this value should be '/nagios'
 # (without the quotes).
 
-url_html_path=/nagios3
+url_html_path=/<%= node['nagios']['basename'] %>
 
 # CONTEXT-SENSITIVE HELP
 # This option determines whether or not a context-sensitive
@@ -47,7 +47,7 @@ show_context_help=1
 # have to be tweaked a bit, as different versions of the plugin
 # use different command line arguments/syntaxes.
 
-nagios_check_command=<%= node['nagios']['plugin_dir'] %>/check_nagios <%= node['nagios']['cache_dir'] %>/status.dat 5 '/usr/sbin/<%= node['nagios']['server']['service_name'] %>'
+<%= node['nagios']['server']['engine'] %>_check_command=<%= node['nagios']['plugin_dir'] %>/check_nagios <%= node['nagios']['cache_dir'] %>/status.dat 5 '/usr/sbin/<%= node['nagios']['server']['service_name'] %>'
 
 # AUTHENTICATION USAGE
 # This option controls whether or not the CGIs will use any 
