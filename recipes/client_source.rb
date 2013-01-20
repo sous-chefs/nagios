@@ -90,7 +90,7 @@ bash "compile-nagios-nrpe" do
   creates "#{node['nagios']['plugin_dir']}/check_nrpe"
 end
 
-template "/etc/init.d/nagios-nrpe-server" do
+template "/etc/init.d/#{node['nagios']['nrpe']['service_name']}" do
   source "nagios-nrpe-server.erb"
   owner "root"
   group "root"

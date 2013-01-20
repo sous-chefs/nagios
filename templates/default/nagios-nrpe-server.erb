@@ -4,8 +4,7 @@
 #
 #  Created 2000-01-03 by jaclu@grm.se
 #
-# nagios-nrpe-server This shell script takes care of starting and stopping
-#               nrpe.
+#  This shell script takes care of starting and stopping nrpe.
 #
 # chkconfig: 2345 80 30
 # description: nrpe is a daemon for a remote nagios server, \
@@ -39,15 +38,15 @@ LockFile=/var/lock/subsys/nrpe
 case "$1" in
   start)
   # Start daemons.
-  echo -n "Starting nagios-nrpe-server: "
+  echo -n "Starting <%= node['nagios']['nrpe']['service_name'] %>: "
   daemon $NrpeBin -c $NrpeCfg -d
   echo
   touch $LockFile
   ;;
   stop)
   # Stop daemons.
-  echo -n "Shutting down nagios-nrpe-server: "
-  killproc nagios-nrpe-server
+  echo -n "Shutting down <%= node['nagios']['nrpe']['service_name'] %>: "
+  killproc <%= node['nagios']['nrpe']['service_name'] %>
   echo
   rm -f $LockFile
   ;;
@@ -56,10 +55,10 @@ case "$1" in
   $0 start
   ;;
   status)
-  status nagios-nrpe-server
+  status <%= node['nagios']['nrpe']['service_name'] %>
   ;;
   *)
-  echo "Usage: nagios-nrpe-server {start|stop|restart|status}"
+  echo "Usage: <%= node['nagios']['nrpe']['service_name'] %> {start|stop|restart|status}"
   exit 1
 esac
 
