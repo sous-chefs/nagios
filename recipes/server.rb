@@ -42,9 +42,6 @@ else
   raise 'Unknown web server option provided for Nagios server'
 end
 
-# install nagios service either from source of package
-include_recipe "nagios::server_#{node['nagios']['server']['install_method']}"
-
 # find nagios web interface users from the users data bag
 group = node['nagios']['users_databag_group']
 begin
@@ -74,6 +71,9 @@ else
     )
   end
 end
+
+# install nagios service either from source of package
+include_recipe "nagios::server_#{node['nagios']['server']['install_method']}"
 
 # find nodes to monitor.  Search in all environments if multi_environment_monitoring is enabled
 Chef::Log.info("Beginning search for nodes.  This may take some time depending on your node count")
