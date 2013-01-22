@@ -21,9 +21,9 @@
 include_recipe "build-essential"
 
 pkgs = value_for_platform_family(
-    ["rhel","fedora"] => ["openssl-devel"] ,
+    ["rhel","fedora"] => ["openssl-devel","make","tar"] ,
     "debian" => ["libssl-dev","make","tar"],
-    "default" => ["libssl-dev"]
+    "default" => ["libssl-dev","make","tar"]
   )
 
 pkgs.each do |pkg|
