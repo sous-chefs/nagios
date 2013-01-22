@@ -61,6 +61,7 @@ when "openid"
     raise
   end
 else
+  directory node['nagios']['conf_dir']
   template "#{node['nagios']['conf_dir']}/htpasswd.users" do
     source "htpasswd.users.erb"
     owner node['nagios']['user']
