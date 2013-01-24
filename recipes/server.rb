@@ -132,7 +132,7 @@ end
 # Load search defined Nagios hostgroups from the nagios_hostgroups data bag and find nodes
 hostgroup_nodes= Hash.new
 hostgroup_list = Array.new
-if data_bags.include?("nagios_hostgroups")
+if nagios_bags.bag_list.include?("nagios_hostgroups")
   search(:nagios_hostgroups, '*:*') do |hg|
     hostgroup_list << hg['hostgroup_name']
     temp_hostgroup_array= Array.new

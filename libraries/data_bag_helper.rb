@@ -1,4 +1,5 @@
 class NagiosDataBags
+  attr_accessor :bag_list
 
   def initialize(bag_list=Chef::DataBag.list)
     @bag_list = bag_list
