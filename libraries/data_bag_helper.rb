@@ -1,9 +1,12 @@
 class NagiosDataBags
 
   def initialize(bag_list=Chef::DataBag.list)
-    @data_list = bag_list
+    @bag_list = bag_list
   end
 
+  # Returns an array of data bag items or an empty array
+  # Avoids unecessary calls to search by checking against
+  # the list of known data bags.
   def get(bag_name)
     if @bag_list.include?(bag_name)
       search(bag_name, "*:*")

@@ -37,8 +37,7 @@ when :apache
   web_group = node["apache"]["group"] || web_user
 else
   Chef::Log.fatal("Unknown web server option provided for Nagios server: " <<
-    "#{node['nagios']['server']['web_server']} provided. Allowed: :nginx or :apache"
-  )
+                  "#{node['nagios']['server']['web_server']} provided. Allowed: :nginx or :apache")
   raise 'Unknown web server option provided for Nagios server'
 end
 
@@ -50,7 +49,7 @@ sysadmins = search(:users, "groups:#{group}")
 
 case node['nagios']['server_auth_method']
 when "openid"
-  if(web_srv == :apache)
+  if web_srv == :apache
     include_recipe "apache2::mod_auth_openid"
   else
     Chef::Log.fatal("OpenID authentication for Nagios is not supported on NGINX")
@@ -63,9 +62,7 @@ else
     owner node['nagios']['user']
     group web_group
     mode 00640
-    variables(
-      :sysadmins => sysadmins
-    )
+    variables(:sysadmins => sysadmins)
   end
 end
 
@@ -213,48 +210,38 @@ end
 nagios_conf "timeperiods"
 
 nagios_conf "templates" do
-    variables :templates => templates
+  variables(:templates => templates)
 end
 
 nagios_conf "commands" do
-  variables(
-    :services => services,
-    :eventhandlers => eventhandlers
-  )
+  variables(:services => services,
+            :eventhandlers => eventhandlers)
 end
 
 nagios_conf "services" do
-  variables(
-    :service_hosts => service_hosts,
-    :services => services,
-    :hostgroups => hostgroups
-  )
+  variables(:service_hosts => service_hosts,
+            :services => services,
+            :hostgroups => hostgroups)
 end
 
 nagios_conf "contacts" do
-  variables(
-    :admins => sysadmins,
-    :members => members,
-    :contacts => contacts,
-    :contactgroups => contactgroups,
-    :serviceescalations => serviceescalations
-  )
+  variables(:admins => sysadmins,
+            :members => members,
+            :contacts => contacts,
+            :contactgroups => contactgroups,
+            :serviceescalations => serviceescalations)
 end
 
 nagios_conf "hostgroups" do
-  variables(
-    :hostgroups => hostgroups,
-    :search_hostgroups => hostgroup_list,
-    :search_nodes => hostgroup_nodes
-  )
+  variables(:hostgroups => hostgroups,
+            :search_hostgroups => hostgroup_list,
+            :search_nodes => hostgroup_nodes)
 end
 
 nagios_conf "hosts" do
-  variables(
-    :nodes => nodes,
-    :unmanaged_hosts => unmanaged_hosts,
-    :hostgroups => hostgroups
-  )
+  variables(:nodes => nodes,
+            :unmanaged_hosts => unmanaged_hosts,
+            :hostgroups => hostgroups)
 end
 
 service "nagios" do
