@@ -18,14 +18,6 @@ define service {
     use                 default-service
 }
 
-# Uncomment if you're using Munin
-#define service {
-#    service_description Munin Client
-#    hostgroup_name      all
-#    check_command       check_tcp!4949
-#    use                 default-service
-#}
-
 # default checks for all hosts
 # Uncomment if you're running chef-client as a daemon
 #define service {
@@ -79,14 +71,6 @@ define service {
 #    use                 default-service
 #}
 
-# If the monitoring host is a syslog server, uncomment this.
-#define service {
-#    service_description Rsyslog
-#    hostgroup_name      monitoring
-#    check_command       check_tcp!514
-#    use                 default-service
-#}
-
 <% end -%>
 <% unless @service_hosts['webserver'].nil? -%>
 # basic web server http check
@@ -94,23 +78,6 @@ define service {
     service_description HTTP Processes
     hostgroup_name      webserver
     check_command       check_http
-    use                 default-service
-}
-
-<% end -%>
-<% unless @service_hosts['appserver'].nil? -%>
-# basic check if appserver role is running unicorn
-define service {
-    service_description Unicorn Processes
-    hostgroup_name      appserver
-    check_command       check_nrpe!check_unicorn
-    use                 default-service
-}
-
-define service {
-    service_description Unicorn HTTP
-    hostgroup_name      appserver
-    check_command       check_http_port_expect!8080!"HTTP/1.1 302 Found"
     use                 default-service
 }
 
