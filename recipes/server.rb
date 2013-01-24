@@ -45,8 +45,14 @@ end
 # install nagios service either from source of package
 include_recipe "nagios::server_#{node['nagios']['server']['install_method']}"
 
-group = "#{node['nagios']['users_databag_group']}"
-sysadmins = search(:users, "groups:#{group}")
+# find nagios web interface users from the users data bag
+group = node['nagios']['users_databag_group']
+begin
+  sysadmins = search(:users, "groups:#{group}")
+rescue Net::HTTPServerException
+  Chef::Log.fatal("Could not find appropriate items in the \"users\" databag.  Check to make sure there is a users databag and if you have set the \"users_databag_group\" that users in that group exist")
+  raise 'Could not find appropriate items in the "users" databag.  Check to make sure there is a users databag and if you have set the "users_databag_group" that users in that group exist'
+end
 
 case node['nagios']['server_auth_method']
 when "openid"
