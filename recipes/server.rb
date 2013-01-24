@@ -114,14 +114,14 @@ nodes.each do |n|
   end
 end
 
-data_bags = Chef::DataBags.list
-services = data_bags.include?("nagios_services") ? search(:nagios_services, '*:*') : []
-templates = data_bags.include?("nagios_templates") ? search(:nagios_templates, '*:*') : []
-eventhandlers = data_bags.include?("nagios_eventhandlers") ? search(:nagios_eventhandlers, '*:*') : []
-unmanaged_hosts = data_bags.include?("nagios_unmanagedhosts") ? search(:nagios_unmanagedhosts, '*:*') : []
-serviceescalations = data_bags.include?("nagios_serviceescalations") ? search(:nagios_serviceescalations, '*:*') : []
-contacts = data_bags.include?("nagios_contacts") ? search(:nagios_contacts, '*:*') : []
-contactgroups = data_bags.include?("nagios_contactgroups") ? search(:nagios_contactgroups, '*:*') : []
+nagios_bags = NagiosDataBags.new
+services = nagios_bags.get(:nagios_services)
+templates = nagios_bags.get(:nagios_templates)
+eventhandlers = nagios_bags.get(:nagios_eventhandlers)
+unmanaged_hosts = nagios_bags.get(:nagios_unmanagedhosts)
+serviceescalations = nagios_bags.get(:nagios_serviceescalations)
+contacts = nagios_bags.get(:nagios_contacts)
+contactgroups = nagios_bags.get(:nagios_contactgroups)
 
 # Add unmanaged host hostgroups to the hostgroups array if they don't already exist
 unmanaged_hosts.each do |host|
