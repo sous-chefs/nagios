@@ -52,7 +52,10 @@ remote_file "#{node['nagios']['plugin_dir']}/pagerduty_#{node['nagios']['server'
   owner "root"
   group "root"
   mode 00755
-  source "http://www.pagerduty.com/configs/pagerduty_#{node['nagios']['server']['engine']}.pl"
+  source case node['nagios']['server']['engine']
+         when 'nagios' then "http://www.pagerduty.com/configs/pagerduty_nagios.pl"
+         when 'icinga' then "http://www.pagerduty.com/configs/icinga/pagerduty_icinga.pl"
+         end
   action :create_if_missing
 end
 
