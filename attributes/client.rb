@@ -27,18 +27,25 @@ when 'debian'
   default['nagios']['client']['install_method']  = 'package'
   default['nagios']['nrpe']['pidfile']           = '/var/run/nagios/nrpe.pid'
   default['nagios']['nrpe']['home']              = '/usr/lib/nagios'
+  if node['nagios']['client']['install_method'] == 'package'
+    default['nagios']['nrpe']['service_name']      = 'nagios-nrpe-server'
+  else
+    default['nagios']['nrpe']['service_name']      = 'nrpe'
+  end
 when 'rhel','fedora'
   default['nagios']['client']['install_method']  = 'source'
   default['nagios']['nrpe']['pidfile']           = '/var/run/nrpe.pid'
   if node['kernel']['machine'] == "i686"
-    default['nagios']['nrpe']['home']            = '/usr/lib/nagios'  
+    default['nagios']['nrpe']['home']            = '/usr/lib/nagios'
   else
     default['nagios']['nrpe']['home']            = '/usr/lib64/nagios'
-  end  
+  end
+  default['nagios']['nrpe']['service_name']      = 'nrpe'
 else
   default['nagios']['client']['install_method']  = 'source'
   default['nagios']['nrpe']['pidfile']           = '/var/run/nrpe.pid'
   default['nagios']['nrpe']['home']              = '/usr/lib/nagios'
+  default['nagios']['nrpe']['service_name']      = 'nrpe'
 end
 
 default['nagios']['nrpe']['conf_dir']          = '/etc/nagios'
