@@ -39,14 +39,6 @@ end
 
 include_recipe "nagios::client_#{node['nagios']['client']['install_method']}"
 
-remote_directory node['nagios']['plugin_dir'] do
-  source "plugins"
-  owner "root"
-  group "root"
-  mode 00755
-  files_mode 00755
-end
-
 directory "#{node['nagios']['nrpe']['conf_dir']}/nrpe.d" do
   owner "root"
   group "root"
