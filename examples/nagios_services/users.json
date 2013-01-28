@@ -1,0 +1,5 @@
+{
+  "id": "users",
+  "hostgroup_name": "linux",
+  "command_line": "$USER1$/check_nrpe -H $HOSTADDRESS$ -c check_local_users -a '-w 10 -c 15'"
+}
