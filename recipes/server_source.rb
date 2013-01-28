@@ -57,7 +57,7 @@ end
 version = node['nagios']['server']['version']
 
 remote_file "#{Chef::Config[:file_cache_path]}/nagios-#{version}.tar.gz" do
-  source "http://prdownloads.sourceforge.net/sourceforge/nagios/nagios-#{version}.tar.gz"
+  source "#{node['nagios']['server']['url']}/nagios-#{version}.tar.gz"
   checksum node['nagios']['server']['checksum']
   action :create_if_missing
 end
