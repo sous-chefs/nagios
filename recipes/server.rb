@@ -119,13 +119,13 @@ nodes.each do |n|
 end
 
 nagios_bags = NagiosDataBags.new
-services = nagios_bags.get(:nagios_services)
-templates = nagios_bags.get(:nagios_templates)
-eventhandlers = nagios_bags.get(:nagios_eventhandlers)
-unmanaged_hosts = nagios_bags.get(:nagios_unmanagedhosts)
-serviceescalations = nagios_bags.get(:nagios_serviceescalations)
-contacts = nagios_bags.get(:nagios_contacts)
-contactgroups = nagios_bags.get(:nagios_contactgroups)
+services = nagios_bags.get('nagios_services')
+templates = nagios_bags.get('nagios_templates')
+eventhandlers = nagios_bags.get('nagios_eventhandlers')
+unmanaged_hosts = nagios_bags.get('nagios_unmanagedhosts')
+serviceescalations = nagios_bags.get('nagios_serviceescalations')
+contacts = nagios_bags.get('nagios_contacts')
+contactgroups = nagios_bags.get('nagios_contactgroups')
 
 # Add unmanaged host hostgroups to the hostgroups array if they don't already exist
 unmanaged_hosts.each do |host|
