@@ -37,8 +37,7 @@ when :apache
   web_group = node["apache"]["group"] || web_user
 else
   Chef::Log.fatal("Unknown web server option provided for Nagios server: " <<
-    "#{node['nagios']['server']['web_server']} provided. Allowed: :nginx or :apache"
-  )
+                  "#{node['nagios']['server']['web_server']} provided. Allowed: :nginx or :apache")
   raise 'Unknown web server option provided for Nagios server'
 end
 
@@ -53,7 +52,7 @@ end
 
 case node['nagios']['server_auth_method']
 when "openid"
-  if(web_srv == :apache)
+  if web_srv == :apache
     include_recipe "apache2::mod_auth_openid"
   else
     Chef::Log.fatal("OpenID authentication for Nagios is not supported on NGINX")
@@ -67,9 +66,7 @@ else
     owner node['nagios']['user']
     group web_group
     mode 00640
-    variables(
-      :sysadmins => sysadmins
-    )
+    variables(:sysadmins => sysadmins)
   end
 end
 
@@ -121,66 +118,28 @@ nodes.each do |n|
   end
 end
 
-# load Nagios services from the nagios_services data bag
-begin
-  services = search(:nagios_services, '*:*')
-rescue Net::HTTPServerException
-  Chef::Log.info("Could not search for nagios_service data bag items, skipping dynamically generated service checks")
-end
-
-if services.nil? || services.empty?
-  Chef::Log.info("No services returned from data bag search.")
-  services = Array.new
-end
-
-# Load Nagios templates from the nagios_templates data bag
-begin
-  templates = search(:nagios_templates, '*:*')
-  rescue Net::HTTPServerException
-  Chef::Log.info("Could not search for nagios_template data bag items, skipping dynamically generated template checks")
-end
-
-if templates.nil? || templates.empty?
-  Chef::Log.info("No templates returned from data bag search.")
-  templates = Array.new
-end
-
-# Load Nagios event handlers from the nagios_eventhandlers data bag
-begin
-  eventhandlers = search(:nagios_eventhandlers, '*:*')
-rescue Net::HTTPServerException
-  Chef::Log.info("Search for nagios_eventhandlers data bag failed, so we'll just move on.")
-end
-
-if eventhandlers.nil? || eventhandlers.empty?
-  Chef::Log.info("No Event Handlers returned from data bag search.")
-  eventhandlers = Array.new
-end
-
-# find all unique hostgroups in the nagios_unmanagedhosts data bag
-begin
-  unmanaged_hosts = search(:nagios_unmanagedhosts, '*:*')
-rescue Net::HTTPServerException
-  Chef::Log.info("Search for nagios_unmanagedhosts data bag failed, so we'll just move on.")
-end
+nagios_bags = NagiosDataBags.new
+services = nagios_bags.get(:nagios_services)
+templates = nagios_bags.get(:nagios_templates)
+eventhandlers = nagios_bags.get(:nagios_eventhandlers)
+unmanaged_hosts = nagios_bags.get(:nagios_unmanagedhosts)
+serviceescalations = nagios_bags.get(:nagios_serviceescalations)
+contacts = nagios_bags.get(:nagios_contacts)
+contactgroups = nagios_bags.get(:nagios_contactgroups)
 
 # Add unmanaged host hostgroups to the hostgroups array if they don't already exist
-if unmanaged_hosts.nil? || unmanaged_hosts.empty?
-  Chef::Log.info("No unmanaged hosts returned from data bag search.")
-else
-  unmanaged_hosts.each do |host|
-    host['hostgroups'].each do |hg|
-      if !hostgroups.include?(hg)
-        hostgroups << hg
-      end
+unmanaged_hosts.each do |host|
+  host['hostgroups'].each do |hg|
+    if !hostgroups.include?(hg)
+      hostgroups << hg
     end
   end
 end
 
 # Load search defined Nagios hostgroups from the nagios_hostgroups data bag and find nodes
-begin
-  hostgroup_nodes= Hash.new
-  hostgroup_list = Array.new
+hostgroup_nodes= Hash.new
+hostgroup_list = Array.new
+if nagios_bags.bag_list.include?("nagios_hostgroups")
   search(:nagios_hostgroups, '*:*') do |hg|
     hostgroup_list << hg['hostgroup_name']
     temp_hostgroup_array= Array.new
@@ -195,40 +154,6 @@ begin
     end
     hostgroup_nodes[hg['hostgroup_name']] = temp_hostgroup_array.join(",")
   end
-rescue Net::HTTPServerException
-  Chef::Log.info("Search for nagios_hostgroups data bag failed, so we'll just move on.")
-end
-
-# Load Nagios service escalations from the nagios_serviceescalations data bag
-begin
-    serviceescalations = search(:nagios_serviceescalations, '*:*')
-    rescue Net::HTTPServerException
-    Chef::Log.info("Search for nagios_serviceescalations data bag failed, so we'll just move on.")
-end
-if serviceescalations.nil? || serviceescalations.empty?
-    Chef::Log.info("No service escalations returned from data bag search.")
-    serviceescalations = Array.new
-end
-
-# load Nagios contacts from the nagios_contacts data bag
-begin
-    contacts = search(:nagios_contacts, '*:*')
-    rescue Net::HTTPServerException
-    Chef::Log.info("Could not search for nagios_contacts data bag items, skipping dynamically generated service checks")
-end
-if contacts.nil? || contacts.empty?
-    Chef::Log.info("No contacts returned from data bag search.")
-    contacts = Array.new
-end
-# load Nagios contactgroups from the nagios_contactgroups data bag
-begin
-    contactgroups = search(:nagios_contactgroups, '*:*')
-    rescue Net::HTTPServerException
-    Chef::Log.info("Could not search for nagios_contactgroups data bag items, skipping dynamically generated service checks")
-end
-if contactgroups.nil? || contactgroups.empty?
-    Chef::Log.info("No contactgroups returned from data bag search.")
-    contactgroups = Array.new
 end
 
 # pick up base contacts
@@ -292,48 +217,38 @@ end
 nagios_conf "timeperiods"
 
 nagios_conf "templates" do
-    variables :templates => templates
+  variables(:templates => templates)
 end
 
 nagios_conf "commands" do
-  variables(
-    :services => services,
-    :eventhandlers => eventhandlers
-  )
+  variables(:services => services,
+            :eventhandlers => eventhandlers)
 end
 
 nagios_conf "services" do
-  variables(
-    :service_hosts => service_hosts,
-    :services => services,
-    :hostgroups => hostgroups
-  )
+  variables(:service_hosts => service_hosts,
+            :services => services,
+            :hostgroups => hostgroups)
 end
 
 nagios_conf "contacts" do
-  variables(
-    :admins => sysadmins,
-    :members => members,
-    :contacts => contacts,
-    :contactgroups => contactgroups,
-    :serviceescalations => serviceescalations
-  )
+  variables(:admins => sysadmins,
+            :members => members,
+            :contacts => contacts,
+            :contactgroups => contactgroups,
+            :serviceescalations => serviceescalations)
 end
 
 nagios_conf "hostgroups" do
-  variables(
-    :hostgroups => hostgroups,
-    :search_hostgroups => hostgroup_list,
-    :search_nodes => hostgroup_nodes
-  )
+  variables(:hostgroups => hostgroups,
+            :search_hostgroups => hostgroup_list,
+            :search_nodes => hostgroup_nodes)
 end
 
 nagios_conf "hosts" do
-  variables(
-    :nodes => nodes,
-    :unmanaged_hosts => unmanaged_hosts,
-    :hostgroups => hostgroups
-  )
+  variables(:nodes => nodes,
+            :unmanaged_hosts => unmanaged_hosts,
+            :hostgroups => hostgroups)
 end
 
 service "nagios" do
