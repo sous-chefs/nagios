@@ -1,7 +1,7 @@
 Description
 ===========
 
-Installs and configures Nagios 3 for a server and NRPE for clients using Chef search capabilities.
+Installs and configures Nagios server and NRPE client.  Chef nodes are automatically discovered using search, and Nagios host groups are created based on Chef roles and optionally environments as well.  NRPE client commands can be defined by using a LWRP, and Nagios service checks applied to hostgroups using definitions in data bag items.
 
 Requirements
 ============
@@ -13,11 +13,10 @@ Chef version 0.10.10+ and Ohai 0.6.12+ are required.
 
 Because of the heavy use of search, this recipe will not work with Chef Solo, as it cannot do any searches without a server.
 
-A data bag named 'users' should exist, see __Data Bag__ below.
+This cookbook relies heavily on multiple data bags.  See __Data Bag__ below.
 
 The system running the 'server' recipe should have a role named 'monitoring' so that NRPE clients can authorize monitoring from that system.  This role name is configurable via an attribute. See __Attributes__ below.
 
-By default the Nagios server will only monitor systems in its same environment. To change this set the multi_environment_monitoring attribute. See __Attributes__ below.
 
 Platform
 --------
@@ -54,30 +53,25 @@ The following attributes are used by both client and server recipes.
 client
 ------
 
-The following attributes are used for the client NRPE checks for warning and critical levels.
+The following attributes are used for the NRPE client
 
-* `node['nagios']['client']['install_method']` - whether to install from package or source. Default chosen by platform based on known packages available for Nagios 3: debian/ubuntu 'package', redhat/centos/fedora/scientific: source
+* `node['nagios']['client']['install_method']` - whether to install from package or source. Default chosen by platform based on known packages available for NRPE: debian/ubuntu 'package', redhat/centos/fedora/scientific: source
 * `node['nagios']['plugins']['url']` - url to retrieve the plugins source
-* `node['nagios']['plugins']['version']` - version of the plugins
+* `node['nagios']['plugins']['version']` - version of the plugins source to download
 * `node['nagios']['plugins']['checksum']` - checksum of the plugins source tarball
 * `node['nagios']['nrpe']['home']` - home directory of nrpe, default /usr/lib/nagios
 * `node['nagios']['nrpe']['conf_dir']` - location of the nrpe configuration, default /etc/nagios
 * `node['nagios']['nrpe']['url']` - url to retrieve NRPE source
-* `node['nagios']['nrpe']['version']` - version of NRPE to download
+* `node['nagios']['nrpe']['version']` - version of NRPE source to download
 * `node['nagios']['nrpe']['checksum']` - checksum of the nrpe source tarball
-* `node['nagios']['checks']['memory']['critical']` - threshold of critical memory usage, default 150
-* `node['nagios']['checks']['memory']['warning']` - threshold of warning memory usage, default 250
-* `node['nagios']['checks']['load']['critical']` - threshold of critical load average, default 30,20,10
-* `node['nagios']['checks']['load']['warning']` - threshold of warning load average, default 15,10,5
-* `node['nagios']['checks']['smtp_host']` - default relayhost to check for connectivity. Default is an empty string, set via an attribute in a role.
 * `node['nagios']['server_role']` - the role that the Nagios server will have in its run list that the clients can search for.
 
 server
 ------
 
-Default directory locations are based on FHS. Change to suit your preferences.
+The following attributes are used for the Nagios server
 
-* `node['nagios']['server']['install_method']` - whether to install from package or source. Default chosen by platform based on known packages available for Nagios 3: debian/ubuntu 'package', redhat/centos/fedora/scientific: source
+* `node['nagios']['server']['install_method']` - whether to install from package or source. Default chosen by platform based on known packages available for Nagios: debian/ubuntu 'package', redhat/centos/fedora/scientific: source
 * `node['nagios']['server']['service_name']` - name of the service used for Nagios, default chosen by platform, debian/ubuntu "nagios3", redhat family "nagios", all others, "nagios"
 * `node['nagios']['home']` - Nagios main home directory, default "/usr/lib/nagios3"
 * `node['nagios']['conf_dir']` - location where main Nagios config lives, default "/etc/nagios3"
@@ -121,7 +115,7 @@ Default directory locations are based on FHS. Change to suit your preferences.
 * `node['nagios']['server']['web_server']` - web server to use. supports Apache or Nginx, default "apache"
 * `node['nagios']['server']['nginx_dispatch']` - nginx dispatch method. support cgi or php, default "cgi"
 * `node['nagios']['server']['stop_apache']` - stop apache service if using nginx, default false
-* `node['nagios']['server']['redirect_root']` - if using Apache, should http://server/ redirect to http://server//nagios3 automatically, default false
+* `node['nagios']['server']['redirect_root']` - if using Apache, should http://server/ redirect to http://server/nagios3 automatically, default false
 
 
 Recipes
@@ -130,7 +124,7 @@ Recipes
 default
 -------
 
-Includes the `nagios::client` recipe.
+Includes the `nagios::client` recipe to install NRPE client.
 
 client
 ------
@@ -139,7 +133,7 @@ Includes the correct NRPE client installation recipe based on platform, either `
 
 The client recipe searches for servers allowed to connect via NRPE that have a role named in the `node['nagios']['server_role']` attribute. The recipe will also install the required packages and start the NRPE service. A custom plugin for checking memory is also added.
 
-Searches are confined to the node's `chef_environment` unless multi-environment monitoring has been enabled via attribute.
+Searches are confined to the node's `chef_environment` unless the `multi_environment_monitoring` attribute has been set to true.
 
 Client commands for NRPE can be installed using the nrpecheck lwrp. (See __Resources/Providers__ below.)
 
@@ -164,15 +158,16 @@ Searches are confined to the node's `chef_environment` unless multi-environment 
 
 The recipe does the following:
 
-1. Searches for members of the sysadmins group by searching through 'users' data bag and adds them to a list for notification/contacts.
-2. Search all available roles and build a list which will be the Nagios hostgroups.
-3. Search for all nodes of each role and add the hostnames to the hostgroups.
+1. Searches for users in 'users' databag belonging to to 'sysadmins' group and authorizes them to access the Nagios web UI and receive notification e-mails.
+2. Searches all available roles/environments and builds a list which will become the Nagios hostgroups.
+3. Places nodes in Nagios hostgroups by role / environment membership.
 4. Installs various packages required for the server.
-5. Sets up some configuration directories.
+5. Sets up configuration directories.
 6. Moves the package-installed Nagios configuration to a 'dist' directory.
 7. Disables the 000-default VirtualHost present on Debian/Ubuntu Apache2 package installations.
-8. Enables the Nagios web front end configuration.
-9. Sets up the configuration templates for services, contacts, hostgroups and hosts.
+8. Templates configuration files for services, contacts, contact groups, templates, hostgroups and hosts.
+9. Enables the Nagios web UI.
+10. Starts the Nagios server service
 
 
 server\_package
@@ -183,7 +178,7 @@ Installs the Nagios server from packages. Default for Debian / Ubuntu systems.
 server\_source
 --------------
 
-Installs the Nagios server from source. Default for Red Hat / Fedora based systems as native packages for Nagios 3 are not available in the default repositories.
+Installs the Nagios server from source. Default for Red Hat / Fedora based systems as native packages for Nagios are not available in the default repositories.
 
 pagerduty
 ---------
@@ -192,38 +187,6 @@ Installs and configures pagerduty plugin for nagios.  You need to set a `node['n
 
 This recipe was written based on the [Nagios Integration Guide](http://www.pagerduty.com/docs/guides/nagios-integration-guide) from PagerDuty which explains how to get an API key for your nagios server.
 
-email notifications
---------------------
-
-You need to set `default['nagios']['notifications_enabled'] = 1` attribute on your nagios server to enable email notifications.
-
-For email notifications to work an appropriate mail program package and local MTA need to be installed so that /usr/bin/mail or /bin/mail is available on the system.
-
-Example:
-
-Include [postfix cookbook](https://github.com/opscode-cookbooks/postfix) to be installed on your nagios server node.
-
-Add override_attributes to your `monitoring` role:
-
-    % cat roles/monitoring.rb
-
-    name "monitoring"
-    description "Monitoring Server"
-    run_list(
-      "recipe[nagios::server]",
-      "recipe[postfix]"
-    )
-
-    override_attributes(
-      "nagios" => { "notifications_enabled" => "1" },
-      "postfix" => { "myhostname":"your_hostname", "mydomain":"example.com" }
-    )
-
-    default_attributes(
-      "nagios" => { "server_auth_method" => "htauth" }
-    )
-
-    % knife role from file monitoring.rb
 
 Data Bags
 =========
@@ -244,7 +207,7 @@ Create a `users` data bag that will contain the users that will be able to log i
       }
     }
 
-When using server_auth_method 'openid', use the openid in the data bag item. Any other value for this attribute (e.g., "htauth", "htpasswd", etc) will use the htpasswd value as the password in `/etc/nagios3/htpasswd.users`.
+When using `server_auth_method` 'openid' (default), use the openid in the data bag item. Any other value for this attribute (e.g., "htauth", "htpasswd", etc) will use the htpasswd value as the password in `/etc/nagios3/htpasswd.users`.
 
 The openid must have the http:// and trailing /. The htpasswd must be the hashed value. Get this value with htpasswd:
 
@@ -258,12 +221,32 @@ For example use the `{SHA}oCagzV4lMZyS7jl2Z0WlmLxEkt4=` value in the data bag.
 Contacts and Contact Groups
 ---------------------------
 
-For contacts that aren't people or to define contact templates, put items in the nagios_contacts and nagios_contactgroups data bags.
+To send alerting notification to contacts that aren't authorized to login to Nagios via the 'users' data bag create `nagios_contacts` and `nagios_contactgroups` data bags.
+
+Example `nagios_contacts` data bag item
+
+    {
+	  "id": "devs",
+      "alias": "Developers",
+	  "use": "default-contact",
+      "email": "devs@company.com",
+      "pager": "page_the_devs@company.com"
+    }
+
+
+Example `nagios_contactgroup` data bag item
+
+    {
+	  "id": "non_admins",
+      "alias": "Non-Administrator Contacts",
+      "members": "devs helpdesk managers"
+    }
+
 
 Services
 --------
 
-Create a nagios\_services data bag that will contain definitions for services to be monitored.  This allows you to add monitoring rules without mucking about in the services and commands templates.  Each service will be named based on the id of the data bag and the command will be named withe the same id prepended with "check\_".  Just make sure the id in your data bag doesn't conflict with a service or command already defined in the templates.
+To add service checks to Nagios create a `nagios_services` data bag containing definitions for services to be monitored.  This allows you to add monitoring rules without directly editing the services and commands templates in the cookbook.  Each service will be named based on the id of the data bag item and the command will be named using the same id prepended with "check\_".  Just make sure the id in your data bag doesn't conflict with a service or command already defined in the templates.
 
 Here's an example of a service check for sshd that you could apply to all hostgroups:
 
@@ -273,7 +256,7 @@ Here's an example of a service check for sshd that you could apply to all hostgr
 	  "command_line": "$USER1$/check_ssh $HOSTADDRESS$"
     }
 
-You may optionally define the service template for your service by including service_template and a valid template name.  Example:  "service_template": "special_service_template".  You may also optionally add a service description that will be displayed in the Nagios UI using "description": "My Service Name".  If this is not present the databag name will be used.  You can define escalations for this service by defining an escalation data bag and then adding 'use_escalation' with the escalation name.
+You may optionally define the service template for your service by including `service_template` and a valid template name.  Example:  "service_template": "special_service_template".  You may also optionally add a service description that will be displayed in the Nagios UI using "description": "My Service Name".  If this is not present the databag item ID will be used as the description.  You use defined escalations for the service with 'use_escalation'.  See ___Service_Escalations__ for more information.
 
 Templates
 ---------
@@ -404,29 +387,32 @@ default
 
 The library included with the cookbook provides some helper methods used in templates.
 
-* nagios_boolean
-* nagios_interval - calculates interval based on interval length and a given number of seconds.
-* nagios_attr - retrieves a nagios attribute from the node.
+* `nagios_boolean`
+* `nagios_interval` - calculates interval based on interval length and a given number of seconds.
+* `nagios_attr` - retrieves a nagios attribute from the node.
 
 Resources/Providers
 ===================
 
-The nrpecheck LWRP provides an easy way to add and remove NRPE checks from within a cookbook.
+nrpecheck
+---------
 
-# Actions
+The nrpecheck LWRP provides an easy way to add and remove NRPE checks from within cookbooks.
 
-- :add: creates a NRPE configuration file and restart the NRPE process. Default action.
-- :remove: removes the configuration file and restart the NRPE process
+### Actions
 
-# Attribute Parameters
+- `:add` creates a NRPE configuration file and restart the NRPE process. Default action.
+- `:remove` removes the configuration file and restart the NRPE process
 
-- command_name: name attribute.  The name of the check.  You'll need to reference this in your commands.cfg template
-- warning_condition: String that you will pass to the command with the -w flag
-- critical_condition: String that you will pass to the command with the -c flag
-- command: The actual command to execute (including the path). If this is not specified, this will use `node['nagios']['plugin_dir']/command_name` as the path to the command.
-- parameters: Any additional parameters you wish to pass to the plugin.
+### Attribute Parameters
 
-# Examples
+- `command_name`  The name of the check.  This is the command that you will call from your nagios\_service data bag check
+- `warning_condition` String that you will pass to the command with the -w flag
+- `critical_condition` String that you will pass to the command with the -c flag
+- `command` The actual command to execute (including the path). If this is not specified, this will use `node['nagios']['plugin_dir']/command_name` as the path to the command.
+- `parameters` Any additional parameters you wish to pass to the plugin.
+
+### Examples
 
     # Use LWRP to define check_load
     nagios_nrpecheck "check_load" do
@@ -444,17 +430,58 @@ The nrpecheck LWRP provides an easy way to add and remove NRPE checks from withi
 Usage
 =====
 
-For a Nagios server, create a role named 'monitoring', and add the following recipe to the run_list:
+server setup
+------------
 
-    recipe[nagios::server]
+Create a role named 'monitoring', and add the nagios server recipe to the run\_list.  See __Monitoring Role__ above for an example.
 
-This will allow client nodes to search for the server by this role and add its IP address to the allowed list for NRPE.
+Apply the nagios client recipe to nodes in order to install the NRPE client
+    
+By default the Nagios server will only monitor systems in its same environment. To change this set the `multi_environment_monitoring` attribute. See __Attributes__ 
 
-To install Nagios and NRPE on a client node:
+Create data bag items in the `users` data bag for each administer you would like to be able to login to the Nagios server UI.  Pay special attention to the method you would like to use to authorization users (openid or htauth). See __Users__ and __Atttributes__
 
-    include_recipe "nagios::client"
+At this point you now have a minimally functional Nagios server, however the server will lack any service checks outside of the single Nagios Server health check.
 
-This is a fairly complicated cookbook. For a walkthrough and example usage please see [Opscode's Nagios Quick Start](http://help.opscode.com/kb/otherhelp/nagios-quick-start).
+defining checks
+---------------
+  
+NRPE commands are defined in recipes using the nrpecheck LWRP provider.  For base system monitoring such as load, ssh, memory, etc you may want to create a cookbook in your environment that defines each monitoring command via the LWRP.  See the examples folder for an example of base monitoring.
+
+With NRPE commands created using the LWRP you will need to define nagios Services to use those commands.  These services are defined using the `nagios_services` data bag and applied to roles and/or environments.  See __Services__
+
+enabling notifications
+----------------------
+
+You need to set `default['nagios']['notifications_enabled'] = 1` attribute on your nagios server to enable email notifications.
+
+For email notifications to work an appropriate mail program package and local MTA need to be installed so that /usr/bin/mail or /bin/mail is available on the system.
+
+Example:
+
+Include [postfix cookbook](https://github.com/opscode-cookbooks/postfix) to be installed on your nagios server node.
+
+Add override_attributes to your `monitoring` role:
+
+    % cat roles/monitoring.rb
+
+    name "monitoring"
+    description "Monitoring Server"
+    run_list(
+      "recipe[nagios::server]",
+      "recipe[postfix]"
+    )
+
+    override_attributes(
+      "nagios" => { "notifications_enabled" => "1" },
+      "postfix" => { "myhostname":"your_hostname", "mydomain":"example.com" }
+    )
+
+    default_attributes(
+      "nagios" => { "server_auth_method" => "htauth" }
+    )
+
+    % knife role from file monitoring.rb
 
 
 License and Author
@@ -464,7 +491,7 @@ Author:: Joshua Sierles <joshua@37signals.com>
 Author:: Nathan Haneysmith <nathan@opscode.com>
 Author:: Joshua Timberman <joshua@opscode.com>
 Author:: Seth Chisamore <schisamo@opscode.com>
-Author:: Tim Smith <tim.smith@webtrends.com>
+Author:: Tim Smith <tsmith84@gmail.com>
 
 Copyright 2009, 37signals
 Copyright 2009-2011, Opscode, Inc
