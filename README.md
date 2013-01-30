@@ -252,7 +252,7 @@ Here's an example of a service check for sshd that you could apply to all hostgr
 
     {
 	  "id": "ssh",
-      "hostgroup_name": "all",
+      "hostgroup_name": "linux",
 	  "command_line": "$USER1$/check_ssh $HOSTADDRESS$"
     }
 
@@ -275,7 +275,7 @@ You then use the template in your service data bag as follows:
 
     {
       "id": "expensive_service_check",
-      "hostgroup_name": "all",
+      "hostgroup_name": "linux",
       "command_line": "$USER1$/check_example $HOSTADDRESS$",
       "service_template": "dailychecks"
     }
@@ -324,7 +324,7 @@ Then, in the service data bag,
 
 	{
       "id": "my-service",
-      ... 
+      ...
       "use_escalation": "15-minute-escalation"
 	}
 
@@ -353,7 +353,7 @@ Once you've defined an event handler you will need to add the event handler to a
 Monitoring Role
 ===============
 
-Create a role to use for the monitoring server. The role name should match the value of the attribute "nagios[:server_role]". By default, this is 'monitoring'. For example:
+Create a role to use for the monitoring server. The role name should match the value of the attribute "`node['nagios']['server_role']`". By default, this is '`monitoring`'. For example:
 
     % cat roles/monitoring.rb
     name "monitoring"
@@ -433,11 +433,11 @@ Usage
 server setup
 ------------
 
-Create a role named 'monitoring', and add the nagios server recipe to the run\_list.  See __Monitoring Role__ above for an example.
+Create a role named '`monitoring`', and add the nagios server recipe to the `run_list`.  See __Monitoring Role__ above for an example.
 
 Apply the nagios client recipe to nodes in order to install the NRPE client
-    
-By default the Nagios server will only monitor systems in its same environment. To change this set the `multi_environment_monitoring` attribute. See __Attributes__ 
+
+By default the Nagios server will only monitor systems in its same environment. To change this set the `multi_environment_monitoring` attribute. See __Attributes__
 
 Create data bag items in the `users` data bag for each administer you would like to be able to login to the Nagios server UI.  Pay special attention to the method you would like to use to authorization users (openid or htauth). See __Users__ and __Atttributes__
 
@@ -445,7 +445,7 @@ At this point you now have a minimally functional Nagios server, however the ser
 
 defining checks
 ---------------
-  
+
 NRPE commands are defined in recipes using the nrpecheck LWRP provider.  For base system monitoring such as load, ssh, memory, etc you may want to create a cookbook in your environment that defines each monitoring command via the LWRP.  See the examples folder for an example of base monitoring.
 
 With NRPE commands created using the LWRP you will need to define nagios Services to use those commands.  These services are defined using the `nagios_services` data bag and applied to roles and/or environments.  See __Services__
@@ -494,7 +494,7 @@ Author:: Seth Chisamore <schisamo@opscode.com>
 Author:: Tim Smith <tsmith84@gmail.com>
 
 Copyright 2009, 37signals
-Copyright 2009-2011, Opscode, Inc
+Copyright 2009-2013, Opscode, Inc
 Copyright 2012, Webtrends Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License");
