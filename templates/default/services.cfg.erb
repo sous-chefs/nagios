@@ -96,7 +96,8 @@ define service {
 
 # Services defined by data bags
 <% @services.each do |service| -%>
-  <% unless service['hostgroup_name'].nil? || !@hostgroups.include?(service['hostgroup_name']) -%>
+  <%# Do not define a service that has no hostgroup or a hostgroup that doesn't exist (including the "all" hostgroup) %>
+  <% unless service['hostgroup_name'].nil? || !(@hostgroups.include?(service['hostgroup_name']) || service['hostgroup_name'] == "all") -%>
 define service {
   service_description <%= service['description'] || service['id'] %>
   hostgroup_name <%= service['hostgroup_name'] %>
