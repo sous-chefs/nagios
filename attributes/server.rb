@@ -103,4 +103,4 @@ default['nagios']['server']['nginx_dispatch'] = :cgi
 default['nagios']['server']['stop_apache'] = false
 default['nagios']['server']['redirect_root'] = false
 
-default['nagios']['ignored_service_hostgroups'] = []
+default['nagios']['server']['ignored_service_hostgroups'] = []

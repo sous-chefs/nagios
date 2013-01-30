@@ -251,10 +251,10 @@ end
 
 nagios_conf "services" do
   def ignored_hostgroups
-    if node['nagios']['ignored_service_hostgroups'].empty?
+    if node['nagios']['server']['ignored_service_hostgroups'].empty?
       nil
     else
-      node['nagios']['ignored_service_hostgroups'].map { |e| "!#{e}" }
+      node['nagios']['server']['ignored_service_hostgroups'].map { |e| "!#{e}" }
     end
   end
 
