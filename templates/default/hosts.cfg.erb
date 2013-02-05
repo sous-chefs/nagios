@@ -25,8 +25,8 @@ define host {
   ip = n['network']["ipaddress_#{node['nagios']['server']['monitored_client_interface']}"]
   if not ip %>
 # WARNING: This host doesn't have a monitored_client_interface defined!
-# Using node['ipaddress'] instead.
-  <% ip = node['ipaddress'] %>
+# Using <%= n['ipaddress'] %> instead.
+  <% ip = n['ipaddress'] %>
   <% end %>
   <% elsif node['cloud'].nil? && !n['cloud'].nil?
     ip = n['cloud']['public_ipv4']
