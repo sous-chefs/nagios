@@ -59,6 +59,14 @@ when "openid"
     Chef::Log.fatal("Set node['nagios']['server_auth_method'] attribute in your role: #{node['nagios']['server_role']}")
     raise
   end
+when "cas"
+  if web_srv == :apache
+    include_recipe "apache2::mod_auth_cas"
+  else
+    Chef::Log.fatal("CAS authentication for Nagios is not supported on NGINX")
+    Chef::Log.fatal("Set node['nagios']['server_auth_method'] attribute in your role: #{node['nagios']['server_role']}")
+    raise
+  end
 else
   directory node['nagios']['conf_dir']
   template "#{node['nagios']['conf_dir']}/htpasswd.users" do

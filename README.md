@@ -96,7 +96,11 @@ The following attributes are used for the Nagios server
 * `node['nagios']['default_contact_groups']`
 * `node['nagios']['sysadmin_email']` - default notification email.
 * `node['nagios']['sysadmin_sms_email']` - default notification sms.
-* `node['nagios']['server_auth_method']` - authentication with the server can be done with openid (using `apache2::mod_auth_openid`), or htauth (basic). The default is openid, any other value will use htauth (basic).
+* `node['nagios']['server_auth_method']` - authentication with the server can be done with openid (using `apache2::mod_auth_openid`), cas (using `apache2::mod_auth_cas`) or htauth (basic). The default is openid, "cas" will utilize cas authentication and any other value will use htauth (basic).
+* `node['nagios']['cas_login_url']` - login url for cas if using cas authentication.
+* `node['nagios']['cas_validate_url']` - validation url for cas if using cas authentication.
+* `node['nagios']['cas_validate_server']` - whether to validate the server cert. Defaults to off.
+* `node['nagios']['cas_root_proxy_url']` - if set, sets the url that the cas server redirects to after auth.
 * `node['nagios']['users_databag_group']` - users databag group considered Nagios admins.  defaults to sysadmins
 * `node['nagios']['host_name_attribute']` - node attribute to use for naming the host. Must be unique across monitored nodes. Defaults to hostname
 * `node['nagios']['templates']`
