@@ -65,7 +65,6 @@ The following attributes are used for the NRPE client
 * `node['nagios']['nrpe']['version']` - version of NRPE source to download
 * `node['nagios']['nrpe']['checksum']` - checksum of the nrpe source tarball
 * `node['nagios']['server_role']` - the role that the Nagios server will have in its run list that the clients can search for.
-* `node['nagios']['monitored_client_interface']` - if set, allows manually setting the client interface that is to be monitored based on interface name (for building hosts.cfg and nrpe.cfg). For example, bond.2001 interface. This functionality requires the ohai netaddr plugin.
 
 server
 ------
@@ -125,6 +124,7 @@ The following attributes are used for the Nagios server
 * `node['nagios']['server']['nginx_dispatch']` - nginx dispatch method. support cgi or php, default "cgi"
 * `node['nagios']['server']['stop_apache']` - stop apache service if using nginx, default false
 * `node['nagios']['server']['redirect_root']` - if using Apache, should http://server/ redirect to http://server/nagios3 automatically, default false
+* `node['nagios']['server']['monitored_client_interface']` - if set, allows manually setting the client interface that is to be monitored based on interface name (for building hosts.cfg and nrpe.cfg). For example, bond.2001 interface. This functionality requires the ohai netaddr plugin.
 
 
 Recipes
