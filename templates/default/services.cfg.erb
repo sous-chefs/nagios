@@ -18,7 +18,11 @@ define service {
 define service {
   service_description <%= service['description'] || service['id'] %>
   hostgroup_name <%= service['hostgroup_name'] %>
+  <% if service['use_existing_command'] -%>
+  check_command <%= service['use_existing_command'] %>
+  <% else -%>
   check_command check_<%= service['id'] %>
+  <% end -%>
   use <% if service['service_template'].nil? -%>default-service<% else -%><%= service['service_template'] %> <% end -%>
   <% unless service['event_handler'].nil? -%>event_handler <%= service['event_handler'] %><% end -%>
   <% %w{check_interval retry_interval notification_interval}.each do |conf| %>
