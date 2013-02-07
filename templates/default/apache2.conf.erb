@@ -46,6 +46,17 @@
     AuthType CAS
     require valid-user
   </Location>
+<% when "ldap" -%>  
+  <Location />
+    AuthName "Nagios Server"
+    AuthType Basic  
+    AuthBasicProvider ldap
+    AuthLDAPBindDN "<%= node['nagios']['ldap_bind_dn'] %>"
+    AuthLDAPBindPassword "<%= node['nagios']['ldap_bind_password'] %>"
+    AuthLDAPURL "<%= node['nagios']['ldap_url'] %>"
+    AuthzLDAPAuthoritative <%= node['nagios']['ldap_authoritative'] %>
+    require valid-user
+  </Location>
 <% else -%>
   <Location />
     AuthName "Nagios Server"

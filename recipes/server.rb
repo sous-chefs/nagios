@@ -67,6 +67,14 @@ when "cas"
     Chef::Log.fatal("Set node['nagios']['server_auth_method'] attribute in your role: #{node['nagios']['server_role']}")
     raise
   end
+when "ldap"
+  if(web_srv == :apache)
+    include_recipe "apache2::mod_authnz_ldap"
+  else
+    Chef::Log.fatal("LDAP authentication for Nagios is not supported on NGINX")
+    Chef::Log.fatal("Set node['nagios']['server_auth_method'] attribute in your role: #{node['nagios']['server_role']}")
+    raise
+  end
 else
   directory node['nagios']['conf_dir']
   template "#{node['nagios']['conf_dir']}/htpasswd.users" do

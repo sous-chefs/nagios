@@ -73,6 +73,12 @@ default['nagios']['cas_validate_url'] = "https://example.com/cas/serviceValidate
 default['nagios']['cas_validate_server'] = "off"
 default['nagios']['cas_root_proxy_url'] = nil
 
+# for apache ldap authentication
+default['nagios']['ldap_bind_dn'] = "CN=<replace>,OU=<replace>,DC=<replace>,DC=<replace>"
+default['nagios']['ldap_bind_password'] = "<replace>"
+default['nagios']['ldap_url'] = "ldap://<server address>/OU=<replace>,DC=<replace>,DC=<replace>?sAMAccountName?sub?(objectClass=*)"
+default['nagios']['ldap_authoritative'] = "off"
+
 # This setting is effectively sets the minimum interval (in seconds) nagios can handle.
 # Other interval settings provided in seconds will calculate their actual from this value, since nagios works in 'time units' rather than allowing definitions everywhere in seconds
 
