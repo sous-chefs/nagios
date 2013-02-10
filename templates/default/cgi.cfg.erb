@@ -47,10 +47,10 @@ show_context_help=1
 # have to be tweaked a bit, as different versions of the plugin
 # use different command line arguments/syntaxes.
 
-nagios_check_command=<%= node['nagios']['plugin_dir'] %>/check_nagios <%= node['nagios']['cache_dir'] %>/status.dat 5 '/usr/sbin/<%= node['nagios']['server']['service_name'] %>'
+nagios_check_command=<%= node['nagios']['plugin_dir'] %>/check_nagios <%= node['nagios']['cache_dir'] %>/status.dat 5 '/usr/sbin/<%= @nagios_service_name %>'
 
 # AUTHENTICATION USAGE
-# This option controls whether or not the CGIs will use any 
+# This option controls whether or not the CGIs will use any
 # authentication when displaying host and service information, as
 # well as committing commands to Nagios for processing.
 #
@@ -130,9 +130,9 @@ authorized_for_all_hosts=*
 # GLOBAL HOST/SERVICE COMMAND ACCESS
 # These two options are comma-delimited lists of all usernames that
 # can issue host or service related commands via the command
-# CGI (cmd.cgi) for all hosts and services that are being monitored. 
-# By default, users can only issue commands for hosts or services 
-# that they are contacts for (unless you you choose to not use 
+# CGI (cmd.cgi) for all hosts and services that are being monitored.
+# By default, users can only issue commands for hosts or services
+# that they are contacts for (unless you you choose to not use
 # authorization).  You may use an asterisk (*) to authorize any
 # user who has authenticated to the web server.
 
@@ -140,7 +140,7 @@ authorized_for_all_service_commands=*
 authorized_for_all_host_commands=*
 
 # STATUSMAP BACKGROUND IMAGE
-# This option allows you to specify an image to be used as a 
+# This option allows you to specify an image to be used as a
 # background in the statusmap CGI.  It is assumed that the image
 # resides in the HTML images path (i.e. /usr/local/nagios/share/images).
 # This path is automatically determined by appending "/images"
@@ -179,7 +179,7 @@ default_statusmap_layout=5
 default_statuswrl_layout=4
 
 # STATUSWRL INCLUDE
-# This option allows you to include your own objects in the 
+# This option allows you to include your own objects in the
 # generated VRML world.  It is assumed that the file
 # resides in the HTML path (i.e. /usr/local/nagios/share).
 
