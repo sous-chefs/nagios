@@ -122,6 +122,39 @@ link "#{node['nagios']['conf_dir']}/stylesheets" do
   to "#{node['nagios']['docroot']}/stylesheets"
 end
 
+# if nrpe client is not being installed by source then we need the NRPE plugin
+if node['nagios']['client']['install_method'] == "package"
+
+  nrpe_version = node['nagios']['nrpe']['version']
+
+  remote_file "#{Chef::Config[:file_cache_path]}/nrpe-#{nrpe_version}.tar.gz" do
+    source "#{node['nagios']['nrpe']['url']}/nrpe-#{nrpe_version}.tar.gz"
+    checksum node['nagios']['nrpe']['checksum']
+    action :create_if_missing
+  end
+
+  bash "compile-nrpe-plugin" do
+    cwd Chef::Config[:file_cache_path]
+    code <<-EOH
+      tar zxvf nrpe-#{nrpe_version}.tar.gz
+      cd nrpe-#{nrpe_version}
+      ./configure --prefix=/usr \
+                  --sysconfdir=/etc \
+                  --localstatedir=/var \
+                  --libexecdir=#{node['nagios']['plugin_dir']} \
+                  --libdir=#{node['nagios']['nrpe']['home']} \
+                  --enable-command-args \
+                  --with-nagios-user=#{node['nagios']['user']} \
+                  --with-nagios-group=#{node['nagios']['group']}
+      make -s
+      make install-plugin
+    EOH
+    creates "#{node['nagios']['plugin_dir']}/check_nrpe"
+  end
+end
+
+
+
 if web_srv == :apache
   apache_module "cgi" do
     enable :true
