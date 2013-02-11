@@ -67,6 +67,12 @@ default['nagios']['server_auth_method']      = "openid"
 default['nagios']['users_databag_group']     = "sysadmin"
 default['nagios']['host_name_attribute']     = "hostname"
 
+# for cas authentication
+default['nagios']['cas_login_url'] = "https://example.com/cas/login"
+default['nagios']['cas_validate_url'] = "https://example.com/cas/serviceValidate"
+default['nagios']['cas_validate_server'] = "off"
+default['nagios']['cas_root_proxy_url'] = nil
+
 # This setting is effectively sets the minimum interval (in seconds) nagios can handle.
 # Other interval settings provided in seconds will calculate their actual from this value, since nagios works in 'time units' rather than allowing definitions everywhere in seconds
 

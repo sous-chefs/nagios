@@ -62,10 +62,4 @@ default['nagios']['nrpe']['url']      = 'http://prdownloads.sourceforge.net/sour
 default['nagios']['nrpe']['version']  = '2.14'
 default['nagios']['nrpe']['checksum'] = '808c7c4a82d0addf15449663e4712b5018c8bbd668e46723139f731f1ac44431'
 
-default['nagios']['checks']['memory']['critical'] = 150
-default['nagios']['checks']['memory']['warning']  = 250
-default['nagios']['checks']['load']['critical']   = '30,20,10'
-default['nagios']['checks']['load']['warning']    = '15,10,5'
-default['nagios']['checks']['smtp_host'] = String.new
-
 default['nagios']['server_role'] = 'monitoring'
