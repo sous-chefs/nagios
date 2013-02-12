@@ -17,11 +17,13 @@ define host {
   # if the nagios server is not in the cloud, always use public IP addresses for cloud nodes.
   # if the nagios server is in the cloud, use private IP addresses for any
   #   cloud servers in the same cloud, public IPs for servers in other clouds
-  #   (where other is defined by node['cloud']['provider']
+  #   (where other is defined by node['cloud']['provider'])
+  # if the cloud IP is nil then use the standard IP address attribute.  This is a work around
+  #   for OHAI incorrectly identifying systems on Cisco hardware as being in Rackspace
   if node['cloud'].nil? && !n['cloud'].nil?
-    ip = n['cloud']['public_ipv4']
+    ip = n['cloud']['public_ipv4'] if node['ipaddress'].include? '.' else n['ipaddress']
   elsif !node['cloud'].nil? && n['cloud']['provider'] != node['cloud']['provider']
-    ip = n['cloud']['public_ipv4']
+    ip = n['cloud']['public_ipv4'] if node['ipaddress'].include? '.' else n['ipaddress']
   else
     ip = n['ipaddress']
   end %>
