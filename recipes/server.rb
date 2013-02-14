@@ -21,6 +21,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# workaround to allow for a nagios server install from source using the override attribute on debian/ubuntu (COOK-2350)
+if platform_family?('debian') && node['nagios']['server']['install_method'] == "source"
+  nagios_service_name = "nagios"
+else
+  nagios_service_name = node['nagios']['server']['service_name']
+end
+
 # configure either Apache2 or NGINX
 web_srv = node['nagios']['server']['web_server'].to_sym
 
@@ -219,6 +226,7 @@ end
 %w{ nagios cgi }.each do |conf|
   nagios_conf conf do
     config_subdir false
+    variables(:nagios_service_name => nagios_service_name)
   end
 end
 
@@ -260,7 +268,7 @@ nagios_conf "hosts" do
 end
 
 service "nagios" do
-  service_name node['nagios']['server']['service_name']
+  service_name nagios_service_name
   supports :status => true, :restart => true, :reload => true
   action [ :enable, :start ]
 end
@@ -268,6 +276,6 @@ end
 # Add the NRPE check to monitor the Nagios server
 nagios_nrpecheck "check_nagios" do
   command "#{node['nagios']['plugin_dir']}/check_nagios"
-  parameters "-F #{node["nagios"]["cache_dir"]}/status.dat -e 4 -C /usr/sbin/#{node['nagios']['server']['service_name']}"
+  parameters "-F #{node["nagios"]["cache_dir"]}/status.dat -e 4 -C /usr/sbin/#{nagios_service_name}"
   action :add
 end
