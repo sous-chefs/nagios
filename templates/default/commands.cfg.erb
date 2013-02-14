@@ -44,10 +44,12 @@ define command {
 
 # Commands added through nagios_services data bags
 <% @services.each do |service| -%>
+<% unless service['use_existing_command'] -%>
 define command {
   command_name    check_<%= service['id'] %>
   command_line    <%= service ['command_line'] %>
 }
+<% end -%>
 <% end -%>
 
 <% if !@eventhandlers.empty? -%>

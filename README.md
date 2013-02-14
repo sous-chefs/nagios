@@ -262,6 +262,14 @@ Here's an example of a service check for sshd that you could apply to all hostgr
 
 You may optionally define the service template for your service by including `service_template` and a valid template name.  Example:  "service_template": "special_service_template".  You may also optionally add a service description that will be displayed in the Nagios UI using "description": "My Service Name".  If this is not present the databag item ID will be used as the description.  You use defined escalations for the service with 'use_escalation'.  See ___Service_Escalations__ for more information.
 
+You may also use an already defined command definition by omitting the command\_line parameter and using use\_existing\_command parameter instead:
+
+    {
+    "id": "pingme",
+     "hostgroup_name": "all",
+     "use_existing_command": "check-host-alive"
+    }
+
 Templates
 ---------
 
