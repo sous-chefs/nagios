@@ -102,10 +102,10 @@ define command {
   command_line    $USER1$/check_load -w $ARG1$ -c $ARG2$
 }
 
-define command {
-  command_name    check_local_procs
-  command_line    $USER1$/check_nrpe -H $HOSTADDRESS$ -c check_total_procs -t 20
-}
+#define command {
+#  command_name    check_local_procs
+#  command_line    $USER1$/check_nrpe -H $HOSTADDRESS$ -c check_total_procs -t 20
+#}
 
 define command {
   command_name    check_zombie_procs
