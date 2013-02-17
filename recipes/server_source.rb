@@ -35,9 +35,9 @@ else
 end
 
 pkgs = value_for_platform_family(
-  [ "rhel","fedora" ] => %w{ openssl-devel gd-devel },
-  "debian" => %w{ libssl-dev libgd2-xpm-dev bsd-mailx },
-  "default" => %w{ libssl-dev libgd2-xpm-dev bsd-mailx }
+  [ "rhel","fedora" ] => %w{ openssl-devel gd-devel tar },
+  "debian" => %w{ libssl-dev libgd2-xpm-dev bsd-mailx tar },
+  "default" => %w{ libssl-dev libgd2-xpm-dev bsd-mailx tar }
 )
 
 pkgs.each do |pkg|
@@ -120,6 +120,13 @@ end
 
 link "#{node['nagios']['conf_dir']}/stylesheets" do
   to "#{node['nagios']['docroot']}/stylesheets"
+end
+
+# if nrpe client is not being installed by source then we need the NRPE plugin
+if node['nagios']['client']['install_method'] == "package"
+
+  include_recipe "nagios::nrpe_source"
+
 end
 
 if web_srv == :apache
