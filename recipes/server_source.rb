@@ -35,9 +35,9 @@ else
 end
 
 pkgs = value_for_platform_family(
-  [ "rhel","fedora" ] => %w{ openssl-devel gd-devel },
-  "debian" => %w{ libssl-dev libgd2-xpm-dev bsd-mailx },
-  "default" => %w{ libssl-dev libgd2-xpm-dev bsd-mailx }
+  [ "rhel","fedora" ] => %w{ openssl-devel gd-devel tar },
+  "debian" => %w{ libssl-dev libgd2-xpm-dev bsd-mailx tar },
+  "default" => %w{ libssl-dev libgd2-xpm-dev bsd-mailx tar }
 )
 
 pkgs.each do |pkg|

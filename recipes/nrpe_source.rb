@@ -18,20 +18,6 @@
 # limitations under the License.
 #
 
-include_recipe "build-essential"
-
-pkgs = value_for_platform_family(
-    ["rhel","fedora"] => ["openssl-devel","make","tar"] ,
-    "debian" => ["libssl-dev","make","tar"],
-    "default" => ["libssl-dev","make","tar"]
-  )
-
-pkgs.each do |pkg|
-  package pkg do
-    action :install
-  end
-end
-
 nrpe_version = node['nagios']['nrpe']['version']
 
 remote_file "#{Chef::Config[:file_cache_path]}/nrpe-#{nrpe_version}.tar.gz" do
