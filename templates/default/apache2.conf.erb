@@ -34,6 +34,29 @@
     require user <%= node['apache']['allowed_openids'].join(' ') %>
     AuthOpenIDDBLocation <%= node['apache']['mod_auth_openid']['dblocation'] %>
   </Location>
+<% when "cas" -%>
+  CASLoginURL <%= node['nagios']['cas_login_url'] %>
+  CASValidateURL <%= node['nagios']['cas_validate_url'] %>
+  CASValidateServer <%= node['nagios']['cas_validate_server'] %>
+  <% if node['nagios']['cas_root_proxy_url'] -%>
+  CASRootProxiedAs <%= node['nagios']['cas_root_proxy_url'] %>
+  <% end -%>
+
+  <Location />
+    AuthType CAS
+    require valid-user
+  </Location>
+<% when "ldap" -%>
+  <Location />
+    AuthName "Nagios Server"
+    AuthType Basic
+    AuthBasicProvider ldap
+    <% unless node['nagios']['ldap_bind_dn'].nil? -%>AuthLDAPBindDN "<%= node['nagios']['ldap_bind_dn'] %>" <% end -%>
+    <% unless node['nagios']['ldap_bind_password'].nil? -%>AuthLDAPBindPassword "<%= node['nagios']['ldap_bind_password'] %>"<% end -%>
+    AuthLDAPURL "<%= node['nagios']['ldap_url'] %>"
+    AuthzLDAPAuthoritative <%= node['nagios']['ldap_authoritative'] %>
+    require valid-user
+  </Location>
 <% else -%>
   <Location />
     AuthName "Nagios Server"
