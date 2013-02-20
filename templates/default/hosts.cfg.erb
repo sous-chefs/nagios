@@ -21,19 +21,16 @@ define host {
   #   (where other is defined by node['cloud']['provider'])
   # if the cloud IP is nil then use the standard IP address attribute.  This is a work around
   #   for OHAI incorrectly identifying systems on Cisco hardware as being in Rackspace
-  if node['nagios']['server']['monitored_client_interface']
-  ip = n['network']["ipaddress_#{node['nagios']['server']['monitored_client_interface']}"]
-  if not ip %>
-# WARNING: This host doesn't have a monitored_client_interface defined!
-# Using <%= n['ipaddress'] %> instead.
-  <% ip = n['ipaddress'] %>
-  <% end %>
-  <% elsif node['cloud'].nil? && !n['cloud'].nil?
+  <% if node['cloud'].nil? && !n['cloud'].nil?
     ip = n['cloud']['public_ipv4']
   elsif !node['cloud'].nil? && n['cloud']['provider'] != node['cloud']['provider']
-    ip = node['ipaddress'].include?('.') ? n['cloud']['public_ipv4'] : n['ipaddress']
-  else
-    ip = n['ipaddress']
+    ip = n['cloud']['public_ipv4']
+  elsif node['nagios']['server']['monitored_client_interface']
+    ip = n['network']["ipaddress_#{node['nagios']['server']['monitored_client_interface']}"]
+    if not ip %>
+# WARNING: This host doesn't have a monitored_client_interface defined!
+# Using <%= n['ipaddress'] %> instead.
+    <% ip = n['ipaddress']
   end %>
   address <%= ip %>
   host_name <%= n[node['nagios']['host_name_attribute']] %>
