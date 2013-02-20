@@ -31,6 +31,9 @@ define host {
 # WARNING: This host doesn't have a monitored_client_interface defined!
 # Using <%= n['ipaddress'] %> instead.
     <% ip = n['ipaddress']
+     end
+   else
+    ip = n['ipaddress']
   end %>
   address <%= ip %>
   host_name <%= n[node['nagios']['host_name_attribute']] %>
