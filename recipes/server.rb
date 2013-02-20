@@ -250,18 +250,10 @@ nagios_conf "commands" do
 end
 
 nagios_conf "services" do
-  def ignored_hostgroups
-    if node['nagios']['server']['ignored_service_hostgroups'].empty?
-      nil
-    else
-      node['nagios']['server']['ignored_service_hostgroups'].map { |e| "!#{e}" }
-    end
-  end
-
   variables(:service_hosts => service_hosts,
             :services => services,
             :hostgroups => hostgroups,
-            :ignored_hostgroups => ignored_hostgroups)
+            :ignored_hostgroups => nagios_ignored_hostgroups)
 end
 
 nagios_conf "contacts" do
