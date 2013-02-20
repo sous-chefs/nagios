@@ -27,7 +27,8 @@ define host {
     ip = n['cloud']['public_ipv4']
   elsif node['nagios']['server']['monitored_client_interface']
     ip = n['network']["ipaddress_#{node['nagios']['server']['monitored_client_interface']}"]
-    if not ip %>
+    if not ip
+      Chef::Log.warn("node['nagios']['server']['monitored_client_interface'] was specified for #{n['name']} but n['network']['ipaddress_#{node['nagios']['server']['monitored_client_interface']}'] was not set. Using n['ipaddress']") %>
 # WARNING: This host doesn't have a monitored_client_interface defined!
 # Using <%= n['ipaddress'] %> instead.
     <% ip = n['ipaddress']
