@@ -67,6 +67,7 @@ The following attributes are used for the NRPE client
 * `node['nagios']['nrpe']['checksum']` - checksum of the nrpe source tarball
 * `node['nagios']['nrpe']['packages']` - nrpe / plugin packages to install.  The default attribute for RHEL/Fedora platforms contains a bare minimum set of packages.  The full list of available packages is available at: `http://dl.fedoraproject.org/pub/epel/6/x86_64/repoview/letter_n.group.html`
 * `node['nagios']['server_role']` - the role that the Nagios server will have in its run list that the clients can search for.
+* `node['nagios']['allowed_hosts']` - the hosts that are allowed to connect to this client. Can be an array of strings or just a string; 127.0.0.1 will always be included. Default is an empty string which causes the recipe to search for the IP.
 
 server
 ------

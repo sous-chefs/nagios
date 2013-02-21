@@ -26,7 +26,11 @@
 mon_host = ['127.0.0.1']
 
 # put all nagios servers that you find in the NPRE config.
-if node['nagios']['multi_environment_monitoring']
+if node.run_list.roles.include?(node['nagios']['server_role'])
+  mon_host << node['ipaddress']
+elsif node['nagios']['allowed_hosts']
+  mon_host.concat node['nagios']['allowed_hosts']
+elsif node['nagios']['multi_environment_monitoring']
   search(:node, "role:#{node['nagios']['server_role']}") do |n|
     mon_host << n['ipaddress']
   end
