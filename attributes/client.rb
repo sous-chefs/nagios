@@ -27,6 +27,11 @@ when 'debian'
   default['nagios']['client']['install_method']  = 'package'
   default['nagios']['nrpe']['pidfile']           = '/var/run/nagios/nrpe.pid'
   default['nagios']['nrpe']['home']              = '/usr/lib/nagios'
+  if node['kernel']['machine'] == "i686"
+    default['nagios']['nrpe']['ssl_lib_dir']       = '/usr/lib/i386-linux-gnu'
+  else
+    default['nagios']['nrpe']['ssl_lib_dir']       = '/usr/lib/x86_64-linux-gnu'
+  end
   if node['nagios']['client']['install_method'] == 'package'
     default['nagios']['nrpe']['service_name']      = 'nagios-nrpe-server'
   else
@@ -37,14 +42,17 @@ when 'rhel','fedora'
   default['nagios']['nrpe']['pidfile']           = '/var/run/nrpe.pid'
   if node['kernel']['machine'] == "i686"
     default['nagios']['nrpe']['home']            = '/usr/lib/nagios'
+    default['nagios']['nrpe']['ssl_lib_dir']     = '/usr/lib'
   else
     default['nagios']['nrpe']['home']            = '/usr/lib64/nagios'
+    default['nagios']['nrpe']['ssl_lib_dir']     = '/usr/lib64'
   end
   default['nagios']['nrpe']['service_name']      = 'nrpe'
 else
   default['nagios']['client']['install_method']  = 'source'
   default['nagios']['nrpe']['pidfile']           = '/var/run/nrpe.pid'
   default['nagios']['nrpe']['home']              = '/usr/lib/nagios'
+  default['nagios']['nrpe']['ssl_lib_dir']       = '/usr/lib'
   default['nagios']['nrpe']['service_name']      = 'nrpe'
 end
 
