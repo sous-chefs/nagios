@@ -27,6 +27,11 @@ when 'debian'
   default['nagios']['client']['install_method']  = 'package'
   default['nagios']['nrpe']['pidfile']           = '/var/run/nagios/nrpe.pid'
   default['nagios']['nrpe']['home']              = '/usr/lib/nagios'
+  if node['kernel']['machine'] == "i686"
+    default['nagios']['nrpe']['ssl_lib_dir']       = '/usr/lib/i386-linux-gnu'
+  else
+    default['nagios']['nrpe']['ssl_lib_dir']       = '/usr/lib/x86_64-linux-gnu'
+  end
   if node['nagios']['client']['install_method'] == 'package'
     default['nagios']['nrpe']['service_name']      = 'nagios-nrpe-server'
   else
@@ -37,14 +42,17 @@ when 'rhel','fedora'
   default['nagios']['nrpe']['pidfile']           = '/var/run/nrpe.pid'
   if node['kernel']['machine'] == "i686"
     default['nagios']['nrpe']['home']            = '/usr/lib/nagios'
+    default['nagios']['nrpe']['ssl_lib_dir']     = '/usr/lib'
   else
     default['nagios']['nrpe']['home']            = '/usr/lib64/nagios'
+    default['nagios']['nrpe']['ssl_lib_dir']     = '/usr/lib64'
   end
   default['nagios']['nrpe']['service_name']      = 'nrpe'
 else
   default['nagios']['client']['install_method']  = 'source'
   default['nagios']['nrpe']['pidfile']           = '/var/run/nrpe.pid'
   default['nagios']['nrpe']['home']              = '/usr/lib/nagios'
+  default['nagios']['nrpe']['ssl_lib_dir']       = '/usr/lib'
   default['nagios']['nrpe']['service_name']      = 'nrpe'
 end
 
@@ -61,11 +69,5 @@ default['nagios']['plugins']['checksum'] = 'b0caf07e0084e9b7f10fdd71cbd3ebabcd85
 default['nagios']['nrpe']['url']      = 'http://prdownloads.sourceforge.net/sourceforge/nagios'
 default['nagios']['nrpe']['version']  = '2.14'
 default['nagios']['nrpe']['checksum'] = '808c7c4a82d0addf15449663e4712b5018c8bbd668e46723139f731f1ac44431'
-
-default['nagios']['checks']['memory']['critical'] = 150
-default['nagios']['checks']['memory']['warning']  = 250
-default['nagios']['checks']['load']['critical']   = '30,20,10'
-default['nagios']['checks']['load']['warning']    = '15,10,5'
-default['nagios']['checks']['smtp_host'] = String.new
 
 default['nagios']['server_role'] = 'monitoring'
