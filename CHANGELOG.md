@@ -1,3 +1,72 @@
+## v4.0.0:
+
+This is a major release that refactors a significant amount of the
+service configuration to use data bags rather than hardcoding specific
+checks in the templates. The README describes how to create services
+via data bags.
+
+The main incompatibility and breaking change is that the default
+services that are monitored by Nagios is reduced to only the
+"check-nagios" service. This means that existing installations will
+need to start converting checks over to the new data bag entries.
+
+* [COOK-1553] - Nagios: check_nagios command does not work if Nagios
+  is installed from source
+* [COOK-1554] - Nagios: The nagios server should be added to all
+  relevant host groups
+* [COOK-1746] - nagios should provide more flexibility for server
+  aliases
+* [COOK-2006] - Extract default checks out of nagios
+* [COOK-2129] - If a host is in the _default environment it should go
+  into the _default hostgroup
+* [COOK-2130] - Chef needs to use the correct nagios plugin path on
+  64bit CentOS systems
+* [COOK-2131] - gd development packages are not necessary for NRPE
+  installs from source
+* [COOK-2132] - Update NRPE installs to 2.14 from 2.13
+* [COOK-2134] - Handle nagios-nrpe-server and nrpe names for NRPE in
+  the init scripts and cookbook
+* [COOK-2135] - Use with-nagios-user and group options source NRPE
+  installs
+* [COOK-2136] - Nagios will not pass config check when multiple
+  machines in different domains have the same hostname
+* [COOK-2150] - hostgroups data bag search doesn't respect the
+  multi_environment_monitoring attribute
+* [COOK-2186] - add service escalation to nagios
+* [COOK-2188] - A notification interval of zero is valid but
+  prohibited by the cookbook
+* [COOK-2200] - Templates and Services from data bags don't specify
+  intervals in the same way as the rest of the cookbook
+* [COOK-2216] - Nagios cookbook readme needs improvement
+* [COOK-2240] - Nagios server setup needs to gracefully fail when
+  users data bag is not present
+* [COOK-2241] - Stylesheets fail to load on a fresh Nagios install
+* [COOK-2242] - Remove unused checks in the NRPE config file
+* [COOK-2245] - nagios::server writes openid apache configs before
+  including apache2::mod_auth_openid
+* [COOK-2246] - Most of the commands in the Nagios cookbook don't work
+* [COOK-2247] - nagios::client_source sets pkgs to a string, then
+  tries to pkgs.each do {|pkg| package pkg }
+* [COOK-2257] - Nagios incorrectly tries to use cloud IPs due to a
+  OHAI bug
+* [COOK-2275] - The Nagios3 download URL attribute is unused
+* [COOK-2285] - Refactor data bag searches into library
+* [COOK-2294] - Add cas authentication to nagios cookbook
+* [COOK-2295] - nagios: chef tries to start nagios-nrpe-server on
+  every run
+* [COOK-2300] - You should be able to define a nagios_service into the
+  "all" host group
+* [COOK-2341] - pagerduty_nagios.pl URL changed
+* [COOK-2350] - Nagios server fails to start when installed via source
+  on Ubuntu/Debian
+* [COOK-2369] - Add LDAP support in the nagios cookbook.
+* [COOK-2374] - Setting an unmanaged host to a string returns 'no
+  method error'
+* [COOK-2375] - Allows adding a service that utilizes a pre-existing
+  command
+* [COOK-2433] - Nagios: ldap authentication needs to handle anonymous
+  binding ldap servers
+
 ## v3.1.0:
 
 * [COOK-2032] - Use public IP address for inter-cloud checks and
