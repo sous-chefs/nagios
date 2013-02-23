@@ -60,6 +60,9 @@ default['nagios']['nrpe']['conf_dir']          = '/etc/nagios'
 default['nagios']['nrpe']['dont_blame_nrpe']   = 0
 default['nagios']['nrpe']['command_timeout']   = 60
 
+# server <-> client identification
+default['nagios']['client_role'] = "nagios_client"
+
 # for plugin from source installation
 default['nagios']['plugins']['url']      = 'http://prdownloads.sourceforge.net/sourceforge/nagiosplug'
 default['nagios']['plugins']['version']  = '1.4.16'
@@ -69,5 +72,3 @@ default['nagios']['plugins']['checksum'] = 'b0caf07e0084e9b7f10fdd71cbd3ebabcd85
 default['nagios']['nrpe']['url']      = 'http://prdownloads.sourceforge.net/sourceforge/nagios'
 default['nagios']['nrpe']['version']  = '2.14'
 default['nagios']['nrpe']['checksum'] = '808c7c4a82d0addf15449663e4712b5018c8bbd668e46723139f731f1ac44431'
-
-default['nagios']['server_role'] = 'monitoring'

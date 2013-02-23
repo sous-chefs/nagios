@@ -51,7 +51,7 @@ end
 # find nagios web interface users from the users data bag
 group = node['nagios']['users_databag_group']
 begin
-  sysadmins = search(:users, "groups:#{group}")
+  sysadmins = search(node['nagios']['users_databag'].to_sym, "groups:#{group}")
 rescue Net::HTTPServerException
   Chef::Log.fatal("Could not find appropriate items in the \"users\" databag.  Check to make sure there is a users databag and if you have set the \"users_databag_group\" that users in that group exist")
   raise 'Could not find appropriate items in the "users" databag.  Check to make sure there is a users databag and if you have set the "users_databag_group" that users in that group exist'
@@ -93,6 +93,27 @@ else
   end
 end
 
+# Shamelessly stolen from cluster_service_discovery.  Big ups, Infochimps!
+def build_nodes_query options = { :role => node['nagios']['client_role'] } 
+  opts = Hash.new
+  opts[:chef_environment] = "#{node.chef_environment}" unless node['nagios']['multi_environment_monitoring']
+  opts[:cluster_name] = "#{node.cluster_name}" unless node['nagios']['cluster_monitoring'].nil?
+  opts[:hostname] = "[* TO *]"
+  opts[:role] = options[:role]
+  query = opts.collect { |k,v| "#{k}:#{v}" }. join(" AND ")
+  Chef::Log.debug "Searching for #{query}"
+  query
+end
+
+# Pass in an array of roles that you do not wish to create hostgroups for.
+def build_roles_query options = { :exclude_roles => node['nagios']['exclude_roles'] }
+  opts = Hash.new
+  exclude = options[:exclude_roles].collect { |r| "name:#{r}" }.join " OR "
+  query = "name:* NOT (#{exclude})"
+  Chef::Log.debug "Searching for #{query}"
+  query
+end
+
 # install nagios service either from source of package
 include_recipe "nagios::server_#{node['nagios']['server']['install_method']}"
 
@@ -101,11 +122,7 @@ Chef::Log.info("Beginning search for nodes.  This may take some time depending o
 nodes = Array.new
 hostgroups = Array.new
 
-if node['nagios']['multi_environment_monitoring']
-  nodes = search(:node, "hostname:[* TO *]")
-else
-  nodes = search(:node, "hostname:[* TO *] AND chef_environment:#{node.chef_environment}")
-end
+nodes = search(:node, build_node_query)
 
 if nodes.empty?
   Chef::Log.info("No nodes returned from search, using this node so hosts.cfg has data")
@@ -115,12 +132,18 @@ end
 # Sort by name to provide stable ordering
 nodes.sort! {|a,b| a.name <=> b.name }
 
+Chef::Log.info("Monitoring these nodes:\n#{nodes.collect { |n| "   ### #{n.fqdn}" }.join "\n"}")
+
 # maps nodes into nagios hostgroups
 service_hosts= Hash.new
-search(:role, "*:*") do |r|
-  hostgroups << r.name
+search(:role, build_roles_query) do |r|
   nodes.select {|n| n['roles'].include?(r.name) }.each do |n|
     service_hosts[r.name] = n[node['nagios']['host_name_attribute']]
+  end
+
+  #Filter out roles with no hosts
+  unless service_hosts[r.name].nil?
+    hostgroups << r.name
   end
 end
 
