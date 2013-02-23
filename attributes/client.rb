@@ -3,6 +3,7 @@
 # Author:: Joshua Timberman <joshua@opscode.com>
 # Author:: Nathan Haneysmith <nathan@opscode.com>
 # Author:: Seth Chisamore <schisamo@opscode.com>
+# Author:: Tim Smith <tsmith84@gmail.com>
 # Cookbook Name:: nagios
 # Attributes:: client
 #
@@ -27,6 +28,7 @@ when 'debian'
   default['nagios']['client']['install_method']  = 'package'
   default['nagios']['nrpe']['pidfile']           = '/var/run/nagios/nrpe.pid'
   default['nagios']['nrpe']['home']              = '/usr/lib/nagios'
+  default['nagios']['nrpe']['packages']          = %w{ nagios-nrpe-server nagios-plugins nagios-plugins-basic nagios-plugins-standard }
   if node['kernel']['machine'] == "i686"
     default['nagios']['nrpe']['ssl_lib_dir']       = '/usr/lib/i386-linux-gnu'
   else
@@ -40,6 +42,7 @@ when 'debian'
 when 'rhel','fedora'
   default['nagios']['client']['install_method']  = 'source'
   default['nagios']['nrpe']['pidfile']           = '/var/run/nrpe.pid'
+  default['nagios']['nrpe']['packages']          = %w{ nrpe nagios-plugins-disk nagios-plugins-load nagios-plugins-procs nagios-plugins-users }
   if node['kernel']['machine'] == "i686"
     default['nagios']['nrpe']['home']            = '/usr/lib/nagios'
     default['nagios']['nrpe']['ssl_lib_dir']     = '/usr/lib'

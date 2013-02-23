@@ -33,9 +33,10 @@ Cookbooks
 
 * apache2
 * build-essential
-* php
 * nginx
 * nginx_simplecgi
+* php
+* yum
 
 Attributes
 ==========
@@ -64,6 +65,7 @@ The following attributes are used for the NRPE client
 * `node['nagios']['nrpe']['url']` - url to retrieve NRPE source
 * `node['nagios']['nrpe']['version']` - version of NRPE source to download
 * `node['nagios']['nrpe']['checksum']` - checksum of the nrpe source tarball
+* `node['nagios']['nrpe']['packages']` - nrpe / plugin packages to install.  The default attribute for RHEL/Fedora platforms contains a bare minimum set of packages.  The full list of available packages is avilable at: http://dl.fedoraproject.org/pub/epel/6/x86_64/repoview/letter_n.group.html
 * `node['nagios']['server_role']` - the role that the Nagios server will have in its run list that the clients can search for.
 
 server
