@@ -39,6 +39,9 @@ else
   default['nagios']['server']['mail_command']   = '/bin/mail'
 end
 
+# server <-> client identification
+default['nagios']['server_role'] = "nagios_server"
+
 default['nagios']['home']       = '/usr/lib/nagios3'
 default['nagios']['conf_dir']   = '/etc/nagios3'
 default['nagios']['config_dir'] = '/etc/nagios3/conf.d'
@@ -64,7 +67,6 @@ default['nagios']['default_contact_groups']  = %w{admins}
 default['nagios']['sysadmin_email']          = "root@localhost"
 default['nagios']['sysadmin_sms_email']      = "root@localhost"
 default['nagios']['server_auth_method']      = "openid"
-default['nagios']['users_databag_group']     = "sysadmin"
 default['nagios']['host_name_attribute']     = "hostname"
 
 # for cas authentication
