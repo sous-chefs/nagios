@@ -21,6 +21,16 @@
 # Allow a Nagios server to monitor hosts in multiple environments.  Impacts NRPE configs as well
 default['nagios']['multi_environment_monitoring'] = false
 
+# Allow a Nagios server to monitor only within the immediate cluster of hosts
+default['nagios']['cluster_monitoring'] = false
+
+# Roles to exclude when creating hostgroups.  Use to exclude roles like "base."
+default['nagios']['exclude_roles'] = nil
+
+# Search the users databag by default, for contacts.  We used "admins," buried deep in the opscode wiki.
+default['nagios']['users_databag'] = "users"
+default['nagios']['users_databag_group'] = "sysadmin"
+
 default['nagios']['user']  = 'nagios'
 default['nagios']['group'] = 'nagios'
 

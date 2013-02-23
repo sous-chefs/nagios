@@ -22,17 +22,25 @@
 # limitations under the License.
 #
 
+# Shamelessly stolen from cluster_service_discovery.  Big ups to Infochimps!
+def build_query options = {} 
+  opts = Hash.new
+  opts[:chef_environment] = "#{node.chef_environment}" unless node['nagios']['multi_environment_monitoring']
+  opts[:cluster_name]     = "#{node.cluster_name}" unless node['nagios']['cluster_nagios'].nil?
+  opts[:hostname]         = "[* TO *]"
+  opts[:role]             = node['nagios']['server_role']
+  query = opts.collect { |k,v| "#{k}:#{v}" }. join(" AND ")
+  Chef::Log.debug "Searching for #{query}"
+  query
+end
+
 # determine hosts that NRPE will allow monitoring from
 mon_host = ['127.0.0.1']
 
 if node.run_list.roles.include?(node['nagios']['server_role'])
   mon_host << node['ipaddress']
-elsif node['nagios']['multi_environment_monitoring']
-  search(:node, "role:#{node['nagios']['server_role']}") do |n|
-    mon_host << n['ipaddress']
-  end
 else
-  search(:node, "role:#{node['nagios']['server_role']} AND chef_environment:#{node.chef_environment}") do |n|
+  search(:node, build_query)
     mon_host << n['ipaddress']
   end
 end

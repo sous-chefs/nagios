@@ -49,6 +49,7 @@ The following attributes are used by both client and server recipes.
 * `node['nagios']['group']` - Nagios group, default 'nagios'.
 * `node['nagios']['plugin_dir']` - location where Nagios plugins go, default '/usr/lib/nagios/plugins'.
 * `node['nagios']['multi_environment_monitoring']` - Chef server will monitor hosts in all environments, not just its own, default 'false'
+* `node['nagios']['cluster_monitoring']` - Chef server will monitor only hosts whose 'cluster_name' attribute matches node['cluster_name'].  Default false.
 
 client
 ------
@@ -73,6 +74,9 @@ The following attributes are used for the Nagios server
 
 * `node['nagios']['server']['install_method']` - whether to install from package or source. Default chosen by platform based on known packages available for Nagios: debian/ubuntu 'package', redhat/centos/fedora/scientific: source
 * `node['nagios']['server']['service_name']` - name of the service used for Nagios, default chosen by platform, debian/ubuntu "nagios3", redhat family "nagios", all others, "nagios"
+* `node['nagios']['client_role']` - the role that the Nagios server will search for to find clients.
+* `node['nagios']['exclude_roles']` - an array of roles to exclude from the list of host groups, to clear up the Nagios web UI.
+* `node['nagios']['users_databag']` - The name of the databag to search for admins and contacts.
 * `node['nagios']['home']` - Nagios main home directory, default "/usr/lib/nagios3"
 * `node['nagios']['conf_dir']` - location where main Nagios config lives, default "/etc/nagios3"
 * `node['nagios']['config_dir']` - location where included configuration files live, default "/etc/nagios3/conf.d"
