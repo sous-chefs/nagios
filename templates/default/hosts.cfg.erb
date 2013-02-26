@@ -5,7 +5,7 @@
 <%# handle the nagios node differently than others to prevent failures in bootstrap scenarios %>
 define host {
   use server
-  address <%= node['ipaddress'] %>
+  address <%= node['nagios']['server']['monitored_client_interface'] ? node['network']["ipaddress_#{node['nagios']['server']['monitored_client_interface']}"] : node['ipaddress'] %>
   host_name <%= node[node['nagios']['host_name_attribute']] %>
   hostgroups <% if node['nagios']['multi_environment_monitoring'] -%><%= node.chef_environment %>,<% end -%>all,<%= node['os'] %>,<%= node['roles'].join(",") %><% if !node['roles'].include?(node['nagios']['server_role']) %>,<%= node['nagios']['server_role'] %><% end -%>
 }
@@ -25,7 +25,15 @@ define host {
     ip = node['ipaddress'].include?('.') ? n['cloud']['public_ipv4'] : n['ipaddress']
   elsif !node['cloud'].nil? && n['cloud']['provider'] != node['cloud']['provider']
     ip = node['ipaddress'].include?('.') ? n['cloud']['public_ipv4'] : n['ipaddress']
-  else
+  elsif node['nagios']['server']['monitored_client_interface']
+    ip = n['network']["ipaddress_#{node['nagios']['server']['monitored_client_interface']}"]
+    if not ip
+      Chef::Log.warn("node['nagios']['server']['monitored_client_interface'] was specified for #{n['name']} but n['network']['ipaddress_#{node['nagios']['server']['monitored_client_interface']}'] was not set. Using n['ipaddress']") %>
+# WARNING: This host doesn't have a monitored_client_interface defined!
+# Using <%= n['ipaddress'] %> instead.
+    <% ip = n['ipaddress']
+     end
+   else
     ip = n['ipaddress']
   end %>
   address <%= ip %>
