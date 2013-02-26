@@ -125,6 +125,7 @@ The following attributes are used for the Nagios server
 * `node['nagios']['server']['stop_apache']` - stop apache service if using nginx, default false
 * `node['nagios']['server']['redirect_root']` - if using Apache, should http://server/ redirect to http://server/nagios3 automatically, default false
 
+* `node['nagios']['server']['ignored_service_hostgroups']` - Do not monitor services in these hostgroups.
 
 Recipes
 =======

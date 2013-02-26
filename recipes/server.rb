@@ -252,7 +252,8 @@ end
 nagios_conf "services" do
   variables(:service_hosts => service_hosts,
             :services => services,
-            :hostgroups => hostgroups)
+            :hostgroups => hostgroups,
+            :ignored_hostgroups => nagios_ignored_hostgroups)
 end
 
 nagios_conf "contacts" do
