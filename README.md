@@ -274,6 +274,27 @@ You may also use an already defined command definition by omitting the command\_
      "use_existing_command": "check-host-alive"
     }
 
+Service Groups
+--------------
+
+Create a nagios\_servicegroups data bag that will contain definitions for service groups.  Each server group will be named based on the id of the data bag.
+
+    {
+    "id": "ops",
+    "alias": "Ops",
+    "notes": "Services for ops"
+    }
+
+You can group your services by using the "servicegroups" keyword in your services data bags. For example, to have your ssh
+checks show up under the ops service group, you could define it like this:
+
+    {
+    "id": "ssh",
+    "hostgroup_name": "all",
+    "command_line": "$USER1$/check_ssh $HOSTADDRESS$",
+    "servicegroups": "ops"
+    }
+
 Templates
 ---------
 
