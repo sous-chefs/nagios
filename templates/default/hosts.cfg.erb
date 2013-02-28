@@ -34,7 +34,7 @@ define host {
   <% if n.run_list.roles.nil? || n.run_list.roles.length == 0 -%>
   hostgroups all,<%= n.os %>, <%= n.chef_environment %>
   <% else -%>
-  hostgroups <%= (n.run_list.roles.to_a & @hostgroups).join(",") %>,<%= n.os %>, <%= n.chef_environment %>
+  hostgroups <%= (n.roles.to_a & @hostgroups).join(",") %>,<%= n.os %>, <%= n.chef_environment %>
   <% end -%>
   <% elsif -%>
   <% if n.run_list.roles.nil? || n.run_list.roles.length == 0 -%>
