@@ -33,9 +33,10 @@ Cookbooks
 
 * apache2
 * build-essential
-* php
 * nginx
 * nginx_simplecgi
+* php
+* yum
 
 Attributes
 ==========
@@ -64,6 +65,7 @@ The following attributes are used for the NRPE client
 * `node['nagios']['nrpe']['url']` - url to retrieve NRPE source
 * `node['nagios']['nrpe']['version']` - version of NRPE source to download
 * `node['nagios']['nrpe']['checksum']` - checksum of the nrpe source tarball
+* `node['nagios']['nrpe']['packages']` - nrpe / plugin packages to install.  The default attribute for RHEL/Fedora platforms contains a bare minimum set of packages.  The full list of available packages is available at: `http://dl.fedoraproject.org/pub/epel/6/x86_64/repoview/letter_n.group.html`
 * `node['nagios']['server_role']` - the role that the Nagios server will have in its run list that the clients can search for.
 
 server
@@ -144,6 +146,8 @@ The client recipe searches for servers allowed to connect via NRPE that have a r
 Searches are confined to the node's `chef_environment` unless the `multi_environment_monitoring` attribute has been set to true.
 
 Client commands for NRPE can be installed using the nrpecheck lwrp. (See __Resources/Providers__ below.)
+
+RHEL and Fedora default to installation via source, but you can install NRPE via package by changing `node['nagios']['client']['install_method']` to "package".  Note that this will enable the EPEL repository on RHEL systems, which may not be desired.  You will also need to modify `node['nagios']['nrpe']['packages']` to include the appropriate NRPE plugins for your environment.  The complete list is available at `http://dl.fedoraproject.org/pub/epel/6/x86_64/repoview/letter_n.group.html`
 
 client\_package
 ---------------
