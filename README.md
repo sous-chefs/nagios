@@ -124,6 +124,8 @@ The following attributes are used for the Nagios server
 * `node['nagios']['server']['nginx_dispatch']` - nginx dispatch method. support cgi or php, default "cgi"
 * `node['nagios']['server']['stop_apache']` - stop apache service if using nginx, default false
 * `node['nagios']['server']['redirect_root']` - if using Apache, should http://server/ redirect to http://server/nagios3 automatically, default false
+* `node['nagios']['server']['host_notes']` - If set, adds a notes entry to hosts.cfg for all hosts.
+* `node['nagios']['server']['host_notes_url']` - If set, adds a notes_url entry to hosts.cfg for all hosts.
 
 
 Recipes
