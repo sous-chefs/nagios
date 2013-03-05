@@ -40,7 +40,7 @@ define service {
   # this should be an escalation defined in the nagios_serviceescalation data bag
   use <%= service['use_escalation'] %>
   service_description <%= service['id'] %>
-  hostgroup_name <%= service[['hostgroup_name']].push(@ignored_hostgroups).compact.join "," %>
+  hostgroup_name <%= [service['hostgroup_name']].push(@ignored_hostgroups).compact.join "," %>
 }
 <% end %>
   <% end -%>
