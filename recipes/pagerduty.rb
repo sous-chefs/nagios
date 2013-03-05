@@ -44,7 +44,7 @@ end
 template "#{node['nagios']['config_dir']}/pagerduty.cfg" do
   owner node['nagios']['user']
   group node['nagios']['group']
-  mode 00644
+  mode 00640
   source "pagerduty_nagios.cfg.erb"
 end
 
