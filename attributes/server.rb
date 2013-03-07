@@ -102,3 +102,6 @@ default['nagios']['server']['web_server'] = :apache
 default['nagios']['server']['nginx_dispatch'] = :cgi
 default['nagios']['server']['stop_apache'] = false
 default['nagios']['server']['redirect_root'] = false
+
+default['nagios']['server']['host_notes'] = nil
+default['nagios']['server']['host_notes_url'] = nil

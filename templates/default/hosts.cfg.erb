@@ -8,6 +8,12 @@ define host {
   address <%= node['ipaddress'] %>
   host_name <%= node[node['nagios']['host_name_attribute']] %>
   hostgroups <% if node['nagios']['multi_environment_monitoring'] -%><%= node.chef_environment %>,<% end -%>all,<%= node['os'] %>,<%= node['roles'].join(",") %><% if !node['roles'].include?(node['nagios']['server_role']) %>,<%= node['nagios']['server_role'] %><% end -%>
+  <% if node['nagios']['server']['host_notes'] -%>
+  notes <%= node['nagios']['server']['host_notes'] %>
+  <% end -%>
+  <% if node['nagios']['server']['host_notes_url'] -%>
+  notes_url <%= node['nagios']['server']['host_notes_url'] %>
+  <% end -%>
 }
 
 <% @nodes.each do |n| -%>
@@ -43,6 +49,12 @@ define host {
   hostgroups <%= (n.run_list.roles.to_a & @hostgroups).join(",") %>,<%= n['os'] %>
   <% end -%>
   <% end -%>
+  <% if node['nagios']['server']['host_notes'] -%>
+  notes <%= node['nagios']['server']['host_notes'] %>
+  <% end -%>
+  <% if node['nagios']['server']['host_notes_url'] -%>
+  notes_url <%= node['nagios']['server']['host_notes_url'] %>
+  <% end -%>
 }
 <% end -%>
 <% end -%>
@@ -55,6 +67,12 @@ define host {
   host_name <%= n['id'] %>
   hostgroups <%= n['hostgroups'].join(",") %>
   notifications_enabled <%= n['notifications'] %>
+  <% if node['nagios']['server']['host_notes'] -%>
+  notes <%= node['nagios']['server']['host_notes'] %>
+  <% end -%>
+  <% if node['nagios']['server']['host_notes_url'] -%>
+  notes_url <%= node['nagios']['server']['host_notes_url'] %>
+  <% end -%>
 }
 <% end -%>
 <% end -%>
