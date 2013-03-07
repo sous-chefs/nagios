@@ -11,7 +11,7 @@ recipe "nagios::client", "Installs and configures a nrpe client"
 recipe "nagios::server", "Installs and configures a nagios server"
 recipe "nagios::pagerduty", "Integrates contacts w/ PagerDuty API"
 
-%w{ apache2 build-essential php nginx nginx_simplecgi }.each do |cb|
+%w{ apache2 build-essential php nginx nginx_simplecgi yum }.each do |cb|
   depends cb
 end
 
