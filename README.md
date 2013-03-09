@@ -93,7 +93,9 @@ The following attributes are used for the Nagios server
 *  `node['nagios']['server']['checksum']` - checksum of the source files
 *  `node['nagios']['url']` - URL to host nagios from - defaults to nil and instead uses  FQDN
 
-* `node['nagios']['notifications_enabled']` - set to 1 to enable notification.
+* `node['nagios']['primary_notifies']` - set to true to enable notifications on only one nagios server, the 'primary', and disable them everywhere else.
+* `node['nagios']['primary']` - if primary_notifies is enabled, set this to the hostname of the primary.
+* `node['nagios']['notifications_enabled']` - set to 1 to enable notification. Only applied if primary_notifies is false.
 * `node['nagios']['check_external_commands']`
 * `node['nagios']['default_contact_groups']`
 * `node['nagios']['sysadmin_email']` - default notification email.

@@ -58,6 +58,12 @@ default['nagios']['server']['url']      = 'http://prdownloads.sourceforge.net/so
 default['nagios']['server']['version']  = '3.4.4'
 default['nagios']['server']['checksum'] = 'cf6c4c82c4d8dd42e5daae92c20682574f001f03d062600327372c8274fc338e'
 
+# Set primary_notifies to true to make only one nagios host send out notifications.
+# If set, set the primary attribute to the nodename of the host that should notify; all others will be silent
+# This overrides the value of ['nagios']['notifications_enabled'] and makes it easy to maintain a failover nagios instance.
+default['nagios']['primary_notifies'] = false
+default['nagios']['primary'] = nil
+
 default['nagios']['notifications_enabled']   = 0
 default['nagios']['check_external_commands'] = true
 default['nagios']['default_contact_groups']  = %w{admins}
