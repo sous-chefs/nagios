@@ -9,6 +9,8 @@ server {
   access_log <%= File.join(@log_dir, 'nginx_access.log') %>;
   error_log <%= File.join(@log_dir, 'nginx_error.log') %>;
   root <%= @docroot %>;
+  auth_basic "Nagios Server";
+  auth_basic_user_file <%= @htpasswd_file %>;
   index index.php index.html index.cgi;
 
 <% if @https %>
@@ -52,8 +54,6 @@ nginx_dispatch(:php,
   }
 
   location / {
-    auth_basic "Nagios Server";
-    auth_basic_user_file <%= @htpasswd_file %>;
     root <%= @docroot %>;
   }
 
