@@ -40,15 +40,15 @@ end
 include_recipe "nagios::client_#{node['nagios']['client']['install_method']}"
 
 directory "#{node['nagios']['nrpe']['conf_dir']}/nrpe.d" do
-  owner "root"
-  group "root"
+  owner node['nagios']['user']
+  group node['nagios']['group']
   mode 00755
 end
 
 template "#{node['nagios']['nrpe']['conf_dir']}/nrpe.cfg" do
   source "nrpe.cfg.erb"
-  owner "root"
-  group "root"
+  owner node['nagios']['user']
+  group node['nagios']['group']
   mode 00644
   variables(
     :mon_host => mon_host,

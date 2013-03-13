@@ -34,14 +34,14 @@ if node['nagios']['client']['install_method'] == "source"
 
   template "/etc/init.d/#{node['nagios']['nrpe']['service_name']}" do
     source "nagios-nrpe-server.erb"
-    owner "root"
-    group "root"
+    owner node['nagios']['user']
+    group node['nagios']['group']
     mode  00755
   end
 
   directory node['nagios']['nrpe']['conf_dir'] do
-    owner "root"
-    group "root"
+    owner node['nagios']['user']
+    group node['nagios']['group']
     mode  00755
   end
 else
