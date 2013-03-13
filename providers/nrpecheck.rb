@@ -31,7 +31,7 @@ action :add do
   file "#{node['nagios']['nrpe']['conf_dir']}/nrpe.d/#{new_resource.command_name}.cfg" do
     owner "root"
     group "root"
-    mode 00644
+    mode 00640
     content file_contents
     notifies :restart, "service[#{node['nagios']['nrpe']['service_name']}]"
   end
