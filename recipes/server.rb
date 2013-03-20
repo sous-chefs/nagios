@@ -143,6 +143,7 @@ end
 
 nagios_bags = NagiosDataBags.new
 services = nagios_bags.get('nagios_services')
+servicegroups = nagios_bags.get('nagios_servicegroups')
 templates = nagios_bags.get('nagios_templates')
 eventhandlers = nagios_bags.get('nagios_eventhandlers')
 unmanaged_hosts = nagios_bags.get('nagios_unmanagedhosts')
@@ -254,6 +255,10 @@ nagios_conf "services" do
             :services => services,
             :search_hostgroups => hostgroup_list,
             :hostgroups => hostgroups)
+end
+
+nagios_conf "servicegroups" do
+  variables(:servicegroups => servicegroups)
 end
 
 nagios_conf "contacts" do
