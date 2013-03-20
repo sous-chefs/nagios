@@ -31,16 +31,16 @@ define host {
   address <%= ip %>
   host_name <%= n[node['nagios']['host_name_attribute']] %>
   <% if node['nagios']['multi_environment_monitoring'] -%>
-  <% if n.run_list.roles.nil? || n.run_list.roles.length == 0 -%>
+  <% if n.roles.nil? || n.roles.length == 0 -%>
   hostgroups all,<%= n.os %>, <%= n.chef_environment %>
   <% else -%>
-  hostgroups <%= (n.run_list.roles.to_a & @hostgroups).join(",") %>,<%= n.os %>, <%= n.chef_environment %>
+  hostgroups all,<%= (n.roles & @hostgroups).join(",") %>,<%= n.os %>, <%= n.chef_environment %>
   <% end -%>
   <% elsif -%>
-  <% if n.run_list.roles.nil? || n.run_list.roles.length == 0 -%>
+  <% if n.roles.nil? || n.roles.length == 0 -%>
   hostgroups all,<%= n.os %>
   <% else -%>
-  hostgroups <%= (n.run_list.roles.to_a & @hostgroups).join(",") %>,<%= n['os'] %>
+  hostgroups all,<%= (n.roles & @hostgroups).join(",") %>,<%= n['os'] %>
   <% end -%>
   <% end -%>
 }
@@ -53,7 +53,7 @@ define host {
   use server
   address <%= n['address'] %>
   host_name <%= n['id'] %>
-  hostgroups <%= n['hostgroups'].join(",") %>
+  hostgroups all,<%= n['hostgroups'].join(",") %>
   notifications_enabled <%= n['notifications'] %>
 }
 <% end -%>
