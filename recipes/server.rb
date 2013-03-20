@@ -192,6 +192,11 @@ nagios_conf "nagios" do
   config_subdir false
 end
 
+# delete the package-left but unused nagios plugin command config directory
+directory "/etc/nagios-plugins" do
+  action :delete
+end
+
 directory "#{node['nagios']['conf_dir']}/dist" do
   owner node['nagios']['user']
   group node['nagios']['group']
