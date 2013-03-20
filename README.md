@@ -126,6 +126,7 @@ The following attributes are used for the Nagios server
 * `node['nagios']['server']['nginx_dispatch']` - nginx dispatch method. support cgi or php, default "cgi"
 * `node['nagios']['server']['stop_apache']` - stop apache service if using nginx, default false
 * `node['nagios']['server']['redirect_root']` - if using Apache, should http://server/ redirect to http://server/nagios3 automatically, default false
+* `node['nagios']['server']['normalize_hostname']` - If set to true, normalize all hostnames in hosts.cfg to lowercase.  Defaults to false.
 
 
 Recipes
