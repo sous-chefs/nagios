@@ -56,7 +56,7 @@ default['nagios']['ssl_req'] = '/C=US/ST=Several/L=Locality/O=Example/OU=Operati
 # for server from source installation
 default['nagios']['server']['url']      = 'http://prdownloads.sourceforge.net/sourceforge/nagios'
 default['nagios']['server']['version']  = '3.5.0'
-default['nagios']['server']['checksum'] = '972e76c638b7d3f15d994eaa8fce0e4907d5d6e1'
+default['nagios']['server']['checksum'] = 'aeef195d2033cc362bf6cb972bcc8f07'
 
 default['nagios']['notifications_enabled']   = 0
 default['nagios']['check_external_commands'] = true
