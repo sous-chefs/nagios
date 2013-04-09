@@ -11,7 +11,7 @@ define host {
 }
 
 <% @nodes.each do |n| -%>
-<% unless n.name == node.name -%>
+<% unless n['name'] == node.name -%>
 define host {
   use server
   <% # decide whether to use internal or external IP addresses for this node
@@ -31,16 +31,16 @@ define host {
   address <%= ip %>
   host_name <%= node['nagios']['server']['normalize_hostname'] ? n[node['nagios']['host_name_attribute']].downcase : n[node['nagios']['host_name_attribute']] %>
   <% if node['nagios']['multi_environment_monitoring'] -%>
-  <% if n.roles.nil? || n.roles.length == 0 -%>
-  hostgroups all,<%= n.os %>, <%= n.chef_environment %>
+  <% if n['roles'].nil? || n['roles'].length == 0 -%>
+  hostgroups all,<%= n['os'] %>, <%= n['chef_environment'] %>
   <% else -%>
-  hostgroups all,<%= (n.roles & @hostgroups).join(",") %>,<%= n.os %>, <%= n.chef_environment %>
+  hostgroups all,<%= (n['roles'] & @hostgroups).join(",") %>,<%= n['os'] %>, <%= n['chef_environment'] %>
   <% end -%>
   <% elsif -%>
-  <% if n.roles.nil? || n.roles.length == 0 -%>
-  hostgroups all,<%= n.os %>
+  <% if n['roles'].nil? || n['roles'].length == 0 -%>
+  hostgroups all,<%= n['os'] %>
   <% else -%>
-  hostgroups all,<%= (n.roles & @hostgroups).join(",") %>,<%= n['os'] %>
+  hostgroups all,<%= (n['roles'] & @hostgroups).join(",") %>,<%= n['os'] %>
   <% end -%>
   <% end -%>
 }
