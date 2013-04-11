@@ -18,7 +18,7 @@ define service {
        valid = false
 
        service['hostgroup_name'].split(",").each do |s|
-         valid = @hostgroups.include?(s)
+         valid = @search_hostgroups.include?(s)  || @search_hostgroups.include?(s)
          valid || break
        end
 
