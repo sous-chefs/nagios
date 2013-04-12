@@ -37,6 +37,8 @@ else
   end
 end
 
+mon_host.concat node['nagios']['allowed_hosts'] if node['nagios']['allowed_hosts']
+
 include_recipe "nagios::client_#{node['nagios']['client']['install_method']}"
 
 directory "#{node['nagios']['nrpe']['conf_dir']}/nrpe.d" do
