@@ -76,4 +76,4 @@ default['nagios']['nrpe']['checksum'] = '808c7c4a82d0addf15449663e4712b5018c8bbd
 # role name of the nagios server
 default['nagios']['server_role'] = 'monitoring'
 # default list of allowed hosts
-default['nagios']['default_allowed_hosts'] = ['127.0.0.1']
+default['nagios']['allowed_hosts'] = ['127.0.0.1']
