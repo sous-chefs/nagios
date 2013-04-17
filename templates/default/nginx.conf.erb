@@ -45,7 +45,30 @@ nginx_dispatch(:php,
 %>
 <% end %>
 
-  location /nagios3/stylesheets {
+<% if @phpfpm %>
+<%=
+nginx_dispatch(:cgi,
+  :pattern => '\.cgi$',
+  :dispatcher => "unix:{node['fcgiwrap']['socket']}",
+  :custom => %q(
+    fastcgi_param AUTH_USER $remote_user;
+    fastcgi_param REMOTE_USER $remote_user;
+  )
+)
+%>
+
+<%=
+nginx_dispatch(:php,
+  :dispatcher => "unix:#{node['php-fpm']['pool']['www']['listen']}",
+  :docroot => @docroot,
+  :custom => %q(
+    fastcgi_param AUTH_USER $remote_user;
+    fastcgi_param REMOTE_USER $remote_user;
+  )
+) %>
+<% end %>
+
+  location /stylesheets {
     alias /etc/nagios3/stylesheets;
   }
 

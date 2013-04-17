@@ -56,6 +56,9 @@ when :cgi
 when :php
   node.set["nginx_simplecgi"]["php"] = true
   include_recipe 'nginx_simplecgi::setup'
+when :phpfpm
+  include_recipe 'php-fpm'
+  include_recipe 'fcgiwrap'
 when :both
   node.set["nginx_simplecgi"]["php"] = true
   node.set["nginx_simplecgi"]["cgi"] = true
@@ -88,7 +91,8 @@ template File.join(node['nginx']['dir'], 'sites-available', 'nagios3.conf') do
       'htpasswd.users'
     ),
     :cgi => [:cgi, :both].include?(dispatch_type.to_sym),
-    :php => [:php, :both].include?(dispatch_type.to_sym)
+    :php => [:php, :both].include?(dispatch_type.to_sym),
+    :phpfpm => [:phpfpm].include?(dispatch_type.to_sym)
   )
   if(::File.symlink?(File.join(node['nginx']['dir'], 'sites-enabled', 'nagios3.conf')))
     notifies :reload, 'service[nginx]', :immediately
