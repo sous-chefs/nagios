@@ -49,7 +49,7 @@ nginx_dispatch(:php,
 <%=
 nginx_dispatch(:cgi,
   :pattern => '\.cgi$',
-  :dispatcher => "unix:{node['fcgiwrap']['socket']}",
+  :dispatcher => "unix:#{node['fcgiwrap']['socket']}",
   :custom => %q(
     fastcgi_param AUTH_USER $remote_user;
     fastcgi_param REMOTE_USER $remote_user;
