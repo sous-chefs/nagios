@@ -1,9 +1,10 @@
 #
 # Author:: Seth Chisamore <schisamo@opscode.com>
+# Author:: Tim Smith <tsmith84@gmail.com>
 # Cookbook Name:: nagios
 # Recipe:: client_package
 #
-# Copyright 2011, Opscode, Inc
+# Copyright 2013, Opscode, Inc
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -18,11 +19,15 @@
 # limitations under the License.
 #
 
-%w{
-  nagios-nrpe-server
-  nagios-plugins
-  nagios-plugins-basic
-  nagios-plugins-standard
-}.each do |pkg|
+# nrpe packages are available in EPEL on rhel / fedora platforms
+# fedora 17 and later don't require epel
+if platform_family?("rhel","fedora")
+  unless platform?("fedora") && node['platform_version'] < 17
+    include_recipe "yum::epel"
+  end
+end
+
+# install the nrpe packages specified in the ['nrpe']['packages'] attribute
+node['nagios']['nrpe']['packages'].each do |pkg|
   package pkg
 end

@@ -55,8 +55,8 @@ default['nagios']['ssl_req'] = '/C=US/ST=Several/L=Locality/O=Example/OU=Operati
 
 # for server from source installation
 default['nagios']['server']['url']      = 'http://prdownloads.sourceforge.net/sourceforge/nagios'
-default['nagios']['server']['version']  = '3.4.3'
-default['nagios']['server']['checksum'] = '2d5c0cc56bafb08a71840a6efa349afc1eebb2761fea0d403e1b929e7c801b10'
+default['nagios']['server']['version']  = '3.5.0'
+default['nagios']['server']['checksum'] = '469381b2954392689c85d3db733e8da4bd43b806b3d661d1a7fbd52dacc084db'
 
 default['nagios']['notifications_enabled']   = 0
 default['nagios']['check_external_commands'] = true
@@ -102,6 +102,7 @@ default['nagios']['server']['web_server'] = :apache
 default['nagios']['server']['nginx_dispatch'] = :cgi
 default['nagios']['server']['stop_apache'] = false
 default['nagios']['server']['redirect_root'] = false
+default['nagios']['server']['normalize_hostname'] = false
 
 # If set allows specifying an interface name to use for client monitoring
 # (i.e. bond.2001 for ipaddress_bond.2001)  Requires Ohai network_addr plugin

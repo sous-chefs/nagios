@@ -29,9 +29,9 @@ action :add do
   file_contents += " -c #{new_resource.critical_condition}" unless new_resource.critical_condition.nil?
   file_contents += " #{new_resource.parameters}" unless new_resource.parameters.nil?
   file "#{node['nagios']['nrpe']['conf_dir']}/nrpe.d/#{new_resource.command_name}.cfg" do
-    owner "root"
-    group "root"
-    mode 00644
+    owner node['nagios']['user']
+    group node['nagios']['group']
+    mode 00640
     content file_contents
     notifies :restart, "service[#{node['nagios']['nrpe']['service_name']}]"
   end

@@ -6,7 +6,7 @@
 define host {
   use server
   address <%= node['nagios']['server']['monitored_client_interface'] ? node['network']["ipaddress_#{node['nagios']['server']['monitored_client_interface']}"] : node['ipaddress'] %>
-  host_name <%= node[node['nagios']['host_name_attribute']] %>
+  host_name <%= node['nagios']['server']['normalize_hostname'] ? node[node['nagios']['host_name_attribute']].downcase : node[node['nagios']['host_name_attribute']] %>
   hostgroups <% if node['nagios']['multi_environment_monitoring'] -%><%= node.chef_environment %>,<% end -%>all,<%= node['os'] %>,<%= node['roles'].join(",") %><% if !node['roles'].include?(node['nagios']['server_role']) %>,<%= node['nagios']['server_role'] %><% end -%>
 }
 
@@ -37,18 +37,18 @@ define host {
     ip = n['ipaddress']
   end %>
   address <%= ip %>
-  host_name <%= n[node['nagios']['host_name_attribute']] %>
+  host_name <%= node['nagios']['server']['normalize_hostname'] ? n[node['nagios']['host_name_attribute']].downcase : n[node['nagios']['host_name_attribute']] %>
   <% if node['nagios']['multi_environment_monitoring'] -%>
-  <% if n.run_list.roles.nil? || n.run_list.roles.length == 0 -%>
+  <% if n.roles.nil? || n.roles.length == 0 -%>
   hostgroups all,<%= n.os %>, <%= n.chef_environment %>
   <% else -%>
-  hostgroups <%= (n.run_list.roles.to_a & @hostgroups).join(",") %>,<%= n.os %>, <%= n.chef_environment %>
+  hostgroups all,<%= (n.roles & @hostgroups).join(",") %>,<%= n.os %>, <%= n.chef_environment %>
   <% end -%>
   <% elsif -%>
-  <% if n.run_list.roles.nil? || n.run_list.roles.length == 0 -%>
+  <% if n.roles.nil? || n.roles.length == 0 -%>
   hostgroups all,<%= n.os %>
   <% else -%>
-  hostgroups <%= (n.run_list.roles.to_a & @hostgroups).join(",") %>,<%= n['os'] %>
+  hostgroups all,<%= (n.roles & @hostgroups).join(",") %>,<%= n['os'] %>
   <% end -%>
   <% end -%>
 }
@@ -60,8 +60,8 @@ define host {
 define host {
   use server
   address <%= n['address'] %>
-  host_name <%= n['id'] %>
-  hostgroups <%= n['hostgroups'].join(",") %>
+  host_name <%= node['nagios']['server']['normalize_hostname'] ? n['id'].downcase : n['id'] %>
+  hostgroups all,<%= n['hostgroups'].join(",") %>
   notifications_enabled <%= n['notifications'] %>
 }
 <% end -%>

@@ -1,3 +1,26 @@
+## v4.1.0:
+
+* [COOK-2257] - Nagios incorrectly tries to use cloud IPs due to a OHAI bug
+* [COOK-2474] - hosts.cfg.erb assumes if nagios server node has the
+  cloud attributes all nodes have the cloud attributes
+* [COOK-1068] - Nagios::client should support CentOS/RHEL NRPE
+  installs via package
+* [COOK-2565] - nginx don't send `AUTH_USER` & `REMOTE_USER` to nagios
+* [COOK-2546] - nrpe config files should not be world readable
+* [COOK-2558] - Services that are attached to hostgroups created from
+  the nagios_hostgroups databag are not created
+* [COOK-2612] - Nagios can't start if search can't find hosts defined
+  in nagios_hostgroups
+* [COOK-2473] - Install Nagios 3.4.4 for source installs
+* [COOK-2541] - Nagios cookbook should use node.roles instead of
+  node.run_list.roles when calculating hostgroups
+* [COOK-2543] - Adds the ability to normalize hostnames to lowercase
+* [COOK-2450] - Add ability to define service groups through data
+  bags.
+* [COOK-2642] - With multiple nagios servers, they can't use NRPE to
+  check each other
+* [COOK-2613] - Install Nagios 3.5.0 when installing from source
+
 ## v4.0.0:
 
 This is a major release that refactors a significant amount of the
