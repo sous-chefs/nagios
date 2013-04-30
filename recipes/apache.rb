@@ -31,9 +31,13 @@ public_domain = node['public_domain'] || node['domain']
 template "#{node['apache']['dir']}/sites-available/nagios3.conf" do
   source "apache2.conf.erb"
   mode 00644
-  variables( :public_domain => public_domain,
-      :nagios_url => node['nagios']['url']
-      )
+  variables( 
+    :public_domain => public_domain,
+    :nagios_url    => node['nagios']['url'],
+    :https         => node['nagios']['enable_ssl'],
+    :ssl_cert_file => node['nagios']['ssl_cert_file'],
+    :ssl_cert_key  => node['nagios']['ssl_cert_key']
+  )
   if ::File.symlink?("#{node['apache']['dir']}/sites-enabled/nagios3.conf")
     notifies :reload, "service[apache2]"
   end
