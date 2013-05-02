@@ -352,10 +352,10 @@ Here's an example host definition:
 Service Escalations
 -------------------
 
-You can optionally define service escalations for the data bag defined services.  Doing so involves two steps - creating the escalation data bag and invoking it from the service.  For example, to create an escalation to page managers on a 15 minute period after the 3rd page:
+You can optionally define service escalations for the data bag defined services.  Doing so involves two steps - creating the `nagios_serviceescalations` data bag and invoking it from the service.  For example, to create an escalation to page managers on a 15 minute period after the 3rd page:
 
 	{
-      "name": "15-minute-escalation",
+      "id": "15-minute-escalation",
       "contact_groups": "managers",
       "first_notification": "3",
       "last_notification": "0",
