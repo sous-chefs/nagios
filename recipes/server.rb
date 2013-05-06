@@ -67,14 +67,31 @@ else
   end
 end
 
-#region = node[:ec2][:placement_availability_zone].match(/^(.*-\d+)[^-]+$/)[0]
+  directory "#{node['nagios']['docroot_pub']}" do
+    owner node['nagios']['user']
+    group node['nagios']['group']
+    mode 00755
+  end
+
+  template "#{node['nagios']['docroot_pub']}/index.html" do
+    source "index.html.erb"
+    owner node['nagios']['user']
+    group web_group
+    mode 0644
+  end
+
 region = node[:ec2][:placement_availability_zone].match(/^(.*-\d+)[^-]+$/)[1]
 
-#nodes = search(:node, "hostname:[* TO *] AND app_environment:#{node[:app_environment]} AND domain:#{node[:domain]}")
+if node['app_environment'] == "production"
 nodes = search(:node, "hostname:[* TO *] AND app_environment:#{node[:app_environment]} AND placement_availability_zone:#{region}*")
+else
+nodes = search(:node, "hostname:[* TO *] AND app_environment:#{node[:monitored_environment]} AND placement_availability_zone:#{node[:monitored_region]}*")
+end
+
+Chef::Log.warn("Nodes are #{nodes}")
 
 if nodes.empty?
-  Chef::Log.info("No nodes returned from search, using this node so hosts.cfg has data")
+  Chef::Log.warn("No nodes returned from search, using this node so hosts.cfg has data")
   nodes = Array.new
   nodes << node
 end

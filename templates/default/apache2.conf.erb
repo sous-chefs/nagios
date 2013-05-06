@@ -2,7 +2,11 @@
 
 <VirtualHost *:<%= node['nagios']['http_port'] %>>
   ServerAdmin     <%= node['nagios']['sysadmin_email'] %>
+<% if node['fqdn'].nil? -%>
+  ServerName      <%= node['ipaddress'] %>
+<% else -%>
   ServerName      <%= node['fqdn'] %>
+<% end -%>
   ServerAlias     nagios nagios.<%= node.chef_environment =~ /^_default$/ ? "default" : node.chef_environment%>.<%= @public_domain %>
   DocumentRoot    <%= node['nagios']['docroot'] %>
   CustomLog       <%= node['nagios']['log_dir'] %>/apache_access.log combined
@@ -20,22 +24,38 @@
   SSLCertificateKeyFile <%= node['nagios']['conf_dir'] %>/certificates/nagios-server.pem
   <% end -%>
 
-
 <% case node['nagios']['server_auth_method'] -%>
 <% when "openid" -%>
-  <Location />
-    AuthName "Nagios Server"
-    AuthType OpenID
-    require user <%= node['apache']['allowed_openids'].join(' ') %>
-    AuthOpenIDDBLocation <%= node['apache']['mod_auth_openid']['dblocation'] %>
-  </Location>
+  <directory /etc/nagios3/sytlesheets>
+   Order allow,deny
+   Allow from all
+  </directory>
+
+  <directory /usr/share/nagios3/htdocs>
+   AuthName "Nagios Server"
+   AuthType OpenID
+   require user <%= node['apache']['allowed_openids'].join(' ') %>
+   AuthOpenIDDBLocation <%= node['apache']['mod_auth_openid']['dblocation'] %>
+  </directory>
 <% else -%>
-  <Location />
+  <directory /etc/nagios3/sytlesheets>
+   Order allow,deny
+   Allow from all
+  </directory>
+
+ <directory /usr/lib/cgi-bin/nagios3>
     AuthName "Nagios Server"
     AuthType Basic
     AuthUserFile "<%= node['nagios']['conf_dir'] %>/htpasswd.users"
     require valid-user
-  </Location>
+  </directory>
+
+  <directory /usr/share/nagios3/htdocs>
+    AuthName "Nagios Server"
+    AuthType Basic
+    AuthUserFile "<%= node['nagios']['conf_dir'] %>/htpasswd.users"
+    require valid-user
+  </directory>
 <% end -%>
 
   RewriteEngine On

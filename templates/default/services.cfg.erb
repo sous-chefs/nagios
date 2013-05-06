@@ -84,6 +84,13 @@ define service {
     use                 default-service
 }
 
+define service {
+  service_description   Check UTUI Logs
+  hostgroup_name        utui
+  check_command         check_nrpe!check_logfiles
+  use                   default-service
+}
+
 <% unless @service_hosts['monitoring'].nil? -%>
 # If the monitoring host is a postfix relay, uncomment this.
 #define service {
