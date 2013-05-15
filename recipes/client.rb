@@ -25,6 +25,7 @@
 # determine hosts that NRPE will allow monitoring from
 mon_host = node['nagios']['allowed_hosts']
 
+# put all nagios servers that you find in the NPRE config.
 if node.run_list.roles.include?(node['nagios']['server_role'])
   mon_host << node['ipaddress']
 elsif node['nagios']['multi_environment_monitoring']
@@ -36,6 +37,15 @@ else
     mon_host << n['ipaddress']
   end
 end
+# on the first run, search isn't available, so if you're the nagios server, go
+# ahead and put your own IP address in the NRPE config (unless it's already there).
+if node.run_list.roles.include?(node['nagios']['server_role'])
+  unless mon_host.include?(node['ipaddress'])
+    mon_host << node['ipaddress']
+  end
+end
+
+mon_host.concat node['nagios']['allowed_hosts'] if node['nagios']['allowed_hosts']
 
 include_recipe "nagios::client_#{node['nagios']['client']['install_method']}"
 

@@ -67,6 +67,7 @@ The following attributes are used for the NRPE client
 * `node['nagios']['nrpe']['checksum']` - checksum of the nrpe source tarball
 * `node['nagios']['nrpe']['packages']` - nrpe / plugin packages to install.  The default attribute for RHEL/Fedora platforms contains a bare minimum set of packages.  The full list of available packages is available at: `http://dl.fedoraproject.org/pub/epel/6/x86_64/repoview/letter_n.group.html`
 * `node['nagios']['server_role']` - the role that the Nagios server will have in its run list that the clients can search for.
+* `node['nagios']['allowed_hosts']` - additional hosts that are allowed to connect to this client. Must be an array of strings (i.e. `%w(test.host other.host)`). These hosts are added in addition to 127.0.0.1 and IPs that are found via search.
 
 server
 ------
@@ -352,10 +353,10 @@ Here's an example host definition:
 Service Escalations
 -------------------
 
-You can optionally define service escalations for the data bag defined services.  Doing so involves two steps - creating the escalation data bag and invoking it from the service.  For example, to create an escalation to page managers on a 15 minute period after the 3rd page:
+You can optionally define service escalations for the data bag defined services.  Doing so involves two steps - creating the `nagios_serviceescalations` data bag and invoking it from the service.  For example, to create an escalation to page managers on a 15 minute period after the 3rd page:
 
 	{
-      "name": "15-minute-escalation",
+      "id": "15-minute-escalation",
       "contact_groups": "managers",
       "first_notification": "3",
       "last_notification": "0",

@@ -15,15 +15,12 @@ define hostgroup {
 }
 
 <% end -%>
-
 <% @search_hostgroups.sort.each do |hostgroup| -%>
 define hostgroup {
   hostgroup_name <%= hostgroup %>
   alias <%= hostgroup %>
 <% if @search_nodes[hostgroup].length > 0 -%>
   members        <%= @search_nodes[hostgroup] %>
-<% else -%>
-  members        empty
 <% end -%>
 }
 

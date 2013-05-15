@@ -30,6 +30,9 @@ define :nagios_conf, :variables => {}, :config_subdir => true do
     group node['nagios']['group']
     source "#{params[:name]}.cfg.erb"
     mode 00644
+    if params[:cookbook]
+      cookbook params[:cookbook]
+    end
     variables params[:variables]
     notifies :reload, "service[nagios]"
     backup 0
