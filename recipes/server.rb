@@ -249,3 +249,12 @@ nagios_nrpecheck "check_nagios" do
   parameters "-F #{node["nagios"]["cache_dir"]}/status.dat -e 4 -C /usr/sbin/#{node['nagios']['server']['service_name']}"
   action :add
 end
+
+
+
+
+
+
+
+
+
