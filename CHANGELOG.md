@@ -1,3 +1,17 @@
+## v4.1.2:
+
+### Bug
+
+- [COOK-2967]: nagios cookbook has foodcritic failure
+
+### Improvement
+
+- [COOK-2630]: Improvements to Readme and Services.cfg.erb template
+
+### New Feature
+
+- [COOK-2460]: create attribute for `allowed_hosts`
+
 ## v4.1.0:
 
 * [COOK-2257] - Nagios incorrectly tries to use cloud IPs due to a OHAI bug
