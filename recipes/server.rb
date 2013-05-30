@@ -51,7 +51,7 @@ end
 # find nagios web interface users from the users data bag
 group = node['nagios']['users_databag_group']
 begin
-  sysadmins = search(:users, "groups:#{group} NOT action:remove")
+  sysadmins = search(:users, "groups:#{group} AND NOT action:remove")
 rescue Net::HTTPServerException
   Chef::Log.fatal("Could not find appropriate items in the \"users\" databag.  Check to make sure there is a users databag and if you have set the \"users_databag_group\" that users in that group exist")
   raise 'Could not find appropriate items in the "users" databag.  Check to make sure there is a users databag and if you have set the "users_databag_group" that users in that group exist'
