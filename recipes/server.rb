@@ -117,6 +117,8 @@ if services.nil? || services.empty?
   services = Array.new
 end
 
+Chef::Log.warn("Services are: #{services}")
+
 # Load search defined Nagios hostgroups from the nagios_hostgroups data bag and find nodes
 begin
   hostgroup_nodes= Hash.new
@@ -147,6 +149,8 @@ search(:role, "*:*") do |r|
     service_hosts[r.name] = n['hostname']
   end
 end
+
+Chef::Log.warn("Service_hosts are: #{service_hosts}")
 
 if node['public_domain']
   public_domain = node['public_domain']
@@ -234,7 +238,9 @@ nagios_conf "hostgroups" do
 end
 
 nagios_conf "hosts" do
-  variables :nodes => nodes
+  variables( 
+  :nodes => nodes
+  )
 end
 
 service "nagios" do

@@ -42,12 +42,40 @@ define service {
     use                 default-service
 }
 
-#define service {
-#    service_description HTTP Processes
-#    hostgroup_name      all, !nagios, !urest, !mongodb, !rabbitmq, !production_nexus, !jenkins
-#    check_command       check_http
-#    use                 default-service
-#}
+define service {
+    service_description Nagios Client
+    hostgroup_name      all
+    check_command       check_tcp!5666
+    use                 default-service
+}
+
+define service {
+    service_description Check Jenkins 8080
+    hostgroup_name      jenkins
+    check_command       check_tcp!8080
+    use                 default-service
+}
+
+define service {
+    service_description Check Tealium aptrepo
+    hostgroup_name      apt_repo
+    check_command       check_tcp!8443
+    use                 default-service
+}
+ 
+define service {
+    service_description Check Nexus
+    hostgroup_name      production_nexus
+    check_command       check_tcp!8081
+    use                 default-service
+}
+
+define service {
+    service_description Check Tealium Website 80
+    hostgroup_name      tealium_website
+    check_command       check_http
+    use                 default-service
+}
 
 define service {
     service_description HTTP Processes Auth
@@ -55,6 +83,76 @@ define service {
     check_command       check_http_auth
     use                 default-service
 }
+
+define service {
+    service_description Check rabbitmq epmd process
+    hostgroup_name      rabbitmq_server
+    check_command       check_nrpe!check_rabbitmq_epmd
+    use                 default-service
+}
+
+define service {
+    service_description Check rsyslog process
+    hostgroup_name      all
+    check_command       check_nrpe!check_rsyslog
+    use                 default-service
+}
+
+define service {
+    service_description Check rabbitmq beam process
+    hostgroup_name      rabbitmq_server
+    check_command       check_nrpe!check_rabbitmq_beam
+    use                 default-service
+}
+
+define service {
+    service_description Check rabbitmq-server
+    hostgroup_name      rabbitmq_server
+    check_command       check_nrpe!check_rabbitmq_server
+    use                 default-service
+}
+
+define service {
+    service_description Check S2S tag processor
+    hostgroup_name      server2server
+    check_command       check_nrpe!check_s2s_tag_processor_perl
+    use                 default-service
+}
+
+define service {
+    service_description Check S2S http
+    hostgroup_name      server2server
+    check_command       check_nrpe!check_s2s_http_perl
+    use                 default-service
+}
+
+define service {
+    service_description Check S2S tagger
+    hostgroup_name      server2server
+    check_command       check_nrpe!check_s2s_tagger_perl
+    use                 default-service
+}
+
+define service {
+    service_description Check VPN Process
+    hostgroup_name      openvpn_access_server, openvpn_client, openvpn_server
+    check_command       check_nrpe!check_openvpn
+    use                 default-service
+}
+
+define service {
+    service_description Check dnsmasq Process
+    hostgroup_name      dnsmasq
+    check_command       check_nrpe!check_dnsmasq
+    use                 default-service
+}
+
+#define service {
+#    service_description Check mongod Process
+#    hostgroup_name      mongodb_config, mongodb_replicaset_1
+#    check_command       check_nrpe!check_mongod
+#    use                 default-service
+#}
 
 define service {
     service_description Load Average
@@ -88,6 +186,69 @@ define service {
   service_description   Check UTUI Logs
   hostgroup_name        utui
   check_command         check_nrpe!check_logfiles
+  use                   default-service
+}
+
+define service {
+  service_description   Check ntp sync
+  hostgroup_name        all
+  check_command         check_nrpe!check_ntp
+  use                   default-service
+}
+
+define service {
+  service_description   Check DigitalVelocity Website 8080
+  hostgroup_name        tealium_website
+  check_command         check_HTTP_8080
+  use                   default-service
+}
+
+define service {
+  service_description   Check mongos 27017
+  hostgroup_name        mongos
+  check_command         check_tcp!27017
+  use                   default-service
+}
+
+define service {
+  service_description   Check mongodb_config 27017
+  hostgroup_name        mongodb_config
+  check_command         check_tcp!27017
+  use                   default-service
+}
+
+define service {
+  service_description   Check mongodb_replicaset_1 27017
+  hostgroup_name        mongodb_replicaset_1
+  check_command         check_tcp!27017
+  use                   default-service
+}
+
+define service {
+  service_description   Check Nagios_auth
+  hostgroup_name        nagios
+  check_command         check_nagios_auth
+  use                   default-service
+}
+
+define service {
+  service_description   Check uconnect_service 9090
+  hostgroup_name        uconnect_logger
+  check_command         check_uconnect_service
+  use                   default-service
+}
+
+define service {
+  service_description   Check utui_service 8443
+  hostgroup_name        utui
+  check_command         check_utui_service
+  use                   default-service
+}
+
+define service {
+  service_description   Check urest_service
+  hostgroup_name        urest
+  check_command         check_urest_service
   use                   default-service
 }
 

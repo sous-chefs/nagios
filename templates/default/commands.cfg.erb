@@ -88,8 +88,8 @@ define command {
 
 
 define command {
-	command_name	check_query_count
-	command_line	$USER1$/db_queues.rb -H $HOSTADDRESS$ -u $ARG1$ -p $ARG2$ -d $ARG3$ -q $ARG4$ -w $ARG5$ -c $ARG6$
+  command_name	check_query_count
+  command_line	$USER1$/db_queues.rb -H $HOSTADDRESS$ -u $ARG1$ -p $ARG2$ -d $ARG3$ -q $ARG4$ -w $ARG5$ -c $ARG6$
 }
 
 define command {
@@ -193,13 +193,13 @@ define command {
 }
 
 define command {
-	command_name	check_tcp
-	command_line	$USER1$/check_tcp -H $HOSTADDRESS$ -p $ARG1$
+  command_name	  check_tcp
+  command_line	  $USER1$/check_tcp -H $HOSTADDRESS$ -p $ARG1$
 }
 
 define command {
-       command_name    check_ssh
-       command_line    $USER1$/check_ssh $HOSTADDRESS$
+  command_name    check_ssh
+  command_line    $USER1$/check_ssh $HOSTADDRESS$
 }
 
 define command {
@@ -208,8 +208,8 @@ define command {
 }
 
 define command {
-	command_name	check_udp
-	command_line	$USER1$/check_udp -H $HOSTADDRESS$ -p $ARG1$
+  command_name	  check_udp
+  command_line	  $USER1$/check_udp -H $HOSTADDRESS$ -p $ARG1$
 }
 
 # 'check_mysql' check mysql connectivity
@@ -310,6 +310,64 @@ define command {
 define command {
 	command_name	no-mem-checks
 	command_line	/usr/local/nagios/libexec/check_dummy 2 "CRITICAL: Results of memory checks not coming in!"
+}
+
+
+define command {
+        command_name    check_HTTP_8080
+        command_line    $USER1$/check_http -H $HOSTADDRESS$ -p 8080
+}
+
+
+define command {
+        command_name    check_mongo_27017
+        command_line    $USER1$/check_http -H $HOSTADDRESS$ -p 27017
+}
+
+define command {
+        command_name    check_HTTP_Processes
+        command_line    $USER1$/check_http -I $HOSTADDRESS$ -H $HOSTADDRESS$
+}
+
+define command {
+        command_name    check_nagios_auth
+        command_line    $USER1$/check_http -I $HOSTADDRESS$ $ARG1$ -a nagiosadmin:nagios
+}
+
+define command {
+        command_name    check_uconnect_service
+        command_line    $USER1$/check_http -I $HOSTADDRESS$ -H $HOSTADDRESS$ -p 9090 -u /ulog/tealium.healthcheck
+}
+
+define command {
+        command_name    check_utui_service
+        command_line    $USER1$/check_http -I $HOSTADDRESS$ -H $HOSTADDRESS$ -p 8443
+}
+
+define command {
+        command_name    check_urest_service
+        command_line    $USER1$/check_http -I $HOSTADDRESS$ -H $HOSTADDRESS$ -p 8085 -u /urest_service/health
+}
+
+define command {
+    command_name    check_mongodb
+    command_line    $USER1$/nagios-plugin-mongodb/check_mongodb.py -H $HOSTADDRESS$ -A $ARG1$ -P $ARG2$ -W $ARG3$ -C $ARG4$
+}
+
+define command {
+    command_name    check_mongodb_database
+    command_line    $USER1$/nagios-plugin-mongodb/check_mongodb.py -H $HOSTADDRESS$ -A $ARG1$ -P $ARG2$ -W $ARG3$ -C $ARG4$ -d $ARG5$
+}
+
+
+define command {
+    command_name    check_mongodb_replicaset
+    command_line    $USER1$/nagios-plugin-mongodb/check_mongodb.py -H $HOSTADDRESS$ -A $ARG1$ -P $ARG2$ -W $ARG3$ -C $ARG4$ -r $ARG5$
+}
+
+define command {
+    command_name    check_mongodb_query
+    command_line    $USER1$/nagios-plugin-mongodb/check_mongodb.py -H $HOSTADDRESS$ -A $ARG1$ -P $ARG2$ -W $ARG3$ -C $ARG4$ -q $ARG5$
 }
 
 # Notification
