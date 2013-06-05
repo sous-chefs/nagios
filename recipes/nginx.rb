@@ -20,20 +20,14 @@ if node["nagios"]["server"]["stop_apache"]
   end
 end
 
-via_pkg = value_for_platform_family(
-  %w(rhel fedora) => {
-    %w(5.0 5.1 5.2 5.3 5.4 5.5 5.6 5.7 5.8) => false,
-    "default" => nil
-  },
-  "default" => true
-)
-
-if(via_pkg.nil?)
+# This doesn't use value_for_platform_family so that it can specify version ranges - COOK-2891
+if platform_family?('rhel') || platform_family?('fedora')
   node.set['nagios']['server']['nginx_dispatch'] = :both
-elsif(via_pkg == false)
-  node.set["nginx"]["install_method"] = 'source'
-  node.set['nagios']['server']['nginx_dispatch'] = :both
+  if node['platform_version'].to_f < 6
+    node.set['nginx']['install_method'] = 'source'
+  end
 end
+
 include_recipe "nginx"
 
 %w(default 000-default).each do |disable_site|
@@ -41,12 +35,6 @@ include_recipe "nginx"
     enable false
     notifies :reload, "service[nginx]"
   end
-end
-
-if node['public_domain']
-  public_domain = node['public_domain']
-else
-  public_domain = node['domain']
 end
 
 case dispatch_type = node['nagios']['server']['nginx_dispatch'].to_sym
@@ -73,7 +61,7 @@ template File.join(node['nginx']['dir'], 'sites-available', 'nagios3.conf') do
     'nagios-server.pem'
   )
   variables(
-    :public_domain => public_domain,
+    :public_domain => node['public_domain'] ? node['public_domain'] : node['domain'],
     :listen_port => node['nagios']['http_port'],
     :https => node['nagios']['https'],
     :cert_file => pem,
@@ -98,4 +86,3 @@ end
 nginx_site "nagios3.conf" do
   notifies :reload, "service[nginx]"
 end
-
