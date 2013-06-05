@@ -43,12 +43,6 @@ include_recipe "nginx"
   end
 end
 
-if node['public_domain']
-  public_domain = node['public_domain']
-else
-  public_domain = node['domain']
-end
-
 case dispatch_type = node['nagios']['server']['nginx_dispatch'].to_sym
 when :cgi
   node.set["nginx_simplecgi"]["cgi"] = true
@@ -73,7 +67,7 @@ template File.join(node['nginx']['dir'], 'sites-available', 'nagios3.conf') do
     'nagios-server.pem'
   )
   variables(
-    :public_domain => public_domain,
+    :public_domain => node['public_domain'] ? node['public_domain'] : node['domain'],
     :listen_port => node['nagios']['http_port'],
     :https => node['nagios']['https'],
     :cert_file => pem,
