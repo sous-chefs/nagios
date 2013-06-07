@@ -23,6 +23,7 @@ include_recipe "build-essential"
 pkgs = value_for_platform_family(
     ["rhel","fedora"] => ["openssl-devel","make","tar"] ,
     "debian" => ["libssl-dev","make","tar"],
+    "gentoo" => [],
     "default" => ["libssl-dev","make","tar"]
   )
 
