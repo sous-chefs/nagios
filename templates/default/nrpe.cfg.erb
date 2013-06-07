@@ -33,7 +33,7 @@ command[check_s2s_tag_processor_perl]=<%= node['nagios']['plugin_dir'] %>/check_
 command[check_s2s_http_perl]=<%= node['nagios']['plugin_dir'] %>/check_procs -a "./s2s_http.pl"
 command[check_s2s_tagger_perl]=<%= node['nagios']['plugin_dir'] %>/check_procs -a "./s2s_tagger.pl"
 
-command[check_ntp]=<%= node['nagios']['plugin_dir'] %>/check_ntp_time -H ntp.ubuntu.com -w .5 -c 1
+command[check_ntp]=<%= node['nagios']['plugin_dir'] %>/check_ntp_time -H pool.ntp.org -w .5 -c 1
 
 #command[check_unicorn]=<%= node['nagios']['plugin_dir'] %>/check_procs -c 4:8 -C unicorn_rails
 #
