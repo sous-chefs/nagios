@@ -108,7 +108,7 @@ The following attributes are used for the Nagios server
 * `node['nagios']['ldap_bind_password']` - bind password used with the DN provided for searcing ldap.
 * `node['nagios']['ldap_url']` - ldap url and search parameters.
 * `node['nagios']['ldap_authoritative']` - accepts "on" or "off". controls other authentication modules from authenticating the user if this one fails.
-* `node['nagios']['users_databag_group']` - users databag group considered Nagios admins.  defaults to sysadmins
+* `node['nagios']['users_databag_group']` - users databag group considered Nagios admins.  defaults to sysadmin
 * `node['nagios']['host_name_attribute']` - node attribute to use for naming the host. Must be unique across monitored nodes. Defaults to hostname
 * `node['nagios']['templates']`
 * `node['nagios']['interval_length']` - minimum interval.
@@ -172,7 +172,7 @@ Searches are confined to the node's `chef_environment` unless multi-environment 
 
 The recipe does the following:
 
-1. Searches for users in 'users' databag belonging to to 'sysadmins' group and authorizes them to access the Nagios web UI and receive notification e-mails.
+1. Searches for users in 'users' databag belonging to to 'sysadmin' group and authorizes them to access the Nagios web UI and receive notification e-mails.
 2. Searches all available roles/environments and builds a list which will become the Nagios hostgroups.
 3. Places nodes in Nagios hostgroups by role / environment membership.
 4. Installs various packages required for the server.
