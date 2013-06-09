@@ -15,8 +15,8 @@ server {
 
 <% if @https %>
   ssl on;
-  ssl_certificate <%= @cert_file %>;
-  ssl_certificate_key <%= @cert_key %>;
+  ssl_certificate <%= @ssl_cert_file %>;
+  ssl_certificate_key <%= @ssl_cert_key %>;
   ssl_ciphers HIGH;
   ssl_protocols SSLv3 TLSv1;
   ssl_prefer_server_ciphers on;
