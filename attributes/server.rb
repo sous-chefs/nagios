@@ -1,5 +1,5 @@
-#
 # Author:: Joshua Sierles <joshua@37signals.com>
+#
 # Author:: Joshua Timberman <joshua@opscode.com>
 # Author:: Nathan Haneysmith <nathan@opscode.com>
 # Author:: Seth Chisamore <schisamo@opscode.com>
@@ -50,6 +50,8 @@ default['nagios']['docroot']    = '/usr/share/nagios3/htdocs'
 default['nagios']['enable_ssl'] = false
 default['nagios']['http_port']  = node['nagios']['enable_ssl'] ? '443' : '80'
 default['nagios']['server_name'] = node.has_key?(:domain) ? "nagios.#{domain}" : 'nagios'
+default['nagios']['ssl_cert_file'] = "#{node['nagios']['conf_dir']}/certificates/nagios-server.pem"
+default['nagios']['ssl_cert_key']  = "#{node['nagios']['conf_dir']}/certificates/nagios-server.pem"
 default['nagios']['ssl_req'] = '/C=US/ST=Several/L=Locality/O=Example/OU=Operations/' +
   "CN=#{node['nagios']['server_name']}/emailAddress=ops@#{node['nagios']['server_name']}"
 
