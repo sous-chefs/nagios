@@ -14,10 +14,9 @@
 # limitations under the License.
 #
 
-if node["nagios"]["server"]["stop_apache"]
-  service 'apache2' do
-    action :stop
-  end
+service 'apache2' do
+  action :stop
+  only_if node["nagios"]["server"]["stop_apache"]
 end
 
 via_pkg = value_for_platform_family(
