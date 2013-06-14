@@ -1,4 +1,4 @@
-  #
+#
 # Author:: Seth Chisamore <schisamo@opscode.com>
 # Cookbook Name:: nagios
 # Recipe:: server_source
@@ -131,6 +131,6 @@ end
 
 apache_module "cgi" do
   enable :true
-  only_if web_srv == :apache
+  only_if { web_srv == :apache }
 end
 
