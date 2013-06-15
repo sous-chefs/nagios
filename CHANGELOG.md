@@ -1,3 +1,15 @@
+## v4.1.4:
+
+### Bug
+
+- [COOK-3014]: Nagios cookbook imports data bag users even if they
+  have action:remove
+
+### Improvement
+
+- [COOK-2826]: Allow Nagios cookbook to configure location of SSL
+  files
+
 ## v4.1.2:
 
 ### Bug
