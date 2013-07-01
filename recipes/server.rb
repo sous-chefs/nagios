@@ -83,9 +83,13 @@ end
 region = node[:ec2][:placement_availability_zone].match(/^(.*-\d+)[^-]+$/)[1]
 
 if node['app_environment'] == "production"
-nodes = search(:node, "hostname:[* TO *] AND app_environment:#{node[:app_environment]} AND placement_availability_zone:#{region}*")
+  nodes = search(:node, "hostname:[* TO *] AND app_environment:#{node[:app_environment]} AND placement_availability_zone:#{region}*")
 else
-nodes = search(:node, "hostname:[* TO *] AND app_environment:#{node[:monitored_environment]} AND placement_availability_zone:#{node[:monitored_region]}*")
+  nodes = search(:node, "hostname:[* TO *] AND app_environment:#{node[:app_environment]} AND placement_availability_zone:#{region}*")
+  #nodes = search(:node, "hostname:[* TO *] AND app_environment:#{node[:monitored_environment]} AND placement_availability_zone:#{node[:monitored_region]}*")
+
+  servers = search(:node, "role:#{node['nagios']['server_role']} AND app_environment:#{node[:monitored_environment]}")
+  nodes = nodes.concat(servers)
 end
 
 Chef::Log.warn("Nodes are #{nodes}")

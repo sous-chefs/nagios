@@ -54,8 +54,8 @@ default['nagios']['checks']['memory']['warning']  = 250
 default['nagios']['checks']['load']['critical']   = "30,20,10"
 default['nagios']['checks']['load']['warning']    = "15,10,5"
 default['nagios']['checks']['smtp_host'] = String.new
-default['nagios']['checks']['inode']['critical']  = 30
-default['nagios']['checks']['inode']['warning']  = 35
+default['nagios']['checks']['inode']['critical']  = 25
+default['nagios']['checks']['inode']['warning']  = 30
 
 default['nagios']['logfiles']['log_file'] = "/etc/tealium/tealium.log"
 default['nagios']['checks']['pattern'] = "main : Publish Monitor upload failure: FAILURE"

@@ -27,13 +27,13 @@ command[check_dnsmasq]=<%= node['nagios']['plugin_dir'] %>/check_procs -c 1:1 -C
 command[check_mongod]=<%= node['nagios']['plugin_dir'] %>/check_procs -c 1:1 -C mongod
 command[check_rsyslog]=<%= node['nagios']['plugin_dir'] %>/check_procs -c 1:1 -C rsyslogd
 command[check_rabbitmq_epmd]=<%= node['nagios']['plugin_dir'] %>/check_procs -c 1:1 -C epmd
-command[check_rabbitmq_beam]=<%= node['nagios']['plugin_dir'] %>/check_procs -c 1:1 -C beam
+command[check_rabbitmq_beam]=<%= node['nagios']['plugin_dir'] %>/check_procs -c 1:2 -C beam
 command[check_rabbitmq_server]=<%= node['nagios']['plugin_dir'] %>/check_procs -a "/usr/sbin/rabbitmq-server"
 command[check_s2s_tag_processor_perl]=<%= node['nagios']['plugin_dir'] %>/check_procs -a "./s2s_tag_processor.pl"
 command[check_s2s_http_perl]=<%= node['nagios']['plugin_dir'] %>/check_procs -a "./s2s_http.pl"
 command[check_s2s_tagger_perl]=<%= node['nagios']['plugin_dir'] %>/check_procs -a "./s2s_tagger.pl"
 
-command[check_ntp]=<%= node['nagios']['plugin_dir'] %>/check_ntp_time -H pool.ntp.org -w .5 -c 1
+command[check_ntp]=<%= node['nagios']['plugin_dir'] %>/check_ntp_time -H pool.ntp.org -w 1.5 -c 3
 
 #command[check_unicorn]=<%= node['nagios']['plugin_dir'] %>/check_procs -c 4:8 -C unicorn_rails
 #

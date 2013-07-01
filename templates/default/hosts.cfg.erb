@@ -20,7 +20,7 @@ define host {
   display_name <%= n.run_list.roles.last %>
   host_name <%= n['ipaddress'] %>
   notes $HOSTDISPLAYNAME$
-  alias Role: <%= n.run_list.roles.last %>\n Instance ID: <%= n['ec2']['instance_id'] %>\n Zone: <%= n['ec2']['placement_availability_zone'] %>\n App Environment: <%= n['app_environment'] %>\n Platform: <%= n['platform'] %>,<%= n['platform_version'] %>\n Public IP(if applicable): <%= n['ec2']['public_ipv4'] %>\n Private IP: <%= n['ipaddress'] %>\n FQDN(if applicable): <%= n['fqdn'] %>\n
+  alias Role: <%= n.run_list.roles.last %>\n Instance ID: <%= n['ec2']['instance_id'] %>\n Zone: <%= n['ec2']['placement_availability_zone'] %>\n App Environment: <%= n['app_environment'] %>\n Platform: <%= n['platform'] %>,<%= n['platform_version'] %>\n Public IP(if applicable): <%= n['ec2']['public_ipv4'] %>\n Private IP: <%= n['ipaddress'] %>\n FQDN(if applicable): <%= n['fqdn'] %>\n Component(if applicable): <%= n['component'] %>\n
 
 
 <% if n.run_list.roles.nil? || n.run_list.roles.length == 0 -%>
