@@ -82,7 +82,11 @@ use_authentication=1
 # define this variable, anyone who has not authenticated to the web
 # server will inherit all rights you assign to this user!
 
+<% if node['nagios']['default_user_name'].nil? %>
 #default_user_name=guest
+<% else %>
+default_user_name=<%= node['nagios']['default_user_name'] %>
+<% end %>
 
 # SYSTEM/PROCESS INFORMATION ACCESS
 # This option is a comma-delimited list of all usernames that
