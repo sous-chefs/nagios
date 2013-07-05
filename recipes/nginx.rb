@@ -77,7 +77,8 @@ template File.join(node['nginx']['dir'], 'sites-available', 'nagios3.conf') do
       'htpasswd.users'
     ),
     :cgi => [:cgi, :both].include?(dispatch_type.to_sym),
-    :php => [:php, :both].include?(dispatch_type.to_sym)
+    :php => [:php, :both].include?(dispatch_type.to_sym),
+    :whitelist_ips => node['nagios']['whitelist_ips']
   )
   if(::File.symlink?(File.join(node['nginx']['dir'], 'sites-enabled', 'nagios3.conf')))
     notifies :reload, 'service[nginx]', :immediately
