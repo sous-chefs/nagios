@@ -169,11 +169,11 @@ if nagios_bags.bag_list.include?("nagios_hostgroups")
     temp_hostgroup_array= Array.new
     if node['nagios']['multi_environment_monitoring']
       search(:node, hg['search_query']) do |n|
-        temp_hostgroup_array << n['hostname']
+        temp_hostgroup_array << n[node['nagios']['host_name_attribute']]
       end
     else
       search(:node, "#{hg['search_query']} AND chef_environment:#{node.chef_environment}") do |n|
-        temp_hostgroup_array << n['hostname']
+        temp_hostgroup_array << n[node['nagios']['host_name_attribute']]
       end
     end
     hostgroup_nodes[hg['hostgroup_name']] = temp_hostgroup_array.join(",")
