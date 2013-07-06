@@ -110,6 +110,7 @@ The following attributes are used for the Nagios server
 * `node['nagios']['ldap_bind_password']` - bind password used with the DN provided for searcing ldap.
 * `node['nagios']['ldap_url']` - ldap url and search parameters.
 * `node['nagios']['ldap_authoritative']` - accepts "on" or "off". controls other authentication modules from authenticating the user if this one fails.
+* `node['nagios']['users_databag']` - the databag containing users to search for. defaults to users
 * `node['nagios']['users_databag_group']` - users databag group considered Nagios admins.  defaults to sysadmin
 * `node['nagios']['host_name_attribute']` - node attribute to use for naming the host. Must be unique across monitored nodes. Defaults to hostname
 * `node['nagios']['templates']`
