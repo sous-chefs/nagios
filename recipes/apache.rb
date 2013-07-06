@@ -36,7 +36,8 @@ template "#{node['apache']['dir']}/sites-available/nagios3.conf" do
     :nagios_url    => node['nagios']['url'],
     :https         => node['nagios']['enable_ssl'],
     :ssl_cert_file => node['nagios']['ssl_cert_file'],
-    :ssl_cert_key  => node['nagios']['ssl_cert_key']
+    :ssl_cert_key  => node['nagios']['ssl_cert_key'],
+    :whitelist_ips => node['nagios']['whitelist_ips']
   )
   if ::File.symlink?("#{node['apache']['dir']}/sites-enabled/nagios3.conf")
     notifies :reload, "service[apache2]"

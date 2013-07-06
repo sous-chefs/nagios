@@ -34,6 +34,14 @@
     require user <%= node['apache']['allowed_openids'].join(' ') %>
     AuthOpenIDDBLocation <%= node['apache']['mod_auth_openid']['dblocation'] %>
   </Location>
+<% when "whitelist" -%>
+  <Location />
+    order deny,allow
+    <% @whitelist_ips.each do |ip| %>
+    allow from <%= ip %>
+    <% end %>
+    deny from all
+  </Location>
 <% when "cas" -%>
   CASLoginURL <%= node['nagios']['cas_login_url'] %>
   CASValidateURL <%= node['nagios']['cas_validate_url'] %>
