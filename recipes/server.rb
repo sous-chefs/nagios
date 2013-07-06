@@ -48,12 +48,13 @@ else
   raise 'Unknown web server option provided for Nagios server'
 end
 
-# find nagios web interface users from the users data bag
+# find nagios web interface users from the defined data bag
+user_databag = node['nagios']['users_databag'].to_sym
 group = node['nagios']['users_databag_group']
 begin
-  sysadmins = search(:users, "groups:#{group} NOT action:remove")
+  sysadmins = search(user_databag, "groups:#{group} NOT action:remove")
 rescue Net::HTTPServerException
-  Chef::Log.fatal("Could not find appropriate items in the \"users\" databag.  Check to make sure there is a users databag and if you have set the \"users_databag_group\" that users in that group exist")
+  Chef::Log.fatal("Could not find appropriate items in the \"#{node['nagios']['users_databag']}\" databag.  Check to make sure the databag exists and if you have set the \"users_databag_group\" that users in that group exist")
   raise 'Could not find appropriate items in the "users" databag.  Check to make sure there is a users databag and if you have set the "users_databag_group" that users in that group exist'
 end
 

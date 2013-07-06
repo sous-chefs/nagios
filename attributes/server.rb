@@ -66,6 +66,7 @@ default['nagios']['default_contact_groups']  = %w{admins}
 default['nagios']['sysadmin_email']          = "root@localhost"
 default['nagios']['sysadmin_sms_email']      = "root@localhost"
 default['nagios']['server_auth_method']      = "openid"
+default['nagios']['users_databag']           = "users"
 default['nagios']['users_databag_group']     = "sysadmin"
 default['nagios']['host_name_attribute']     = "hostname"
 
