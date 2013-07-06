@@ -1,4 +1,4 @@
-node['munin']['whitelist_ips'].each do |ip|
+node['nagios']['whitelist_ips'].each do |ip|
   firewall_rule "allow #{ip} to access nagios" do
     port 80
     protocol :tcp
