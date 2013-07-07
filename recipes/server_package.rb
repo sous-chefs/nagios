@@ -26,17 +26,13 @@ if node['platform_family'] == 'debian'
 
   %w{adminpassword adminpassword-repeat}.each do |setting|
     execute 'preseed nagiosadmin password' do
-      command "echo nagios3-cgi nagios3/#{setting} password #{random_initial_password} | debconf-set-selections"
-      not_if 'dpkg -l nagios3'
+      command "echo #{node['nagios']['server']['vname']}-cgi #{node['nagios']['server']['vname']}/#{setting} password #{random_initial_password} | debconf-set-selections"
+      not_if "dpkg -l #{node['nagios']['server']['vname']}"
     end
   end
 
 end
 
-%w{
-  nagios3
-  nagios-nrpe-plugin
-  nagios-images
-}.each do |pkg|
+node['nagios']['server']['packages'].each do |pkg|
   package pkg
 end

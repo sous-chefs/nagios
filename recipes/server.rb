@@ -26,7 +26,7 @@ include_recipe 'nagios::client'
 
 # workaround to allow for a nagios server install from source using the override attribute on debian/ubuntu (COOK-2350)
 if platform_family?('debian') && node['nagios']['server']['install_method'] == 'source'
-  nagios_service_name = 'nagios'
+  nagios_service_name = node['nagios']['server']['name']
 else
   nagios_service_name = node['nagios']['server']['service_name']
 end
@@ -194,7 +194,7 @@ if node['nagios']['additional_contacts']
   end
 end
 
-nagios_conf 'nagios' do
+nagios_conf node['nagios']['server']['name'] do
   config_subdir false
 end
 
@@ -217,8 +217,8 @@ directory "#{node['nagios']['state_dir']}/rw" do
 end
 
 execute 'archive-default-nagios-object-definitions' do
-  command "mv #{node['nagios']['config_dir']}/*_nagios*.cfg #{node['nagios']['conf_dir']}/dist"
-  not_if { Dir.glob("#{node['nagios']['config_dir']}/*_nagios*.cfg").empty? }
+  command "mv #{node['nagios']['config_dir']}/*_#{node['nagios']['server']['name']}*.cfg #{node['nagios']['conf_dir']}/dist"
+  not_if { Dir.glob("#{node['nagios']['config_dir']}/*_#{node['nagios']['server']['name']}*.cfg").empty? }
 end
 
 directory "#{node['nagios']['conf_dir']}/certificates" do
@@ -238,7 +238,7 @@ bash 'Create SSL Certificates' do
   not_if { ::File.exists?(node['nagios']['ssl_cert_file']) }
 end
 
-%w{ nagios cgi }.each do |conf|
+[ node['nagios']['server']['name'], 'cgi' ].each do |conf|
   nagios_conf conf do
     config_subdir false
     variables(:nagios_service_name => nagios_service_name)

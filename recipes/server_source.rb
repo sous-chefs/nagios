@@ -55,8 +55,8 @@ end
 
 version = node['nagios']['server']['version']
 
-remote_file "#{Chef::Config[:file_cache_path]}/nagios-#{version}.tar.gz" do
-  source "#{node['nagios']['server']['url']}/nagios-#{version}.tar.gz"
+remote_file "#{Chef::Config[:file_cache_path]}/#{node['nagios']['server']['name']}-#{version}.tar.gz" do
+  source "#{node['nagios']['server']['url']}/#{node['nagios']['server']['name']}-#{version}.tar.gz"
   checksum node['nagios']['server']['checksum']
   action :create_if_missing
 end
@@ -64,12 +64,12 @@ end
 bash 'compile-nagios' do
   cwd Chef::Config[:file_cache_path]
   code <<-EOH
-    tar zxvf nagios-#{version}.tar.gz
-    cd nagios
+    tar zxvf #{node['nagios']['server']['name']}-#{version}.tar.gz
+    cd #{node['nagios']['server']['src_dir']}
     ./configure --prefix=/usr \
         --mandir=/usr/share/man \
         --bindir=/usr/sbin \
-        --sbindir=/usr/lib/cgi-bin/nagios3 \
+        --sbindir=/usr/lib/cgi-bin/#{node['nagios']['server']['vname']} \
         --datadir=#{node['nagios']['docroot']} \
         --sysconfdir=#{node['nagios']['conf_dir']} \
         --infodir=/usr/share/info \
@@ -81,18 +81,18 @@ bash 'compile-nagios' do
         --with-command-user=#{node['nagios']['user']} \
         --with-command-group=#{node['nagios']['group']} \
         --with-init-dir=/etc/init.d \
-        --with-lockfile=#{node['nagios']['run_dir']}/nagios3.pid \
+        --with-lockfile=#{node['nagios']['run_dir']}/#{node['nagios']['server']['vname']}.pid \
         --with-mail=/usr/bin/mail \
         --with-perlcache \
-        --with-htmurl=/nagios3 \
-        --with-cgiurl=/cgi-bin/nagios3
+        --with-htmurl=/#{node['nagios']['server']['vname']} \
+        --with-cgiurl=/cgi-bin/#{node['nagios']['server']['vname']}
     make all
     make install
     make install-init
     make install-config
     make install-commandmode
   EOH
-  creates '/usr/sbin/nagios'
+  creates "/usr/sbin/#{node['nagios']['server']['name']}"
 end
 
 directory "#{node['nagios']['conf_dir']}/conf.d" do
@@ -111,7 +111,7 @@ end
 
 end
 
-directory '/usr/lib/nagios3' do
+directory "/usr/lib/#{node['nagios']['server']['vname']}" do
   owner node['nagios']['user']
   group node['nagios']['group']
   mode 00755
