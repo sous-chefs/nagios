@@ -195,6 +195,7 @@ if node['nagios']['additional_contacts']
 end
 
 nagios_conf node['nagios']['server']['name'] do
+  source 'nagios.cfg.erb'
   config_subdir false
 end
 
@@ -238,11 +239,15 @@ bash 'Create SSL Certificates' do
   not_if { ::File.exists?(node['nagios']['ssl_cert_file']) }
 end
 
-[ node['nagios']['server']['name'], 'cgi' ].each do |conf|
-  nagios_conf conf do
-    config_subdir false
-    variables(:nagios_service_name => nagios_service_name)
-  end
+nagios_conf node['nagios']['server']['name'] do
+  config_subdir false
+  source 'nagios.cfg.erb'
+  variables(:nagios_service_name => nagios_service_name)
+end
+
+nagios_conf 'cgi' do
+  config_subdir false
+  variables(:nagios_service_name => nagios_service_name)
 end
 
 nagios_conf 'timeperiods'
