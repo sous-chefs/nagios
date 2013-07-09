@@ -87,7 +87,7 @@ The following attributes are used for the Nagios server
 * `node['nagios']['enable_ssl]` - boolean for whether Nagios web server should be https, default false
 * `node['nagios']['ssl_cert_file']` = Location of SSL Certificate File. default "/etc/nagios3/certificates/nagios-server.pem"
 * `node['nagios']['ssl_cert_key']`  = Location of SSL Certificate Key.  default "/etc/nagios3/certificates/nagios-server.pem"
-* `node['nagios']['http_port']` - port that the Apache server should listen on, determined whether ssl is enabled (443 if so, otherwise 80)
+* `node['nagios']['http_port']` - port that the Apache/NGINX virtual site should listen on, determined whether ssl is enabled (443 if so, otherwise 80).  Note:  You will also need to configure the listening port for either NGINX or Apache within those cookbooks.
 * `node['nagios']['server_name']` - common name to use in a server cert, default "nagios"
 * `node['nagios']['ssl_req']` - info to use in a cert, default `/C=US/ST=Several/L=Locality/O=Example/OU=Operations/CN=#{node['nagios']['server_name']}/emailAddress=ops@#{node['nagios']['server_name']}`
 
