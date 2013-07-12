@@ -32,6 +32,9 @@ command[check_rabbitmq_server]=<%= node['nagios']['plugin_dir'] %>/check_procs -
 command[check_s2s_tag_processor_perl]=<%= node['nagios']['plugin_dir'] %>/check_procs -a "./s2s_tag_processor.pl"
 command[check_s2s_http_perl]=<%= node['nagios']['plugin_dir'] %>/check_procs -a "./s2s_http.pl"
 command[check_s2s_tagger_perl]=<%= node['nagios']['plugin_dir'] %>/check_procs -a "./s2s_tagger.pl"
+command[check_sitemap_audit_sitemap_perl]=<%= node['nagios']['plugin_dir'] %>/check_procs -a "./audit-sitemap.pl"
+command[check_sitemap_audit_urls_perl]=<%= node['nagios']['plugin_dir'] %>/check_procs -a "./audit-urls.pl"
+command[check_sitemap_audit_complete_perl]=<%= node['nagios']['plugin_dir'] %>/check_procs -a "./audit-complete.pl"
 
 command[check_ntp]=<%= node['nagios']['plugin_dir'] %>/check_ntp_time -H pool.ntp.org -w 1.5 -c 3
 

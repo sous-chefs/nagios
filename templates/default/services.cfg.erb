@@ -162,6 +162,27 @@ define service {
 }
 
 define service {
+    service_description Check Site Audit sitemap
+    hostgroup_name      sitemap_audit
+    check_command       check_nrpe!check_sitemap_audit_sitemap_perl
+    use                 default-service,srv-pnp
+}
+
+define service {
+    service_description Check Site Audit URLS
+    hostgroup_name      sitemap_audit
+    check_command       check_nrpe!check_sitemap_audit_urls_perl
+    use                 default-service,srv-pnp
+}
+
+define service {
+    service_description Check Site Audit Complete
+    hostgroup_name      sitemap_audit
+    check_command       check_nrpe!check_sitemap_audit_complete_perl
+    use                 default-service,srv-pnp
+}
+
+define service {
     service_description Check VPN Process
     hostgroup_name      openvpn_access_server, openvpn_client, openvpn_server
     check_command       check_nrpe!check_openvpn
