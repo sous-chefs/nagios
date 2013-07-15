@@ -83,9 +83,13 @@ end
 region = node[:ec2][:placement_availability_zone].match(/^(.*-\d+)[^-]+$/)[1]
 
 if node['app_environment'] == "production"
-nodes = search(:node, "hostname:[* TO *] AND app_environment:#{node[:app_environment]} AND placement_availability_zone:#{region}*")
+  nodes = search(:node, "hostname:[* TO *] AND app_environment:#{node[:app_environment]} AND placement_availability_zone:#{region}*")
 else
-nodes = search(:node, "hostname:[* TO *] AND app_environment:#{node[:monitored_environment]} AND placement_availability_zone:#{node[:monitored_region]}*")
+  nodes = search(:node, "hostname:[* TO *] AND app_environment:#{node[:app_environment]} AND placement_availability_zone:#{region}*")
+  #nodes = search(:node, "hostname:[* TO *] AND app_environment:#{node[:monitored_environment]} AND placement_availability_zone:#{node[:monitored_region]}*")
+
+  servers = search(:node, "role:#{node['nagios']['server_role']} AND app_environment:#{node[:monitored_environment]}")
+  nodes = nodes.concat(servers)
 end
 
 Chef::Log.warn("Nodes are #{nodes}")
@@ -117,6 +121,8 @@ if services.nil? || services.empty?
   services = Array.new
 end
 
+Chef::Log.warn("Services are: #{services}")
+
 # Load search defined Nagios hostgroups from the nagios_hostgroups data bag and find nodes
 begin
   hostgroup_nodes= Hash.new
@@ -147,6 +153,8 @@ search(:role, "*:*") do |r|
     service_hosts[r.name] = n['hostname']
   end
 end
+
+Chef::Log.warn("Service_hosts are: #{service_hosts}")
 
 if node['public_domain']
   public_domain = node['public_domain']
@@ -234,7 +242,9 @@ nagios_conf "hostgroups" do
 end
 
 nagios_conf "hosts" do
-  variables :nodes => nodes
+  variables( 
+  :nodes => nodes
+  )
 end
 
 service "nagios" do
@@ -249,3 +259,12 @@ nagios_nrpecheck "check_nagios" do
   parameters "-F #{node["nagios"]["cache_dir"]}/status.dat -e 4 -C /usr/sbin/#{node['nagios']['server']['service_name']}"
   action :add
 end
+
+
+
+
+
+
+
+
+

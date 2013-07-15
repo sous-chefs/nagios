@@ -32,8 +32,7 @@ define host {
   event_handler_enabled           1
   flap_detection_enabled          <%= nagios_boolean(nagios_attr(:default_host)[:flap_detection]) %>
   failure_prediction_enabled      1
-#  process_perf_data               1
-  process_perf_data               0
+  process_perf_data               1
   retain_status_information       1
   retain_nonstatus_information    1
   notification_period             24x7
@@ -42,7 +41,7 @@ define host {
 
 define host {
   name                    server
-  use                     default-host
+  use                     default-host,host-pnp
   check_period            24x7
   check_interval          <%= nagios_interval(nagios_attr(:default_host)[:check_interval]) %>
   retry_interval          <%= nagios_interval(nagios_attr(:default_host)[:retry_interval]) %>
@@ -66,8 +65,7 @@ define service {
   event_handler_enabled           1
   flap_detection_enabled          <%= nagios_boolean(nagios_attr(:default_service)[:flap_detection]) %>
   failure_prediction_enabled      1
-#  process_perf_data               1
-  process_perf_data               0
+  process_perf_data               1
   retain_status_information       1
   retain_nonstatus_information    1
   is_volatile                     0
@@ -80,6 +78,18 @@ define service {
   notification_interval           <%= nagios_interval(nagios_attr(:default_service)[:notification_interval]) %>
   notification_period             24x7
   register                        0
+}
+
+define host {
+   name       host-pnp
+   action_url /pnp4nagios/index.php/graph?host=$HOSTNAME$&srv=_HOST_
+   register   0
+}
+
+define service {
+   name       srv-pnp
+   action_url /pnp4nagios/index.php/graph?host=$HOSTNAME$&srv=$SERVICEDESC$
+   register   0
 }
 
 # Define the log monitoring template (monitoring logs is very different)
