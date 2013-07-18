@@ -298,6 +298,14 @@ nagios_conf "tomcat" do
             :nodes => nodes)
 end
 
+nagios_conf "mounts" do
+  variables(:service_hosts => service_hosts,
+            :services => services,
+            :search_hostgroups => hostgroup_list,
+            :hostgroups => hostgroups,
+            :nodes => nodes)
+end
+
 # Not ready yet
 #nagios_conf "jee_app" do
 #  variables(:service_hosts => service_hosts,
