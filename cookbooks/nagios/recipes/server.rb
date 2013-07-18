@@ -298,13 +298,14 @@ nagios_conf "tomcat" do
             :nodes => nodes)
 end
 
-nagios_conf "portal" do
-  variables(:service_hosts => service_hosts,
-            :services => services,
-            :search_hostgroups => hostgroup_list,
-            :hostgroups => hostgroups,
-            :nodes => nodes)
-end
+# Not ready yet
+#nagios_conf "jee_app" do
+#  variables(:service_hosts => service_hosts,
+#            :services => services,
+#            :search_hostgroups => hostgroup_list,
+#            :hostgroups => hostgroups,
+#            :nodes => nodes)
+#end
 
 service "nagios" do
   service_name nagios_service_name
