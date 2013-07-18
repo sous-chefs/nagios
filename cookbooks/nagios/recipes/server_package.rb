@@ -37,6 +37,7 @@ end
   nagios3
   nagios-nrpe-plugin
   nagios-images
+  pnp4nagios
 }.each do |pkg|
   package pkg
 end

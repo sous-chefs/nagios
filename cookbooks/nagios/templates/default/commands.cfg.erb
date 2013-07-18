@@ -5,7 +5,7 @@
 # Host checks
 define command {
   command_name    check-host-alive
-  command_line    $USER1$/check_ping -H $HOSTADDRESS$ -w 2000,80% -c 3000,100% -p 1
+  command_line    $USER1$/check_ssh -H $HOSTADDRESS$
 }
 
 # Service checks
@@ -24,6 +24,16 @@ define command {
 	command_name    check_nrpe
 	command_line    $USER1$/check_nrpe -H $HOSTADDRESS$ -c $ARG1$ -t 20
 	}
+
+define command {
+        command_name    check_http
+        command_line    $USER1$/check_http -L -H $ARG1$ -p $ARG2$
+        }
+
+define command {
+        command_name    check_portal
+        command_line    $USER1$/check_portal -u $ARG1$ -v $ARG2$
+        }
 
 # Notification
 define command {

@@ -281,6 +281,31 @@ nagios_conf "hosts" do
             :hostgroups => hostgroups)
 end
 
+nagios_conf "apache" do
+  variables(:service_hosts => service_hosts,
+            :services => services,
+            :search_hostgroups => hostgroup_list,
+            :hostgroups => hostgroups,
+            :nodes => nodes,
+            :unmanaged_hosts => unmanaged_hosts)
+end
+
+nagios_conf "tomcat" do
+  variables(:service_hosts => service_hosts,
+            :services => services,
+            :search_hostgroups => hostgroup_list,
+            :hostgroups => hostgroups,
+            :nodes => nodes)
+end
+
+nagios_conf "portal" do
+  variables(:service_hosts => service_hosts,
+            :services => services,
+            :search_hostgroups => hostgroup_list,
+            :hostgroups => hostgroups,
+            :nodes => nodes)
+end
+
 service "nagios" do
   service_name nagios_service_name
   supports :status => true, :restart => true, :reload => true

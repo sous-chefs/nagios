@@ -81,6 +81,14 @@ define service {
   register                        0
 }
 
+# PNP definition
+define host{
+  name                            server-pnp
+  use                             server
+  action_url                      /pnp4nagios/index.php/graph?host=$HOSTNAME$&srv=_HOST_
+  register                        0
+}
+
 # Define the log monitoring template (monitoring logs is very different)
 define service{
   name                            default-logfile
