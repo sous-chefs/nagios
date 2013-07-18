@@ -1,0 +1,98 @@
+#!/bin/bash
+
+# Written by Dan Fruehauf <dan.fruehauf@utas.edu.au>
+
+# used for returned error messages
+declare ERROR_STRING=""
+
+# checks tomcat instances
+# $1 - portal URL
+# $2 - portal version (optional)
+check_portal() {
+	local url="$1"; shift
+	local version_compare_with="$1"; shift
+	local -i retval
+
+	tmp_output=`mktemp`
+	curl -o $tmp_output -L -s $url
+	let retval=$retval+$?
+	if [ $retval -ne 0 ]; then
+		ERROR_STRING="curl error"
+		rm -f $tmp_output
+		return 2 # 2 for CRITICAL
+	fi
+
+	# this is a fully built version
+	local version=`grep -e "<\!-- .\+ Portal v.*, build date: .* -->" $tmp_output | sed -e 's/<\!-- //g' -e 's/ -->//g' | cut -d, -f1`
+
+	# on rc, we'll handle it differently
+	if [ x"$version" = x ]; then
+		local version=`grep Version: $tmp_output | tr -s " " | cut -d' ' -f3`
+	fi
+	rm -f $tmp_output
+
+	if [ x"$version_compare_with" != x ] && \
+		[ "$version" != "$version_compare_with" ]; then
+		ERROR_STRING="Version installed: '$version', required: '$version_compare_with'"
+		retval=1 # return a warning
+	fi
+
+	# all good, lets format a string to return
+	if [ $retval -eq 0 ]; then
+		ERROR_STRING="Portal running version '$version'"
+	fi
+
+	return $retval
+}
+
+# prints usage and exit
+usage() {
+	echo "Usage: $0 [OPTIONS]... NODE_NAME"
+	echo "Checks portal version."
+	echo "
+Options:
+  -u, --url                  Portal URL.
+  -v, --version              Version to compare with"
+	exit 3
+}
+
+
+# "$@" - parameters, see usage
+main() {
+	# parse options with getopt
+	local tmp_getops=`getopt -o hu:v: --long help,url:,version: -- "$@"`
+	[ $? != 0 ] && usage
+
+	eval set -- "$tmp_getops"
+	local url version
+
+	# parse the options
+	while true ; do
+		case "$1" in
+			-h|--help) usage;;
+			-u|--url) url="$2"; shift 2;;
+			-v|--version) version="$2"; shift 2;;
+			--) shift; break;;
+			*) usage;;
+		esac
+	done
+
+	# if url is empty, do not proceed
+	[ x"$url" = x ] && usage
+
+	check_portal "$url" "$version"
+	local -i retval=$?
+
+	if [ $retval -ge 2 ]; then
+		echo "Critical: $ERROR_STRING"
+		return 2
+	elif [ $retval -eq 1 ]; then
+		echo "Warning: $ERROR_STRING"
+		return 1
+	else
+		echo "OK: $ERROR_STRING"
+		return 0
+	fi
+}
+
+main "$@"

@@ -1,0 +1,75 @@
+#!/bin/bash
+
+# Written by Dan Fruehauf <dan.fruehauf@utas.edu.au>
+
+# used for returned error messages
+declare ERROR_STRING=""
+
+# TODO should be templated
+declare -r NAGIOS_PLUGINS_DIR=/usr/lib/nagios/plugins
+
+# TODO should be templated
+declare -r TOMCAT_BASE=/var/lib/tomcat7
+
+# prints usage and exit
+usage() {
+	echo "$0"
+	exit 3
+}
+
+# returns a list of tomcat instances
+# for example: "tomcat7_aodn tomcat7_ncwms"
+get_tomcat_instances() {
+	(cd /etc/init.d && ls -1 tomcat7_*) 2> /dev/null
+}
+
+# returns tomcat port
+# $1 - tomcat instance name
+get_tomcat_port() {
+	# TODO a bit ugly, but working :)
+	local tomcat_instance=$1; shift
+	local tomcat_name=`echo $tomcat_instance | cut -d_ -f2`
+	grep -o 'Connector port=\"[[:digit:]]\+"' $TOMCAT_BASE/$tomcat_name/conf/server.xml | head -1 | cut -d'"' -f2
+}
+
+# checks tomcat instances
+# "$@" - list of tomcat instances, as returned from get_tomcat_instances
+check_tomcat_instances() {
+	local -i retval
+	local tomcat_instance
+	for tomcat_instance in "$@"; do
+		local -i port=`get_tomcat_port $tomcat_instance`
+		local -i service_up=0
+		local -i port_open=0
+
+		# perform the actual tests
+		if $NAGIOS_PLUGINS_DIR/check_http -H localhost -p $port >& /dev/null; then
+			ERROR_STRING="$ERROR_STRING '$tomcat_instance is up'"
+		elif [ $service_up -ne 0 ]; then
+			ERROR_STRING="$ERROR_STRING '$tomcat_instance service is down'"
+			let retval=$retval+2
+		fi
+	done
+	return $retval
+}
+
+# "$@" - parameters
+main() {
+	local tomcat_instances=`get_tomcat_instances`
+	if [ x"$tomcat_instances" = x ]; then
+		echo "Critical: No tomcat instances found"
+		return 2
+	fi
+
+	check_tomcat_instances $tomcat_instances
+	local -i retval=$?
+
+	if [ $retval -gt 2 ]; then
+		echo "Critical: $ERROR_STRING"
+		return 2
+	else
+		echo "OK: $ERROR_STRING"
+	fi
+}
+
+main "$@"
