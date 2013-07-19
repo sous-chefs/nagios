@@ -71,9 +71,13 @@ if node['tomcat'] and node['tomcat']['instances']
   node['tomcat']['instances'].each do |tomcat_instance|
     instance_name = tomcat_instance['name']
     instance_port = tomcat_instance['ports']['connector_port'] ? tomcat_instance['ports']['connector_port'] : 8080
-    nagios_nrpecheck "check_tomcat_#{instance_port}" do
-      command "#{node['nagios']['plugin_dir']}/check_http -H localhost -p #{instance_port}"
-      action :add
+    # Make sure it's an actual tomcat instance and not the stub one taken
+    # from the cookbook's attributes
+    if instance_name != "default" and instance_port != "8080"
+      nagios_nrpecheck "check_tomcat_#{instance_port}" do
+        command "#{node['nagios']['plugin_dir']}/check_http -H localhost -p #{instance_port}"
+        action :add
+      end
     end
   end
 end

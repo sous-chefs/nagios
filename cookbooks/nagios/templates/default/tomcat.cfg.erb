@@ -11,6 +11,9 @@ tomcat_ports = []
     n['tomcat']['instances'].each do |tomcat_instance|
       instance_name = tomcat_instance['name']
       instance_port = tomcat_instance['ports']['connector_port'] ? tomcat_instance['ports']['connector_port'] : 8080
+      # Make sure it's an actual tomcat instance and not the stub one taken
+      # from the cookbook's attributes
+      if instance_name != "default" and instance_port != "8080"
 %>
 define service {
   service_description tomcat instance <%= instance_name %>:<%= instance_port %>
@@ -19,8 +22,9 @@ define service {
   use default-service-pnp
 }
 <%
-      # collect all ports, so we can define commands
-      tomcat_ports.push(instance_port)
+        # collect all ports, so we can define commands
+        tomcat_ports.push(instance_port)
+      end
     end
   end
 end
