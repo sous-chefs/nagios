@@ -60,10 +60,19 @@ end
 
 # Check for pgsql
 nagios_nrpecheck "check_pgsql" do
-  command "#{node['nagios']['plugin_dir']}/check_pgsql"
+  command "sudo -u postgres #{node['nagios']['plugin_dir']}/check_pgsql"
   warning_condition "20"
   critical_condition "50"
   action :add
+end
+
+# check_pgsql will need sudo access as user postgres
+sudo "nagios_postgres" do
+  user node['nagios']['user']
+  runas "postgres"
+  commands [ "#{node['nagios']['plugin_dir']}/check_pgsql" ] 
+  host "ALL"
+  nopasswd true
 end
 
 # Check all IMOS tomcat instances
