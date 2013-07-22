@@ -60,9 +60,7 @@ end
 
 # Check for pgsql
 nagios_nrpecheck "check_pgsql" do
-  command "sudo -u postgres #{node['nagios']['plugin_dir']}/check_pgsql"
-  warning_condition "20"
-  critical_condition "50"
+  command "sudo -u postgres #{node['nagios']['plugin_dir']}/check_pgsql_"
   action :add
 end
 

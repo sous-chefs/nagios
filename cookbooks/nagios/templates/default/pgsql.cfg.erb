@@ -13,10 +13,12 @@ pgsql_databases = []
     # TODO Remove this section once databases are defined in node definitions
     node_databases = []
     node_databases.push(n['postgresql']['databases'])
-    node_databases.push("")
+    # Push the dummy database
+    node_databases.push({ "name" => "" })
     if node_databases
-      n['postgresql']['databases'].each do |pgsql_database|
-        db_name = pgsql_database['name']
+      node_databases.each do |pgsql_database|
+        if pgsql_database
+          db_name = pgsql_database['name']
 %>
 define service {
   service_description pgsql <%= db_name %>
@@ -25,8 +27,9 @@ define service {
   use default-service
 }
 <%
-        # collect all databases, so we can define commands
-        pgsql_databases.push(db_name)
+          # collect all databases, so we can define commands
+          pgsql_databases.push(db_name)
+        end
       end
     end
   end
