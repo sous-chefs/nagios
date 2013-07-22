@@ -59,18 +59,35 @@ nagios_nrpecheck "check_swap" do
 end
 
 # Check for pgsql
-nagios_nrpecheck "check_pgsql" do
-  command "sudo -u postgres #{node['nagios']['plugin_dir']}/check_pgsql_"
-  action :add
-end
+if node['postgresql']
+  # 2013-07-19 - no databases defined, we will only use the default one (simply
+  # run check_pgsql with no database), so we'll inject it!
+  # TODO Remove this section once databases are defined in node definitions
+  node_databases = []
+  node_databases.push(node['postgresql']['databases'])
+  # Push the dummy database
+  node_databases.push({ "name" => "" })
+  if node_databases
+    node_databases.each do |pgsql_database|
+      if pgsql_database
+        db_name = pgsql_database['name']
+        # define nrpe check
+        nagios_nrpecheck "check_pgsql_#{db_name}" do
+          command "sudo -u postgres #{node['nagios']['plugin_dir']}/check_pgsql_#{db_name}"
+          action :add
+        end
+      end
+    end
+  end
 
-# check_pgsql will need sudo access as user postgres
-sudo "nagios_postgres" do
-  user node['nagios']['user']
-  runas "postgres"
-  commands [ "#{node['nagios']['plugin_dir']}/check_pgsql" ] 
-  host "ALL"
-  nopasswd true
+  # check_pgsql will need sudo access as user postgres
+  sudo "nagios_postgres" do
+    user node['nagios']['user']
+    runas "postgres"
+    commands [ "#{node['nagios']['plugin_dir']}/check_pgsql" ] 
+    host "ALL"
+    nopasswd true
+  end
 end
 
 # Check all IMOS tomcat instances
