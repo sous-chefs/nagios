@@ -73,7 +73,7 @@ if node['postgresql']
         db_name = pgsql_database['name']
         # define nrpe check
         nagios_nrpecheck "check_pgsql_#{db_name}" do
-          command "sudo -u postgres #{node['nagios']['plugin_dir']}/check_pgsql_#{db_name}"
+          command "sudo -u postgres #{node['nagios']['plugin_dir']}/check_pgsql"
           action :add
         end
       end
