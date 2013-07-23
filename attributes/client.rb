@@ -73,5 +73,6 @@ default['nagios']['nrpe']['url']      = 'http://prdownloads.sourceforge.net/sour
 default['nagios']['nrpe']['version']  = '2.14'
 default['nagios']['nrpe']['checksum'] = '808c7c4a82d0addf15449663e4712b5018c8bbd668e46723139f731f1ac44431'
 
+# role name of the nagios server
 default['nagios']['server_role'] = 'monitoring'
 default['nagios']['allowed_hosts'] = nil

@@ -23,7 +23,7 @@
 #
 
 # determine hosts that NRPE will allow monitoring from
-mon_host = ['127.0.0.1']
+mon_host = node['nagios']['allowed_hosts']
 
 # put all nagios servers that you find in the NPRE config.
 if node.run_list.roles.include?(node['nagios']['server_role'])
