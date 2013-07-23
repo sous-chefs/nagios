@@ -115,6 +115,16 @@ end
 # Sort by name to provide stable ordering
 nodes.sort! {|a,b| a.name <=> b.name }
 
+# If primary_notifies is enabled, enable notifications on the primary and disable it everywhere else
+# otherwise, leave it alone
+if node["nagios"]["primary_notifies"]
+  if node["hostname"] == node["nagios"]["primary"]
+    node.set["nagios"]["notifications_enabled"] = 1
+  else
+    node.set["nagios"]["notifications_enabled"] = 0
+  end
+end
+
 # maps nodes into nagios hostgroups
 service_hosts= Hash.new
 search(:role, "*:*") do |r|
