@@ -7,7 +7,7 @@ pgsql_databases = []
 @nodes.each do |n|
   host_name = node['nagios']['server']['normalize_hostname'] ? n[node['nagios']['host_name_attribute']].downcase : n[node['nagios']['host_name_attribute']]
   # perform a search on httpd hosts
-  if n['postgresql']
+  if n['postgresql'] and n['postgresql']['config']
     # 2013-07-19 - no databases defined, we will only use the default one (simply
     # run check_pgsql with no database), so we'll inject it!
     # TODO Remove this section once databases are defined in node definitions

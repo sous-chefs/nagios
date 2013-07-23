@@ -59,7 +59,7 @@ nagios_nrpecheck "check_swap" do
 end
 
 # Check for pgsql
-if node['postgresql']
+if node['postgresql'] and node['postgresql']['config']
   # 2013-07-19 - no databases defined, we will only use the default one (simply
   # run check_pgsql with no database), so we'll inject it!
   # TODO Remove this section once databases are defined in node definitions
