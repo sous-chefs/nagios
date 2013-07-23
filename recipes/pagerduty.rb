@@ -41,13 +41,6 @@ package "libcrypt-ssleay-perl" do
   action :install
 end
 
-template "#{node['nagios']['config_dir']}/pagerduty.cfg" do
-  owner node['nagios']['user']
-  group node['nagios']['group']
-  mode 00640
-  source "pagerduty_nagios.cfg.erb"
-end
-
 remote_file "#{node['nagios']['plugin_dir']}/pagerduty_nagios.pl" do
   owner "root"
   group "root"
@@ -55,6 +48,8 @@ remote_file "#{node['nagios']['plugin_dir']}/pagerduty_nagios.pl" do
   source node['nagios']['pagerduty']['script_url']
   action :create_if_missing
 end
+
+nagios_conf 'pagerduty'
 
 cron "Flush Pagerduty" do
   user node['nagios']['user']
