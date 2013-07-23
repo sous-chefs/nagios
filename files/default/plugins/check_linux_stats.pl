@@ -64,31 +64,31 @@ elsif($o_disk){
 	check_disk();
 }
 elsif($o_io){
-        check_io();
+	check_io();
 }
 elsif($o_net){
-        check_net();
+	check_net();
 }
 elsif($o_load){
-        check_load();
+	check_load();
 }
 elsif($o_file){
-        check_file();
+	check_file();
 }
 elsif($o_procs){
-        check_procs();
+	check_procs();
 }
 elsif($o_socket){
-        check_socket();
+	check_socket();
 }
 elsif($o_process){
-        check_process();
+	check_process();
 }
 elsif($o_paging){
-        check_paging();
+	check_paging();
 }
 elsif($o_uptime){
-        check_uptime();
+	check_uptime();
 }
 else {
 	help();
@@ -111,10 +111,10 @@ sub check_cpu {
 		my $cpu_used=sprintf("%.2f", (100-$cpu->{idle}));
 
 		if ($cpu_used >= $o_critical) {
-        		$status = "CRITICAL";
+			$status = "CRITICAL";
 		}
 		elsif ($cpu_used >= $o_warning) {
-        		$status = "WARNING";
+			$status = "WARNING";
 		}
 		
 		my $perfdata .= "|"
@@ -126,26 +126,26 @@ sub check_cpu {
 		print "CPU $status : idle $cpu->{idle}% $perfdata";
 	}
 	else {
-                print "No data";
-        }
+		print "No data";
+	}
 }
 
 sub check_procs {
-   	my $lxs = Sys::Statistics::Linux->new(procstats => 1);
+	my $lxs = Sys::Statistics::Linux->new(procstats => 1);
 	$lxs->init;
-        sleep $o_sleep;
-        my $stat = $lxs->get;
+	sleep $o_sleep;
+	my $stat = $lxs->get;
 
-        if(defined($stat->procstats)) {
+	if(defined($stat->procstats)) {
 		$status = "OK";
 		my $procs = $stat->procstats;
 		
 		if($procs->{count} >= $o_critical) {
-                        $status = "CRITICAL";
-                }
-                elsif ($procs->{count} >= $o_warning) {
-                        $status = "WARNING";
-                }
+			$status = "CRITICAL";
+		}
+		elsif ($procs->{count} >= $o_warning) {
+			$status = "WARNING";
+		}
 
 		my $perfdata .= "|"
 		."count=$procs->{count};$o_warning;$o_critical "
@@ -153,80 +153,80 @@ sub check_procs {
 		."blocked=$procs->{blocked} "
 		."running=$procs->{running} "
 		."new=$procs->{new}";
-                print "PROCS $status : count $procs->{count} $perfdata";
+		print "PROCS $status : count $procs->{count} $perfdata";
 	}
 }
 
 
 sub check_process {
 	my $return_str = "";
-        my $perfdata = "";
+	my $perfdata = "";
 	# pidfiles
-        my @pids = ();
-        for my $file (split(/,/, $o_pattern)) {
-                open FILE, $file or die "Could not read from $file, program halting.";
-                # read the record, and chomp off the newline
-                chomp(my $pid = <FILE>);
-                close FILE;
-                if($pid=~/^\d+$/){
-                        push @pids,$pid;
+	my @pids = ();
+	for my $file (split(/,/, $o_pattern)) {
+		open FILE, $file or die "Could not read from $file, program halting.";
+		# read the record, and chomp off the newline
+		chomp(my $pid = <FILE>);
+		close FILE;
+		if($pid=~/^\d+$/) {
+			push @pids,$pid;
 		}
-        }
-        
-        if($#pids>-1) {
-		 my $lxs = Sys::Statistics::Linux::Processes->new(pids => \@pids);
-        	$lxs->init;
-        	sleep $o_sleep;
-        	my $processes = $lxs->get;
+	}
+
+	if($#pids>-1) {
+		my $lxs = Sys::Statistics::Linux::Processes->new(pids => \@pids);
+		$lxs->init;
+		sleep $o_sleep;
+		my $processes = $lxs->get;
 		my @pname = ();
 
-        	if(defined($processes)) {
-                	$status = "OK";
+		if(defined($processes)) {
+			$status = "OK";
 
 			my $crit = 0; #critical counter
-                	my $warn = 0; #warning counter
-                	foreach my $process (keys (%$processes)) {
-                        	my $vsize = $processes->{$process}->{vsize};
-                        	my $nswap = $processes->{$process}->{nswap};
-                        	my $cnswap = $processes->{$process}->{cnswap};
-                        	my $cpu = $processes->{$process}->{cpu};
-                    		my $cmd = $processes->{$process}->{cmd};
+			my $warn = 0; #warning counter
+			foreach my $process (keys (%$processes)) {
+				my $vsize = $processes->{$process}->{vsize};
+				my $nswap = $processes->{$process}->{nswap};
+				my $cnswap = $processes->{$process}->{cnswap};
+				my $cpu = $processes->{$process}->{cpu};
+				my $cmd = $processes->{$process}->{cmd};
 				$cmd =~s/\W+//g;
 
-	                        if($vsize >= $o_critical) {$crit++; push @pname,$cmd;}
-                                elsif($vsize >= $o_warning){ $warn++; push @pname,$cmd;}
+				if($vsize >= $o_critical) {$crit++; push @pname,$cmd;}
+				elsif($vsize >= $o_warning){ $warn++; push @pname,$cmd;}
 
-                                $perfdata .= "|"
+				$perfdata .= "|"
 				.$cmd."_vsize=$vsize;$o_warning;$o_critical "
 				.$cmd."_nswap=$nswap "
 				.$cmd."_cnswap=$cnswap "
 				.$cmd."_cpu=$cpu";
-                        }
+			}
 		
 			if($crit>0) {$status="CRITICAL";}
 			elsif($warn>0) {$status="WARNING";}
 		
-                }
-                print "PROCESSES $status : ".join(',',@pname)." $perfdata";
+		}
+		print "PROCESSES $status : ".join(',',@pname)." $perfdata";
 	}
 }
 
 sub check_socket {
-        my $lxs = Sys::Statistics::Linux->new(sockstats => 1);
+	my $lxs = Sys::Statistics::Linux->new(sockstats => 1);
 	$lxs->init;
-        sleep $o_sleep;
-        my $stat = $lxs->get;
+	sleep $o_sleep;
+	my $stat = $lxs->get;
 
-        if(defined($stat->sockstats)) {
+	if(defined($stat->sockstats)) {
 		$status = "OK";
 		my $socks = $stat->sockstats;
 		
 		if($socks->{used} >= $o_critical) {
-                        $status = "CRITICAL";
-                }
-                elsif($socks->{used} >= $o_warning) {
-                        $status = "WARNING";
-                }
+			$status = "CRITICAL";
+		}
+		elsif($socks->{used} >= $o_warning) {
+			$status = "WARNING";
+		}
 
 		my $perfdata .= "|"
 		."used=$socks->{used};$o_warning;$o_critical "
@@ -236,29 +236,29 @@ sub check_socket {
 		print "SOCKET USAGE  $status : used $socks->{used} $perfdata";
 	}
 	else {
-                print "No data";
-        }
+		print "No data";
+	}
 }
 
 sub check_file {
-        my $lxs = Sys::Statistics::Linux->new(filestats => 1);
+	my $lxs = Sys::Statistics::Linux->new(filestats => 1);
 	$lxs->init;
-        sleep $o_sleep;
-        my $stat = $lxs->get;
+	sleep $o_sleep;
+	my $stat = $lxs->get;
 
-        if(defined($stat->filestats)) {
+	if(defined($stat->filestats)) {
 		$status = "OK";
 		my $file = $stat->filestats;
 		
 		my ($fh_crit,$inode_crit) = split(/,/,$o_critical);
-                my ($fh_warn,$inode_warn) = split(/,/,$o_warning);
+		my ($fh_warn,$inode_warn) = split(/,/,$o_warning);
 
 		if(($file->{fhalloc}>=$fh_crit)||($file->{inalloc}>=$inode_crit)) {
-                        $status = "CRITICAL";
-                }
+			$status = "CRITICAL";
+		}
 		elsif(($file->{fhalloc}>=$fh_warn)||($file->{inalloc}>=$inode_warn)) {
-                        $status = "WARNING";
-                }
+			$status = "WARNING";
+		}
 
 		my $perfdata .= "|"
 		."fhalloc=$file->{fhalloc};$fh_warn;$fh_crit;$file->{fhmax} "
@@ -268,18 +268,18 @@ sub check_file {
 		print "OPEN FILES $status allocated: $file->{fhalloc} (inodes: $file->{inalloc}) $perfdata";
 	}
 	else {
-                print "No data";
-        }
+		print "No data";
+	}
 }
 
 sub check_mem {
-        my $lxs = Sys::Statistics::Linux->new(memstats  => 1);
-		$lxs->init;
-        sleep $o_sleep;
-        my $stat = $lxs->get;
+	my $lxs = Sys::Statistics::Linux->new(memstats  => 1);
+	$lxs->init;
+	sleep $o_sleep;
+	my $stat = $lxs->get;
 
 	if(defined($stat->memstats)) {
-                $status = "OK";
+		$status = "OK";
 		
 		my ($mem_crit,$swap_crit) = split(/,/,$o_critical);
 		my ($mem_warn,$swap_warn) = split(/,/,$o_warning);
@@ -292,11 +292,11 @@ sub check_mem {
 		my $active = sprintf("%.2f", ($mem->{active}/$mem->{memtotal})*100);
 		
 		if(($memused>=$mem_crit)||($swapused>=$swap_crit)) {
-                        $status = "CRITICAL";
-                }
-                elsif (($memused>=$mem_warn)||($swapused>=$swap_warn)) {
-                        $status = "WARNING";
-                }
+			$status = "CRITICAL";
+		}
+		elsif (($memused>=$mem_warn)||($swapused>=$swap_warn)) {
+			$status = "WARNING";
+		}
 	
 		my $perfdata .= "|"
 		."MemUsed=$memused%;$mem_warn;$mem_crit "
@@ -305,7 +305,7 @@ sub check_mem {
 		."Active=$active";
 
 		print "MEMORY $status : Mem used: $memused%, Swap used: $swapused% $perfdata";
-        }
+	}
 	else {
 		print "No data";
 	}
@@ -314,15 +314,15 @@ sub check_mem {
 sub check_disk {
 	my $lxs = Sys::Statistics::Linux->new(diskusage => 1);
 	$lxs->init;
-        sleep $o_sleep;
-        my $stat = $lxs->get;
+	sleep $o_sleep;
+	my $stat = $lxs->get;
 	my $return_str = "";
 	my $perfdata = "";
 
-        if(defined($stat->diskusage)) {
-                $status = "OK";
+	if(defined($stat->diskusage)) {
+		$status = "OK";
 
-                my $disk = $stat->diskusage;
+		my $disk = $stat->diskusage;
 		if(!defined($o_pattern)){ $o_pattern = 'all';}
 		
 		my $checkthis;
@@ -336,7 +336,7 @@ sub check_disk {
 			my $total = $disk->{$device}->{total};   # KB
 			my $mountpoint = $disk->{$device}->{mountpoint};
 			my $percentused = sprintf("%.2f", ($usage/$total)*100);
-                        my $percentfree = sprintf("%.2f", ($free/$total)*100);
+			my $percentfree = sprintf("%.2f", ($free/$total)*100);
 
 			if(defined($checkthis->{$mountpoint})||defined($checkthis->{all})){
 				$return_str .= " $mountpoint $percentfree% free";
@@ -374,85 +374,85 @@ sub check_disk {
 
 		if($crit>0) {$status="CRITICAL";}
 		elsif($warn>0) {$status="WARNING";}
-        }
+	}
 	print "DISK $status used : $return_str |$perfdata";
 }
 
 sub check_io {
 	my $lxs = Sys::Statistics::Linux->new(diskstats => 1);
 	$lxs->init;
-        sleep $o_sleep;
-        my $stat = $lxs->get;
+	sleep $o_sleep;
+	my $stat = $lxs->get;
 	my $return_str = "io :";
-        my $perfdata = "";
+	my $perfdata = "";
 
-        if(defined($stat->diskstats)) {
-                $status = "OK";
+	if(defined($stat->diskstats)) {
+		$status = "OK";
 
-                my $disk = $stat->diskstats;
+		my $disk = $stat->diskstats;
 		if(!defined($o_pattern)){ $o_pattern = 'all';}
 
-                my $checkthis;
-                map {$checkthis->{$_}++} split(/,/, $o_pattern);
+		my $checkthis;
+		map {$checkthis->{$_}++} split(/,/, $o_pattern);
 
 		my ($read_crit,$write_crit) = split(/,/,$o_critical);
-                my ($read_warn,$write_warn) = split(/,/,$o_warning);
+		my ($read_warn,$write_warn) = split(/,/,$o_warning);
 
-                my $crit = 0; #critical counter
-                my $warn = 0; #warning counter
+		my $crit = 0; #critical counter
+		my $warn = 0; #warning counter
 		foreach my $device (keys (%$disk)) {
 			my $rdreq = $disk->{$device}->{rdreq};
 			my $wrtreq = $disk->{$device}->{wrtreq};
 			my $ttreq = $disk->{$device}->{ttreq};
 			my $rdbyt = $disk->{$device}->{rdbyt};
-                        my $wrtbyt = $disk->{$device}->{wrtbyt};
-                        my $ttbyt = $disk->{$device}->{ttbyt};
-			
+			my $wrtbyt = $disk->{$device}->{wrtbyt};
+			my $ttbyt = $disk->{$device}->{ttbyt};
+		
 			if(defined($checkthis->{$device})||defined($checkthis->{all})){
 				if($o_unit =~ /BYTES/i) {
-                                        if(($rdbyt>=$read_crit)||($wrtbyt>=$write_crit)){ $crit++;}
-                                        elsif(($rdbyt>=$read_warn)||($wrtbyt>=$write_warn)){ $warn++;}
+					if(($rdbyt>=$read_crit)||($wrtbyt>=$write_crit)){ $crit++;}
+					elsif(($rdbyt>=$read_warn)||($wrtbyt>=$write_warn)){ $warn++;}
 
-                                        $perfdata .= "|"
+					$perfdata .= "|"
 					.$device."_read=$rdbyt;$read_warn;$read_crit "
 					.$device."_write=$wrtbyt;$write_warn;$write_crit";
-                                }
+				}
 				else {
-                                	if(($rdreq>=$read_crit)||($wrtreq>=$write_crit)){ $crit++;}
-                                	elsif(($rdreq>=$read_warn)||($wrtreq>=$write_warn)){ $warn++;}
-				
-                                	$perfdata .= "|"
+					if(($rdreq>=$read_crit)||($wrtreq>=$write_crit)){ $crit++;}
+					elsif(($rdreq>=$read_warn)||($wrtreq>=$write_warn)){ $warn++;}
+			
+					$perfdata .= "|"
 					.$device."_read=$rdreq;$read_warn;$read_crit "
 					.$device."_write=$wrtreq;$write_warn;$write_crit";
 				}
-                        }
-                }
+			}
+		}
 		if($crit>0) {$status="CRITICAL";}
 		elsif($warn>0) {$status="WARNING";}
-		
+	
 		print "DISK $status $return_str $perfdata";	
-        }
+	}
 }
 
 sub check_net {
 	my $lxs = Sys::Statistics::Linux->new(netstats => 1);
 	$lxs->init;
-        sleep $o_sleep;
-        my $stat = $lxs->get;
+	sleep $o_sleep;
+	my $stat = $lxs->get;
 
 	my $return_str = "";
-        my $perfdata = ""; 
-        if(defined($stat->netstats)) {
-                $status = "OK";
-                my $net = $stat->netstats;
+	my $perfdata = ""; 
+	if(defined($stat->netstats)) {
+		$status = "OK";
+		my $net = $stat->netstats;
 		if(!defined($o_pattern)){ $o_pattern = 'all';}
 
-                my $checkthis;
-                map {$checkthis->{$_}++} split(/,/, $o_pattern);
+		my $checkthis;
+		map {$checkthis->{$_}++} split(/,/, $o_pattern);
 
 		my $crit = 0; #critical counter
-                my $warn = 0; #warning counter
-                foreach my $device (keys (%$net)) {
+		my $warn = 0; #warning counter
+		foreach my $device (keys (%$net)) {
 			my $txbyt = $net->{$device}->{txbyt};
 			my $rxerrs = $net->{$device}->{rxerrs};
 			my $ttbyt = $net->{$device}->{ttbyt};
@@ -462,44 +462,44 @@ sub check_net {
 			my $rxbyt = $net->{$device}->{rxbyt};
 			my $rxdrop = $net->{$device}->{rxdrop};
 
-			 if(defined($checkthis->{$device})||defined($checkthis->{all})){
-                                if($ttbyt>=$o_critical){ $crit++;}
-                                elsif($ttbyt>=$o_warning){ $warn++;}
+			if(defined($checkthis->{$device})||defined($checkthis->{all})){
+				if($ttbyt>=$o_critical){ $crit++;}
+				elsif($ttbyt>=$o_warning){ $warn++;}
 
 				$return_str .= $device.":".bytes_to_readable($ttbyt)." ";
-                                
+
 				$perfdata .= "|"
 				.$device."_txbyt=".$txbyt."B "
 				.$device."_txerrs=".$txerrs."B "
 				.$device."_rxbyt=".$rxbyt."B "
 				.$device."_rxerrs=".$rxerrs."B";
-                        }
+			}
 		}
 
 		if($crit>0) {$status="CRITICAL";}
 		elsif($warn>0) {$status="WARNING";}
 
 		print "NET USAGE $status $return_str $perfdata";
-        }
+	}
 }
 
 sub check_load {
 	my $lxs = Sys::Statistics::Linux->new(loadavg => 1);
 	$lxs->init;
-        sleep $o_sleep;
-        my $stat = $lxs->get;
+	sleep $o_sleep;
+	my $stat = $lxs->get;
 
-        if(defined($stat->loadavg)) {
-                $status = "OK";
-                my $load = $stat->loadavg;
+	if(defined($stat->loadavg)) {
+		$status = "OK";
+		my $load = $stat->loadavg;
 		my ($warn_1,$warn_5,$warn_15) = split(/,/,$o_warning);
 		my ($crit_1,$crit_5,$crit_15) = split(/,/,$o_critical);
 
 		if(($load->{avg_1}>=$crit_1)||($load->{avg_5}>=$crit_5)||($load->{avg_15}>=$crit_15)) {
-			 $status = "CRITICAL";			
+			$status = "CRITICAL";			
 		}
 		elsif(($load->{avg_1}>=$warn_1)||($load->{avg_5}>=$warn_5)||($load->{avg_15}>=$warn_15)) {
-                        $status = "WARNING";
+			$status = "WARNING";
 		}
 
 		my $perfdata = "|"
@@ -507,40 +507,38 @@ sub check_load {
 		."load5=$load->{avg_5};$warn_5;$crit_5;0 "
 		."load15=$load->{avg_15};$warn_15;$crit_15;0";
 
-                print "LOAD AVERAGE $status : $load->{avg_1},$load->{avg_5},$load->{avg_15} $perfdata";
-        }
-	else {
+		print "LOAD AVERAGE $status : $load->{avg_1},$load->{avg_5},$load->{avg_15} $perfdata";
+	} else {
 		print "No data";
 	}
 }
 
 sub check_paging {
 	my $lxs = Sys::Statistics::Linux->new(pgswstats => 1);
-    	$lxs->init;
+	$lxs->init;
 	sleep $o_sleep;
-        my $stat = $lxs->get;
+	my $stat = $lxs->get;
 	if(defined($stat->pgswstats)) {
-                $status = "OK";
-                my $page = $stat->pgswstats;
+		$status = "OK";
+		my $page = $stat->pgswstats;
 		my ($warn_in,$warn_out) = split(/,/,$o_warning);
-                my ($crit_in,$crit_out) = split(/,/,$o_critical);
+		my ($crit_in,$crit_out) = split(/,/,$o_critical);
 		if(($page->{pgpgin}>=$crit_in)||($page->{pgpgout}>=$crit_out)) {
-                         $status = "CRITICAL";
-                }
+			$status = "CRITICAL";
+		}
 		elsif(($page->{pgpgin}>=$warn_in)||($page->{pgpgout}>=$warn_out)) {
-                        $status = "WARNING";
-                }
+			$status = "WARNING";
+		}
 
 		my $perfdata = "|"
 		."pgpgin=$page->{pgpgin};$warn_in;$crit_in;0 "
 		."pgpgout=$page->{pgpgout};$warn_out;$crit_out;0 "
 		."pswpin=$page->{pswpin} pswpout=$page->{pswpout}";
 
-                print "Paging $status : in:$page->{pgpgin},out:$page->{pgpgout} $perfdata";
+		print "Paging $status : in:$page->{pgpgin},out:$page->{pgpgout} $perfdata";
+	} else {
+		print "No data";
 	}
-	else {
-                print "No data";
-        }
 }
 
 sub check_uptime {
@@ -587,7 +585,7 @@ sub help {
 
 	print <<HELP;
 	-h, --help
-   		print this help message
+		print this help message
 	-C, --cpu=CPU USAGE
 	-P, --procs
 	-M, --memory=MEMORY USAGE
@@ -605,8 +603,8 @@ sub help {
 	-c, --critical
 	-s, --sleep
 	-u, --unit
-               %, KB, MB or GB left on disk usage, default : MB	
-	       REQS OR BYTES on disk io statistics, default : REQS
+		%, KB, MB or GB left on disk usage, default : MB
+		REQS OR BYTES on disk io statistics, default : REQS
 	-V, --version
 		version number
 
@@ -627,25 +625,25 @@ HELP
 sub check_options {
 	Getopt::Long::Configure("bundling");
 	GetOptions(
-		'h'	=> \$o_help,		'help'		=> \$o_help,
-		's:i'	=> \$o_sleep,		'sleep:i'	=> \$o_sleep,
-		'C'	=> \$o_cpu,		'cpu'		=> \$o_cpu,
-		'P'	=> \$o_procs, 		'procs'		=> \$o_procs,
-		'T'	=> \$o_process, 	'top'		=> \$o_process,
-		'M'	=> \$o_mem,		'memory'	=> \$o_mem,
-		'N'	=> \$o_net,		'network'	=> \$o_net,
-		'D'	=> \$o_disk,		'disk'		=> \$o_disk,
-		'I'	=> \$o_io,		'io'		=> \$o_io,	
-		'L'	=> \$o_load,		'load'		=> \$o_load,
-		'F'	=> \$o_file,		'file'		=> \$o_file,
-		'S'	=> \$o_socket,		'socket'	=> \$o_socket,
-		'W'	=> \$o_paging,		'paging'	=> \$o_paging,
-		'U'	=> \$o_uptime,		'uptime'	=> \$o_uptime,
-		'V'	=> \$o_version,		'version'	=> \$o_version,
-		'p:s'	=> \$o_pattern,		'pattern:s'	=> \$o_pattern,
-		'w:s'	=> \$o_warning,		'warning:s'	=> \$o_warning,
-		'c:s'	=> \$o_critical,	'critical:s'	=> \$o_critical,
-		'u:s'	=> \$o_unit,	        'unit:s'	=> \$o_unit
+		'h'   => \$o_help,     'help'       => \$o_help,
+		's:i' => \$o_sleep,    'sleep:i'    => \$o_sleep,
+		'C'   => \$o_cpu,      'cpu'        => \$o_cpu,
+		'P'   => \$o_procs,    'procs'      => \$o_procs,
+		'T'   => \$o_process,  'top'        => \$o_process,
+		'M'   => \$o_mem,      'memory'     => \$o_mem,
+		'N'   => \$o_net,      'network'    => \$o_net,
+		'D'   => \$o_disk,     'disk'       => \$o_disk,
+		'I'   => \$o_io,       'io'         => \$o_io,
+		'L'   => \$o_load,     'load'       => \$o_load,
+		'F'   => \$o_file,     'file'       => \$o_file,
+		'S'   => \$o_socket,   'socket'     => \$o_socket,
+		'W'   => \$o_paging,   'paging'     => \$o_paging,
+		'U'   => \$o_uptime,   'uptime'     => \$o_uptime,
+		'V'   => \$o_version,  'version'    => \$o_version,
+		'p:s' => \$o_pattern,  'pattern:s'  => \$o_pattern,
+		'w:s' => \$o_warning,  'warning:s'  => \$o_warning,
+		'c:s' => \$o_critical, 'critical:s' => \$o_critical,
+		'u:s' => \$o_unit,     'unit:s'     => \$o_unit
 	);
 
 	if(defined($o_help)) {
@@ -660,29 +658,29 @@ sub check_options {
 }
 
 sub bytes_to_readable {
-        my ($bignum) = @_;
+	my ($bignum) = @_;
 
-        foreach my $unit ("B","KB","MB","GB") {
+	foreach my $unit ("B","KB","MB","GB") {
 		return sprintf("%.2f",$bignum)."$unit" if $bignum < 1024;
-   		$bignum /= 1024;
+		$bignum /= 1024;
 	}
 }
 
 sub bytes_to_kilobytes {
-        my ($bignum) = @_;
+	my ($bignum) = @_;
 
-        return sprintf("%.2f", $bignum/1024);
+	return sprintf("%.2f", $bignum/1024);
 }
 
 sub bytes_to_megabytes {
-        my ($bignum) = @_;
+	my ($bignum) = @_;
 
-        return sprintf("%.2f", $bignum/1048576);
+	return sprintf("%.2f", $bignum/1048576);
 }
 
 sub bytes_to_gigabytes {
-        my ($bignum) = @_;
+	my ($bignum) = @_;
 
-        return sprintf("%.2f", $bignum/1073741824);
+	return sprintf("%.2f", $bignum/1073741824);
 }
 
