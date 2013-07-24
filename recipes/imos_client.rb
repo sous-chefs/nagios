@@ -10,7 +10,13 @@
 
 include_recipe "nagios::client"
 
-# sync with custom scripts
+# We'll need the perl linux statistics module
+package "libsys-statistics-linux-perl" do
+  package_name "libsys-statistics-linux-perl"
+  action :install
+end
+
+# Sync with custom scripts
 remote_directory "#{node['nagios']['plugin_dir']}" do
   source "plugins"
   files_owner node['nagios']['user']
@@ -21,13 +27,13 @@ end
 # Check for high load.  This check defines warning levels and attributes
 nagios_nrpecheck "check_load" do
   command "#{node['nagios']['plugin_dir']}/check_load"
-  warning_condition "6"
-  critical_condition "10"
+  warning_condition "15,3,1.7"
+  critical_condition "15,15,15"
   action :add
 end
 
 # Check all non-NFS/tmp-fs disks.
-nagios_nrpecheck "check_all_disks" do
+nagios_nrpecheck "check_disks" do
   command "#{node['nagios']['plugin_dir']}/check_disk"
   warning_condition "8%"
   critical_condition "5%"
@@ -39,31 +45,81 @@ end
 # define what the warning/critical levels and attributes are
 nagios_nrpecheck "check_users" do
   command "#{node['nagios']['plugin_dir']}/check_users"
-  warning_condition "20"
-  critical_condition "40"
+  warning_condition "8"
+  critical_condition "15"
   action :add
 end
 
 # Check number of processes
-nagios_nrpecheck "check_procs" do
+nagios_nrpecheck "check_total_procs" do
   command "#{node['nagios']['plugin_dir']}/check_procs"
+  warning_condition "400"
+  critical_condition "600"
   action :add
 end
 
 # Check swap
 nagios_nrpecheck "check_swap" do
   command "#{node['nagios']['plugin_dir']}/check_swap"
-  warning_condition "90"
-  critical_condition "70"
+  warning_condition "60"
+  critical_condition "10"
+  action :add
+end
+
+# Check CPU
+nagios_nrpecheck "check_cpu" do
+  command "#{node['nagios']['plugin_dir']}/check_linux_stats.pl -C -u % -w 100 -c 100"
+  action :add
+end
+
+# Check memory
+nagios_nrpecheck "check_mem" do
+  command "#{node['nagios']['plugin_dir']}/check_linux_stats.pl -M -u % -c 90,100 -w 95,100"
+  action :add
+end
+
+# Check disk IO
+nagios_nrpecheck "check_disk_io" do
+  command "#{node['nagios']['plugin_dir']}/check_linux_stats.pl -I -u BYTES -w 34816000,34816000 -c 43008000,43008000"
+  action :add
+end
+
+# Check network
+nagios_nrpecheck "check_net" do
+  command "#{node['nagios']['plugin_dir']}/check_linux_stats.pl -N -u KB -w 50000 -c 60000"
   action :add
 end
 
 # Check for pgsql
-nagios_nrpecheck "check_pgsql" do
-  command "#{node['nagios']['plugin_dir']}/check_pgsql"
-  warning_condition "20"
-  critical_condition "50"
-  action :add
+if node['postgresql'] and node['postgresql']['config']
+  # 2013-07-19 - no databases defined, we will only use the default one (simply
+  # run check_pgsql with no database), so we'll inject it!
+  # TODO Remove this section once databases are defined in node definitions
+  node_databases = []
+  node_databases.push(node['postgresql']['databases'])
+  # Push the dummy database
+  node_databases.push({ "name" => "" })
+  if node_databases
+    node_databases.each do |pgsql_database|
+      if pgsql_database
+        db_name = pgsql_database['name']
+        # define nrpe check
+        nagios_nrpecheck "check_pgsql_#{db_name}" do
+          command "sudo -u postgres #{node['nagios']['plugin_dir']}/check_pgsql"
+          action :add
+        end
+      end
+    end
+  end
+
+  # check_pgsql will need sudo access as user postgres
+  sudo "nagios_postgres" do
+    user node['nagios']['user']
+    runas "postgres"
+    commands [ "#{node['nagios']['plugin_dir']}/check_pgsql" ] 
+    host "ALL"
+    nopasswd true
+  end
 end
 
 # Check all IMOS tomcat instances

@@ -43,9 +43,11 @@ end
       vhost_name = website['name']
       vhost_port = website['port'] ? website['port'] : 80
       vhost_uri  = website['uri'] ? website['uri'] : "/"
+      # notice we'll truncate vhost_uri when creating the service description
+      # as it can get rather long sometimes...
 %>
 define service {
-  service_description apache vhost <%= vhost_name %>:<%= vhost_port %><%= vhost_uri %>
+  service_description apache vhost <%= vhost_name %>:<%= vhost_port %><%= vhost_uri[0..9] %>
   check_command check_http!<%= vhost_name %>!<%= vhost_port %>!<%= vhost_uri %>
   host_name <%= host_name %>
   use default-service-pnp

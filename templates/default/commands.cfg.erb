@@ -4,8 +4,10 @@
 
 # Host checks
 define command {
+  # check_tcp, comparing to check_ssh, supplies us with performance data
+  # (latency and stuff)
   command_name    check-host-alive
-  command_line    $USER1$/check_ssh -H $HOSTADDRESS$
+  command_line    $USER1$/check_tcp -e "SSH-2.0" -p 22 -H $HOSTADDRESS$
 }
 
 # Service checks

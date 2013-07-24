@@ -86,6 +86,7 @@ define host{
   name                            server-pnp
   use                             server
   action_url                      /pnp4nagios/index.php/graph?host=$HOSTNAME$&srv=_HOST_
+  process_perf_data               1
   register                        0
 }
 
