@@ -19,4 +19,17 @@ class NagiosDataBags
     end
     results
   end
+
+  def self.solo_data_bags
+    ['nagios_services',
+     'nagios_servicegroups',
+     'nagios_templates',
+     'nagios_eventhandlers',
+     'nagios_unmanagedhosts',
+     'nagios_serviceescalations',
+     'nagios_contacts',
+     'nagios_contactgroups'
+    ]
+  end
+
 end
