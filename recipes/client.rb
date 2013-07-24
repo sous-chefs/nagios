@@ -31,10 +31,16 @@ if node.run_list.roles.include?(node['nagios']['server_role'])
 elsif node['nagios']['multi_environment_monitoring']
   search(:node, "role:#{node['nagios']['server_role']}") do |n|
     mon_host << n['ipaddress']
+    if n['network'] and n['network']['public_ipv4']
+      mon_host << n['network']['public_ipv4']
+    end
   end
 else
   search(:node, "role:#{node['nagios']['server_role']} AND chef_environment:#{node.chef_environment}") do |n|
     mon_host << n['ipaddress']
+    if n['network'] and n['network']['public_ipv4']
+      mon_host << n['network']['public_ipv4']
+    end
   end
 end
 # on the first run, search isn't available, so if you're the nagios server, go

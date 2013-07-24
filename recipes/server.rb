@@ -101,11 +101,13 @@ Chef::Log.info("Beginning search for nodes.  This may take some time depending o
 nodes = Array.new
 hostgroups = Array.new
 
-if node['nagios']['multi_environment_monitoring']
-  nodes = search(:node, "hostname:[* TO *]")
-else
-  nodes = search(:node, "hostname:[* TO *] AND chef_environment:#{node.chef_environment}")
+nodes_search_term = Chef::Config[:solo] ? "fqdn:imos-*" : "hostname:[* TO *]"
+unless node['nagios']['multi_environment_monitoring']
+  nodes_search_term = "#{nodes_search_term} AND chef_environment:#{node.chef_environment}"
 end
+Chef::Log.info("Node search term #{nodes_search_term}")
+
+nodes = search(:node, nodes_search_term)
 
 if nodes.empty?
   Chef::Log.info("No nodes returned from search, using this node so hosts.cfg has data")
@@ -141,7 +143,7 @@ nodes.each do |n|
   end
 end
 
-nagios_bags = NagiosDataBags.new
+nagios_bags = NagiosDataBags.new(Chef::Config[:solo] ? NagiosDataBags.solo_data_bags : nil)
 services = nagios_bags.get('nagios_services')
 servicegroups = nagios_bags.get('nagios_servicegroups')
 templates = nagios_bags.get('nagios_templates')
@@ -279,6 +281,39 @@ nagios_conf "hosts" do
   variables(:nodes => nodes,
             :unmanaged_hosts => unmanaged_hosts,
             :hostgroups => hostgroups)
+end
+
+nagios_conf "apache" do
+  variables(:service_hosts => service_hosts,
+            :services => services,
+            :search_hostgroups => hostgroup_list,
+            :hostgroups => hostgroups,
+            :nodes => nodes,
+            :unmanaged_hosts => unmanaged_hosts)
+end
+
+nagios_conf "tomcat" do
+  variables(:service_hosts => service_hosts,
+            :services => services,
+            :search_hostgroups => hostgroup_list,
+            :hostgroups => hostgroups,
+            :nodes => nodes)
+end
+
+nagios_conf "mounts" do
+  variables(:service_hosts => service_hosts,
+            :services => services,
+            :search_hostgroups => hostgroup_list,
+            :hostgroups => hostgroups,
+            :nodes => nodes)
+end
+
+nagios_conf "pgsql" do
+  variables(:service_hosts => service_hosts,
+            :services => services,
+            :search_hostgroups => hostgroup_list,
+            :hostgroups => hostgroups,
+            :nodes => nodes)
 end
 
 service "nagios" do
