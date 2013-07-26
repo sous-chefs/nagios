@@ -35,7 +35,6 @@ action :add do
     content file_contents
     notifies :restart, "service[#{node['nagios']['nrpe']['service_name']}]"
   end
-  new_resource.updated_by_last_action(true)
 end
 
 action :remove do
