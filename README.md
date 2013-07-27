@@ -23,7 +23,7 @@ Platform
 
 * Debian 6
 * Ubuntu 10.04, 12.04
-* Red Hat Enterprise Linux (CentOS/Amazon/Scientific/Oracle) 5.8, 6.3
+* Red Hat Enterprise Linux (CentOS/Amazon/Scientific/Oracle) 5.9, 6.4
 
 **Notes**: This cookbook has been tested on the listed platforms. It
   may work on other platforms with or without modification.
