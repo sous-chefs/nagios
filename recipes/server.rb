@@ -21,6 +21,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+include_recipe "nagios::client"
+
 # workaround to allow for a nagios server install from source using the override attribute on debian/ubuntu (COOK-2350)
 if platform_family?('debian') && node['nagios']['server']['install_method'] == "source"
   nagios_service_name = "nagios"

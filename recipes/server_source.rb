@@ -21,7 +21,6 @@
 # Package pre-reqs
 
 include_recipe "build-essential"
-include_recipe "nagios::client"
 include_recipe "php"
 include_recipe "php::module_gd"
 
