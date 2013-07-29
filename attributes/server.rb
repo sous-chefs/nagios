@@ -23,7 +23,7 @@
 #
 
 default['nagios']['pagerduty_key'] = ''
-default['nagios']['pagerduty']['script_url'] = 'http://raw.github.com/PagerDuty/pagerduty-nagios-pl/master/pagerduty_nagios.pl'
+default['nagios']['pagerduty']['script_url'] = 'https://raw.github.com/PagerDuty/pagerduty-nagios-pl/master/pagerduty_nagios.pl'
 
 case node['platform_family']
 when 'debian'
