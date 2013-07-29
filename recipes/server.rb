@@ -21,6 +21,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# install nrpe first so the nagios user is available before we template files using that user
 include_recipe "nagios::client"
 
 # workaround to allow for a nagios server install from source using the override attribute on debian/ubuntu (COOK-2350)
