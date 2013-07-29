@@ -44,12 +44,10 @@ stop)
   ;;
 restart)
   $0 stop
+  sleep 1
   $0 start
   ;;
-status)
-  status <%= node['nagios']['nrpe']['service_name'] %>
-  ;;
-  *)
+*)
   echo "Usage: <%= node['nagios']['nrpe']['service_name'] %> {start|stop|restart|status}"
   exit 1
 esac
