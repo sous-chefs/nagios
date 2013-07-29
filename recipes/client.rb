@@ -69,5 +69,5 @@ end
 
 service node['nagios']['nrpe']['service_name'] do
   action [:start, :enable]
-  supports :restart => true, :reload => true, :status => true
+  supports :restart => true, :status => false
 end
