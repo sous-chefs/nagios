@@ -61,9 +61,9 @@ else
     Chef::Log.info( "Found node #{n['ipaddress']}" )
     mon_host << n['ipaddress']
    end
-   else
-     mon_host << 'localhost'
  end
+ mon_host << 'localhost' if mon_host.empty?
+
 end
 
 include_recipe "nagios::client_#{node['nagios']['client']['install_method']}"
