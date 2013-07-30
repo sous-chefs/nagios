@@ -61,6 +61,8 @@ else
     Chef::Log.info( "Found node #{n['ipaddress']}" )
     mon_host << n['ipaddress']
    end
+   else
+     mon_host << 'localhost'
  end
 end
 
