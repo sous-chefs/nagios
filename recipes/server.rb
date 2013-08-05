@@ -105,9 +105,15 @@ else
   #quick fix for datacloud servers
   datacloud = search(:node, "role:datacloud_component AND placement_availability_zone:#{region}*")
   servers = search(:node, "role:#{node['nagios']['server_role']} AND app_environment:#{node[:monitored_environment]}")
-  both = datacloud.concat(servers)
-    Chef::Log.warn("Nodes are #{nodes}, datacloud is #{datacloud}, servers are #{servers} and both are #{both}")
-  nodes = nodes.concat(both)
+
+  if node['app_environment'] == "production_vpc2"
+     both = datacloud.concat(servers)
+       Chef::Log.warn("Nodes are #{nodes}, datacloud is #{datacloud}, servers are #{servers} and both are #{both}")
+     nodes = nodes.concat(both)
+  else 
+     nodes = nodes.concat(servers)     
+  end 
+
 end
 
 Chef::Log.warn("Nodes are #{nodes}")
