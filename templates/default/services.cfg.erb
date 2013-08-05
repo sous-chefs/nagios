@@ -71,6 +71,13 @@ define service {
 }
 
 define service {
+    service_description Check CDN Max Age
+    hostgroup_name      nagios
+    check_command       check_cdn_maxage
+    use                 default-service,srv-pnp
+}
+
+define service {
     service_description Check Tealium aptrepo
     hostgroup_name      apt_repo
     check_command       check_tcp!8443
@@ -179,6 +186,20 @@ define service {
     service_description Check Site Audit Complete
     hostgroup_name      sitemap_audit
     check_command       check_nrpe!check_sitemap_audit_complete_perl
+    use                 default-service,srv-pnp
+}
+
+define service {
+    service_description Check HTTPD Iron
+    hostgroup_name      uconnect_logger
+    check_command       check_nrpe!check_iron
+    use                 default-service,srv-pnp
+}
+
+define service {
+    service_description Check HTTPD Iron Processor
+    hostgroup_name      uconnect_logger
+    check_command       check_nrpe!check_iron_processor
     use                 default-service,srv-pnp
 }
 

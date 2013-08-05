@@ -35,6 +35,8 @@ command[check_s2s_tagger_perl]=<%= node['nagios']['plugin_dir'] %>/check_procs -
 command[check_sitemap_audit_sitemap_perl]=<%= node['nagios']['plugin_dir'] %>/check_procs -a "./audit-sitemap.pl"
 command[check_sitemap_audit_urls_perl]=<%= node['nagios']['plugin_dir'] %>/check_procs -a "./audit-urls.pl"
 command[check_sitemap_audit_complete_perl]=<%= node['nagios']['plugin_dir'] %>/check_procs -a "./audit-complete.pl"
+command[check_iron]=<%= node['nagios']['plugin_dir'] %>/check_procs -a "./s2s_httpd_iron.pl"
+command[check_iron_processor]=<%= node['nagios']['plugin_dir'] %>/check_procs -a "./s2s_httpd_iron_processor.pl"
 
 command[check_ntp]=<%= node['nagios']['plugin_dir'] %>/check_ntp_time -H pool.ntp.org -w 1.5 -c 3
 
