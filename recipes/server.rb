@@ -21,6 +21,20 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+include_recipe "perl"
+
+%w{make libmodule-install-perl libyaml-perl libyaml-syck-perl libwww-perl}.each do |pkg|
+  package pkg do
+    action :install
+  end
+end
+
+[
+  "LWP::UserAgent::DNS::Hosts"
+].each { |package|
+   cpan_module package
+}
+
 web_srv = node['nagios']['server']['web_server'].to_sym
 
 case web_srv
@@ -87,9 +101,19 @@ if node[:monitored_region].nil?
 else
   nodes = search(:node, "hostname:[* TO *] AND app_environment:#{node[:app_environment]} AND placement_availability_zone:#{region}*")
   #nodes = search(:node, "hostname:[* TO *] AND app_environment:#{node[:monitored_environment]} AND placement_availability_zone:#{node[:monitored_region]}*")
-
+  
+  #quick fix for datacloud servers
+  datacloud = search(:node, "role:datacloud_component AND placement_availability_zone:#{region}*")
   servers = search(:node, "role:#{node['nagios']['server_role']} AND app_environment:#{node[:monitored_environment]}")
-  nodes = nodes.concat(servers)
+
+  if node['app_environment'] == "production_vpc2"
+     both = datacloud.concat(servers)
+       Chef::Log.warn("Nodes are #{nodes}, datacloud is #{datacloud}, servers are #{servers} and both are #{both}")
+     nodes = nodes.concat(both)
+  else 
+     nodes = nodes.concat(servers)     
+  end 
+
 end
 
 Chef::Log.warn("Nodes are #{nodes}")
