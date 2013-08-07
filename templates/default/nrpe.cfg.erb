@@ -37,6 +37,7 @@ command[check_sitemap_audit_urls_perl]=<%= node['nagios']['plugin_dir'] %>/check
 command[check_sitemap_audit_complete_perl]=<%= node['nagios']['plugin_dir'] %>/check_procs -a "./audit-complete.pl"
 command[check_iron]=<%= node['nagios']['plugin_dir'] %>/check_procs -a "./s2s_httpd_iron.pl"
 command[check_iron_processor]=<%= node['nagios']['plugin_dir'] %>/check_procs -a "./s2s_httpd_iron_processor.pl"
+command[check_chef_status]=<%= node['nagios']['plugin_dir'] %>/check_last_logs.pl /usr/bin/chef-client 270 /var/log/syslog
 
 command[check_ntp]=<%= node['nagios']['plugin_dir'] %>/check_ntp_time -H pool.ntp.org -w 1.5 -c 3
 
