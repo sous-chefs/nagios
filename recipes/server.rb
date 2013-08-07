@@ -23,7 +23,7 @@
 
 include_recipe "perl"
 
-%w{make libmodule-install-perl libyaml-perl libyaml-syck-perl libwww-perl libdatetime-format-builder-perl libfile-readbackwards-perl}.each do |pkg|
+%w{make libmodule-install-perl libyaml-perl libyaml-syck-perl libwww-perl}.each do |pkg|
   package pkg do
     action :install
   end

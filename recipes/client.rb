@@ -22,6 +22,12 @@
 # limitations under the License.
 #
 
+%w{libdatetime-format-builder-perl libfile-readbackwards-perl}.each do |pkg|
+  package pkg do
+    action :install
+  end
+end
+
 mon_host = []
 
 if node.run_list.roles.include?(node['nagios']['server_role'])
