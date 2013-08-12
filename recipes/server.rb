@@ -189,8 +189,8 @@ members = Array.new
 sysadmins.each do |s|
   members << s['id']
 end
-node['nagios']['additional_contacts'].each do |s|
-  members << s
+node['nagios']['additional_contacts'].each do |s,enabled|
+  members << s if enabled
 end
 
 public_domain = node['public_domain'] || node['domain']
