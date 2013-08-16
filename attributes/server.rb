@@ -24,7 +24,7 @@
 
 default['nagios']['pagerduty_key'] = ''
 default['nagios']['pagerduty']['script_url'] = 'https://raw.github.com/PagerDuty/pagerduty-nagios-pl/master/pagerduty_nagios.pl'
-if node['nagios']['pagerduty_key']
+unless node['nagios']['pagerduty_key'].empty?
   default['nagios']['additional_contacts'] = { 'pagerduty' => true }
 end
 
