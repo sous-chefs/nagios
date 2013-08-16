@@ -77,12 +77,12 @@ define service {
     use                 default-service,srv-pnp
 }
 
-define service {
-    service_description Check Chef Status
-    hostgroup_name      all
-    check_command       check_nrpe!check_chef_status
-    use                 default-service,srv-pnp
-}
+#define service {
+#    service_description Check Chef Status
+#    hostgroup_name      all
+#    check_command       check_nrpe!check_chef_status
+#    use                 default-service,srv-pnp
+#}
 
 
 define service {

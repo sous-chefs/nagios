@@ -34,8 +34,6 @@ if node.run_list.roles.include?(node['nagios']['server_role'])
   mon_host << node['ipaddress']
 
   search = "role:openvpn* AND app_environment:#{node['app_environment']} AND placement_availability_zone:#{node['placement_availability_zone']}*"
-  #search = "role:nagios AND app_environment:#{node['monitored_environment']} AND placement_availability_zone:#{node['placement_availability_zone']}*"
-    Chef::Log.warn( "Searching for OpenVPN Servers -- Search is: #{search}" );
 
   search(:node, search) do |vpn_node|
      Chef::Log.info( "Found node #{vpn_node['ipaddress']}" )
@@ -50,13 +48,13 @@ else
   # Need to add availability zone to the search paramater.
   region = node[:ec2][:placement_availability_zone].match(/^(.*-\d+)[^-]+$/)[1]
 
-  #search = "role:openvpn* AND app_environment:#{node['app_environment']} AND placement_availability_zone:#{node['placement_availability_zone']}*"
-  search = "role:nagios AND app_environment:#{node['app_environment']} AND placement_availability_zone:#{node['placement_availability_zone']}*"
-    Chef::Log.warn( "Searching for OpenVPN Servers -- Search is: #{search}" );
+  #search = "role:nagios AND app_environment:#{node['app_environment']} AND placement_availability_zone:#{node['placement_availability_zone']}*"
+  search = "role:nagios AND placement_availability_zone:#{node['placement_availability_zone']}*"
+    Chef::Log.warn( "Searching for Nagios servers -- Search is: #{search}" );
     
- search(:node, search) do |vpn_node|
-     Chef::Log.info( "Found node #{vpn_node['ipaddress']}" )
-     mon_host << vpn_node['ipaddress']
+ search(:node, search) do |nagios_node|
+     Chef::Log.info( "Found Nagios node #{nagios_node['ipaddress']}" )
+     mon_host << nagios_node['ipaddress']
  end
 
  if mon_host.empty?
@@ -68,7 +66,7 @@ else
     mon_host << n['ipaddress']
    end
  end
- mon_host << 'localhost' if mon_host.empty?
+ mon_host << node['ipaddress'] if mon_host.empty?
 
 end
 
