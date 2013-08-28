@@ -14,10 +14,9 @@
 # limitations under the License.
 #
 
-if node["nagios"]["server"]["stop_apache"]
-  service 'apache2' do
-    action :stop
-  end
+service 'apache2' do
+  action :stop
+  only_if { node["nagios"]["server"]["stop_apache"] }
 end
 
 # This doesn't use value_for_platform_family so that it can specify version ranges - COOK-2891

@@ -128,8 +128,8 @@ if node['nagios']['client']['install_method'] == "package"
 
 end
 
-if web_srv == :apache
-  apache_module "cgi" do
-    enable :true
-  end
+apache_module "cgi" do
+  enable :true
+  only_if { web_srv == :apache }
 end
+
