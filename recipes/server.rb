@@ -70,6 +70,8 @@ when "openid"
     Chef::Log.fatal("Set node['nagios']['server_auth_method'] attribute in your role: #{node['nagios']['server_role']}")
     raise
   end
+when "whitelist"
+  # Nothing to do
 when "cas"
   if web_srv == :apache
     include_recipe "apache2::mod_auth_cas"

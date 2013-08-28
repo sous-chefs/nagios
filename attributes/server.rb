@@ -73,6 +73,8 @@ default['nagios']['server_auth_method']      = "openid"
 default['nagios']['users_databag']           = "users"
 default['nagios']['users_databag_group']     = "sysadmin"
 default['nagios']['host_name_attribute']     = "hostname"
+default['nagios']['whitelist_ips']           = []
+default['nagios']['default_user_name']       = nil
 
 # for cas authentication
 default['nagios']['cas_login_url'] = "https://example.com/cas/login"

@@ -6,6 +6,11 @@ admin_email=<%= node['nagios']['sysadmin_email'] %>
 admin_pager=<%= node['nagios']['sysadmin_sms_email'] %>
 
 cfg_dir=<%= node['nagios']['config_dir'] %>
+<% if node['platform_family'] == 'debian' %>
+# Debian also defaults to using the check commands defined by the debian
+# nagios-plugins package
+cfg_dir=/etc/nagios-plugins/config
+<% end %>
 
 object_cache_file=<%= node['nagios']['cache_dir'] %>/objects.cache
 precached_object_file=<%= node['nagios']['cache_dir'] %>/objects.precache

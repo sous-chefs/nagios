@@ -90,6 +90,8 @@ The following attributes are used for the Nagios server
 * `node['nagios']['http_port']` - port that the Apache/Nginx virtual site should listen on, determined whether ssl is enabled (443 if so, otherwise 80). Note:  You will also need to configure the listening port for either NGINX or Apache within those cookbooks.
 * `node['nagios']['server_name']` - common name to use in a server cert, default "nagios"
 * `node['nagios']['ssl_req']` - info to use in a cert, default `/C=US/ST=Several/L=Locality/O=Example/OU=Operations/CN=#{node['nagios']['server_name']}/emailAddress=ops@#{node['nagios']['server_name']}`
+* `node['nagios']['whitelist_ips']` - the array of ip addresses that will be whitelisted if `node['nagios']['server_auth_method'] == 'whitelist'`
+* `node['nagios']['default_user_name']` - This allows people within a secure domain (i.e., behind a firewall) to access the CGIs without necessarily having to authenticate to the web server 
 
 *  `node['nagios']['server']['url']` - url to download the server source from if installing from source
 *  `node['nagios']['server']['version']` - version of the server source to download
