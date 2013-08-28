@@ -51,6 +51,7 @@ default['nagios']['cache_dir']  = '/var/cache/nagios3'
 default['nagios']['state_dir']  = '/var/lib/nagios3'
 default['nagios']['run_dir']    = '/var/run/nagios3'
 default['nagios']['docroot']    = '/usr/share/nagios3/htdocs'
+default['nagios']['url_path']   = 'nagios3'
 default['nagios']['enable_ssl'] = false
 default['nagios']['http_port']  = node['nagios']['enable_ssl'] ? '443' : '80'
 default['nagios']['server_name'] = node.has_key?(:domain) ? "nagios.#{domain}" : 'nagios'

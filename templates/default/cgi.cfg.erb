@@ -22,7 +22,7 @@ physical_html_path=<%= node['nagios']['docroot'] %>
 # http://www.myhost.com/nagios, this value should be '/nagios'
 # (without the quotes).
 
-url_html_path=/nagios3
+url_html_path=/<%= node['nagios']['url_path'] %>
 
 # CONTEXT-SENSITIVE HELP
 # This option determines whether or not a context-sensitive
