@@ -57,25 +57,34 @@ define service {
 }
 
 define service {
-    service_description Nagios Client
-    hostgroup_name      all
-    check_command       check_tcp!5666
-    use                 default-service,srv-pnp
-}
-
-define service {
     service_description Check Jenkins 8080
     hostgroup_name      jenkins
     check_command       check_tcp!8080
     use                 default-service,srv-pnp
 }
 
+<% unless @main_nagios.nil? -%>
+#define service {
+#    service_description Check MongoDB Snapshots
+#    <%= @designation %>	<%= @main_nagios %>
+#    check_command       check_snapshot_set
+#    use                 mongo-snapshot-service,srv-pnp
+#}
+
+define service {
+    service_description Check MongoDB Backup
+    <%= @designation %>	<%= @main_nagios %>
+    check_command       check_mongodb_backup
+    use                 mongo-backup-service,srv-pnp
+}
+
 define service {
     service_description Check CDN Max Age
-    hostgroup_name      nagios
+    <%= @designation %>	<%= @main_nagios %>
     check_command       check_cdn_maxage
     use                 default-service,srv-pnp
 }
+<% end %>
 
 #define service {
 #    service_description Check Chef Status

@@ -39,7 +39,7 @@ command[check_iron]=<%= node['nagios']['plugin_dir'] %>/check_procs -a "./s2s_ht
 command[check_iron_processor]=<%= node['nagios']['plugin_dir'] %>/check_procs -a "./s2s_httpd_iron_processor.pl"
 command[check_chef_status]=<%= node['nagios']['plugin_dir'] %>/check_last_logs.pl /usr/bin/chef-client 270 /var/log/syslog
 
-command[check_ntp]=<%= node['nagios']['plugin_dir'] %>/check_ntp_time -H pool.ntp.org -w 1.5 -c 3
+command[check_ntp]=<%= node['nagios']['plugin_dir'] %>/check_ntp_time -H <%= @ntp_server %> -w 1.5 -c 3
 
 #command[check_unicorn]=<%= node['nagios']['plugin_dir'] %>/check_procs -c 4:8 -C unicorn_rails
 #

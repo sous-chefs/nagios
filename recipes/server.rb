@@ -22,6 +22,7 @@
 # limitations under the License.
 
 include_recipe "perl"
+include_recipe "zookeeper_tealium::client_python"
 
 %w{make libmodule-install-perl libyaml-perl libyaml-syck-perl libwww-perl}.each do |pkg|
   package pkg do
@@ -247,11 +248,25 @@ nagios_conf "commands" do
   variables :services => services
 end
 
-nagios_conf "services" do
-  variables(
-    :service_hosts => service_hosts,
-    :services => services
-  )
+if node[:ec2][:local_ipv4] == "10.1.2.7"
+main_nagios = node[:ec2][:local_ipv4]
+designation = "host_name"
+
+  nagios_conf "services" do
+    variables(
+      :service_hosts => service_hosts,
+      :services => services,
+      :main_nagios => main_nagios,
+      :designation => designation
+    )
+  end
+else
+  nagios_conf "services" do
+    variables(
+      :service_hosts => service_hosts,
+      :services => services
+    )
+  end
 end
 
 nagios_conf "contacts" do

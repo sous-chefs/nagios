@@ -86,6 +86,63 @@ directory "#{node['nagios']['nrpe']['conf_dir']}/nrpe.d" do
   mode 00755
 end
 
+if node.run_list.roles.include?(node['nagios']['server_role'])
+    Chef::Log.warn("Node is a Nagios server")
+   
+    AZ = node[:ec2][:placement_availability_zone]
+
+    Chef::Log.warn("Availability zone is #{AZ}")
+  
+    region = node[:ec2][:placement_availability_zone].match(/^(\w{2}).+$/)[1]
+
+    Chef::Log.warn("Country code is #{region}")
+
+      case region
+      when "us"
+        ntp_server = 'us.pool.ntp.org'
+      when "eu"
+        ntp_server = 'europe.pool.ntp.org'
+      when "ap"
+        ntp_server = 'asia.pool.ntp.org'
+      when "sa"
+        ntp_server = 'south-america.pool.ntp.org'
+      else
+        Chef::Log.warn("Cannot get country code for server")
+      end
+else 
+    region = node[:ec2][:placement_availability_zone].match(/^(.*-\d+)[^-]+$/)[1]
+    search = "role:#{node['nagios']['server_role']} AND placement_availability_zone:#{region}* AND app_environment:#{node[:app_environment]}"
+
+    search(:node, search) do |nagios_node|
+      Chef::Log.info( "Found Nagios server for NTP at #{nagios_node['ipaddress']}" )
+      ntp_server =  nagios_node['ipaddress']
+    end   
+
+    if ntp_server.nil? || ntp_server.empty?
+    #get country code for aws instances
+    AZ = node[:ec2][:placement_availability_zone]
+
+    Chef::Log.warn("Availability zone is #{AZ}")
+
+    region = node[:ec2][:placement_availability_zone].match(/^(\w{2}).+$/)[1]
+
+    Chef::Log.warn("Country code is #{region}")
+
+      case region
+      when "us"
+        ntp_server = 'us.pool.ntp.org'
+      when "eu"
+        ntp_server = 'europe.pool.ntp.org'
+      when "ap"
+        ntp_server = 'asia.pool.ntp.org'
+      when "sa"
+        ntp_server = 'south-america.pool.ntp.org'
+      else
+        Chef::Log.warn("Cannot get country code for server")
+      end
+   end
+end
+
 template "#{node['nagios']['nrpe']['conf_dir']}/nrpe.cfg" do
   source "nrpe.cfg.erb"
   owner "root"
@@ -93,7 +150,8 @@ template "#{node['nagios']['nrpe']['conf_dir']}/nrpe.cfg" do
   mode 00644
   variables(
     :mon_host => mon_host,
-    :nrpe_directory => "#{node['nagios']['nrpe']['conf_dir']}/nrpe.d"
+    :nrpe_directory => "#{node['nagios']['nrpe']['conf_dir']}/nrpe.d",
+    :ntp_server => ntp_server
   )
   notifies :restart, "service[nagios-nrpe-server]"
 end
