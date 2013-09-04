@@ -81,17 +81,11 @@ define service {
 }
 
 define service {
-  name                            mongo-snapshot-service
+  name                            mongo-service
   use                             default-service
-  is_volatile                     1
   max_check_attempts              1
-  check_interval                  720
-}
-
-define service {
-  name                            mongo-backup-service
-  use                             mongo-snapshot-service
-  check_interval                  120
+  check_interval                  240
+  notification_interval           0
 }
 
 define host {
