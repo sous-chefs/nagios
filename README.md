@@ -306,6 +306,22 @@ checks show up under the ops service group, you could define it like this:
     "servicegroups": "ops"
     }
 
+Service Dependencies
+--------------------
+
+Create a nagios\_servicedependencies data bag that will contain definitions for service dependencies. Each service dependency will be named based on the id of the data bag. Each service dependency requires either a dependent host name and/or hostgroup name, dependent service description, host name and/or hostgroup name, and service description. 
+
+    {
+    "id": "Service X depends on Service Y",
+    "dependent_host_name": "ServerX",
+    "dependent_service_description": "Service X",
+    "host_name": "ServerY",
+    "service_description": "Service Y",
+    "notification_failure_criteria": "u, c"
+    }
+
+Additional directives can be defined as described in the [Nagios documentation](http://nagios.sourceforge.net/docs/3_0/objectdefinitions.html#servicedependency).
+
 Templates
 ---------
 
