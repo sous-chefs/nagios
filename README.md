@@ -115,6 +115,7 @@ The following attributes are used for the Nagios server
 * `node['nagios']['users_databag']` - the databag containing users to search for. defaults to users
 * `node['nagios']['users_databag_group']` - users databag group considered Nagios admins.  defaults to sysadmin
 * `node['nagios']['host_name_attribute']` - node attribute to use for naming the host. Must be unique across monitored nodes. Defaults to hostname
+* `node['nagios']['large_installation_tweaks']` - Attribute to enable [large installation tweaks](http://nagios.sourceforge.net/docs/3_0/largeinstalltweaks.html). Defaults to 0.
 * `node['nagios']['templates']`
 * `node['nagios']['interval_length']` - minimum interval.
 
