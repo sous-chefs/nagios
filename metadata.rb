@@ -11,6 +11,7 @@ recipe "nagios::server", "Installs and configures a nagios server"
 recipe "nagios::pagerduty", "Integrates contacts w/ PagerDuty API"
 
 depends "zookeeper_tealium"
+depends "tealium_bongo"
 depends "python"
 
 %w{ apache2 build-essential php nginx nginx_simplecgi }.each do |cb|
