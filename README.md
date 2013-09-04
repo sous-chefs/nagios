@@ -84,6 +84,7 @@ The following attributes are used for the Nagios server
 * `node['nagios']['state_dir']` - Nagios runtime state information, default "/var/lib/nagios3"
 * `node['nagios']['run_dir']` - where pidfiles are stored, default "/var/run/nagios3"
 * `node['nagios']['docroot']` - Nagios webui docroot, default "/usr/share/nagios3/htdocs"
+* `node['nagios']['timezone']` - Nagios timezone, defaults to UTC
 * `node['nagios']['enable_ssl]` - boolean for whether Nagios web server should be https, default false
 * `node['nagios']['ssl_cert_file']` = Location of SSL Certificate File. default "/etc/nagios3/certificates/nagios-server.pem"
 * `node['nagios']['ssl_cert_key']`  = Location of SSL Certificate Key. default "/etc/nagios3/certificates/nagios-server.pem"
