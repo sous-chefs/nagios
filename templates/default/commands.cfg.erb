@@ -159,12 +159,12 @@ define command {
 
 define command {
   command_name    check_mongodb_backup
-  command_line    $USER1$/check_mongodb_backup
+  command_line    $USER1$/check_mongodb_backup.py --cluster $ARG1$
 }
 
 define command {
-  command_name    check_snapshot_check
-  command_line    $USER1$/check_snapshot_set -n 4 -d 'production/mongodb_shard*' -r us-west-1
+  command_name    check_mongodb_snapshots
+  command_line    $USER1$/check_mongodb_backup.py --snaps --cluster $ARG1$
 }
 
 define command {
