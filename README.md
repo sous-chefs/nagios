@@ -312,7 +312,7 @@ Create a nagios\_servicedependencies data bag that will contain definitions for 
     {
     "id": "Service X depends on Service Y",
     "dependent_host_name": "ServerX",
-    "dependent_servcie_description": "Service X",
+    "dependent_service_description": "Service X",
     "host_name": "ServerY",
     "service_description": "Service Y",
     "notification_failure_criteria": "u, c"
