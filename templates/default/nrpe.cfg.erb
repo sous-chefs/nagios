@@ -22,7 +22,7 @@ command[check_sphinx]=<%= node['nagios']['plugin_dir'] %>/check_procs -c 1:1 -C 
 command[check_mysql_server]=<%= node['nagios']['plugin_dir'] %>/check_mysql -H localhost -u debian-sys-maint -p <%= node['mysql']['server_debian_password'] %>
 <% end -%>
 
-
+#TEST
 
 command[check_logfiles]=/usr/lib/nagios/plugins/check-log-new.pl -l <%= node['nagios']['logfiles']['log_file'] %> -r 0 -s <%= node['nagios']['checks']['pattern'] %>
 
