@@ -1,0 +1,107 @@
+#!/usr/bin/env python
+
+desc = 'Checks the status of the most recent MongoDB backup.'
+
+import kazoo
+from kazoo.client import KazooClient
+from kazoo.client import KazooState
+import kazoo.exceptions
+import yaml
+import argparse
+import sys
+import time
+from datetime import datetime
+from datetime import timedelta
+
+NAME=0
+CODE=1
+MSG=2
+
+def state_listener(state):
+   if state == KazooState.LOST:
+      error("zookeeper connection state was lost")
+   elif state == KazooState.SUSPENDED:
+      error("zookeeper connection state was suspended")
+   elif state == KazooState.CONNECTED:
+      pass
+
+def create_date_path(days_ago):
+   when = datetime.utcnow()
+   if days_ago:
+      delta = timedelta(days=days_ago)
+      when = when - delta
+   return when.strftime("/%Y/%m/%d")
+
+def look4abort(zk, days_ago=None):
+
+   day_node = args.prefix.rstrip('/') + '/' + args.env.rstrip('/') + create_date_path(days_ago) 
+
+   if zk.exists(day_node):
+      hours = zk.retry(zk.get_children, day_node)
+      if len(hours):
+	 hours.sort()
+	 abort_node = day_node + '/' + str(hours[-1]) + '/ABORT'
+	 if zk.exists(abort_node):
+	    excuse = zk.retry(zk.get, abort_node)
+	    return ['CRITICAL', 2, "found backup abort status: %s" % excuse[0]]
+	 else:
+            return ['OK', 0, 'no abort during most recent backup']
+      else:
+         # Apparently no backups yet today.  Let's check yesterday.
+
+         # Let's not explore infinity though...
+         if days_ago: return ['WARNING', 1, 'found no backup info for past two days']
+
+         return look4abort(zk, 1)
+
+   else:
+
+      # Apparently no backups yet today.  Let's check yesterday.
+
+      # Let's not explore infinity though...
+      if days_ago: return ['WARNING', 1, 'found no backup info for past two days']
+
+      return look4abort(zk, 1)
+
+
+if __name__ == '__main__':
+
+   gargle = argparse.ArgumentParser(prog = "check_mongodb_backup", description=desc,
+	       usage='%(prog)s [options] <value>',
+	       formatter_class = argparse.RawDescriptionHelpFormatter)
+
+   gargle.add_argument('--prefix', dest="prefix", metavar="<path_prefix>", default='/backup/mongodb_cluster/',
+                       help='ZooKeeper path prefix (default: /backup/mongodb_cluster/)')
+
+   gargle.add_argument('--env', dest="env", metavar="<environment>", default='production',
+                       help='MongoDB backup environment (default: production)')
+
+   gargle.add_argument('--config', dest='yaml', metavar="<config_file>",
+		      help='ZooKeeper server list file (default: /etc/zookeeper/server_list.yml)',
+                      default='/etc/zookeeper/server_list.yml')
+
+   args = gargle.parse_args()
+
+   try:
+      y = yaml.safe_load(open(args.yaml))
+      servers = ','.join("%s:%s" % (s['host'],s['port']) for s in y['zookeepers'])
+
+
+      zk = KazooClient(hosts=servers)
+      zk.start()
+      zk.add_listener(state_listener)
+
+      status = look4abort(zk)
+
+      zk.remove_listener(state_listener)
+      zk.stop()
+
+      print "%s - %s" % (status[NAME], status[MSG])
+      raise SystemExit(status[CODE])
+
+   except SystemExit:
+      raise
+   except Exception as e:
+      print "UNKNOWN - Error: %s" % e
+      raise SystemExit(3)
+

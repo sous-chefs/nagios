@@ -80,6 +80,14 @@ define service {
   register                        0
 }
 
+define service {
+  name                            mongo-service
+  use                             default-service
+  max_check_attempts              1
+  check_interval                  240
+  notification_interval           0
+}
+
 define host {
    name       host-pnp
    action_url /pnp4nagios/index.php/graph?host=$HOSTNAME$&srv=_HOST_

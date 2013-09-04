@@ -1,0 +1,123 @@
+#!/bin/bash
+
+export AWS_ACCESS_KEY=AKIAJOZW5BF3X2G5VHSA
+export AWS_SECRET_KEY=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
+
+OK=0
+WARN=1
+CRIT=2
+OOPS=3
+
+function usage {
+
+   me=`basename $0`
+   cat <<EOF
+
+Usage:
+
+$me -n <int> -d <str> [-s <int> -f <filter> -h]
+
+Checks for the existence of a given number of complete EBS snapshots
+matching the given description string and any optional tag filters.
+
+Returns OK if the exact number of snapshots is found.
+
+Returns WARN if an unexpected number of snapshots is found.
+
+Returns CRIT if no snapshots are found.
+
+Options:
+
+-n <int>	Expects to find <int> number of completed snapshots
+
+-d <str>	Looks for snapshots with a description attribute matching
+		matching <str>.  Wildcards like '*' may be used.
+
+-s <int>	Looks for snapshots that were started <int> days ago.
+		Defaults to 1.
+
+-f <filter>	Looks for snapshots matching the given filter spec.
+		Example: -f 'tag:Name=MySnap'
+
+-r <region>	EC2 region (defaults to us-west-1).
+
+-h		Display this help message.
+
+EOF
+}
+
+start=1
+region='us-west-1'
+
+while getopts "hn:d:s:f:r:" opt; do
+  case $opt in
+    n)
+      target=$OPTARG
+      ;;
+    d)
+      desc=$OPTARG
+      ;;
+    s)
+      start=$OPTARG
+      ;;
+    f)
+      filter=$OPTARG
+      ;;
+    r)
+      region=$OPTARG
+      ;;
+    h)
+      usage
+      exit 0
+      ;;
+    \?)
+      echo "Invalid option: -$OPTARG" >&2
+      exit $OOPS
+      ;;
+    :)
+      echo "Option -$OPTARG requires an argument." >&2
+      exit $OOPS
+      ;;
+  esac
+done
+
+if [ -z "$target" -o -z "$desc" ]; then
+   usage
+   exit $OOPS
+fi
+
+if [ -n "$filter" ]; then
+   filtopt="--filter $filter"
+fi
+
+ondate=`date -v -${start}d +'%Y-%m-%d'`
+start_time=$ondate
+start_time+='*'
+
+cmd="ec2-describe-snapshots --region $region \
+                            --filter 'description=$desc' \
+                            --filter 'status=completed' \
+                            --filter 'start-time=$start_time' \
+                            $filtopt \
+       | grep '^SNAPSHOT' | wc -l | sed -e 's/ *//'"
+
+count=`eval $cmd`
+
+if [ $? -ne 0 ]; then
+   echo "UNKNOWN - error running ec2-describe-snapshots"
+   exit $OOPS
+fi
+
+if [ "$count" == "0" ]; then
+   echo "CRITICAL - found 0 completed snapshots for $ondate matching '$desc', expected $target"
+   exit $CRIT
+fi
+
+if [ "$count" != "$target" ]; then
+   echo "WARNING - found $count completed snapshots for $ondate matching '$desc', expected $target"
+   exit $WARN
+fi
+
+echo "OK - found $target completed snapshots for $ondate matching '$desc'"
+exit $OK
+

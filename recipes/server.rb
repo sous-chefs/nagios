@@ -22,8 +22,9 @@
 # limitations under the License.
 
 include_recipe "perl"
+include_recipe "zookeeper_tealium::client_python"
 
-%w{make libmodule-install-perl libyaml-perl libyaml-syck-perl libwww-perl libdatetime-format-builder-perl libfile-readbackwards-perl}.each do |pkg|
+%w{make libmodule-install-perl libyaml-perl libyaml-syck-perl libwww-perl}.each do |pkg|
   package pkg do
     action :install
   end
@@ -102,14 +103,16 @@ else
   nodes = search(:node, "hostname:[* TO *] AND app_environment:#{node[:app_environment]} AND placement_availability_zone:#{region}*")
   #nodes = search(:node, "hostname:[* TO *] AND app_environment:#{node[:monitored_environment]} AND placement_availability_zone:#{node[:monitored_region]}*")
   
-  #quick fix for datacloud servers
+  #quick fix for datacloud and sitemap
   datacloud = search(:node, "role:datacloud_component AND placement_availability_zone:#{region}*")
+  sitemap = search(:node, "role:sitemap_audit AND placement_availability_zone:#{region}*")
   servers = search(:node, "role:#{node['nagios']['server_role']} AND app_environment:#{node[:monitored_environment]}")
 
   if node['app_environment'] == "production_vpc2"
      both = datacloud.concat(servers)
+     three = both.concat(sitemap)
        Chef::Log.warn("Nodes are #{nodes}, datacloud is #{datacloud}, servers are #{servers} and both are #{both}")
-     nodes = nodes.concat(both)
+     nodes = nodes.concat(three)
   else 
      nodes = nodes.concat(servers)     
   end 
@@ -245,11 +248,25 @@ nagios_conf "commands" do
   variables :services => services
 end
 
-nagios_conf "services" do
-  variables(
-    :service_hosts => service_hosts,
-    :services => services
-  )
+if node[:ec2][:local_ipv4] == "10.1.2.7"
+main_nagios = node[:ec2][:local_ipv4]
+designation = "host_name"
+
+  nagios_conf "services" do
+    variables(
+      :service_hosts => service_hosts,
+      :services => services,
+      :main_nagios => main_nagios,
+      :designation => designation
+    )
+  end
+else
+  nagios_conf "services" do
+    variables(
+      :service_hosts => service_hosts,
+      :services => services
+    )
+  end
 end
 
 nagios_conf "contacts" do

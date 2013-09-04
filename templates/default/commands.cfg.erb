@@ -30,6 +30,11 @@ define command {
 }
 
 define command {
+  command_name    check_jmx
+  command_line    $USER1$/check_nrpe -H $HOSTADDRESS$ -c check_jmx -t 20
+}
+
+define command {
   command_name    check_collectd_client
   command_line    $USER1$/check_nrpe -H $HOSTADDRESS$ -c check_collectd_client -t 20
 }
@@ -153,8 +158,18 @@ define command {
 }
 
 define command {
+  command_name    check_mongodb_backup
+  command_line    $USER1$/check_mongodb_backup
+}
+
+define command {
+  command_name    check_snapshot_check
+  command_line    $USER1$/check_snapshot_set -n 4 -d 'production/mongodb_shard*' -r us-west-1
+}
+
+define command {
   command_name    check_rabbitmq_auth
-  command_line    $USER1$/check_http -I $HOSTADDRESS$ $ARG1$ -a server2server_app:"a;lkhy2what3lkjf" -p 15672
+  command_line    $USER1$/check_http -I $HOSTADDRESS$ $ARG1$ -a admin:"toor4cars9window14five." -p 15672
 }
 
 define command {
