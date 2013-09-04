@@ -130,7 +130,7 @@ high_host_flap_threshold=20.0
 
 date_format=iso8601
 
-use_timezone=UTC
+use_timezone=<%= node['nagios']['timezone'] %>
 p1_file=<%= node['nagios']['home'] %>/p1.pl
 enable_embedded_perl=1
 use_embedded_perl_implicitly=1
