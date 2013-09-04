@@ -8,10 +8,8 @@ checks that the snapshots for the most recent backup were completed.
 import kazoo
 from kazoo.client import KazooClient
 from kazoo.client import KazooState
-import kazoo.exceptions
 import yaml
 import argparse
-import sys
 import time
 from datetime import datetime
 from datetime import timedelta
@@ -194,8 +192,8 @@ if __name__ == '__main__':
    gargle.add_argument('--prefix', dest="prefix", metavar="<path_prefix>", default='/backup/mongodb_cluster/',
                        help='ZooKeeper path prefix (default: /backup/mongodb_cluster/)')
 
-   gargle.add_argument('--env', dest="env", metavar="<environment>", default='production',
-                       help='MongoDB backup environment (default: production)')
+   gargle.add_argument('--cluster', dest="env", metavar="<cluster_id>", default='production',
+                       help='MongoDB cluster name (default: production)')
 
    gargle.add_argument('--config', dest='yaml', metavar="<config_file>",
 		      help='ZooKeeper server list file (default: /etc/zookeeper/server_list.yml)',
