@@ -154,6 +154,7 @@ unmanaged_hosts = nagios_bags.get('nagios_unmanagedhosts')
 serviceescalations = nagios_bags.get('nagios_serviceescalations')
 contacts = nagios_bags.get('nagios_contacts')
 contactgroups = nagios_bags.get('nagios_contactgroups')
+servicedependencies = nagios_bags.get('nagios_servicedependencies')
 
 # Add unmanaged host hostgroups to the hostgroups array if they don't already exist
 unmanaged_hosts.each do |host|
@@ -286,6 +287,10 @@ nagios_conf "hosts" do
   variables(:nodes => nodes,
             :unmanaged_hosts => unmanaged_hosts,
             :hostgroups => hostgroups)
+end
+
+nagios_conf "servicedependencies" do
+  variables(:servicedependencies => servicedependencies)
 end
 
 service "nagios" do
