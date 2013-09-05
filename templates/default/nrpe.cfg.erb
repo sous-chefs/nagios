@@ -83,7 +83,7 @@ command[check_iron]=<%= node['nagios']['plugin_dir'] %>/check_procs -a "./s2s_ht
 command[check_iron_processor]=<%= node['nagios']['plugin_dir'] %>/check_procs -a "./s2s_httpd_iron_processor.pl"
 <% end %>
 
-<% if node.recipes.include?("datacloud_component") %>
+<% if node.roles.include?("datacloud_component") %>
 ###### JMX Generic ######
 command[check_jmx_heap]=<%= node['nagios']['plugin_dir'] %>/check_jmx -U service:jmx:rmi:///jndi/rmi://localhost:9001/jmxrmi -O java.lang:type=Memory -A HeapMemoryUsage -K used -I HeapMemoryUsage -J used -vvvv -w 750000000 -c 1000000000
 
