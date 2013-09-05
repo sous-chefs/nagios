@@ -151,7 +151,7 @@ def look4snaps(zk, days_ago=None):
                snap_text = ''
                for snap in snaps:
 
-                  if snap.status != 'completed': err = 1
+                  if snap.status == 'error': err = 1
 
                   snap_text = snap_text + ", %s (%s)" % (str(snap), snap.status)
 
