@@ -3,7 +3,7 @@ maintainer_email  "cookbooks@opscode.com"
 license           "Apache 2.0"
 description       "Installs and configures nagios"
 long_description  IO.read(File.join(File.dirname(__FILE__), 'README.md'))
-version           "1.10.16"
+version           "1.10.17"
 
 recipe "nagios", "Includes the client recipe."
 recipe "nagios::client", "Installs and configures a nagios client with nrpe"
@@ -13,6 +13,7 @@ recipe "nagios::pagerduty", "Integrates contacts w/ PagerDuty API"
 depends "zookeeper_tealium"
 depends "tealium_bongo"
 depends "python"
+depends "pnp4nagios_tealium"
 
 %w{ apache2 build-essential php nginx nginx_simplecgi }.each do |cb|
   depends cb

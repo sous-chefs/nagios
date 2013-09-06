@@ -24,6 +24,7 @@
 include_recipe "perl"
 include_recipe "zookeeper_tealium::client_python"
 include_recipe "tealium_bongo::packages"
+include_recipe "pnp4nagios_tealium"
 
 %w{make libmodule-install-perl libyaml-perl libyaml-syck-perl libwww-perl}.each do |pkg|
   package pkg do
