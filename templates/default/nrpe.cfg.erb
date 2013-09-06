@@ -22,8 +22,6 @@ command[check_sphinx]=<%= node['nagios']['plugin_dir'] %>/check_procs -c 1:1 -C 
 command[check_mysql_server]=<%= node['nagios']['plugin_dir'] %>/check_mysql -H localhost -u debian-sys-maint -p <%= node['mysql']['server_debian_password'] %>
 <% end -%>
 
-#TEST
-
 command[check_logfiles]=/usr/lib/nagios/plugins/check-log-new.pl -l <%= node['nagios']['logfiles']['log_file'] %> -r 0 -s <%= node['nagios']['checks']['pattern'] %>
 
 #check stunnel process
@@ -43,7 +41,6 @@ command[check_chef_status]=<%= node['nagios']['plugin_dir'] %>/check_last_logs.p
 
 #chech NTP sync
 command[check_ntp]=<%= node['nagios']['plugin_dir'] %>/check_ntp_time -H <%= @ntp_server %> -w 1.5 -c 3
-
 
 
 <% if node.recipes.include?("openvpn") %>
@@ -88,8 +85,6 @@ command[check_iron_processor]=<%= node['nagios']['plugin_dir'] %>/check_procs -a
 command[check_jmx_heap]=<%= node['nagios']['plugin_dir'] %>/check_jmx -U service:jmx:rmi:///jndi/rmi://localhost:9001/jmxrmi -O java.lang:type=Memory -A HeapMemoryUsage -K used -I HeapMemoryUsage -J used -vvvv -w 750000000 -c 1000000000
 
 command[check_jmx_garbage]=<%= node['nagios']['plugin_dir'] %>/check_jmx -U service:jmx:rmi:///jndi/rmi://localhost:9001/jmxrmi -O "java.lang:type=GarbageCollector,name=MarkSweepCompact" -A LastGcInfo -K duration -w 3500 -c 4000 -u ms 
-
-command[check_jmx_load]=<%= node['nagios']['plugin_dir'] %>/check_jmx -U service:jmx:rmi:///jndi/rmi://localhost:9001/jmxrmi -O "java.lang:type=OperatingSystem" -A SystemLoadAverage -c 1
 
 command[check_jmx_threads]=<%= node['nagios']['plugin_dir'] %>/check_jmx -U service:jmx:rmi:///jndi/rmi://localhost:9001/jmxrmi -O "java.lang:type=Threading" -A ThreadCount -w 50 -c 60
 <% end %>
