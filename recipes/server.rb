@@ -190,8 +190,12 @@ members = Array.new
 sysadmins.each do |s|
   members << s['id']
 end
-node['nagios']['additional_contacts'].each do |s,enabled|
-  members << s if enabled
+
+# add additional contacts including pagerduty to the contacts
+if node['nagios']['additional_contacts']
+  node['nagios']['additional_contacts'].each do |s,enabled|
+    members << s if enabled
+  end
 end
 
 public_domain = node['public_domain'] || node['domain']
