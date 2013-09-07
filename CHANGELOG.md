@@ -3,6 +3,28 @@ nagios Cookbook CHANGELOG
 This file is used to list changes made in each version of the nagios cookbook.
 
 
+v4.2.0
+------
+### New Feature
+- **[COOK-3445](https://tickets.opscode.com/browse/COOK-3445)** - Allow setting service dependencies from data dags
+- **[COOK-3429](https://tickets.opscode.com/browse/COOK-3429)** - Allow setting timezone from attribute
+- **[COOK-3422](https://tickets.opscode.com/browse/COOK-3422)** - Enable large installation tweaks by attribute
+
+### Improvement
+- **[COOK-3440](https://tickets.opscode.com/browse/COOK-3440)** - Permit additional pagerduty-like integrations
+- **[COOK-3136](https://tickets.opscode.com/browse/COOK-3136)** - Fix `nagios::client_source` under Gentoo
+- **[COOK-3111](https://tickets.opscode.com/browse/COOK-3111)** - Add support for alternate users databag to Nagios cookbook
+- **[COOK-2891](https://tickets.opscode.com/browse/COOK-2891)** - Improve RHEL 5 detection in Nagios cookbook to catch all versions
+- **[COOK-2721](https://tickets.opscode.com/browse/COOK-2721)** - Add Chef Solo support
+
+### Bug
+- **[COOK-3405](https://tickets.opscode.com/browse/COOK-3405)** - Fix NRPE source install on Ubuntu
+- **[COOK-3404](https://tickets.opscode.com/browse/COOK-3404)** - Fix `htpasswd` file references (Chef 11 fix)
+- **[COOK-3282](https://tickets.opscode.com/browse/COOK-3282)** - Use `host_name` attribute when used in conjunction with a search-defined hostgroup
+- **[COOK-3162](https://tickets.opscode.com/browse/COOK-3162)** - Allow setting port
+- **[COOK-3140](https://tickets.opscode.com/browse/COOK-3140)** - No longer import databag users even if they don't have an `htpasswd` value set
+- **[COOK-3068](https://tickets.opscode.com/browse/COOK-3068)** - Use `nagios_conf` definition in `nagios::pagerduty`
+
 v4.1.4
 ------
 ### Bug
