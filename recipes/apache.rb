@@ -31,7 +31,7 @@ public_domain = node['public_domain'] || node['domain']
 template "#{node['apache']['dir']}/sites-available/nagios3.conf" do
   source "apache2.conf.erb"
   mode 00644
-  variables( 
+  variables(
     :public_domain => public_domain,
     :nagios_url    => node['nagios']['url'],
     :https         => node['nagios']['enable_ssl'],

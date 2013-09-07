@@ -6,7 +6,7 @@
 # description: nrpe is a daemon for a remote nagios server, \
 #              running nagios plugins on this host.
 # processname: <%= node['nagios']['nrpe']['service_name'] %>
-# config: <%= node['nagios']['nrpe']['conf_dir'] %>/nrpe.cfg 
+# config: <%= node['nagios']['nrpe']['conf_dir'] %>/nrpe.cfg
 
 <% if ['rhel', 'fedora'].include?(node['platform_family']) -%>
 # Source function library

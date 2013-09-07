@@ -16,7 +16,7 @@ define servicedependency{
   dependent_service_description	<%= servicedependency['dependent_service_description'] %>
 <% end -%>
 <% if servicedependency['host_name'] -%>
-  host_name			<%= servicedependency['host_name'] %> 
+  host_name			<%= servicedependency['host_name'] %>
 <% end -%>
 <% if servicedependency['hostgroup_name'] -%>
   hostgroup_name		<%= servicedependency['hotsgroup_name'] %>
@@ -34,7 +34,7 @@ define servicedependency{
   notification_failure_criteria	<%= servicedependency['notification_failure_criteria'] %>
 <% end -%>
 <% if servicedependency['dependency_period'] -%>
-  dependency_period		<%= servicedependency['dependency_period'] %>  
+  dependency_period		<%= servicedependency['dependency_period'] %>
 <% end -%>
 }
 <% end -%>
