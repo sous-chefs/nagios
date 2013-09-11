@@ -21,4 +21,6 @@
 default['nagios']['user'] = "nagios"
 default['nagios']['group'] = "nagios"
 
+default['nagios']['secretpath'] = "/etc/verticloud/secrets/nagios.pem"
+
 set['nagios']['plugin_dir'] = "/usr/lib/nagios/plugins"
