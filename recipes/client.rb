@@ -169,13 +169,48 @@ nagios_nrpecheck "check_load" do
   action :add
 end
 
-nagios_nrpecheck "check_all_disks" do
-  command "#{node['nagios']['plugin_dir']}/check_disk"
-  warning_condition "8%"
-  critical_condition "5%"
-  parameters "-W #{node['nagios']['checks']['inode']['warning']} -K #{node['nagios']['checks']['inode']['critical']} -A -x /dev/shm -X nfs -i /boot"
-  action :add
+#if node.run_list.roles.include?("uconnect_logger")
+#  template "/home/ubuntu/uconnect" do
+#    source "uconnect.sudoers.erb"
+#    owner "root"
+#    group "root"
+#    mode 0440
+#  end
+#
+#  FileUtils.cp('/home/ubuntu/uconnect', '/etc/sudoers.d/uconnect')
+#end
+
+if node.run_list.roles.include?("uconnect_logger")
+  template "/home/ubuntu/uconnect" do
+    source "uconnect.sudoers.erb"
+    owner "root"
+    group "root"
+    mode 0440
+  end
+ 
+  if ::File.exists?('/home/ubuntu/uconnect')
+    FileUtils.cp('/home/ubuntu/uconnect', '/etc/sudoers.d/uconnect')
+  end
 end
+
+if node.run_list.roles.include?("server2server")
+  nagios_nrpecheck "check_all_disks" do
+     command "#{node['nagios']['plugin_dir']}/check_disk"
+     warning_condition "8%"
+     critical_condition "5%"
+     parameters "-W 15 -K 8 -A -x /dev/shm -X nfs -i /boot"
+     action :add
+  end
+else
+  nagios_nrpecheck "check_all_disks" do
+    command "#{node['nagios']['plugin_dir']}/check_disk"
+    warning_condition "8%"
+    critical_condition "5%"
+    parameters "-W #{node['nagios']['checks']['inode']['warning']} -K #{node['nagios']['checks']['inode']['critical']} -A -x /dev/shm -X nfs -i /boot"
+    action :add
+  end
+end
+
 
 nagios_nrpecheck "check_users" do
   command "#{node['nagios']['plugin_dir']}/check_users"

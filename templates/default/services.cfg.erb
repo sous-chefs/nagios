@@ -56,10 +56,24 @@ define service {
     use                 default-service,srv-pnp
 }
 
+#define service {
+#    service_description Check mailq
+#    hostgroup_name      linux
+#    check_command       check_nrpe!check_mailq
+#    use                 default-service,srv-pnp
+#}
+
 define service {
     service_description Check Jenkins 8080
     hostgroup_name      jenkins
     check_command       check_tcp!8080
+    use                 default-service,srv-pnp
+}
+
+define service {
+    service_description Check Files to Process
+    hostgroup_name      uconnect_logger
+    check_command       check_dir_files
     use                 default-service,srv-pnp
 }
 
@@ -99,6 +113,13 @@ define service {
     check_command       check_cdn_maxage
     use                 default-service,srv-pnp
 }
+
+define service {
+    service_description Check SES SMTP Availability
+    <%= @designation %> <%= @main_nagios %>
+    check_command       check_smtp
+    use                 default-service,srv-pnp
+}
 <% end %>
 
 #define service {
@@ -112,7 +133,7 @@ define service {
 define service {
     service_description Check Tealium aptrepo
     hostgroup_name      apt_repo
-    check_command       check_tcp!8443
+    check_command       check_tcp!80
     use                 default-service,srv-pnp
 }
  
@@ -156,13 +177,6 @@ define service {
     service_description Check JMX Garbage Collection
     hostgroup_name      datacloud_component
     check_command       check_nrpe!check_jmx_garbage
-    use                 default-service,srv-pnp
-}
-
-define service {
-    service_description Check JMX System Load
-    hostgroup_name      datacloud_component
-    check_command       check_nrpe!check_jmx_load
     use                 default-service,srv-pnp
 }
 
@@ -461,7 +475,21 @@ define service {
 define service {
   service_description   Check UTUI Logs
   hostgroup_name        utui
-  check_command         check_nrpe!check_logfiles
+  check_command         check_nrpe!check_logfiles_utui_error
+  use                   default-service,srv-pnp
+}
+
+define service {
+  service_description   Check Uconnect Rabbit Connection
+  hostgroup_name        uconnect_logger
+  check_command         check_nrpe!check_logfiles_rabbit_connection
+  use                   default-service,srv-pnp
+}
+
+define service {
+  service_description   Check Uconnect Rabbit Authentication
+  hostgroup_name        uconnect_logger
+  check_command         check_nrpe!check_logfiles_rabbit_auth
   use                   default-service,srv-pnp
 }
 

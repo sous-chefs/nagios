@@ -75,7 +75,7 @@ template File.join(node['nginx']['dir'], 'sites-available', 'nagios3.conf') do
   variables(
     :public_domain => public_domain,
     :listen_port => node['nagios']['http_port'],
-    :https => node['nagios']['https'],
+    #:https => node['nagios']['https'],
     :cert_file => pem,
     :cert_key => pem,
     :docroot => node['nagios']['docroot'],

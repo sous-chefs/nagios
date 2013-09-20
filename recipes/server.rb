@@ -96,7 +96,7 @@ end
     group web_group
     mode 0644
   end
-
+ 
 region = node[:ec2][:placement_availability_zone].match(/^(.*-\d+)[^-]+$/)[1]
 
 if node[:monitored_region].nil? 
@@ -107,7 +107,7 @@ else
   
   #quick fix for datacloud and sitemap
   datacloud = search(:node, "role:datacloud_component AND placement_availability_zone:#{region}*")
-  sitemap = search(:node, "role:sitemap_audit AND placement_availability_zone:#{region}*")
+  sitemap = search(:node, "role:sitemap_audit AND placement_availability_zone:#{region}* AND app_environment:production_vpc*")
   servers = search(:node, "role:#{node['nagios']['server_role']} AND app_environment:#{node[:monitored_environment]}")
 
   if node['app_environment'] == "production_vpc2"
@@ -253,6 +253,17 @@ end
 if node[:ec2][:local_ipv4] == "10.1.2.7"
 main_nagios = node[:ec2][:local_ipv4]
 designation = "host_name"
+
+  template "/home/ubuntu/nagios" do
+    source "nagios.sudoers.erb"
+    owner "root"
+    group "root"
+    mode 0440
+  end
+
+  if ::File.exists?('/home/ubuntu/nagios')
+    FileUtils.cp('/home/ubuntu/nagios', '/etc/sudoers.d/nagios')
+  end  
 
   nagios_conf "services" do
     variables(

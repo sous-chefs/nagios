@@ -30,6 +30,11 @@ define command {
 }
 
 define command {
+  command_name    check_dir_files
+  command_line    $USER1$/check_nrpe -H $HOSTADDRESS$ -c check_dir_files -t 60
+}
+
+define command {
   command_name    check_jmx
   command_line    $USER1$/check_nrpe -H $HOSTADDRESS$ -c check_jmx -t 20
 }
@@ -164,7 +169,7 @@ define command {
 
 define command {
   command_name    check_mongodb_snapshots
-  command_line    $USER1$/check_mongodb_backup.py --snaps --cluster $ARG1$
+  command_line    sudo $USER1$/check_mongodb_backup.py --snaps --cluster $ARG1$
 }
 
 define command {
@@ -210,11 +215,6 @@ define command {
 define command {
   command_name    check_pop
   command_line    $USER1$/check_pop -H $HOSTADDRESS$
-}
-
-define command {
-  command_name    check_smtp
-  command_line    $USER1$/check_smtp -H $HOSTADDRESS$
 }
 
 define command {
@@ -356,7 +356,7 @@ define command {
 
 define command {
         command_name    check_uconnect_service
-        command_line    $USER1$/check_http -I $HOSTADDRESS$ -H $HOSTADDRESS$ -p 9090 -u /ulog/tealium.healthcheck
+        command_line    $USER1$/check_http -I $HOSTADDRESS$ -H $HOSTADDRESS$ -p 9090 -u /ulog/tealium.healthcheck -t 45
 }
 
 define command {
@@ -400,6 +400,11 @@ define command {
     command_line    $USER1$/monitor-cdn-maxage.pl
 }
 
+define command {
+    command_name    check_smtp
+    command_line    $USER1$/check_smtp -H localhost -p 2525 -U AKIAIU254TK3C4L25ODQ -P Av5w7z7/attZltIki5SjzCa3HzBa8z/Sj5ikiYAwnALK
+}
+
 # Notification
 define command {
   command_name  host-notify-by-email
@@ -429,12 +434,12 @@ define command {
 
 define command {
        command_name    process-service-perfdata
-       command_line    /usr/local/pnp4nagios/libexec/process_perfdata.pl
+       command_line    /usr/lib/pnp4nagios/libexec/process_perfdata.pl
 }
 
 define command {
        command_name    process-host-perfdata
-       command_line    /usr/local/pnp4nagios/libexec/process_perfdata.pl -d HOSTPERFDATA
+       command_line    /usr/lib/pnp4nagios/libexec/process_perfdata.pl -d HOSTPERFDATA
 }
 
 # Commands added through nagios_services data bags
