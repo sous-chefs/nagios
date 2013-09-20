@@ -138,49 +138,36 @@ def look4snaps(zk, days_ago=None):
 	 if zk.exists(shards_parent_node):
 
             shard_list = zk.retry(zk.get_children, shards_parent_node)
-            if len(shard_list) == 0:
-               return CRITICAL("mongodb shard data not available for most recent backup")
+            if len(shard_list) > 0:
 
-            msg = ''
-            err = 0
-            for shard in shard_list:
-               shard_data = zk.retry(zk.get, shards_parent_node + '/' + shard)
-               snaps = conn.get_all_snapshots(eval(shard_data[0]))
+               msg = ''
+               err = 0
+               for shard in shard_list:
+                  shard_data = zk.retry(zk.get, shards_parent_node + '/' + shard)
+                  snaps = conn.get_all_snapshots(eval(shard_data[0]))
 
-               msg = msg + ", %s [" % shard
-               snap_text = ''
-               for snap in snaps:
+                  msg = msg + ", %s [" % shard
+                  snap_text = ''
+                  for snap in snaps:
 
-                  if snap.status == 'error': err = 1
+                     if snap.status == 'error': err = 1
 
-                  snap_text = snap_text + ", %s (%s)" % (str(snap), snap.status)
+                     snap_text = snap_text + ", %s (%s)" % (str(snap), snap.status)
 
-               msg = msg + snap_text.strip(', ') + ']'
+                  msg = msg + snap_text.strip(', ') + ']'
 
-            if err:
-	       return CRITICAL(msg.strip(', '))
+               if err:
+                  return CRITICAL(msg.strip(', '))
 
-            return OK(msg.strip(', '))
+               return OK(msg.strip(', '))
 
-	 else:
-	    return CRITICAL("mongodb shard data not available for most recent backup")
 
-      else:
-         # Apparently no backups yet today.  Let's check yesterday.
+   # Apparently no backups yet today.  Let's check yesterday.
 
-         # Let's not explore infinity though...
-         if days_ago: return WARNING('found no backup info for past two days')
+   # Let's not explore infinity though...
+   if days_ago: return WARNING('found no backup info for past two days')
 
-         return look4snaps(zk, 1)
-
-   else:
-
-      # Apparently no backups yet today.  Let's check yesterday.
-
-      # Let's not explore infinity though...
-      if days_ago: return WARNING('found no backup info for past two days')
-
-      return look4snaps(zk, 1)
+   return look4snaps(zk, 1)
 
 
 if __name__ == '__main__':
