@@ -143,6 +143,10 @@ else
    end
 end
 
+if mon_host.nil? || mon_host.empty?
+  mon_host = '127.0.0.1'
+end
+
 template "#{node['nagios']['nrpe']['conf_dir']}/nrpe.cfg" do
   source "nrpe.cfg.erb"
   owner "root"
