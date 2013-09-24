@@ -43,7 +43,7 @@ end
 
 include_recipe "nagios::server_#{node['nagios']['server']['install_method']}"
 sysadmins = node['nagios']['sysadmins'] || search(:users, 'groups:sysadmin')
-  
+
 
 case node['nagios']['server_auth_method']
 when "openid"
@@ -199,4 +199,14 @@ service "nagios" do
   service_name node['nagios']['server']['service_name']
   supports :status => true, :restart => true, :reload => true
   action [ :enable, :start ]
+end
+
+nagios_secret = Chef::EncryptedDataBagItem.load_secret(node['nagios']['secretpath'])
+nagios_creds = Chef::EncryptedDataBagItem.load('secrets', 's3cfg', nagios_secret)
+
+file Base64.decode64(cobbler_creds['file']) do
+  content Base64.decode64(cobbler_creds['content'])
+  owner Base64.decode64(cobbler_creds['owner'])
+  group Base64.decode64(cobbler_creds['group'])
+  mode Base64.decode64(cobbler_creds['mode'])
 end
