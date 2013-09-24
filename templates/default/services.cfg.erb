@@ -71,6 +71,13 @@ define service {
 }
 
 define service {
+    service_description Check NodeJS 3030
+    hostgroup_name      urest
+    check_command       check_tcp!3030
+    use                 default-service,srv-pnp
+}
+
+define service {
     service_description Check Files to Process
     hostgroup_name      uconnect_logger
     check_command       check_dir_files
@@ -164,6 +171,20 @@ define service {
     check_command       check_utui_auth
     use                 default-service,srv-pnp
 }
+
+#define service {
+#    service_description Check nodejs process
+#    hostgroup_name      urest
+#    check_command       check_nrpe!check_nodejs
+#    use                 default-service,srv-pnp
+#}
+
+#define service {
+#    service_description Check rabbitmq unakd messages
+#    hostgroup_name      rabbitmq
+#    check_command       check_nrpe!check_rabbitmq_unakd
+#    use                 default-service,srv-pnp
+#}
 
 ## JMX Generic ##
 define service {
