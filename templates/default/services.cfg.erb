@@ -172,19 +172,19 @@ define service {
     use                 default-service,srv-pnp
 }
 
-#define service {
-#    service_description Check nodejs process
-#    hostgroup_name      urest
-#    check_command       check_nrpe!check_nodejs
-#    use                 default-service,srv-pnp
-#}
+define service {
+    service_description Check nodejs process
+    hostgroup_name      urest
+    check_command       check_nrpe!check_nodejs
+    use                 default-service,srv-pnp
+}
 
-#define service {
-#    service_description Check rabbitmq unakd messages
-#    hostgroup_name      rabbitmq
-#    check_command       check_nrpe!check_rabbitmq_unakd
-#    use                 default-service,srv-pnp
-#}
+define service {
+    service_description Check rabbitmq unakd messages
+    hostgroup_name      rabbitmq_server
+    check_command       check_nrpe!check_rabbitmq_unackd
+    use                 default-service,srv-pnp
+}
 
 ## JMX Generic ##
 define service {

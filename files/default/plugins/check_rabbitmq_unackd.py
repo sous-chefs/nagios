@@ -21,9 +21,9 @@ CRITACK = int(options.critack)
 WARNACK = int(options.warnack)
 
 GET_VHOSTS = "%s -q list_vhosts" % (RABBITMQCTL)
-sys.stdout.write("Get Vhosts command: %s\n\n" % (GET_VHOSTS))
+#sys.stdout.write("Get Vhosts command: %s\n\n" % (GET_VHOSTS))
 vhostdata = os.popen(GET_VHOSTS).read().strip()
-sys.stdout.write("VHOSTS are:\n%s\n\n" % (vhostdata))
+#sys.stdout.write("VHOSTS are:\n%s\n\n" % (vhostdata))
 
 for vhost in vhostdata.split("\n"):
     if vhostdata is not None:
@@ -50,12 +50,12 @@ for vhost in vhostdata.split("\n"):
         unakd = ""
         unakd = os.popen(UNAKD).read().strip()
 
-        sys.stdout.write("Current VHOST is: %s\n" % (vhost))
+        #sys.stdout.write("Current VHOST is: %s\n" % (vhost))
 
-        if not data2:
-            sys.stdout.write("No queues found on VHOST %s\n\n\n" % (vhost))
-        else:
-            sys.stdout.write("Found queues in %s:\n%s\n\n\n" % (vhost, data2))
+        #if not data2:
+            #sys.stdout.write("No queues found on VHOST %s\n\n\n" % (vhost))
+        #else:
+            #sys.stdout.write("Found queues in %s:\n%s\n\n\n" % (vhost, data2))
 
         is_warnack = False
         is_critack = False
@@ -84,7 +84,8 @@ for vhost in vhostdata.split("\n"):
 
         for results in unakd.split("\n"):
             if not results:
-                sys.stdout.write("No queues found on VHOST %s\n\n\n" % (vhost))
+                #sys.stdout.write("No queues found on VHOST %s\n\n\n" % (vhost))
+                no_results = True
             else:         
                 check_line2(results)
 

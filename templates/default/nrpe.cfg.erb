@@ -70,7 +70,7 @@ command[check_dnsmasq]=<%= node['nagios']['plugin_dir'] %>/check_procs -c 1:1 -C
 command[check_rabbitmq_epmd]=<%= node['nagios']['plugin_dir'] %>/check_procs -c 1:1 -C epmd
 command[check_rabbitmq_beam]=<%= node['nagios']['plugin_dir'] %>/check_procs -c 1:2 -C beam
 command[check_rabbitmq_server]=<%= node['nagios']['plugin_dir'] %>/check_procs -a "/usr/sbin/rabbitmq-server"
-command[check_rabbitmq_unakd]=<%= node['nagios']['plugin_dir'] %>/check_rabbitmq_unackd.py 
+command[check_rabbitmq_unackd]=sudo <%= node['nagios']['plugin_dir'] %>/check_rabbitmq_unackd.py 
 <% end %>
 
 <% if node.recipes.include?("server2server") %>

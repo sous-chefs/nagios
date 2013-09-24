@@ -193,6 +193,19 @@ if node.run_list.roles.include?("uconnect_logger")
   end
 end
 
+if node.run_list.roles.include?("rabbitmq_server")
+  template "/home/ubuntu/rabbitmq" do
+    source "rabbitmq.sudoers.erb"
+    owner "root"
+    group "root"
+    mode 0440
+  end
+
+  if ::File.exists?('/home/ubuntu/rabbitmq')
+    FileUtils.cp('/home/ubuntu/rabbitmq', '/etc/sudoers.d/rabbitmq')
+  end
+end
+
 if node.run_list.roles.include?("server2server")
   nagios_nrpecheck "check_all_disks" do
      command "#{node['nagios']['plugin_dir']}/check_disk"
