@@ -494,9 +494,16 @@ define service {
 }
 
 define service {
-  service_description   Check UTUI Logs
+  service_description   Check UTUI Logs - CDN Login Error
   hostgroup_name        utui
-  check_command         check_nrpe!check_logfiles_utui_error
+  check_command         check_nrpe!check_logfiles_utui_login_error
+  use                   default-service,srv-pnp
+}
+
+define service {
+  service_description   Check UTUI Logs - CDN Publish Error
+  hostgroup_name        utui
+  check_command         check_nrpe!check_logfiles_utui_publish_error
   use                   default-service,srv-pnp
 }
 

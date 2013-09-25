@@ -52,7 +52,8 @@ command[check_mongod]=<%= node['nagios']['plugin_dir'] %>/check_procs -c 1:1 -C 
 
 <% if node.roles.include?("utui") %>
 #check UTUI log for errors 
-command[check_logfiles_utui_error]=/usr/lib/nagios/plugins/check-log-new.pl -l <%= node['nagios']['logfiles']['utui']['log_file'] %> -r 0 -s "<%= node['nagios']['checks']['utui_error']['pattern'] %>"
+command[check_logfiles_utui_login_error]=sudo /usr/lib/nagios/plugins/check-log-new.pl -l <%= node['nagios']['logfiles']['utui']['log_file'] %> -r 0 -s "<%= node['nagios']['checks']['utui_login_error']['pattern'] %>"
+command[check_logfiles_utui_publish_error]=sudo /usr/lib/nagios/plugins/check-log-new.pl -l <%= node['nagios']['logfiles']['utui']['log_file'] %> -r 0 -s "<%= node['nagios']['checks']['utui_publish_error']['pattern'] %>"
 <% end %>
 
 <% if node.recipes.include?("openvpn") %>
