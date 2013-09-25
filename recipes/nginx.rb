@@ -14,7 +14,7 @@
 # limitations under the License.
 #
 
-if node["nagios"]["server"]["stop_apache"]
+if node['nagios']['server']['stop_apache']
   service 'apache2' do
     action :stop
   end
@@ -28,12 +28,12 @@ if platform_family?('rhel') || platform_family?('fedora')
   end
 end
 
-include_recipe "nginx"
+include_recipe 'nginx'
 
 %w(default 000-default).each do |disable_site|
   nginx_site disable_site do
     enable false
-    notifies :reload, "service[nginx]"
+    notifies :reload, 'service[nginx]'
   end
 end
 
@@ -45,17 +45,17 @@ end
 
 case dispatch_type = node['nagios']['server']['nginx_dispatch'].to_sym
 when :cgi
-  node.set["nginx_simplecgi"]["cgi"] = true
+  node.set['nginx_simplecgi']['cgi'] = true
   include_recipe 'nginx_simplecgi::setup'
 when :php
-  node.set["nginx_simplecgi"]["php"] = true
+  node.set['nginx_simplecgi']['php'] = true
   include_recipe 'nginx_simplecgi::setup'
 when :both
-  node.set["nginx_simplecgi"]["php"] = true
-  node.set["nginx_simplecgi"]["cgi"] = true
+  node.set['nginx_simplecgi']['php'] = true
+  node.set['nginx_simplecgi']['cgi'] = true
   include_recipe 'nginx_simplecgi::setup'
 else
-  Chef::Log.warn "NAGIOS: NGINX setup does not have a dispatcher provided"
+  Chef::Log.warn 'NAGIOS: NGINX setup does not have a dispatcher provided'
 end
 
 template File.join(node['nginx']['dir'], 'sites-available', 'nagios3.conf') do
@@ -79,11 +79,11 @@ template File.join(node['nginx']['dir'], 'sites-available', 'nagios3.conf') do
     :cgi => [:cgi, :both].include?(dispatch_type.to_sym),
     :php => [:php, :both].include?(dispatch_type.to_sym)
   )
-  if(::File.symlink?(File.join(node['nginx']['dir'], 'sites-enabled', 'nagios3.conf')))
+  if ::File.symlink?(File.join(node['nginx']['dir'], 'sites-enabled', 'nagios3.conf'))
     notifies :reload, 'service[nginx]', :immediately
   end
 end
 
-nginx_site "nagios3.conf" do
-  notifies :reload, "service[nginx]"
+nginx_site 'nagios3.conf' do
+  notifies :reload, 'service[nginx]'
 end

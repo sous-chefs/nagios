@@ -7,7 +7,7 @@
 # Recipe:: client
 #
 # Copyright 2009, 37signals
-# Copyright 2009-2011, Opscode, Inc
+# Copyright 2009-2013, Opscode, Inc
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -40,9 +40,7 @@ end
 # on the first run, search isn't available, so if you're the nagios server, go
 # ahead and put your own IP address in the NRPE config (unless it's already there).
 if node.run_list.roles.include?(node['nagios']['server_role'])
-  unless mon_host.include?(node['ipaddress'])
-    mon_host << node['ipaddress']
-  end
+  mon_host << node['ipaddress'] unless mon_host.include?(node['ipaddress'])
 end
 
 mon_host.concat node['nagios']['allowed_hosts'] if node['nagios']['allowed_hosts']
@@ -56,7 +54,7 @@ directory "#{node['nagios']['nrpe']['conf_dir']}/nrpe.d" do
 end
 
 template "#{node['nagios']['nrpe']['conf_dir']}/nrpe.cfg" do
-  source "nrpe.cfg.erb"
+  source 'nrpe.cfg.erb'
   owner node['nagios']['user']
   group node['nagios']['group']
   mode 00644

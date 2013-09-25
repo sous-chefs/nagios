@@ -3,7 +3,7 @@
 # Cookbook Name:: nagios
 # Attributes:: default
 #
-# Copyright 2011, Opscode, Inc
+# Copyright 2011-2013, Opscode, Inc
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -26,13 +26,13 @@ default['nagios']['group'] = 'nagios'
 
 case node['platform_family']
 when 'debian'
-default['nagios']['plugin_dir']     = '/usr/lib/nagios/plugins'
-when 'rhel','fedora'
-  if node['kernel']['machine'] == "i686"
+  default['nagios']['plugin_dir'] = '/usr/lib/nagios/plugins'
+when 'rhel', 'fedora'
+  if node['kernel']['machine'] == 'i686'
     default['nagios']['plugin_dir'] = '/usr/lib/nagios/plugins'
   else
     default['nagios']['plugin_dir'] = '/usr/lib64/nagios/plugins'
   end
 else
-  default['nagios']['plugin_dir']   = '/usr/lib/nagios/plugins'
+  default['nagios']['plugin_dir'] = '/usr/lib/nagios/plugins'
 end

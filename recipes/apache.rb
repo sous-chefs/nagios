@@ -14,22 +14,19 @@
 # limitations under the License.
 #
 
-include_recipe "apache2"
-include_recipe "apache2::mod_rewrite"
-include_recipe "apache2::mod_php5"
+include_recipe 'apache2'
+include_recipe 'apache2::mod_rewrite'
+include_recipe 'apache2::mod_php5'
+include_recipe 'apache2::mod_ssl' if node['nagios']['enable_ssl']
 
-if node['nagios']['enable_ssl']
-  include_recipe "apache2::mod_ssl"
-end
-
-apache_site "000-default" do
+apache_site '000-default' do
   enable false
 end
 
 public_domain = node['public_domain'] || node['domain']
 
 template "#{node['apache']['dir']}/sites-available/nagios3.conf" do
-  source "apache2.conf.erb"
+  source 'apache2.conf.erb'
   mode 00644
   variables(
     :public_domain => public_domain,
@@ -39,7 +36,7 @@ template "#{node['apache']['dir']}/sites-available/nagios3.conf" do
     :ssl_cert_key  => node['nagios']['ssl_cert_key']
   )
   if ::File.symlink?("#{node['apache']['dir']}/sites-enabled/nagios3.conf")
-    notifies :reload, "service[apache2]"
+    notifies :reload, 'service[apache2]'
   end
 end
 
@@ -47,4 +44,4 @@ file "#{node['apache']['dir']}/conf.d/nagios3.conf" do
   action :delete
 end
 
-apache_site "nagios3.conf"
+apache_site 'nagios3.conf'

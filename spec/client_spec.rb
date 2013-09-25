@@ -16,7 +16,7 @@ describe 'nagios::client' do
   end
 
   it 'does not blow up when the search returns no results' do
-    Chef::REST.any_instance.stub(:get_rest).and_return({"rows"=>[], "start"=>0, "total"=>0})
+    Chef::REST.any_instance.stub(:get_rest).and_return({ 'rows' => [], 'start' => 0, 'total' => 0 })
 
     lambda { chef_run }.should_not raise_error
   end

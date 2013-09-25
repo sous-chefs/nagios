@@ -17,33 +17,33 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-package "libwww-perl" do
-  case node["platform_family"]
-  when "rhel", "fedora"
-    package_name "perl-libwww-perl"
-  when "debian"
-    package_name "libwww-perl"
-  when "arch"
-    package_name "libwww-perl"
+package 'libwww-perl' do
+  case node['platform_family']
+  when 'rhel', 'fedora'
+    package_name 'perl-libwww-perl'
+  when 'debian'
+    package_name 'libwww-perl'
+  when 'arch'
+    package_name 'libwww-perl'
   end
   action :install
 end
 
-package "libcrypt-ssleay-perl" do
-  case node["platform_family"]
-  when "rhel", "fedora"
-    package_name "perl-Crypt-SSLeay"
-  when "debian"
-    package_name "libcrypt-ssleay-perl"
-  when "arch"
-    package_name "libcrypt-ssleay-perl"
+package 'libcrypt-ssleay-perl' do
+  case node['platform_family']
+  when 'rhel', 'fedora'
+    package_name 'perl-Crypt-SSLeay'
+  when 'debian'
+    package_name 'libcrypt-ssleay-perl'
+  when 'arch'
+    package_name 'libcrypt-ssleay-perl'
   end
   action :install
 end
 
 remote_file "#{node['nagios']['plugin_dir']}/pagerduty_nagios.pl" do
-  owner "root"
-  group "root"
+  owner 'root'
+  group 'root'
   mode 00755
   source node['nagios']['pagerduty']['script_url']
   action :create_if_missing
@@ -51,8 +51,8 @@ end
 
 nagios_conf 'pagerduty'
 
-cron "Flush Pagerduty" do
+cron 'Flush Pagerduty' do
   user node['nagios']['user']
-  mailto "root@localhost"
+  mailto 'root@localhost'
   command "#{node['nagios']['plugin_dir']}/pagerduty_nagios.pl flush"
 end
