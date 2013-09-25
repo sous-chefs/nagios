@@ -7,7 +7,7 @@
 # Recipe:: server
 #
 # Copyright 2009, 37signals
-# Copyright 2009-2011, Opscode, Inc
+# Copyright 2009-2013, Opscode, Inc
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -22,11 +22,11 @@
 # limitations under the License.
 
 # install nrpe first so the nagios user is available before we template files using that user
-include_recipe "nagios::client"
+include_recipe 'nagios::client'
 
 # workaround to allow for a nagios server install from source using the override attribute on debian/ubuntu (COOK-2350)
-if platform_family?('debian') && node['nagios']['server']['install_method'] == "source"
-  nagios_service_name = "nagios"
+if platform_family?('debian') && node['nagios']['server']['install_method'] == 'source'
+  nagios_service_name = 'nagios'
 else
   nagios_service_name = node['nagios']['server']['service_name']
 end
@@ -36,17 +36,17 @@ web_srv = node['nagios']['server']['web_server'].to_sym
 
 case web_srv
 when :nginx
-  Chef::Log.info "Setting up Nagios server via NGINX"
+  Chef::Log.info 'Setting up Nagios server via NGINX'
   include_recipe 'nagios::nginx'
-  web_user = node["nginx"]["user"]
-  web_group = node["nginx"]["group"] || web_user
+  web_user = node['nginx']['user']
+  web_group = node['nginx']['group'] || web_user
 when :apache
-  Chef::Log.info "Setting up Nagios server via Apache2"
+  Chef::Log.info 'Setting up Nagios server via Apache2'
   include_recipe 'nagios::apache'
-  web_user = node["apache"]["user"]
-  web_group = node["apache"]["group"] || web_user
+  web_user = node['apache']['user']
+  web_group = node['apache']['group'] || web_user
 else
-  Chef::Log.fatal("Unknown web server option provided for Nagios server: " <<
+  Chef::Log.fatal('Unknown web server option provided for Nagios server: ' <<
                   "#{node['nagios']['server']['web_server']} provided. Allowed: :nginx or :apache")
   raise 'Unknown web server option provided for Nagios server'
 end
@@ -62,34 +62,34 @@ rescue Net::HTTPServerException
 end
 
 case node['nagios']['server_auth_method']
-when "openid"
+when 'openid'
   if web_srv == :apache
-    include_recipe "apache2::mod_auth_openid"
+    include_recipe 'apache2::mod_auth_openid'
   else
-    Chef::Log.fatal("OpenID authentication for Nagios is not supported on NGINX")
+    Chef::Log.fatal('OpenID authentication for Nagios is not supported on NGINX')
     Chef::Log.fatal("Set node['nagios']['server_auth_method'] attribute in your role: #{node['nagios']['server_role']}")
     raise
   end
-when "cas"
+when 'cas'
   if web_srv == :apache
-    include_recipe "apache2::mod_auth_cas"
+    include_recipe 'apache2::mod_auth_cas'
   else
-    Chef::Log.fatal("CAS authentication for Nagios is not supported on NGINX")
+    Chef::Log.fatal('CAS authentication for Nagios is not supported on NGINX')
     Chef::Log.fatal("Set node['nagios']['server_auth_method'] attribute in your role: #{node['nagios']['server_role']}")
     raise
   end
-when "ldap"
-  if(web_srv == :apache)
-    include_recipe "apache2::mod_authnz_ldap"
+when 'ldap'
+  if web_srv == :apache
+    include_recipe 'apache2::mod_authnz_ldap'
   else
-    Chef::Log.fatal("LDAP authentication for Nagios is not supported on NGINX")
+    Chef::Log.fatal('LDAP authentication for Nagios is not supported on NGINX')
     Chef::Log.fatal("Set node['nagios']['server_auth_method'] attribute in your role: #{node['nagios']['server_role']}")
     raise
   end
 else
   directory node['nagios']['conf_dir']
   template "#{node['nagios']['conf_dir']}/htpasswd.users" do
-    source "htpasswd.users.erb"
+    source 'htpasswd.users.erb'
     owner node['nagios']['user']
     group web_group
     mode 00640
@@ -101,38 +101,38 @@ end
 include_recipe "nagios::server_#{node['nagios']['server']['install_method']}"
 
 # find nodes to monitor.  Search in all environments if multi_environment_monitoring is enabled
-Chef::Log.info("Beginning search for nodes.  This may take some time depending on your node count")
-nodes = Array.new
-hostgroups = Array.new
+Chef::Log.info('Beginning search for nodes.  This may take some time depending on your node count')
+nodes = []
+hostgroups = []
 
 if node['nagios']['multi_environment_monitoring']
-  nodes = search(:node, "hostname:[* TO *]")
+  nodes = search(:node, 'hostname:[* TO *]')
 else
   nodes = search(:node, "hostname:[* TO *] AND chef_environment:#{node.chef_environment}")
 end
 
 if nodes.empty?
-  Chef::Log.info("No nodes returned from search, using this node so hosts.cfg has data")
+  Chef::Log.info('No nodes returned from search, using this node so hosts.cfg has data')
   nodes << node
 end
 
 # Sort by name to provide stable ordering
-nodes.sort! {|a,b| a.name <=> b.name }
+nodes.sort! { |a, b| a.name <=> b.name }
 
 # maps nodes into nagios hostgroups
-service_hosts= Hash.new
-search(:role, "*:*") do |r|
+service_hosts = {}
+search(:role, '*:*') do |r|
   hostgroups << r.name
-  nodes.select {|n| n['roles'].include?(r.name) }.each do |n|
+  nodes.select { |n| n['roles'].include?(r.name) }.each do |n|
     service_hosts[r.name] = n[node['nagios']['host_name_attribute']]
   end
 end
 
 # if using multi environment monitoring add all environments to the array of hostgroups
 if node['nagios']['multi_environment_monitoring']
-  search(:environment, "*:*") do |e|
+  search(:environment, '*:*') do |e|
     hostgroups << e.name
-    nodes.select {|n| n.chef_environment == e.name }.each do |n|
+    nodes.select { |n| n.chef_environment == e.name }.each do |n|
       service_hosts[e.name] = n[node['nagios']['host_name_attribute']]
     end
   end
@@ -140,9 +140,7 @@ end
 
 # Add all unique platforms to the array of hostgroups
 nodes.each do |n|
-  if !hostgroups.include?(n['os'])
-    hostgroups << n['os']
-  end
+  hostgroups << n['os'] unless hostgroups.include?(n['os'])
 end
 
 nagios_bags = NagiosDataBags.new
@@ -159,19 +157,17 @@ servicedependencies = nagios_bags.get('nagios_servicedependencies')
 # Add unmanaged host hostgroups to the hostgroups array if they don't already exist
 unmanaged_hosts.each do |host|
   host['hostgroups'].each do |hg|
-    if !hostgroups.include?(hg)
-      hostgroups << hg
-    end
+    hostgroups << hg unless hostgroups.include?(hg)
   end
 end
 
 # Load search defined Nagios hostgroups from the nagios_hostgroups data bag and find nodes
-hostgroup_nodes= Hash.new
-hostgroup_list = Array.new
-if nagios_bags.bag_list.include?("nagios_hostgroups")
+hostgroup_nodes = {}
+hostgroup_list = []
+if nagios_bags.bag_list.include?('nagios_hostgroups')
   search(:nagios_hostgroups, '*:*') do |hg|
     hostgroup_list << hg['hostgroup_name']
-    temp_hostgroup_array= Array.new
+    temp_hostgroup_array = Array.new
     if node['nagios']['multi_environment_monitoring']
       search(:node, hg['search_query']) do |n|
         temp_hostgroup_array << n[node['nagios']['host_name_attribute']]
@@ -181,26 +177,24 @@ if nagios_bags.bag_list.include?("nagios_hostgroups")
         temp_hostgroup_array << n[node['nagios']['host_name_attribute']]
       end
     end
-    hostgroup_nodes[hg['hostgroup_name']] = temp_hostgroup_array.join(",")
+    hostgroup_nodes[hg['hostgroup_name']] = temp_hostgroup_array.join(',')
   end
 end
 
 # pick up base contacts
-members = Array.new
+members = []
 sysadmins.each do |s|
   members << s['id']
 end
 
 # add additional contacts including pagerduty to the contacts
 if node['nagios']['additional_contacts']
-  node['nagios']['additional_contacts'].each do |s,enabled|
+  node['nagios']['additional_contacts'].each do |s, enabled|
     members << s if enabled
   end
 end
 
-public_domain = node['public_domain'] || node['domain']
-
-nagios_conf "nagios" do
+nagios_conf 'nagios' do
   config_subdir false
 end
 
@@ -222,7 +216,7 @@ directory "#{node['nagios']['state_dir']}/rw" do
   mode 02710
 end
 
-execute "archive-default-nagios-object-definitions" do
+execute 'archive-default-nagios-object-definitions' do
   command "mv #{node['nagios']['config_dir']}/*_nagios*.cfg #{node['nagios']['conf_dir']}/dist"
   not_if { Dir.glob("#{node['nagios']['config_dir']}/*_nagios*.cfg").empty? }
 end
@@ -233,7 +227,7 @@ directory "#{node['nagios']['conf_dir']}/certificates" do
   mode 00700
 end
 
-bash "Create SSL Certificates" do
+bash 'Create SSL Certificates' do
   cwd "#{node['nagios']['conf_dir']}/certificates"
   code <<-EOH
   umask 077
@@ -251,29 +245,29 @@ end
   end
 end
 
-nagios_conf "timeperiods"
+nagios_conf 'timeperiods'
 
-nagios_conf "templates" do
+nagios_conf 'templates' do
   variables(:templates => templates)
 end
 
-nagios_conf "commands" do
+nagios_conf 'commands' do
   variables(:services => services,
             :eventhandlers => eventhandlers)
 end
 
-nagios_conf "services" do
+nagios_conf 'services' do
   variables(:service_hosts => service_hosts,
             :services => services,
             :search_hostgroups => hostgroup_list,
             :hostgroups => hostgroups)
 end
 
-nagios_conf "servicegroups" do
+nagios_conf 'servicegroups' do
   variables(:servicegroups => servicegroups)
 end
 
-nagios_conf "contacts" do
+nagios_conf 'contacts' do
   variables(:admins => sysadmins,
             :members => members,
             :contacts => contacts,
@@ -281,30 +275,30 @@ nagios_conf "contacts" do
             :serviceescalations => serviceescalations)
 end
 
-nagios_conf "hostgroups" do
+nagios_conf 'hostgroups' do
   variables(:hostgroups => hostgroups,
             :search_hostgroups => hostgroup_list,
             :search_nodes => hostgroup_nodes)
 end
 
-nagios_conf "hosts" do
+nagios_conf 'hosts' do
   variables(:nodes => nodes,
             :unmanaged_hosts => unmanaged_hosts,
             :hostgroups => hostgroups)
 end
 
-nagios_conf "servicedependencies" do
+nagios_conf 'servicedependencies' do
   variables(:servicedependencies => servicedependencies)
 end
 
-service "nagios" do
+service 'nagios' do
   service_name nagios_service_name
   supports :status => true, :restart => true, :reload => true
-  action [ :enable, :start ]
+  action [:enable, :start]
 end
 
 # Add the NRPE check to monitor the Nagios server
-nagios_nrpecheck "check_nagios" do
+nagios_nrpecheck 'check_nagios' do
   command "#{node['nagios']['plugin_dir']}/check_nagios"
   parameters "-F #{node["nagios"]["cache_dir"]}/status.dat -e 4 -C /usr/sbin/#{nagios_service_name}"
   action :add
