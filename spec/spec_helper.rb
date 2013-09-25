@@ -1,7 +1,12 @@
 require 'chefspec'
+require 'berkshelf'
+
+Berkshelf.ui.mute do
+  Berkshelf::Berksfile.from_file('Berksfile').install(path: 'vendor/cookbooks/')
+end
 
 def runner(attributes = {}, environment = 'test')
-  cookbook_paths = %W(#{File.expand_path("..", Dir.pwd)} #{File.expand_path(Dir.pwd)}/cookbooks)
+  cookbook_paths = File.expand_path('vendor/cookbooks/', Dir.pwd)
 
   # A workaround so that ChefSpec can work with Chef environments (from https://github.com/acrmp/chefspec/issues/54)
   @runner ||= ChefSpec::ChefRunner.new(:cookbook_path => cookbook_paths, :platform => 'ubuntu', :version => '10.04') do |node|
