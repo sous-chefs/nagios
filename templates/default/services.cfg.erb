@@ -71,6 +71,13 @@ define service {
 }
 
 define service {
+    service_description Check NodeJS 3030
+    hostgroup_name      urest
+    check_command       check_tcp!3030
+    use                 default-service,srv-pnp
+}
+
+define service {
     service_description Check Files to Process
     hostgroup_name      uconnect_logger
     check_command       check_dir_files
@@ -162,6 +169,20 @@ define service {
     service_description UTUI HTTP Auth
     hostgroup_name      utui
     check_command       check_utui_auth
+    use                 default-service,srv-pnp
+}
+
+define service {
+    service_description Check nodejs process
+    hostgroup_name      urest
+    check_command       check_nrpe!check_nodejs
+    use                 default-service,srv-pnp
+}
+
+define service {
+    service_description Check rabbitmq unakd messages
+    hostgroup_name      rabbitmq_server
+    check_command       check_nrpe!check_rabbitmq_unackd
     use                 default-service,srv-pnp
 }
 
@@ -473,9 +494,16 @@ define service {
 }
 
 define service {
-  service_description   Check UTUI Logs
+  service_description   Check UTUI Logs - CDN Login Error
   hostgroup_name        utui
-  check_command         check_nrpe!check_logfiles_utui_error
+  check_command         check_nrpe!check_logfiles_utui_login_error
+  use                   default-service,srv-pnp
+}
+
+define service {
+  service_description   Check UTUI Logs - CDN Publish Error
+  hostgroup_name        utui
+  check_command         check_nrpe!check_logfiles_utui_publish_error
   use                   default-service,srv-pnp
 }
 

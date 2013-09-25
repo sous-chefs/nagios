@@ -40,6 +40,11 @@ command[check_chef_status]=<%= node['nagios']['plugin_dir'] %>/check_last_logs.p
 #chech NTP sync
 command[check_ntp]=<%= node['nagios']['plugin_dir'] %>/check_ntp_time -H <%= @ntp_server %> -w 1.5 -c 3
 
+<% if node.roles.include?("urest") %>
+#check nodejs process
+command[check_nodejs]=<%= node['nagios']['plugin_dir'] %>/check_procs -c 1:1 -C node
+<% end %>
+
 <% if node.roles.include?("mongodb_cluster") %>
 #check mongod processes
 command[check_mongod]=<%= node['nagios']['plugin_dir'] %>/check_procs -c 1:1 -C mongod
@@ -47,7 +52,8 @@ command[check_mongod]=<%= node['nagios']['plugin_dir'] %>/check_procs -c 1:1 -C 
 
 <% if node.roles.include?("utui") %>
 #check UTUI log for errors 
-command[check_logfiles_utui_error]=/usr/lib/nagios/plugins/check-log-new.pl -l <%= node['nagios']['logfiles']['utui']['log_file'] %> -r 0 -s "<%= node['nagios']['checks']['utui_error']['pattern'] %>"
+command[check_logfiles_utui_login_error]=sudo /usr/lib/nagios/plugins/check-log-new.pl -l <%= node['nagios']['logfiles']['utui']['log_file'] %> -r 0 -s "<%= node['nagios']['checks']['utui_login_error']['pattern'] %>"
+command[check_logfiles_utui_publish_error]=sudo /usr/lib/nagios/plugins/check-log-new.pl -l <%= node['nagios']['logfiles']['utui']['log_file'] %> -r 0 -s "<%= node['nagios']['checks']['utui_publish_error']['pattern'] %>"
 <% end %>
 
 <% if node.recipes.include?("openvpn") %>
@@ -65,6 +71,7 @@ command[check_dnsmasq]=<%= node['nagios']['plugin_dir'] %>/check_procs -c 1:1 -C
 command[check_rabbitmq_epmd]=<%= node['nagios']['plugin_dir'] %>/check_procs -c 1:1 -C epmd
 command[check_rabbitmq_beam]=<%= node['nagios']['plugin_dir'] %>/check_procs -c 1:2 -C beam
 command[check_rabbitmq_server]=<%= node['nagios']['plugin_dir'] %>/check_procs -a "/usr/sbin/rabbitmq-server"
+command[check_rabbitmq_unackd]=sudo <%= node['nagios']['plugin_dir'] %>/check_rabbitmq_unackd.py 
 <% end %>
 
 <% if node.recipes.include?("server2server") %>

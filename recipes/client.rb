@@ -173,18 +173,7 @@ nagios_nrpecheck "check_load" do
   action :add
 end
 
-#if node.run_list.roles.include?("uconnect_logger")
-#  template "/home/ubuntu/uconnect" do
-#    source "uconnect.sudoers.erb"
-#    owner "root"
-#    group "root"
-#    mode 0440
-#  end
-#
-#  FileUtils.cp('/home/ubuntu/uconnect', '/etc/sudoers.d/uconnect')
-#end
-
-if node.run_list.roles.include?("uconnect_logger")
+if node.roles.include?("uconnect_logger")
   template "/home/ubuntu/uconnect" do
     source "uconnect.sudoers.erb"
     owner "root"
@@ -197,7 +186,33 @@ if node.run_list.roles.include?("uconnect_logger")
   end
 end
 
-if node.run_list.roles.include?("server2server")
+if node.roles.include?("rabbitmq_server")
+  template "/home/ubuntu/rabbitmq" do
+    source "rabbitmq.sudoers.erb"
+    owner "root"
+    group "root"
+    mode 0440
+  end
+
+  if ::File.exists?('/home/ubuntu/rabbitmq')
+    FileUtils.cp('/home/ubuntu/rabbitmq', '/etc/sudoers.d/rabbitmq')
+  end
+end
+
+if node.roles.include?("utui")
+  template "/home/ubuntu/utui" do
+    source "utui.sudoers.erb"
+    owner "root"
+    group "root"
+    mode 0440
+  end
+
+  if ::File.exists?('/home/ubuntu/utui')
+    FileUtils.cp('/home/ubuntu/utui', '/etc/sudoers.d/utui')
+  end
+end
+
+if node.roles.include?("server2server")
   nagios_nrpecheck "check_all_disks" do
      command "#{node['nagios']['plugin_dir']}/check_disk"
      warning_condition "8%"
