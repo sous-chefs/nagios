@@ -18,7 +18,7 @@
 # limitations under the License.
 #
 def nagios_boolean(true_or_false)
-  true_or_false ? "1" : "0"
+  true_or_false ? '1' : '0'
 end
 
 def nagios_interval(seconds)
@@ -35,4 +35,3 @@ end
 def nagios_attr(name)
   node['nagios'][name]
 end
-

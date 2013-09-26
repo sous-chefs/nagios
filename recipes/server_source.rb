@@ -3,7 +3,7 @@
 # Cookbook Name:: nagios
 # Recipe:: server_source
 #
-# Copyright 2011, Opscode, Inc
+# Copyright 2011-2013, Opscode, Inc
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -20,23 +20,23 @@
 
 # Package pre-reqs
 
-include_recipe "build-essential"
-include_recipe "php"
-include_recipe "php::module_gd"
+include_recipe 'build-essential'
+include_recipe 'php'
+include_recipe 'php::module_gd'
 
 web_srv = node['nagios']['server']['web_server'].to_sym
 
 case web_srv
 when :apache
-  include_recipe "nagios::apache"
+  include_recipe 'nagios::apache'
 else
-  include_recipe "nagios::nginx"
+  include_recipe 'nagios::nginx'
 end
 
 pkgs = value_for_platform_family(
-  [ "rhel","fedora" ] => %w{ openssl-devel gd-devel tar },
-  "debian" => %w{ libssl-dev libgd2-xpm-dev bsd-mailx tar },
-  "default" => %w{ libssl-dev libgd2-xpm-dev bsd-mailx tar }
+  %w{ rhel fedora } => %w{ openssl-devel gd-devel tar },
+  'debian' => %w{ libssl-dev libgd2-xpm-dev bsd-mailx tar },
+  'default' => %w{ libssl-dev libgd2-xpm-dev bsd-mailx tar }
 )
 
 pkgs.each do |pkg|
@@ -61,7 +61,7 @@ remote_file "#{Chef::Config[:file_cache_path]}/nagios-#{version}.tar.gz" do
   action :create_if_missing
 end
 
-bash "compile-nagios" do
+bash 'compile-nagios' do
   cwd Chef::Config[:file_cache_path]
   code <<-EOH
     tar zxvf nagios-#{version}.tar.gz
@@ -92,12 +92,12 @@ bash "compile-nagios" do
     make install-config
     make install-commandmode
   EOH
-  creates "/usr/sbin/nagios"
+  creates '/usr/sbin/nagios'
 end
 
 directory "#{node['nagios']['conf_dir']}/conf.d" do
-  owner "root"
-  group "root"
+  owner 'root'
+  group 'root'
   mode 00755
 end
 
@@ -111,7 +111,7 @@ end
 
 end
 
-directory "/usr/lib/nagios3" do
+directory '/usr/lib/nagios3' do
   owner node['nagios']['user']
   group node['nagios']['group']
   mode 00755
@@ -122,14 +122,14 @@ link "#{node['nagios']['conf_dir']}/stylesheets" do
 end
 
 # if nrpe client is not being installed by source then we need the NRPE plugin
-if node['nagios']['client']['install_method'] == "package"
+if node['nagios']['client']['install_method'] == 'package'
 
-  include_recipe "nagios::nrpe_source"
+  include_recipe 'nagios::nrpe_source'
 
 end
 
 if web_srv == :apache
-  apache_module "cgi" do
+  apache_module 'cgi' do
     enable :true
   end
 end

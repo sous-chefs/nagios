@@ -29,11 +29,11 @@ end
 # handle a full install vs a plugin install.  plugin installs are called via the
 # server_source.rb recipe.  full installs are called via client_source.rb
 
-if node['nagios']['client']['install_method'] == "source"
-  install_type = "install"
+if node['nagios']['client']['install_method'] == 'source'
+  install_type = 'install'
 
   template "/etc/init.d/#{node['nagios']['nrpe']['service_name']}" do
-    source "nagios-nrpe-server.erb"
+    source 'nagios-nrpe-server.erb'
     owner node['nagios']['user']
     group node['nagios']['group']
     mode  00755
@@ -45,10 +45,10 @@ if node['nagios']['client']['install_method'] == "source"
     mode  00755
   end
 else
-  install_type = "install-plugin"
+  install_type = 'install-plugin'
 end
 
-bash "compile-nagios-nrpe" do
+bash 'compile-nagios-nrpe' do
   cwd Chef::Config[:file_cache_path]
   code <<-EOH
     tar zxvf nrpe-#{nrpe_version}.tar.gz

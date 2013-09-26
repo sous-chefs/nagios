@@ -7,7 +7,7 @@
 # Definition:: nagios_conf
 #
 # Copyright 2009, 37signals
-# Copyright 2009-2011, Opscode, Inc
+# Copyright 2009-2013, Opscode, Inc
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -31,7 +31,7 @@ define :nagios_conf, :variables => {}, :config_subdir => true do
     source "#{params[:name]}.cfg.erb"
     mode 00644
     variables params[:variables]
-    notifies :reload, "service[nagios]"
+    notifies :reload, 'service[nagios]'
     backup 0
   end
 end
