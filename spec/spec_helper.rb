@@ -6,10 +6,8 @@ Berkshelf.ui.mute do
 end
 
 def runner(attributes = {}, environment = 'test')
-  cookbook_paths = File.expand_path('vendor/cookbooks/', Dir.pwd)
-
   # A workaround so that ChefSpec can work with Chef environments (from https://github.com/acrmp/chefspec/issues/54)
-  @runner ||= ChefSpec::ChefRunner.new(:cookbook_path => cookbook_paths, :platform => 'ubuntu', :version => '10.04') do |node|
+  @runner ||= ChefSpec::ChefRunner.new(:platform => 'ubuntu', :version => '10.04') do |node|
     env = Chef::Environment.new
     env.name environment
     node.stub(:chef_environment).and_return env.name
