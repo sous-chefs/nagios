@@ -1,3 +1,0 @@
-cookbook "nagios" do
-  runtimes []
-end
