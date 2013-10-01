@@ -3,7 +3,7 @@
 # Cookbook Name:: nagios
 # Recipe:: server_package
 #
-# Copyright 2011, Opscode, Inc
+# Copyright 2011-2013, Opscode, Inc
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -25,7 +25,7 @@ if node['platform_family'] == 'debian'
   random_initial_password = rand(36**16).to_s(36)
 
   %w{adminpassword adminpassword-repeat}.each do |setting|
-    execute "preseed nagiosadmin password" do
+    execute 'preseed nagiosadmin password' do
       command "echo nagios3-cgi nagios3/#{setting} password #{random_initial_password} | debconf-set-selections"
       not_if 'dpkg -l nagios3'
     end
@@ -33,12 +33,10 @@ if node['platform_family'] == 'debian'
 
 end
 
-%w{ 
+%w{
   nagios3
   nagios-nrpe-plugin
   nagios-images
 }.each do |pkg|
   package pkg
 end
-
-include_recipe "nagios::client"

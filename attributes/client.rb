@@ -8,7 +8,7 @@
 # Attributes:: client
 #
 # Copyright 2009, 37signals
-# Copyright 2009-2011, Opscode, Inc
+# Copyright 2009-2013, Opscode, Inc
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -29,7 +29,7 @@ when 'debian'
   default['nagios']['nrpe']['pidfile']           = '/var/run/nagios/nrpe.pid'
   default['nagios']['nrpe']['home']              = '/usr/lib/nagios'
   default['nagios']['nrpe']['packages']          = %w{ nagios-nrpe-server nagios-plugins nagios-plugins-basic nagios-plugins-standard }
-  if node['kernel']['machine'] == "i686"
+  if node['kernel']['machine'] == 'i686'
     default['nagios']['nrpe']['ssl_lib_dir']       = '/usr/lib/i386-linux-gnu'
   else
     default['nagios']['nrpe']['ssl_lib_dir']       = '/usr/lib/x86_64-linux-gnu'
@@ -39,11 +39,11 @@ when 'debian'
   else
     default['nagios']['nrpe']['service_name']      = 'nrpe'
   end
-when 'rhel','fedora'
+when 'rhel', 'fedora'
   default['nagios']['client']['install_method']  = 'source'
   default['nagios']['nrpe']['pidfile']           = '/var/run/nrpe.pid'
   default['nagios']['nrpe']['packages']          = %w{ nrpe nagios-plugins-disk nagios-plugins-load nagios-plugins-procs nagios-plugins-users }
-  if node['kernel']['machine'] == "i686"
+  if node['kernel']['machine'] == 'i686'
     default['nagios']['nrpe']['home']            = '/usr/lib/nagios'
     default['nagios']['nrpe']['ssl_lib_dir']     = '/usr/lib'
   else
@@ -74,3 +74,4 @@ default['nagios']['nrpe']['version']  = '2.14'
 default['nagios']['nrpe']['checksum'] = '808c7c4a82d0addf15449663e4712b5018c8bbd668e46723139f731f1ac44431'
 
 default['nagios']['server_role'] = 'monitoring'
+default['nagios']['allowed_hosts'] = nil

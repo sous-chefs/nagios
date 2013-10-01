@@ -7,7 +7,7 @@
 # Recipe:: client
 #
 # Copyright 2009, 37signals
-# Copyright 2009-2011, Opscode, Inc
+# Copyright 2009-2013, Opscode, Inc
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -45,6 +45,7 @@ if node.run_list.roles.include?(node['nagios']['server_role'])
   end
 end
 
+mon_host.concat node['nagios']['allowed_hosts'] if node['nagios']['allowed_hosts']
 
 include_recipe "nagios::client_#{node['nagios']['client']['install_method']}"
 
@@ -55,7 +56,7 @@ directory "#{node['nagios']['nrpe']['conf_dir']}/nrpe.d" do
 end
 
 template "#{node['nagios']['nrpe']['conf_dir']}/nrpe.cfg" do
-  source "nrpe.cfg.erb"
+  source 'nrpe.cfg.erb'
   owner node['nagios']['user']
   group node['nagios']['group']
   mode 00644
@@ -68,5 +69,5 @@ end
 
 service node['nagios']['nrpe']['service_name'] do
   action [:start, :enable]
-  supports :restart => true, :reload => true, :status => true
+  supports :restart => true, :status => false
 end

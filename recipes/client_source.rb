@@ -3,7 +3,7 @@
 # Cookbook Name:: nagios
 # Recipe:: client_source
 #
-# Copyright 2011, Opscode, Inc
+# Copyright 2011-2013, Opscode, Inc
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -18,12 +18,13 @@
 # limitations under the License.
 #
 
-include_recipe "build-essential"
+include_recipe 'build-essential'
 
 pkgs = value_for_platform_family(
-    ["rhel","fedora"] => ["openssl-devel","make","tar"] ,
-    "debian" => ["libssl-dev","make","tar"],
-    "default" => ["libssl-dev","make","tar"]
+    %{ rhel fedora } => %w{ openssl-devel make tar },
+    'debian' => %w{ libssl-dev make tar },
+    'gentoo' => [],
+    'default' => %w{ libssl-dev make tar }
   )
 
 pkgs.each do |pkg|
@@ -37,7 +38,7 @@ user node['nagios']['user'] do
 end
 
 group node['nagios']['group'] do
-  members [ node['nagios']['user'] ]
+  members [node['nagios']['user']]
 end
 
 plugins_version = node['nagios']['plugins']['version']
@@ -48,7 +49,7 @@ remote_file "#{Chef::Config[:file_cache_path]}/nagios-plugins-#{plugins_version}
   action :create_if_missing
 end
 
-bash "compile-nagios-plugins" do
+bash 'compile-nagios-plugins' do
   cwd Chef::Config[:file_cache_path]
   code <<-EOH
     tar zxvf nagios-plugins-#{plugins_version}.tar.gz
@@ -64,5 +65,4 @@ bash "compile-nagios-plugins" do
 end
 
 # compile the NRPE service and NRPE plugin
-include_recipe "nagios::nrpe_source"
-
+include_recipe 'nagios::nrpe_source'
