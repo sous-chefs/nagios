@@ -508,6 +508,20 @@ define service {
 }
 
 define service {
+  service_description   Check UTUI Logs - CDN smartFTP Error
+  hostgroup_name        utui
+  check_command         check_nrpe!check_logfiles_utui_smartFTP_error
+  use                   default-service,srv-pnp
+}
+
+define service {
+  service_description   Check UTUI Logs - CDN FTP Upload Error
+  hostgroup_name        utui
+  check_command         check_nrpe!check_logfiles_utui_ftp_upload_error
+  use                   default-service,srv-pnp
+}
+
+define service {
   service_description   Check Uconnect Rabbit Connection
   hostgroup_name        uconnect_logger
   check_command         check_nrpe!check_logfiles_rabbit_connection

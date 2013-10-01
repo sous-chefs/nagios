@@ -61,6 +61,8 @@ default['nagios']['logfiles']['utui']['log_file'] = "/var/log/syslog"
 default['nagios']['logfiles']['uconnect']['log_file'] = "/var/log/upstart/s2s-httpd-iron-processor.log"
 default['nagios']['checks']['utui_login_error']['pattern'] = "FAILURE (ERROR: UNABLE TO LOGIN )"
 default['nagios']['checks']['utui_publish_error']['pattern'] = "UPLOAD PUBLICATION FAILURE"
+default['nagios']['checks']['utui_smartFTP_error']['pattern'] = "WARNING: Resetting smartFTP flag"
+default['nagios']['checks']['utui_ftp_upload_error']['pattern'] = "FTP UPLOAD FAILURE"
 default['nagios']['checks']['rabbit_connection']['pattern'] = "couldn't connect to server"
 default['nagios']['checks']['rabbit_auth']['pattern'] = "Connection reset by peer"
 
