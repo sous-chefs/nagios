@@ -14,7 +14,15 @@ define service {
 # Services defined by data bags
 <% @services.each do |service| -%>
   <%# Do not define a service that has no hostgroup or a hostgroup that doesn't exist (including the "all" hostgroup) %>
-  <% unless service['hostgroup_name'].nil? || !(@hostgroups.include?(service['hostgroup_name']) || @search_hostgroups.include?(service['hostgroup_name']) || service['hostgroup_name'] == "all") -%>
+  <% unless service['hostgroup_name'].nil? || service['hostgroup_name'] == "all"
+       valid = false
+
+       service['hostgroup_name'].split(",").each do |s|
+         valid = @search_hostgroups.include?(s)  || @search_hostgroups.include?(s)
+         valid || break
+       end
+
+       if valid %>
 define service {
   service_description <%= service['description'] || service['id'] %>
   hostgroup_name <%= service['hostgroup_name'] %>
@@ -34,8 +42,9 @@ define service {
     <% unless service[conf].nil? %>
   <%= conf %> <%= service[conf] %>
     <% end %>
-  <% end %>
+   <% end %>
 }
+  <% end %>
 <% if service['use_escalation'] %>define serviceescalation {
   # this should be an escalation defined in the nagios_serviceescalation data bag
   use <%= service['use_escalation'] %>
