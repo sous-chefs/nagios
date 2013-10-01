@@ -104,15 +104,20 @@ The following attributes are used for the Nagios server
 * `node['nagios']['templates']`
 * `node['nagios']['interval_length']` - minimum interval.
 
-* `node['nagios']['default_host']['check_interval']`
-* `node['nagios']['default_host']['retry_interval']`
-* `node['nagios']['default_host']['max_check_attempts']`
-* `node['nagios']['default_host']['notification_interval']`
+These set directives in the default host template. Unless explicitly
+overridden, they will be inheirited by the host definitions for each
+disovered node and `nagios_unmanagedhosts` data bag. For more
+information about these directives, see the Nagios documentation for
+[host definitions](http://nagios.sourceforge.net/docs/3_0/objectdefinitions.html#host).
 
-* `node['nagios']['default_service']['check_interval']`
-* `node['nagios']['default_service']['retry_interval']`
-* `node['nagios']['default_service']['max_check_attempts']`
-* `node['nagios']['default_service']['notification_interval']`
+* `node['nagios']['default_host']['flap_detection']` - Defaults to `true`.
+* `node['nagios']['default_host']['check_period']` - Defaults to `'24x7'`.
+* `node['nagios']['default_host']['check_interval']` - In seconds. Must be divisible by `node['nagios']['interval_length']`. Defaults to `15`.
+* `node['nagios']['default_host']['retry_interval']` - In seconds. Must be divisible by `node['nagios']['interval_length']`. Defaults to `15`.
+* `node['nagios']['default_host']['max_check_attempts']` - Defaults to `1`.
+* `node['nagios']['default_host']['check_command']` - Defaults to the pre-defined command `'check-host-alive'`.
+* `node['nagios']['default_host']['notification_interval']` - In seconds. Must be divisible by `node['nagios']['interval_length']`. Defaults to `300`.
+* `node['nagios']['default_host']['notification_options']` - Defaults to `'d,u,r'`.
 
 * `node['nagios']['server']['web_server']` - web server to use. supports Apache or Nginx, default "apache"
 * `node['nagios']['server']['nginx_dispatch']` - nginx dispatch method. support cgi or php, default "cgi"

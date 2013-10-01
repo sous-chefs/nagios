@@ -94,12 +94,15 @@ default['nagios']['ldap_authoritative'] = nil
 default['nagios']['templates']       = Mash.new
 default['nagios']['interval_length'] = 1
 
+default['nagios']['default_host']['flap_detection']        = true
+default['nagios']['default_host']['check_period']          = '24x7'
 # Provide all interval values in seconds
 default['nagios']['default_host']['check_interval']        = 15
 default['nagios']['default_host']['retry_interval']        = 15
 default['nagios']['default_host']['max_check_attempts']    = 1
+default['nagios']['default_host']['check_command']         = 'check-host-alive'
 default['nagios']['default_host']['notification_interval'] = 300
-default['nagios']['default_host']['flap_detection']        = true
+default['nagios']['default_host']['notification_options']  = 'd,u,r'
 
 default['nagios']['default_service']['check_interval']        = 60
 default['nagios']['default_service']['retry_interval']        = 15
