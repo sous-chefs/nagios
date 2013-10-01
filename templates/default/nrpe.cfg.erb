@@ -107,7 +107,7 @@ command[check_jmx_heap]=<%= node['nagios']['plugin_dir'] %>/check_jmx -U service
 
 #command[check_jmx_garbage]=<%= node['nagios']['plugin_dir'] %>/check_jmx -U service:jmx:rmi:///jndi/rmi://localhost:9001/jmxrmi -O "java.lang:type=GarbageCollector,name=MarkSweepCompact" -A LastGcInfo -K duration
 
-command[check_jmx_threads]=<%= node['nagios']['plugin_dir'] %>/check_jmx -U service:jmx:rmi:///jndi/rmi://localhost:9001/jmxrmi -O "java.lang:type=Threading" -A ThreadCount
+command[check_jmx_threads]=<%= node['nagios']['plugin_dir'] %>/check_jmx -U service:jmx:rmi:///jndi/rmi://localhost:9001/jmxrmi -O "java.lang:type=Threading" -A ThreadCount -w 60 -c 70
 <% end %>
 
 <% if node.roles.include?("dc_visitor_processor") %>
