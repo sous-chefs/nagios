@@ -1,5 +1,7 @@
 nagios Cookbook
 ===============
+[![Build Status](https://secure.travis-ci.org/opscode-cookbooks/nagios.png?branch=master)](http://travis-ci.org/opscode-cookbooks/nagios)
+
 Installs and configures Nagios server and NRPE client. Chef nodes are automatically discovered using search, and Nagios host groups are created based on Chef roles and optionally environments as well. NRPE client commands can be defined by using a LWRP, and Nagios service checks applied to hostgroups using definitions in data bag items.
 
 
@@ -115,7 +117,7 @@ The following attributes are used for the Nagios server
 * `node['nagios']['default_service']['notification_interval']`
 
 * `node['nagios']['server']['web_server']` - web server to use. supports Apache or Nginx, default "apache"
-* `node['nagios']['server']['nginx_dispatch']` - nginx dispatch method. support cgi or php, default "cgi"
+* `node['nagios']['server']['nginx_dispatch']` - nginx dispatch method. supports cgi or php, default "cgi"
 * `node['nagios']['server']['stop_apache']` - stop apache service if using nginx, default false
 * `node['nagios']['server']['redirect_root']` - if using Apache, should http://server/ redirect to http://server/nagios3 automatically, default false
 * `node['nagios']['server']['normalize_hostname']` - If set to true, normalize all hostnames in hosts.cfg to lowercase. Defaults to false.

@@ -22,9 +22,9 @@ define host {
   # if the cloud IP is nil then use the standard IP address attribute.  This is a work around
   #   for OHAI incorrectly identifying systems on Cisco hardware as being in Rackspace
   if node['cloud'].nil? && !n['cloud'].nil?
-    ip = node['ipaddress'].include?('.') ? n['cloud']['public_ipv4'] : n['ipaddress']
-  elsif !node['cloud'].nil? && n['cloud']['provider'] != node['cloud']['provider']
-    ip = node['ipaddress'].include?('.') ? n['cloud']['public_ipv4'] : n['ipaddress']
+    ip = n['cloud']['public_ipv4'].include?('.') ? n['cloud']['public_ipv4'] : n['ipaddress']
+  elsif !node['cloud'].nil? && !n['cloud'].nil? && n['cloud']['provider'] != node['cloud']['provider']
+    ip = n['cloud']['public_ipv4'].include?('.') ? n['cloud']['public_ipv4'] : n['ipaddress']
   elsif node['nagios']['server']['monitored_client_interface']
     ip = n['network']["ipaddress_#{node['nagios']['server']['monitored_client_interface']}"]
     if not ip
