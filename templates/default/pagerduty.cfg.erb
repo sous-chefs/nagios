@@ -16,10 +16,10 @@ define contact {
 
 define command {
        command_name     notify-service-by-pagerduty
-       command_line     <%= node['nagios']['plugin_dir'] %>/pagerduty_<%= node['nagios']['server']['name'] %>.pl enqueue -f pd_nagios_object=service
+       command_line     <%= node['nagios']['plugin_dir'] %>/notify_pagerduty.pl enqueue -f pd_nagios_object=service
 }
 
 define command {
        command_name     notify-host-by-pagerduty
-       command_line     <%= node['nagios']['plugin_dir'] %>/pagerduty_<%= node['nagios']['server']['name'] %>.pl enqueue -f pd_nagios_object=host
+       command_line     <%= node['nagios']['plugin_dir'] %>/notify_pagerduty.pl enqueue -f pd_nagios_object=host
 }
