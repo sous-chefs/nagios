@@ -71,10 +71,7 @@ default['nagios']['server']['checksum'] = '469381b2954392689c85d3db733e8da4bd43b
 default['nagios']['server']['src_dir'] = 'nagios'
 
 # for server from packages installation
-default['nagios']['server']['packages'] = [
-  'nagios3',
-  'nagios-nrpe-plugin',
-  'nagios-images' ]
+default['nagios']['server']['packages'] = %w[nagios nagios-nrpe-plugin nagios-images]
 
 default['nagios']['notifications_enabled']     = 0
 default['nagios']['check_external_commands']   = true
