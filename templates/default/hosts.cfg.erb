@@ -49,6 +49,7 @@ define host {
 
 <% unless @unmanaged_hosts.nil? -%>
 <% @unmanaged_hosts.each do |n| -%>
+  <% unless (n['environment'] && n['environment'] != node.chef_environment ) -%>
 define host {
   use server
   address <%= n['address'] %>
@@ -56,5 +57,6 @@ define host {
   hostgroups all,<%= n['hostgroups'].join(",") %>
   notifications_enabled <%= n['notifications'] %>
 }
+  <% end %>
 <% end -%>
 <% end -%>
