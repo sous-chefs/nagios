@@ -6,18 +6,18 @@
   ServerName <%= @nagios_url %>
   <% else %>
   ServerName      <%= node['fqdn'] %>
-  ServerAlias     nagios nagios.<%= node.chef_environment =~ /^_default$/ ? "default" : node.chef_environment%>.<%= @public_domain %>
+  ServerAlias     <%= node['nagios']['server']['name'] %> <%= node['nagios']['server']['name'] %>.<%= node.chef_environment =~ /^_default$/ ? "default" : node.chef_environment%>.<%= @public_domain %>
   <% end %>
   DocumentRoot    <%= node['nagios']['docroot'] %>
   CustomLog       <%= node['nagios']['log_dir'] %>/apache_access.log combined
   ErrorLog        <%= node['nagios']['log_dir'] %>/apache_error.log
 
-  ScriptAlias /cgi-bin/nagios3 /usr/lib/cgi-bin/nagios3
-  ScriptAlias /nagios3/cgi-bin /usr/lib/cgi-bin/nagios3
+  ScriptAlias /cgi-bin/<%= node['nagios']['server']['vname'] %> /usr/lib/cgi-bin/<%= node['nagios']['server']['vname'] %>
+  ScriptAlias /<%= node['nagios']['server']['vname'] %>/cgi-bin /usr/lib/cgi-bin/<%= node['nagios']['server']['vname'] %>
 
-  Alias /stylesheets /etc/nagios3/stylesheets
-  Alias /nagios3/stylesheets /etc/nagios3/stylesheets
-  Alias /nagios3 <%= node['nagios']['docroot'] %>
+  Alias /stylesheets /etc/<%= node['nagios']['server']['vname'] %>/stylesheets
+  Alias /<%= node['nagios']['server']['vname'] %>/stylesheets /etc/<%= node['nagios']['server']['vname'] %>/stylesheets
+  Alias /<%= node['nagios']['server']['vname'] %> <%= node['nagios']['docroot'] %>
 
   <% if @https -%>
   SSLEngine On
@@ -70,7 +70,7 @@
 
   RewriteEngine On
   <% if node['nagios']['server']['redirect_root'] -%>
-  RewriteRule ^/$ /nagios3 [R=301,L]
+  RewriteRule ^/$ /<%= node['nagios']['server']['vname'] %> [R=301,L]
   <% end -%>
   RewriteCond %{THE_REQUEST} ^[A-Z]{3,9}\ /.*index\.html\ HTTP/
   RewriteRule ^(.*)index\.html$ $1 [R=301,L]

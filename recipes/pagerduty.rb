@@ -41,7 +41,7 @@ package 'libcrypt-ssleay-perl' do
   action :install
 end
 
-remote_file "#{node['nagios']['plugin_dir']}/pagerduty_nagios.pl" do
+remote_file "#{node['nagios']['plugin_dir']}/notify_pagerduty.pl" do
   owner 'root'
   group 'root'
   mode 00755

@@ -60,10 +60,18 @@ default['nagios']['ssl_cert_key']  = "#{node['nagios']['conf_dir']}/certificates
 default['nagios']['ssl_req']       = '/C=US/ST=Several/L=Locality/O=Example/OU=Operations/' +
   "CN=#{node['nagios']['server_name']}/emailAddress=ops@#{node['nagios']['server_name']}"
 
+# to enable Icinga
+default['nagios']['server']['name']  = 'nagios'
+default['nagios']['server']['vname'] = 'nagios3'
+
 # for server from source installation
 default['nagios']['server']['url']      = 'http://prdownloads.sourceforge.net/sourceforge/nagios'
 default['nagios']['server']['version']  = '3.5.0'
 default['nagios']['server']['checksum'] = '469381b2954392689c85d3db733e8da4bd43b806b3d661d1a7fbd52dacc084db'
+default['nagios']['server']['src_dir'] = 'nagios'
+
+# for server from packages installation
+default['nagios']['server']['packages'] = %w[nagios nagios-nrpe-plugin nagios-images]
 
 default['nagios']['notifications_enabled']     = 0
 default['nagios']['check_external_commands']   = true
