@@ -60,7 +60,7 @@ default['nagios']['ssl_cert_key']  = "#{node['nagios']['conf_dir']}/certificates
 default['nagios']['ssl_req']       = '/C=US/ST=Several/L=Locality/O=Example/OU=Operations/' +
   "CN=#{node['nagios']['server_name']}/emailAddress=ops@#{node['nagios']['server_name']}"
 
-# to enable Icinga
+# nagios server name and webserver vname.  this can be changed to allow for the installation of icinga
 default['nagios']['server']['name']  = 'nagios'
 default['nagios']['server']['vname'] = 'nagios3'
 
