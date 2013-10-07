@@ -138,7 +138,7 @@ use_embedded_perl_implicitly=1
 illegal_object_name_chars=`~!$%^&*|'"<>?,()=
 illegal_macro_output_chars=`~$&|'"<>
 
-use_regexp_matching=0
+use_regexp_matching=<%= node['nagios']['regexp_matching'] %>
 use_true_regexp_matching=0
 
 daemon_dumps_core=0
