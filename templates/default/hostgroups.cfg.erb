@@ -5,11 +5,11 @@
 define hostgroup {
   hostgroup_name all
   alias all
-  <% if node['nagios']['regexp_matching'] == 1 -%>
+<% if node['nagios']['regexp_matching'] == 1 -%>
   members .*
-  <% else -%>
+<% else -%>
   members *
-  <% end -%>
+<% end -%>
 }
 
 <% @hostgroups.sort.each do |h| -%>
