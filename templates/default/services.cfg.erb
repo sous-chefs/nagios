@@ -195,13 +195,6 @@ define service {
 }
 
 define service {
-    service_description Check JMX Garbage Collection
-    hostgroup_name      datacloud_component
-    check_command       check_nrpe!check_jmx_garbage
-    use                 default-service,srv-pnp
-}
-
-define service {
     service_description Check JMX Threading
     hostgroup_name      datacloud_component
     check_command       check_nrpe!check_jmx_threads
@@ -258,6 +251,27 @@ define service {
     use                 default-service,srv-pnp
 }
 
+define service {
+    service_description Check JMX DataCloud VP ActiveQueryCount
+    hostgroup_name      dc_visitor_processor
+    check_command       check_nrpe!check_jmx_dc_vp_active_query_count
+    use                 default-service,srv-pnp
+}
+
+define service {
+    service_description Check JMX DataCloud VP RebalancedObjectsReceived
+    hostgroup_name      dc_visitor_processor
+    check_command       check_nrpe!check_jmx_dc_vp_rebalanced_objects_received
+    use                 default-service,srv-pnp
+}
+
+define service {
+    service_description Check JMX DataCloud VP RebalancedObjectsSent
+    hostgroup_name      dc_visitor_processor
+    check_command       check_nrpe!check_jmx_dc_vp_rebalanced_objects_sent
+    use                 default-service,srv-pnp
+}
+
 ## JMX QA ##
 define service {
     service_description Check JMX DataCloud QA TotalMessagesReceived
@@ -281,9 +295,58 @@ define service {
 }
 
 define service {
-    service_description Check JMX DataCloud QA ActiveQueryCount
+    service_description Check JMX DataCloud QA Query Aggregator ActiveQueryCount
     hostgroup_name      dc_query_aggregator
     check_command       check_nrpe!check_jmx_dc_qa_active_query_count
+    use                 default-service,srv-pnp
+}
+
+define service {
+    service_description Check JMX DataCloud QA TotalUnknownQueryResults
+    hostgroup_name      dc_query_aggregator
+    check_command       check_nrpe!check_jmx_dc_qa_total_unknown_query_results
+    use                 default-service,srv-pnp
+}
+
+define service {
+    service_description Check JMX DataCloud QA UnknownQuerysWithQueuedVisitors
+    hostgroup_name      dc_query_aggregator
+    check_command       check_nrpe!check_jmx_dc_qa_unknown_querys_with_queued_visitors
+    use                 default-service,srv-pnp
+}
+
+define service {
+    service_description Check JMX DataCloud QA UnknownQuerysQueuedVisitorCount
+    hostgroup_name      dc_query_aggregator
+    check_command       check_nrpe!check_jmx_dc_qa_unknown_querys_queued_visitor_count
+    use                 default-service,srv-pnp
+}
+
+define service {
+    service_description Check JMX DataCloud QA RebalancedObjectsReceived
+    hostgroup_name      dc_query_aggregator
+    check_command       check_nrpe!check_jmx_dc_qa_rebalanced_objects_received
+    use                 default-service,srv-pnp
+}
+
+define service {
+    service_description Check JMX DataCloud QA RebalancedObjectsSent
+    hostgroup_name      dc_query_aggregator
+    check_command       check_nrpe!check_jmx_dc_qa_rebalanced_objects_sent
+    use                 default-service,srv-pnp
+}
+
+define service {
+    service_description Check JMX DataCloud QA Query Manager ActiveQueryCount
+    hostgroup_name      dc_query_aggregator
+    check_command       check_nrpe!check_jmx_dc_qa_qm_active_query_count
+    use                 default-service,srv-pnp
+}
+
+define service {
+    service_description Check JMX DataCloud QA Query Monitor QueriesRecieved
+    hostgroup_name      dc_query_aggregator
+    check_command       check_nrpe!check_jmx_dc_qa_qm_queries_recieved
     use                 default-service,srv-pnp
 }
 

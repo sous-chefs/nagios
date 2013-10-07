@@ -105,8 +105,6 @@ command[check_logfiles_rabbit_auth]=sudo /usr/lib/nagios/plugins/check-log-new.p
 ###### JMX Generic ######
 command[check_jmx_heap]=<%= node['nagios']['plugin_dir'] %>/check_jmx -U service:jmx:rmi:///jndi/rmi://localhost:9001/jmxrmi -O java.lang:type=Memory -A HeapMemoryUsage -K used -I HeapMemoryUsage -J used -vvvv -w 3000000000 -c 3500000000
 
-#command[check_jmx_garbage]=<%= node['nagios']['plugin_dir'] %>/check_jmx -U service:jmx:rmi:///jndi/rmi://localhost:9001/jmxrmi -O "java.lang:type=GarbageCollector,name=MarkSweepCompact" -A LastGcInfo -K duration
-
 command[check_jmx_threads]=<%= node['nagios']['plugin_dir'] %>/check_jmx -U service:jmx:rmi:///jndi/rmi://localhost:9001/jmxrmi -O "java.lang:type=Threading" -A ThreadCount -w 60 -c 70
 <% end %>
 
@@ -128,6 +126,13 @@ command[check_jmx_dc_vp_active_visitor_count]=<%= node['nagios']['plugin_dir'] %
 command[check_jmx_dc_vp_visitors_persisted]=<%= node['nagios']['plugin_dir'] %>/check_jmx -U service:jmx:rmi:///jndi/rmi://localhost:9001/jmxrmi -O "DataCloud:type=VisitorManager" -A VisitorsPersisted
 
 command[check_jmx_dc_vp_total_events_received]=<%= node['nagios']['plugin_dir'] %>/check_jmx -U service:jmx:rmi:///jndi/rmi://localhost:9001/jmxrmi -O "DataCloud:type=VisitorProcessor" -A TotalEventsReceived
+
+command[check_jmx_dc_vp_active_query_count]=<%= node['nagios']['plugin_dir'] %>/check_jmx -U service:jmx:rmi:///jndi/rmi://localhost:9001/jmxrmi -O "DataCloud:type=QueryManager" -A ActiveQueryCount
+
+command[check_jmx_dc_vp_rebalanced_objects_received]=<%= node['nagios']['plugin_dir'] %>/check_jmx -U service:jmx:rmi:///jndi/rmi://localhost:9001/jmxrmi -O "DataCloud:type=VisitorProcessorCluster" -A RebalancedObjectsReceived
+
+command[check_jmx_dc_vp_rebalanced_objects_sent]=<%= node['nagios']['plugin_dir'] %>/check_jmx -U service:jmx:rmi:///jndi/rmi://localhost:9001/jmxrmi -O "DataCloud:type=VisitorProcessorCluster" -A RebalancedObjectsSent
+
 <% end %>
 
 <% if node.roles.include?("dc_query_aggregator") %>
@@ -135,6 +140,8 @@ command[check_jmx_dc_vp_total_events_received]=<%= node['nagios']['plugin_dir'] 
 command[check_query_aggregator]=<%= node['nagios']['plugin_dir'] %>/check_procs -a "/var/lib/sources/data_cloud/visitor_profile_processor.one-jar.jar query_aggregator"
 
 ###### JMX QA ######
+command[check_jmx_dc_qa_total_query_results_received]=<%= node['nagios']['plugin_dir'] %>/check_jmx -U service:jmx:rmi:///jndi/rmi://localhost:9001/jmxrmi -O "DataCloud:type=QueryAggregator" -A TotalQueryResultsReceived
+
 command[check_jmx_dc_qa_total_messages_received]=<%= node['nagios']['plugin_dir'] %>/check_jmx -U service:jmx:rmi:///jndi/rmi://localhost:9001/jmxrmi -O "DataCloud:type=QueryAggregator" -A TotalMessagesReceived
 
 command[check_jmx_dc_qa_total_queries_received]=<%= node['nagios']['plugin_dir'] %>/check_jmx -U service:jmx:rmi:///jndi/rmi://localhost:9001/jmxrmi -O "DataCloud:type=QueryAggregator" -A TotalQueriesReceived
@@ -142,6 +149,20 @@ command[check_jmx_dc_qa_total_queries_received]=<%= node['nagios']['plugin_dir']
 command[check_jmx_dc_qa_total_query_results_received]=<%= node['nagios']['plugin_dir'] %>/check_jmx -U service:jmx:rmi:///jndi/rmi://localhost:9001/jmxrmi -O "DataCloud:type=QueryAggregator" -A TotalQueryResultsReceived
 
 command[check_jmx_dc_qa_active_query_count]=<%= node['nagios']['plugin_dir'] %>/check_jmx -U service:jmx:rmi:///jndi/rmi://localhost:9001/jmxrmi -O "DataCloud:type=QueryAggregator" -A ActiveQueryCount
+
+command[check_jmx_dc_qa_total_unknown_query_results]=<%= node['nagios']['plugin_dir'] %>/check_jmx -U service:jmx:rmi:///jndi/rmi://localhost:9001/jmxrmi -O "DataCloud:type=QueryAggregator" -A TotalUnknownQueryResults
+
+command[check_jmx_dc_qa_unknown_querys_with_queued_visitors]=<%= node['nagios']['plugin_dir'] %>/check_jmx -U service:jmx:rmi:///jndi/rmi://localhost:9001/jmxrmi -O "DataCloud:type=QueryAggregator" -A UnknownQuerysWithQueuedVisitors
+
+command[check_jmx_dc_qa_unknown_querys_queued_visitor_count]=<%= node['nagios']['plugin_dir'] %>/check_jmx -U service:jmx:rmi:///jndi/rmi://localhost:9001/jmxrmi -O "DataCloud:type=QueryAggregator" -A UnknownQuerysQueuedVisitorCount
+
+command[check_jmx_dc_qa_rebalanced_objects_received]=<%= node['nagios']['plugin_dir'] %>/check_jmx -U service:jmx:rmi:///jndi/rmi://localhost:9001/jmxrmi -O "DataCloud:type=QueryAggregatorCluster" -A RebalancedObjectsReceived
+
+command[check_jmx_dc_qa_rebalanced_objects_sent]=<%= node['nagios']['plugin_dir'] %>/check_jmx -U service:jmx:rmi:///jndi/rmi://localhost:9001/jmxrmi -O "DataCloud:type=QueryAggregatorCluster" -A RebalancedObjectsSent
+
+command[check_jmx_dc_qa_qm_active_query_count]=<%= node['nagios']['plugin_dir'] %>/check_jmx -U service:jmx:rmi:///jndi/rmi://localhost:9001/jmxrmi -O "DataCloud:type=QueryManager" -A ActiveQueryCount
+
+command[check_jmx_dc_qa_qm_queries_recieved]=<%= node['nagios']['plugin_dir'] %>/check_jmx -U service:jmx:rmi:///jndi/rmi://localhost:9001/jmxrmi -O "DataCloud:type=QueryMonitor" -A QueriesReceived
 <% end %>
 
 <% if node.roles.include?("dc_message_router") %>
