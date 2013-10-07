@@ -106,9 +106,9 @@ nodes = []
 hostgroups = []
 
 if node['nagios']['multi_environment_monitoring']
-  nodes = search(:node, 'hostname:[* TO *]')
+  nodes = search(:node, 'hostname:*')
 else
-  nodes = search(:node, "hostname:[* TO *] AND chef_environment:#{node.chef_environment}")
+  nodes = search(:node, "hostname:* AND chef_environment:#{node.chef_environment}")
 end
 
 if nodes.empty?
