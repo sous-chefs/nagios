@@ -95,7 +95,7 @@ bash 'compile-nagios' do
   creates "/usr/sbin/#{node['nagios']['server']['name']}"
 end
 
-directory "#{node['nagios']['conf_dir']}/conf.d" do
+directory node['nagios']['config_dir'] do
   owner 'root'
   group 'root'
   mode 00755
