@@ -22,11 +22,14 @@
 # limitations under the License.
 #
 
-default['nagios']['pagerduty_key'] = ''
-default['nagios']['pagerduty']['script_url'] = 'https://raw.github.com/PagerDuty/pagerduty-nagios-pl/master/pagerduty_nagios.pl'
-unless node['nagios']['pagerduty_key'].empty?
+node.set['nagios']['pagerduty']['key'] = node['nagios']['pagerduty_key']
+default['nagios']['pagerduty']['key'] = ''
+unless node['nagios']['pagerduty']['key'].empty?
   default['nagios']['additional_contacts'] = { 'pagerduty' => true }
 end
+default['nagios']['pagerduty']['script_url'] = 'https://raw.github.com/PagerDuty/pagerduty-nagios-pl/master/pagerduty_nagios.pl'
+default['nagios']['pagerduty']['service_notification_options'] = 'w,u,c,r'
+default['nagios']['pagerduty']['host_notification_options'] = 'd,r'
 
 case node['platform_family']
 when 'debian'

@@ -174,7 +174,7 @@ Installs the Nagios server from packages. Default for Debian / Ubuntu systems.
 Installs the Nagios server from source. Default for Red Hat / Fedora based systems as native packages for Nagios are not available in the default repositories.
 
 ### pagerduty
-Installs and configures pagerduty plugin for Nagios. You need to set a `node['nagios']['pagerduty_key']` attribute on your server for this to work. This can be set through environments so that you can use different API keys for servers in production vs staging for instance.
+Installs and configures pagerduty plugin for Nagios. You need to set a `node['nagios']['pagerduty']['key']` attribute on your server for this to work. This can be set through environments so that you can use different API keys for servers in production vs staging for instance.
 
 This recipe was written based on the [Nagios Integration Guide](http://www.pagerduty.com/docs/guides/nagios-integration-guide) from PagerDuty which explains how to get an API key for your Nagios server.
 
