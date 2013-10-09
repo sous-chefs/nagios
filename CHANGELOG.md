@@ -3,6 +3,29 @@ nagios Cookbook CHANGELOG
 This file is used to list changes made in each version of the nagios cookbook.
 
 
+v5.0.0
+------
+### Bug
+- **[COOK-3778](https://tickets.opscode.com/browse/COOK-3778)** - Fix missing customization points for Icinga
+- **[COOK-3731](https://tickets.opscode.com/browse/COOK-3731)** - Remove range searches in Nagios cookbook that break chef-zero
+- **[COOK-3729](https://tickets.opscode.com/browse/COOK-3729)** - Update Nagios Plugin download URL
+- **[COOK-3579](https://tickets.opscode.com/browse/COOK-3579)** - Stop shipping icons files that arent used
+- **[COOK-3332](https://tickets.opscode.com/browse/COOK-3332)** - Fix `nagios::client` failures on Chef Solo
+
+### Improvement
+- **[COOK-3730](https://tickets.opscode.com/browse/COOK-3730)** - Change the default authentication method
+- **[COOK-3696](https://tickets.opscode.com/browse/COOK-3696)** - Sort hostgroups so they don't get updated on each run
+- **[COOK-3670](https://tickets.opscode.com/browse/COOK-3670)** - Add Travis support
+- **[COOK-3583](https://tickets.opscode.com/browse/COOK-3583)** - Update Nagios source to 3.5.1
+- **[COOK-3577](https://tickets.opscode.com/browse/COOK-3577)** - Cleanup code style
+- **[COOK-3287](https://tickets.opscode.com/browse/COOK-3287)** - Provide more customization points to make it possible to use Icinga
+- **[COOK-1725](https://tickets.opscode.com/browse/COOK-1725)** - Add configurable notification options for `nagios::pagerduty`
+
+### New Feature
+- **[COOK-3723](https://tickets.opscode.com/browse/COOK-3723)** - Support regexp_matching in Nagios
+- **[COOK-3695](https://tickets.opscode.com/browse/COOK-3695)** - Add more tunables for default host template
+
+
 v4.2.0
 ------
 ### New Feature
