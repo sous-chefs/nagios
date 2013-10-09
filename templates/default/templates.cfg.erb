@@ -43,13 +43,13 @@ define host {
 define host {
   name                    server
   use                     default-host
-  check_period            24x7
+  check_period            <%= nagios_attr(:default_host)[:check_period] %>
   check_interval          <%= nagios_interval(nagios_attr(:default_host)[:check_interval]) %>
   retry_interval          <%= nagios_interval(nagios_attr(:default_host)[:retry_interval]) %>
   max_check_attempts      <%= nagios_attr(:default_host)[:max_check_attempts] %>
-  check_command           check-host-alive
+  check_command           <%= nagios_attr(:default_host)[:check_command] %>
   notification_interval   <%= nagios_interval(nagios_attr(:default_host)[:notification_interval]) %>
-  notification_options    d,u,r
+  notification_options    <%= nagios_attr(:default_host)[:notification_options] %>
   contact_groups          <%= nagios_attr(:default_contact_groups).join(",") %>
   register                0
 }
