@@ -66,5 +66,5 @@ nagios_conf 'pagerduty'
 cron 'Flush Pagerduty' do
   user node['nagios']['user']
   mailto 'root@localhost'
-  command "#{node['nagios']['plugin_dir']}/pagerduty_nagios.pl flush"
+  command "#{node['nagios']['plugin_dir']}/notify_pagerduty.pl flush"
 end
