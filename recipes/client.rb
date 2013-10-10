@@ -220,6 +220,14 @@ if node.roles.include?("server2server")
      parameters "-W 15 -K 8 -A -x /dev/shm -X nfs -i /boot"
      action :add
   end
+elsif node.roles.include?("rabbitmq_server") || node.roles.include?("rabbitmq_server_cluster_disc") || node.roles.include?("rabbitmq_server_cluster_ram")
+  nagios_nrpecheck "check_all_disks" do
+    command "#{node['nagios']['plugin_dir']}/check_disk"
+    warning_condition "15%"
+    critical_condition "11%"
+    parameters "-W 15 -K 8 -A -x /dev/shm -X nfs -i /boot"
+    action :add
+  end
 else
   nagios_nrpecheck "check_all_disks" do
     command "#{node['nagios']['plugin_dir']}/check_disk"
