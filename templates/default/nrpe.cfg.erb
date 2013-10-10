@@ -2,6 +2,9 @@
 
 pid_file=<%= node['nagios']['nrpe']['pidfile'] %>
 server_port=5666
+<% if node['nagios']['nrpe']['server_address'] && node['nagios']['nrpe']['server_address']!='' -%>
+server_address=<%= node['nagios']['nrpe']['server_address'] %>
+<% end -%>
 nrpe_user=<%= node['nagios']['user'] %>
 nrpe_group=<%= node['nagios']['group'] %>
 dont_blame_nrpe=<%= node['nagios']['nrpe']['dont_blame_nrpe'] %>
