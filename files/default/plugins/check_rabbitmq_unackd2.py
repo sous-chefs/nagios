@@ -8,9 +8,12 @@ RABBITMQCTL = "/usr/sbin/rabbitmqctl"
 NAME = "name"
 
 parser = OptionParser()
+parser.add_option("-w", "--warning", dest="warn", metavar="INT", type="int", default=100, help="Default: 100")
 parser.add_option("-W", "--Warning", dest="warnack", metavar="INT", type="int", default=1000, help="Default: 1000")
+parser.add_option("-c", "--critical", dest="crit", metavar="INT", type="int", default=200, help="Default: 200")
 parser.add_option("-k", "--kritical", dest="critack", metavar="INT", type="int", default=2000, help="Default: 2000")
 parser.add_option("-v", "--vhost", dest="vhost", metavar="VIRTUAL_HOST", type="string", default="/", help="Default \"/\"")
+parser.add_option("-q", "--queue", dest="queue", metavar="QUEUE", type="string", default=None, help="Default: all")
 parser.add_option("-i", "--info", dest="info", metavar="INFO", type="string", default="messages_unacknowledged", help="Default: messages_unacknowledged")
 (options, args) = parser.parse_args()
 
@@ -23,6 +26,10 @@ vhostdata = os.popen(GET_VHOSTS).read().strip()
 for vhost in vhostdata.split("\n"):
     if vhostdata is not None:
 
+        COMMAND2 = ""
+        COMMAND2 = "%s -q list_queues -p %s %s %s" % (RABBITMQCTL, vhost, NAME, options.info)
+        QUEUE = ""
+        QUEUE = "%s -q list_queues -p %s %s" % (RABBITMQCTL, vhost, NAME)
         UNAKD = ""
         UNAKD = "%s -q list_queues -p %s %s" % (RABBITMQCTL, vhost, options.info, NAME)
 
@@ -34,6 +41,10 @@ for vhost in vhostdata.split("\n"):
             print "Warning value cannot be greater than critical value"
             sys.exit(3)
 
+        data2 = ""
+        data2 = os.popen(COMMAND2).read().strip()
+        queue = ""
+        queue = os.popen(QUEUE).read().strip()
         unakd = ""
         unakd = os.popen(UNAKD).read().strip()
 
