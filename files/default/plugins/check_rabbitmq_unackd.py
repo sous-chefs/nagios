@@ -24,7 +24,7 @@ for vhost in vhostdata.split("\n"):
     if vhostdata is not None:
 
         UNAKD = ""
-        UNAKD = "%s -q list_queues -p %s %s" % (RABBITMQCTL, vhost, options.info, NAME)
+        UNAKD = "%s -q list_queues -p %s %s" % (RABBITMQCTL, vhost, options.info)
 
         if not os.path.exists(RABBITMQCTL):
             print "%s does not exist" % RABBITMQCTL
