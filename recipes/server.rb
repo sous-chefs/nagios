@@ -206,7 +206,7 @@ nagios_creds = Chef::EncryptedDataBagItem.load('secrets', 's3cfg', nagios_secret
 
 file Base64.decode64(nagios_creds['file']) do
   content Base64.decode64(nagios_creds['content'])
-  owner Base64.decode64(nagios_creds['owner'])
-  group Base64.decode64(nagios_creds['group'])
-  mode Base64.decode64(nagios_creds['mode'])
+  owner nagios_creds['owner']
+  group nagios_creds['group']
+  mode nagios_creds['mode']
 end
