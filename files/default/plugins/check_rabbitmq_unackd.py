@@ -42,9 +42,9 @@ for vhost in vhostdata.split("\n"):
         output = ""
         perf = ""
 
-        def check_line2(result):
+        def check_line2(result, queue):
             result = int(result)
-            globals()['output'] += "%s" % (result)
+            globals()['output'] = "%s" % (result)
             
             globals()['perf'] += "unacknowledged=%sITEMS;%s;%s;; " % (result, WARNACK, CRITACK)
             if result > CRITACK:
@@ -54,18 +54,21 @@ for vhost in vhostdata.split("\n"):
                     globals()['is_warnack'] = True
 
                 if is_critack is True:
-                    sys.stdout.write("UNAKD MESSAGE CRITICAL FOR VHOST %s - %s|%s\n" % (vhost, output, perf))
+                    sys.stdout.write("UNAKD MESSAGE CRITICAL FOR VHOST %s and QUEUE %s - %s|%s\n" % (vhost, queue, output, perf))
                     sys.exit(2)
 
                 if is_warnack is True:
-                    sys.stdout.write("UNAKD MESSAGE WARNING FOR VHOST %s - %s|%s\n" % (vhost, output, perf))
+                    sys.stdout.write("UNAKD MESSAGE WARNING FOR VHOST %s and QUEUE %s - %s|%s\n" % (vhost, queue, output, perf))
                     sys.exit(1)
 
         for results in unakd.split("\n"):
             if not results:
                 no_results = True
-            else:         
-                check_line2(results)
+            else:
+                list1 = results.split()
+                number = list1[0]
+                name = list1[1]
+                check_line2(number, name)
 
     else:
         sys.stdout.write("There seems to be no VHOSTS on this machine.\n")
