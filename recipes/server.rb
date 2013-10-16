@@ -110,7 +110,7 @@ else
   sitemap = search(:node, "role:sitemap_audit AND placement_availability_zone:#{region}* AND app_environment:production_vpc*")
   servers = search(:node, "role:#{node['nagios']['server_role']} AND app_environment:#{node[:monitored_environment]}")
 
-  if node['app_environment'] == "production_vpc2"
+  if node['app_environment'] == "production_vpc2" || node['app_environment'] == "production_vpc3"
      both = datacloud.concat(servers)
      three = both.concat(sitemap)
        Chef::Log.warn("Nodes are #{nodes}, datacloud is #{datacloud}, servers are #{servers} and both are #{both}")
