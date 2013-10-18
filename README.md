@@ -99,15 +99,11 @@ Attributes
 * `node['nagios']['host_name_attribute']` - node attribute to use for naming the host. Must be unique across monitored nodes. Defaults to hostname
 * `node['nagios']['regexp_matching']` - Attribute to enable [regexp matching](http://nagios.sourceforge.net/docs/3_0/configmain.html#use_regexp_matching). Defaults to 0.
 * `node['nagios']['large_installation_tweaks']` - Attribute to enable [large installation tweaks](http://nagios.sourceforge.net/docs/3_0/largeinstalltweaks.html). Defaults to 0.
-* `node['nagios']['templates']`
+* `node['nagios']['templates']` - These set directives in the default host template. Unless explicitly overridden, they will be inherited by the host definitions for each discovered node and `nagios_unmanagedhosts` data bag. For more information about these directives, see the Nagios documentation for [host definitions](http://nagios.sourceforge.net/docs/3_0/objectdefinitions.html#host).
+* `node['nagios']['hosts_template']` - Host template you want to inherit properties/variables from, default 'server'. For more information, see the nagios doc on [Object Inheritance](http://nagios.sourceforge.net/docs/3_0/objectinheritance.html).
 * `node['nagios']['interval_length']` - minimum interval.
 * `node['nagios']['brokers']` - Hash of broker modules to include in the config. Hash key is the path to the broker module, the value is any parameters to pass to it.
 
-These set directives in the default host template. Unless explicitly
-overridden, they will be inherited by the host definitions for each
-discovered node and `nagios_unmanagedhosts` data bag. For more
-information about these directives, see the Nagios documentation for
-[host definitions](http://nagios.sourceforge.net/docs/3_0/objectdefinitions.html#host).
 
 * `node['nagios']['default_host']['flap_detection']` - Defaults to `true`.
 * `node['nagios']['default_host']['check_period']` - Defaults to `'24x7'`.

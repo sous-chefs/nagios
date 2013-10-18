@@ -4,7 +4,7 @@
 
 <% #handle the nagios node differently than others to prevent failures in bootstrap scenarios %>
 define host {
-  use server
+  use <%= node['nagios']['host_template'] %>
   address <%= (node['network']["ipaddress_#{node['nagios']['monitoring_interface']}"] || node['ipaddress']) %>
   host_name <%= node['nagios']['server']['normalize_hostname'] ? node[node['nagios']['host_name_attribute']].downcase : node[node['nagios']['host_name_attribute']] %>
   hostgroups <% if node['nagios']['multi_environment_monitoring'] -%><%= node.chef_environment %>,<% end -%>all,<%= node['os'] %><% unless node['roles'].empty? -%>,<%= node['roles'].sort.join(",") %><% end -%>
@@ -14,6 +14,9 @@ define host {
 <% unless n.name == node.name -%>
 define host {
   use server
+  <% # because nodes may not include the nagios cookbook, host_template
+     # may be undefined, so we default to 'server' %>
+  use <%=  (n['nagios'] && n['nagios']['host_template']) || 'server' %>
   address <%= ip_to_monitor(n) %>
   <% host_name = (n[node['nagios']['host_name_attribute']] ? n[node['nagios']['host_name_attribute']] : n.name) -%>
   host_name <%= node['nagios']['server']['normalize_hostname'] ? host_name.downcase : host_name %>

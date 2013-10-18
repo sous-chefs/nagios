@@ -156,6 +156,7 @@ default['nagios']['timeperiods_databag']         = 'nagios_timeperiods'
 default['nagios']['host_name_attribute']         = 'hostname'
 default['nagios']['regexp_matching']             = 0
 default['nagios']['large_installation_tweaks']   = 0
+default['nagios']['host_template'] = 'server'
 
 # for cas authentication
 default['nagios']['cas_login_url']       = 'https://example.com/cas/login'
@@ -169,9 +170,10 @@ default['nagios']['ldap_bind_password'] = nil
 default['nagios']['ldap_url']           = nil
 default['nagios']['ldap_authoritative'] = nil
 
+default['nagios']['templates']       = Mash.new
+
 # This setting is effectively sets the minimum interval (in seconds) nagios can handle.
 # Other interval settings provided in seconds will calculate their actual from this value, since nagios works in 'time units' rather than allowing definitions everywhere in seconds
-default['nagios']['templates']       = Mash.new
 default['nagios']['interval_length'] = 1
 
 default['nagios']['default_host']['flap_detection']        = true
