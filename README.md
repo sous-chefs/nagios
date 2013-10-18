@@ -41,6 +41,9 @@ The following attributes are used by both client and server recipes.
 * `node['nagios']['group']` - Nagios group, default 'nagios'.
 * `node['nagios']['plugin_dir']` - location where Nagios plugins go, default '/usr/lib/nagios/plugins'.
 * `node['nagios']['multi_environment_monitoring']` - Chef server will monitor hosts in all environments, not just its own, default 'false'
+* `node['nagios']['hosts_template']` - Host template you want to inherit
+  properties/variables from, default 'server'. For more informations,
+  see the nagios doc on [Object Inheritance](http://nagios.sourceforge.net/docs/3_0/objectinheritance.html).
 
 ### client
 The following attributes are used for the NRPE client

@@ -4,7 +4,7 @@
 
 <%# handle the nagios node differently than others to prevent failures in bootstrap scenarios %>
 define host {
-  use server
+  use <%= node['nagios']['host_template'] %>
   address <%= node['ipaddress'] %>
   host_name <%= node['nagios']['server']['normalize_hostname'] ? node[node['nagios']['host_name_attribute']].downcase : node[node['nagios']['host_name_attribute']] %>
   hostgroups <% if node['nagios']['multi_environment_monitoring'] -%><%= node.chef_environment %>,<% end -%>all,<%= node['os'] %>,<%= node['roles'].sort.join(",") %><% if !node['roles'].include?(node['nagios']['server_role']) %>,<%= node['nagios']['server_role'] %><% end -%>
@@ -13,7 +13,9 @@ define host {
 <% @nodes.each do |n| -%>
 <% unless n.name == node.name -%>
 define host {
-  use server
+  <% # because nodes may not include the nagios cookbook, host_template
+     # may be undefined, so we default to 'server' %>
+  use <%=  (n['nagios'] && n['nagios']['host_template']) || 'server' %>
   <% # decide whether to use internal or external IP addresses for this node
   # if the nagios server is not in the cloud, always use public IP addresses for cloud nodes.
   # if the nagios server is in the cloud, use private IP addresses for any
