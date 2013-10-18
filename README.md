@@ -305,6 +305,32 @@ Create a nagios\_servicedependencies data bag that will contain definitions for 
 
 Additional directives can be defined as described in the [Nagios documentation](http://nagios.sourceforge.net/docs/3_0/objectdefinitions.html#servicedependency).
 
+### Host Templates
+Host templates are optional, but allow you to specify combinations of attributes to apply to a host. Create a nagios_hosttemplates\ data bag that will contain definitions for host templates to be used. Each host template need only specify id and whichever parameters you want to override.
+
+Here's an example of a template that reduces the check frequency to once per day and changes the retry interval to 1 hour.
+
+```javascript
+{
+  "id": "windows-host",
+  "check_command": "check-host-alive-windows"
+}
+```
+
+You then use the host template by setting the `node['nagios']['host_template']` attribute for a node. You could apply this with a role as follows:
+
+```ruby
+role 'windows'
+
+default_attributes(
+  nagios: {
+    host_template: 'windows-host'
+  }
+)
+```
+
+Additional directives can be defined as described in the Nagios documentation for [Host Definitions](http://nagios.sourceforge.net/docs/3_0/objectdefinitions.html#host).
+
 ### Templates
 Templates are optional, but allow you to specify combinations of attributes to apply to a service. Create a nagios_templates\ data bag that will contain definitions for templates to be used. Each template need only specify id and whichever parameters you want to override.
 

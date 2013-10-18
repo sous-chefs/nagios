@@ -147,6 +147,7 @@ nagios_bags = NagiosDataBags.new
 services = nagios_bags.get('nagios_services')
 servicegroups = nagios_bags.get('nagios_servicegroups')
 templates = nagios_bags.get('nagios_templates')
+host_templates = nagios_bags.get('nagios_hosttemplates')
 eventhandlers = nagios_bags.get('nagios_eventhandlers')
 unmanaged_hosts = nagios_bags.get('nagios_unmanagedhosts')
 serviceescalations = nagios_bags.get('nagios_serviceescalations')
@@ -253,7 +254,8 @@ end
 nagios_conf 'timeperiods'
 
 nagios_conf 'templates' do
-  variables(:templates => templates)
+  variables(:templates => templates,
+            :host_templates => host_templates)
 end
 
 nagios_conf 'commands' do
