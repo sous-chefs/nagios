@@ -18,3 +18,8 @@ end
 %w{ debian ubuntu redhat centos fedora scientific amazon oracle}.each do |os|
   supports os
 end
+
+# we want to search our local data_bags for solo
+if defined? Chef && Chef::Config[:solo]
+  depends "solo-search"
+end
