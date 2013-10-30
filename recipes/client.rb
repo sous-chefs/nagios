@@ -32,7 +32,7 @@ elsif node['nagios']['multi_environment_monitoring']
   search(:node, "role:#{node['nagios']['server_role']}") do |n|
     mon_host << n['ipaddress']
   end
-elsif !Chef::Config[:solo]
+elsif !Chef::Config[:solo] || node['nagios']['using_solo_search']
   search(:node, "role:#{node['nagios']['server_role']} AND chef_environment:#{node.chef_environment}") do |n|
     mon_host << n['ipaddress']
   end
