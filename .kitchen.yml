@@ -1,4 +1,5 @@
 driver_plugin: vagrant
+provisioner: chef_zero
 driver_config:
   require_chef_omnibus: true
   customize:
@@ -17,4 +18,6 @@ platforms:
 suites:
 - name: default
   run_list:
-  - recipe[nagios::client]
+  - recipe[nagios::server]
+  data_bags_path: ./test/chef-zero-artifacts/data_bags
+  roles_path: ./test/chef-zero-artifacts/roles
