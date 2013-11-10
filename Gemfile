@@ -1,13 +1,11 @@
 source 'https://rubygems.org'
 
 gem 'strainer'
-gem 'berkshelf',  '~> 2.0'
-gem 'chefspec',   '~> 3.0'
-gem 'foodcritic', '~> 3.0'
-gem 'rubocop',    '~> 0.14'
-gem 'chef-zero',  '~> 1.6'
-
-group :integration do
-  gem 'test-kitchen',    '~> 1.0.0.beta.4'
-  gem 'kitchen-vagrant', '~> 0.11'
-end
+gem 'berkshelf',         '~> 2.0'
+gem 'chefspec',          '~> 3.0'
+gem 'foodcritic',        '~> 3.0'
+gem 'rubocop',           '~> 0.14'
+gem 'chef-zero',         '~> 1.6'
+gem 'test-kitchen',      '~> 1.0.0.beta.4'
+gem 'kitchen-vagrant',   '~> 0.11'
+gem 'vagrant-berkshelf', '~> 1.3'
