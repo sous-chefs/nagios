@@ -19,6 +19,12 @@
 
 actions :add, :remove
 
+state_attrs :command,
+            :command_name,
+            :critical_condition,
+            :parameters,
+            :warning_condition
+
 # Name of the nrpe check, used for the filename and the command name
 attribute :command_name, :kind_of => String, :name_attribute => true
 
