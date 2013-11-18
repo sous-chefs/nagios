@@ -81,6 +81,13 @@ define service {
 }
 
 define service {
+  name                            jmx-service
+  use                             default-service
+  check_interval                  600
+  retry_interval                  180
+}
+
+define service {
   name                            mongo-service
   use                             default-service
   max_check_attempts              1

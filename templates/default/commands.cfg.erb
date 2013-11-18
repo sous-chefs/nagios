@@ -9,6 +9,152 @@ define command {
 }
 
 # Service checks
+
+define command {
+command_name check_website_response
+command_line $USER1$/check_website_response.sh -u $ARG1$ -w $ARG2$ -c $ARG3$
+}
+
+define command {
+  command_name    check_jmx_dc_dd_total_messages_received
+  command_line    $USER1$/check_jmx -U service:jmx:rmi:///jndi/rmi://$HOSTADDRESS$:9001/jmxrmi -O "DataCloud:type=DataDistributor" -A TotalMessagesReceived
+}
+
+define command {
+  command_name    check_jmx_heap
+  command_line    $USER1$/check_jmx -U service:jmx:rmi:///jndi/rmi://$HOSTADDRESS$:9001/jmxrmi -O java.lang:type=Memory -A HeapMemoryUsage -K used -I HeapMemoryUsage -J used -vvvv -c $ARG1$
+}
+
+define command {
+  command_name    check_jmx_threads
+  command_line    $USER1$/check_jmx -U service:jmx:rmi:///jndi/rmi://$HOSTADDRESS$:9001/jmxrmi -O "java.lang:type=Threading" -A ThreadCount -w 100 -c 125 
+}
+
+define command {
+  command_name    check_jmx_dc_vp_active_visitor
+  command_line    $USER1$/check_jmx -U service:jmx:rmi:///jndi/rmi://$HOSTADDRESS$:9001/jmxrmi -O "DataCloud:type=EventProcessor" -A ActiveVisitorEventCount
+}
+
+define command {
+  command_name    check_jmx_dc_vp_visitors_to_aggregator
+  command_line    $USER1$/check_jmx -U service:jmx:rmi:///jndi/rmi://$HOSTADDRESS$:9001/jmxrmi -O "DataCloud:type=QueryEngine" -A TotalVisitorsSentToAggregator
+}
+
+define command {
+  command_name	  check_jmx_dc_vp_visitors_streamed
+  command_line    $USER1$/check_jmx -U service:jmx:rmi:///jndi/rmi://$HOSTADDRESS$:9001/jmxrmi -O "DataCloud:type=QueryEngine" -A TotalVisitorsStreamed    
+}
+
+define command {
+  command_name    check_jmx_dc_vp_queries_received
+  command_line    $USER1$/check_jmx -U service:jmx:rmi:///jndi/rmi://$HOSTADDRESS$:9001/jmxrmi -O "DataCloud:type=QueryMonitor" -A QueriesReceived
+}
+
+define command {
+  command_name    check_jmx_dc_vp_active_visitor_count
+  command_line    $USER1$/check_jmx -U service:jmx:rmi:///jndi/rmi://$HOSTADDRESS$:9001/jmxrmi -O "DataCloud:type=VisitorManager" -A ActiveVisitorCount
+}
+
+define command {
+  command_name    check_jmx_dc_vp_visitors_persisted
+  command_line    $USER1$/check_jmx -U service:jmx:rmi:///jndi/rmi://$HOSTADDRESS$:9001/jmxrmi -O "DataCloud:type=VisitorManager" -A VisitorsPersisted
+}
+
+define command {
+  command_name    check_jmx_dc_vp_total_events_received
+  command_line    $USER1$/check_jmx -U service:jmx:rmi:///jndi/rmi://$HOSTADDRESS$:9001/jmxrmi -O "DataCloud:type=VisitorProcessor" -A TotalEventsReceived
+}
+
+define command {
+  command_name    check_jmx_dc_vp_active_query_count
+  command_line    $USER1$/check_jmx -U service:jmx:rmi:///jndi/rmi://$HOSTADDRESS$:9001/jmxrmi -O "DataCloud:type=QueryManager" -A ActiveQueryCount
+}
+
+define command {
+  command_name    check_jmx_dc_vp_rebalanced_objects_received
+  command_line    $USER1$/check_jmx -U service:jmx:rmi:///jndi/rmi://$HOSTADDRESS$:9001/jmxrmi -O "DataCloud:type=VisitorProcessorCluster" -A RebalancedObjectsReceived
+}
+
+define command {
+  command_name    check_jmx_dc_vp_rebalanced_objects_sent
+  command_line    $USER1$/check_jmx -U service:jmx:rmi:///jndi/rmi://$HOSTADDRESS$:9001/jmxrmi -O "DataCloud:type=VisitorProcessorCluster" -A RebalancedObjectsSent
+}
+
+define command {
+  command_name    check_jmx_dc_qa_total_query_results_received
+  command_line    $USER1$/check_jmx -U service:jmx:rmi:///jndi/rmi://$HOSTADDRESS$:9001/jmxrmi -O "DataCloud:type=QueryAggregator" -A TotalQueryResultsReceived
+}
+
+define command {
+  command_name    check_jmx_dc_qa_total_messages_received
+  command_line    $USER1$/check_jmx -U service:jmx:rmi:///jndi/rmi://$HOSTADDRESS$:9001/jmxrmi -O "DataCloud:type=QueryAggregator" -A TotalMessagesReceived
+}
+
+define command {
+  command_name    check_jmx_dc_qa_total_queries_received
+  command_line    $USER1$/check_jmx -U service:jmx:rmi:///jndi/rmi://$HOSTADDRESS$:9001/jmxrmi -O "DataCloud:type=QueryAggregator" -A TotalQueriesReceived
+}
+
+define command {
+  command_name    check_jmx_dc_qa_active_query_count
+  command_line    $USER1$/check_jmx -U service:jmx:rmi:///jndi/rmi://$HOSTADDRESS$:9001/jmxrmi -O "DataCloud:type=QueryAggregator" -A ActiveQueryCount
+}
+
+define command {
+  command_name    check_jmx_dc_qa_total_unknown_query_results
+  command_line    $USER1$/check_jmx -U service:jmx:rmi:///jndi/rmi://$HOSTADDRESS$:9001/jmxrmi -O "DataCloud:type=QueryAggregator" -A TotalUnknownQueryResults
+}
+
+define command {
+  command_name    check_jmx_dc_qa_unknown_queries_with_queued_visitors
+  command_line    $USER1$/check_jmx -U service:jmx:rmi:///jndi/rmi://$HOSTADDRESS$:9001/jmxrmi -O "DataCloud:type=QueryAggregator" -A UnknownQueriesWithQueuedVisitors
+}
+
+define command {
+  command_name    check_jmx_dc_qa_unknown_queries_queued_visitor_count
+  command_line    $USER1$/check_jmx -U service:jmx:rmi:///jndi/rmi://$HOSTADDRESS$:9001/jmxrmi -O "DataCloud:type=QueryAggregator" -A UnknownQueriesQueuedVisitorCount
+}
+
+define command {
+  command_name    check_jmx_dc_qa_rebalanced_objects_received
+  command_line    $USER1$/check_jmx -U service:jmx:rmi:///jndi/rmi://$HOSTADDRESS$:9001/jmxrmi -O "DataCloud:type=QueryAggregatorCluster" -A RebalancedObjectsReceived
+}
+
+define command {
+  command_name    check_jmx_dc_qa_rebalanced_objects_sent
+  command_line    $USER1$/check_jmx -U service:jmx:rmi:///jndi/rmi://$HOSTADDRESS$:9001/jmxrmi -O "DataCloud:type=QueryAggregatorCluster" -A RebalancedObjectsSent
+}
+
+define command {
+  command_name    check_jmx_dc_qa_qm_queries_recieved
+  command_line    $USER1$/check_jmx -U service:jmx:rmi:///jndi/rmi://$HOSTADDRESS$:9001/jmxrmi -O "DataCloud:type=QueryMonitor" -A QueriesReceived
+}
+
+define command {
+  command_name    check_jmx_dc_qa_qm_active_query_count
+  command_line    $USER1$/check_jmx -U service:jmx:rmi:///jndi/rmi://$HOSTADDRESS$:9001/jmxrmi -O "DataCloud:type=QueryManager" -A ActiveQueryCount
+}
+
+define command {
+  command_name    check_jmx_dc_mr_total_messages_routed
+  command_line    $USER1$/check_jmx -U service:jmx:rmi:///jndi/rmi://$HOSTADDRESS$:9001/jmxrmi -O "DataCloud:type=MessageRouter" -A TotalMessagesRouted
+}
+
+define command {
+  command_name    check_jmx_dc_mr_total_events_routed
+  command_line    $USER1$/check_jmx -U service:jmx:rmi:///jndi/rmi://$HOSTADDRESS$:9001/jmxrmi -O "DataCloud:type=MessageRouter" -A TotalEventsRouted
+}
+
+define command {
+  command_name    check_jmx_dc_mr_total_messages_received
+  command_line    $USER1$/check_jmx -U service:jmx:rmi:///jndi/rmi://$HOSTADDRESS$:9001/jmxrmi -O "DataCloud:type=MessageRouter" -A TotalMessagesReceived
+}
+
+define command {
+  command_name    check_jmx_dc_mr_total_events_received
+  command_line    $USER1$/check_jmx -U service:jmx:rmi:///jndi/rmi://$HOSTADDRESS$:9001/jmxrmi -O "DataCloud:type=MessageRouter" -A TotalEventsReceived
+}
+
 define command {
   command_name    check_ec2_count
   command_line    $USER1$/count_ec2_instances.sh
@@ -408,7 +554,7 @@ define command {
 # Notification
 define command {
   command_name  host-notify-by-email
-  command_line  /usr/bin/printf "%b" "$LONGDATETIME$\n\n$HOSTALIAS$ $NOTIFICATIONTYPE$ $HOSTSTATE$\n\n$HOSTOUTPUT$\n\nLogin: ssh://$HOSTNAME$" | <%=node['nagios']['server']['mail_command']%> -s "$NOTIFICATIONTYPE$ - $HOSTNAME$ $HOSTSTATE$!" $CONTACTEMAIL$
+  command_line  /usr/bin/printf "%b" "$LONGDATETIME$\n\n$HOSTALIAS$ $NOTIFICATIONTYPE$ $HOSTSTATE$\n\n$HOSTOUTPUT$\n\nMachine Login: ssh://$HOSTNAME$\n\n Nagios UI Login: <%= @url %> " | <%=node['nagios']['server']['mail_command']%> -s "$NOTIFICATIONTYPE$ - $HOSTGROUPNAME$ - $HOSTNAME$ - $HOSTSTATE$!" $CONTACTEMAIL$
 }
 
 define command {
@@ -419,7 +565,7 @@ define command {
 # 'notify-by-email' command definition
 define command {
   command_name  service-notify-by-email
-  command_line  /usr/bin/printf "%b" "$LONGDATETIME$ - $SERVICEDESC$ $SERVICESTATE$\n\n$HOSTALIAS$  $NOTIFICATIONTYPE$\n\n$SERVICEOUTPUT$\n\nLogin: ssh://$HOSTNAME$" | <%=node['nagios']['server']['mail_command']%> -s "** $NOTIFICATIONTYPE$ - $HOSTNAME$ - $SERVICEDESC$ - $SERVICESTATE$" $CONTACTEMAIL$
+  command_line  /usr/bin/printf "%b" "$LONGDATETIME$ - $SERVICEDESC$ $SERVICESTATE$\n\n$HOSTALIAS$  $NOTIFICATIONTYPE$\n\n$SERVICEOUTPUT$\n\nMachine Login: ssh://$HOSTNAME$\n\n Nagios UI Login: <%= @url %> " | <%=node['nagios']['server']['mail_command']%> -s "** $NOTIFICATIONTYPE$ - $HOSTGROUPNAME$ - $HOSTNAME$ - $SERVICEDESC$ - $SERVICESTATE$" $CONTACTEMAIL$
 }
 
 #define command {

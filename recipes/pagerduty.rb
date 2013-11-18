@@ -41,23 +41,50 @@ package "libcrypt-ssleay-perl" do
   action :install
 end
 
-template "#{node['nagios']['config_dir']}/pagerduty_nagios.cfg" do
+domain = node[:domain]
+
+case domain
+when "prod.us-w1"
+  region = "us_west_1_vpc"
+when "prod.us-e1"
+  region = "us_east_1_vpc"
+when "prod-1.eu-w1"
+  region = "eu_west_1_vpc"
+when "no.domain.name.set"
+  region = "us_west_1"
+when "eu-w1"
+  region = "eu_west_1"
+when "ec2.internal"
+  region = "us_east_1"
+end
+
+key_bag = data_bag_item('pager_duty', "#{region}")
+api_key = key_bag['api_key']
+
+template "/etc/nagios3/conf.d/pagerduty_nagios.cfg" do
   owner "nagios"
   group "nagios"
-  mode 00644
+  mode 0644
   source "pagerduty_nagios.cfg.erb"
+  variables :api_key => api_key
+  notifies :reload, "service[nagios]"
 end
 
 remote_file "#{node['nagios']['plugin_dir']}/pagerduty_nagios.pl" do
   owner "root"
   group "root"
-  mode 00755
-  source "http://www.pagerduty.com/configs/pagerduty_nagios.pl"
+  mode 0755
+  source "https://raw.github.com/PagerDuty/pagerduty-nagios-pl/master/pagerduty_nagios.pl"
   action :create_if_missing
 end
 
 cron "Flush Pagerduty" do
   user "nagios"
-  mailto "root@localhost"
   command "#{node['nagios']['plugin_dir']}/pagerduty_nagios.pl flush"
+  minute "*"
+  hour "*"
+  day "*"
+  month "*"
+  weekday "*"
+  action :create
 end

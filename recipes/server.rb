@@ -21,6 +21,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+unless node[:monitored_region].nil?
+  include_recipe "java"
+end
+
 include_recipe "perl"
 include_recipe "zookeeper_tealium::client_python"
 include_recipe "tealium_bongo::packages"
@@ -102,22 +106,34 @@ region = node[:ec2][:placement_availability_zone].match(/^(.*-\d+)[^-]+$/)[1]
 if node[:monitored_region].nil? 
   nodes = search(:node, "hostname:[* TO *] AND app_environment:#{node[:app_environment]} AND placement_availability_zone:#{region}*")
 else
-  nodes = search(:node, "hostname:[* TO *] AND app_environment:#{node[:app_environment]} AND placement_availability_zone:#{region}*")
-  #nodes = search(:node, "hostname:[* TO *] AND app_environment:#{node[:monitored_environment]} AND placement_availability_zone:#{node[:monitored_region]}*")
-  
-  #quick fix for datacloud and sitemap
-  datacloud = search(:node, "role:datacloud_component AND placement_availability_zone:#{region}*")
-  sitemap = search(:node, "role:sitemap_audit AND placement_availability_zone:#{region}* AND app_environment:production_vpc*")
-  servers = search(:node, "role:#{node['nagios']['server_role']} AND app_environment:#{node[:monitored_environment]}")
 
-  if node['app_environment'] == "production_vpc2" || node['app_environment'] == "production_vpc3"
-     both = datacloud.concat(servers)
-     three = both.concat(sitemap)
-       Chef::Log.warn("Nodes are #{nodes}, datacloud is #{datacloud}, servers are #{servers} and both are #{both}")
-     nodes = nodes.concat(three)
-  else 
-     nodes = nodes.concat(servers)     
-  end 
+  nodes1 = search(:node, "domain:prod* AND app_environment:production* AND placement_availability_zone:#{region}*")
+  #nodes1 = search(:node, "domain:prod* AND app_environment:production* AND placement_availability_zone:#{region}* AND tealium_use_nagios:true")
+ 
+  nodes = []
+  nodes1.each do |n|
+    #if node.roles.include?("urest") 
+    if n.roles.include?("base")
+      nodes << n
+    end
+  end
+ 
+  #nodes = search(:node, "hostname:[* TO *] AND app_environment:#{node[:app_environment]} AND placement_availability_zone:#{region}*")
+  ##nodes = search(:node, "hostname:[* TO *] AND app_environment:#{node[:monitored_environment]} AND placement_availability_zone:#{node[:monitored_region]}*")
+  
+  ##quick fix for datacloud and sitemap
+  #datacloud = search(:node, "role:datacloud_component AND placement_availability_zone:#{region}*")
+  #sitemap = search(:node, "role:sitemap_audit AND placement_availability_zone:#{region}* AND app_environment:production_vpc*")
+  #servers = search(:node, "role:#{node['nagios']['server_role']} AND app_environment:#{node[:monitored_environment]}")
+
+  #if node['app_environment'] == "production_vpc2" || node['app_environment'] == "production_vpc3"
+  #   both = datacloud.concat(servers)
+  #   three = both.concat(sitemap)
+  #     Chef::Log.warn("Nodes are #{nodes}, datacloud is #{datacloud}, servers are #{servers} and both are #{both}")
+  #   nodes = nodes.concat(three)
+  #else 
+  #   nodes = nodes.concat(servers)     
+  #end 
 
 end
 
@@ -246,12 +262,42 @@ end
   nagios_conf conf
 end
 
-nagios_conf "commands" do
-  variables :services => services
+domain = node[:domain]
+
+case domain
+when "prod.us-w1"
+  url = "us-west-1-vpc.nagios.ops.tlium.com/nagios3/"
+when "prod.us-e1"
+  url = "us-east-1-vpc.nagios.ops.tlium.com/nagios3/"
+when "prod-1.eu-w1"
+  url = "eu-west-1-vpc.nagios.ops.tlium.com/nagios3/"
+when "no.domain.name.set"
+  url = "us-west-1.nagios.ops.tlium.com/nagios3/"
+when "eu-w1"
+  url = "eu-west-1.nagios.ops.tlium.com/nagios3/"
+when "ec2.internal"
+  url = "us-east-1.nagios.ops.tlium.com/nagios3/"
 end
 
+nagios_conf "commands" do
+  variables(
+    :services => services,
+    :url => url
+  )
+end
+
+dcvp = search(:node, "role:dc_visitor_processor AND app_environment:production*")
+dcmr = search(:node, "role:dc_message_router AND app_environment:production*")
+dcqa = search(:node, "role:dc_query_aggregator AND app_environment:production*")
+dcdd = search(:node, "role:dc_data_distributor AND app_environment:production*")
+
+vp_heap = dcvp.last[:datacloud][:java_options].match(/^\DX{1}[a-z]{2}\d[g]\s\DX{1}[a-z]{2}(\d)[g]/)[1]
+mr_heap = dcmr.last[:datacloud][:java_options].match(/^\DX{1}[a-z]{2}\d[g]\s\DX{1}[a-z]{2}(\d)[g]/)[1]
+qa_heap = dcqa.last[:datacloud][:java_options].match(/^\DX{1}[a-z]{2}\d[g]\s\DX{1}[a-z]{2}(\d)[g]/)[1]
+dd_heap = dcdd.last[:datacloud][:java_options].match(/^\DX{1}[a-z]{2}\d[g]\s\DX{1}[a-z]{2}(\d)[g]/)[1]
+
 if node[:ec2][:local_ipv4] == "10.1.2.7"
-main_nagios = node[:ec2][:local_ipv4]
+main_nagios = "#{node['hostname']} - #{node[:ipaddress]}"
 designation = "host_name"
 
   template "/home/ubuntu/nagios" do
@@ -270,14 +316,22 @@ designation = "host_name"
       :service_hosts => service_hosts,
       :services => services,
       :main_nagios => main_nagios,
-      :designation => designation
+      :designation => designation,
+      :vp_heap => vp_heap,
+      :mr_heap => mr_heap,
+      :qa_heap => qa_heap,
+      :dd_heap => dd_heap
     )
   end
 else
   nagios_conf "services" do
     variables(
       :service_hosts => service_hosts,
-      :services => services
+      :services => services,
+      :vp_heap => vp_heap,
+      :mr_heap => mr_heap,
+      :qa_heap => qa_heap,
+      :dd_heap => dd_heap
     )
   end
 end
@@ -314,11 +368,11 @@ nagios_nrpecheck "check_nagios" do
   action :add
 end
 
+#template "/home/ubuntu/testingJack" do
+#    source "testingJack.erb"
+#    owner "root"
+#    group "root"
+#    mode 0440
+#  end
 
-
-
-
-
-
-
-
+include_recipe "nagios::pagerduty"

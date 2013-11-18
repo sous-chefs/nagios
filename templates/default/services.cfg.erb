@@ -51,7 +51,8 @@ define service {
 
 define service {
     service_description Free Space All Disks
-    hostgroup_name      linux
+    #hostgroup_name      linux
+    hostgroup_name      all
     check_command       check_all_disks
     use                 default-service,srv-pnp
 }
@@ -78,8 +79,8 @@ define service {
 }
 
 define service {
-    service_description Check Files to Process
-    hostgroup_name      uconnect_logger
+    service_description Check Uconnect Files to Process
+    hostgroup_name      uconnect_logger,hostname_uconnect
     check_command       check_dir_files
     use                 default-service,srv-pnp
 }
@@ -127,6 +128,13 @@ define service {
     check_command       check_smtp
     use                 default-service,srv-pnp
 }
+
+#define service {
+#    service_description Check Uconnect TIQ Response Time
+#    <%= @designation %> <%= @main_nagios %>
+#    check_command       check_website_response!"http://datacloud.tealiumiq.com/tealium/main/10/i.gif"!500!1000
+#    use                 default-service,srv-pnp
+#}
 <% end %>
 
 #define service {
@@ -180,6 +188,13 @@ define service {
 }
 
 define service {
+    service_description Check Eventstream process
+    hostgroup_name      hostname_eventstream
+    check_command       check_nrpe!check_eventstream
+    use                 default-service,srv-pnp
+}
+
+define service {
     service_description Check rabbitmq unakd messages
     hostgroup_name      rabbitmq_server
     check_command       check_nrpe!check_rabbitmq_unackd
@@ -188,198 +203,234 @@ define service {
 
 ## JMX Generic ##
 define service {
-    service_description Check JMX Java Heap
-    hostgroup_name      datacloud_component
-    check_command       check_nrpe!check_jmx_heap
-    use                 default-service,srv-pnp
+    service_description Check JMX DataCloud Visitor Processor Java Heap
+    hostgroup_name      dc_visitor_processor
+    check_command       check_jmx_heap!<%= @vp_heap %>000000000
+    use                 jmx-service,srv-pnp
 }
 
 define service {
-    service_description Check JMX Threading
+    service_description Check JMX DataCloud Message Router Java Heap
+    hostgroup_name      dc_message_router
+    check_command       check_jmx_heap!<%= @mr_heap %>000000000
+    use                 jmx-service,srv-pnp
+}
+
+define service {
+    service_description Check JMX DataCloud Query Aggregator Java Heap
+    hostgroup_name      dc_query_aggregator
+    check_command       check_jmx_heap!<%= @qa_heap %>000000000
+    use                 jmx-service,srv-pnp
+}
+
+define service {
+    service_description Check JMX DataCloud Data Distributor Java Heap
+    hostgroup_name      dc_data_distributor
+    check_command       check_jmx_heap!<%= @dd_heap %>000000000
+    use                 jmx-service,srv-pnp
+}
+
+define service {
+    service_description Check JMX DataCloud Threading
     hostgroup_name      datacloud_component
-    check_command       check_nrpe!check_jmx_threads
-    use                 default-service,srv-pnp
+    check_command       check_jmx_threads
+    use                 jmx-service,srv-pnp
 }
 
 ## JMX VP ##
 define service {
     service_description Check JMX DataCloud VP ActiveVisitorEventCount
     hostgroup_name      dc_visitor_processor
-    check_command       check_nrpe!check_jmx_dc_vp_active_visitor
-    use                 default-service,srv-pnp
+    check_command       check_jmx_dc_vp_active_visitor
+    use                 jmx-service,srv-pnp
 }
 
 define service {
     service_description Check JMX DataCloud VP VisitorsToAggregator
     hostgroup_name      dc_visitor_processor
-    check_command       check_nrpe!check_jmx_dc_vp_visitors_to_aggregator
-    use                 default-service,srv-pnp
+    check_command       check_jmx_dc_vp_visitors_to_aggregator
+    use                 jmx-service,srv-pnp
 }
 
 define service {
     service_description Check JMX DataCloud VP VisitorsStreamed
     hostgroup_name      dc_visitor_processor
-    check_command       check_nrpe!check_jmx_dc_vp_visitors_streamed
-    use                 default-service,srv-pnp
+    check_command       check_jmx_dc_vp_visitors_streamed
+    use                 jmx-service,srv-pnp
 }
 
 define service {
     service_description Check JMX DataCloud VP QueriesReceived
     hostgroup_name      dc_visitor_processor
-    check_command       check_nrpe!check_jmx_dc_vp_queries_received
-    use                 default-service,srv-pnp
+    check_command       check_jmx_dc_vp_queries_received
+    use                 jmx-service,srv-pnp
 }
 
 define service {
     service_description Check JMX DataCloud VP VisitorCount
     hostgroup_name      dc_visitor_processor
-    check_command       check_nrpe!check_jmx_dc_vp_active_visitor_count
-    use                 default-service,srv-pnp
+    check_command       check_jmx_dc_vp_active_visitor_count
+    use                 jmx-service,srv-pnp
 }
 
 define service {
     service_description Check JMX DataCloud VP VisitorsPersisted
     hostgroup_name      dc_visitor_processor
-    check_command       check_nrpe!check_jmx_dc_vp_visitors_persisted
-    use                 default-service,srv-pnp
+    check_command       check_jmx_dc_vp_visitors_persisted
+    use                 jmx-service,srv-pnp
 }
 
 define service {
     service_description Check JMX DataCloud VP EventsReceived
     hostgroup_name      dc_visitor_processor
-    check_command       check_nrpe!check_jmx_dc_vp_total_events_received
-    use                 default-service,srv-pnp
+    check_command       check_jmx_dc_vp_total_events_received
+    use                 jmx-service,srv-pnp
 }
 
 define service {
     service_description Check JMX DataCloud VP ActiveQueryCount
     hostgroup_name      dc_visitor_processor
-    check_command       check_nrpe!check_jmx_dc_vp_active_query_count
-    use                 default-service,srv-pnp
+    check_command       check_jmx_dc_vp_active_query_count
+    use                 jmx-service,srv-pnp
 }
 
 define service {
     service_description Check JMX DataCloud VP RebalancedObjectsReceived
     hostgroup_name      dc_visitor_processor
-    check_command       check_nrpe!check_jmx_dc_vp_rebalanced_objects_received
-    use                 default-service,srv-pnp
+    check_command       check_jmx_dc_vp_rebalanced_objects_received
+    use                 jmx-service,srv-pnp
 }
 
 define service {
     service_description Check JMX DataCloud VP RebalancedObjectsSent
     hostgroup_name      dc_visitor_processor
-    check_command       check_nrpe!check_jmx_dc_vp_rebalanced_objects_sent
-    use                 default-service,srv-pnp
+    check_command       check_jmx_dc_vp_rebalanced_objects_sent
+    use                 jmx-service,srv-pnp
 }
 
 ## JMX QA ##
 define service {
     service_description Check JMX DataCloud QA TotalMessagesReceived
     hostgroup_name      dc_query_aggregator
-    check_command       check_nrpe!check_jmx_dc_qa_total_messages_received
-    use                 default-service,srv-pnp
+    check_command       check_jmx_dc_qa_total_messages_received
+    use                 jmx-service,srv-pnp
 }
 
 define service {
     service_description Check JMX DataCloud QA TotalQueriesReceived
     hostgroup_name      dc_query_aggregator
-    check_command       check_nrpe!check_jmx_dc_qa_total_queries_received
-    use                 default-service,srv-pnp
+    check_command       check_jmx_dc_qa_total_queries_received
+    use                 jmx-service,srv-pnp
 }
 
 define service {
     service_description Check JMX DataCloud QA TotalQueryResultsReceived
     hostgroup_name      dc_query_aggregator
-    check_command       check_nrpe!check_jmx_dc_qa_total_query_results_received
-    use                 default-service,srv-pnp
+    check_command       check_jmx_dc_qa_total_query_results_received
+    use                 jmx-service,srv-pnp
 }
 
 define service {
     service_description Check JMX DataCloud QA Query Aggregator ActiveQueryCount
     hostgroup_name      dc_query_aggregator
-    check_command       check_nrpe!check_jmx_dc_qa_active_query_count
-    use                 default-service,srv-pnp
+    check_command       check_jmx_dc_qa_active_query_count
+    use                 jmx-service,srv-pnp
 }
 
 define service {
     service_description Check JMX DataCloud QA TotalUnknownQueryResults
     hostgroup_name      dc_query_aggregator
-    check_command       check_nrpe!check_jmx_dc_qa_total_unknown_query_results
-    use                 default-service,srv-pnp
+    check_command       check_jmx_dc_qa_total_unknown_query_results
+    use                 jmx-service,srv-pnp
 }
 
 define service {
     service_description Check JMX DataCloud QA UnknownQueriesWithQueuedVisitors
     hostgroup_name      dc_query_aggregator
-    check_command       check_nrpe!check_jmx_dc_qa_unknown_queries_with_queued_visitors
-    use                 default-service,srv-pnp
+    check_command       check_jmx_dc_qa_unknown_queries_with_queued_visitors
+    use                 jmx-service,srv-pnp
 }
 
 define service {
     service_description Check JMX DataCloud QA UnknownQueriesQueuedVisitorCount
     hostgroup_name      dc_query_aggregator
-    check_command       check_nrpe!check_jmx_dc_qa_unknown_queries_queued_visitor_count
-    use                 default-service,srv-pnp
+    check_command       check_jmx_dc_qa_unknown_queries_queued_visitor_count
+    use                 jmx-service,srv-pnp
 }
 
 define service {
     service_description Check JMX DataCloud QA RebalancedObjectsReceived
     hostgroup_name      dc_query_aggregator
-    check_command       check_nrpe!check_jmx_dc_qa_rebalanced_objects_received
-    use                 default-service,srv-pnp
+    check_command       check_jmx_dc_qa_rebalanced_objects_received
+    use                 jmx-service,srv-pnp
 }
 
 define service {
     service_description Check JMX DataCloud QA RebalancedObjectsSent
     hostgroup_name      dc_query_aggregator
-    check_command       check_nrpe!check_jmx_dc_qa_rebalanced_objects_sent
-    use                 default-service,srv-pnp
+    check_command       check_jmx_dc_qa_rebalanced_objects_sent
+    use                 jmx-service,srv-pnp
 }
 
 define service {
     service_description Check JMX DataCloud QA Query Manager ActiveQueryCount
     hostgroup_name      dc_query_aggregator
-    check_command       check_nrpe!check_jmx_dc_qa_qm_active_query_count
-    use                 default-service,srv-pnp
+    check_command       check_jmx_dc_qa_qm_active_query_count
+    use                 jmx-service,srv-pnp
 }
 
 define service {
     service_description Check JMX DataCloud QA Query Monitor QueriesRecieved
     hostgroup_name      dc_query_aggregator
-    check_command       check_nrpe!check_jmx_dc_qa_qm_queries_recieved
-    use                 default-service,srv-pnp
+    check_command       check_jmx_dc_qa_qm_queries_recieved
+    use                 jmx-service,srv-pnp
 }
 
 ## JMX MR ##
 define service {
     service_description Check JMX DataCloud MR TotalMessagesRouted
     hostgroup_name      dc_message_router
-    check_command       check_nrpe!check_jmx_dc_mr_total_messages_routed
-    use                 default-service,srv-pnp
+    check_command       check_jmx_dc_mr_total_messages_routed
+    use                 jmx-service,srv-pnp
 }
 
 define service {
     service_description Check JMX DataCloud MR TotalEventsRouted
     hostgroup_name      dc_message_router
-    check_command       check_nrpe!check_jmx_dc_mr_total_events_routed
-    use                 default-service,srv-pnp
+    check_command       check_jmx_dc_mr_total_events_routed
+    use                 jmx-service,srv-pnp
 }
 
 define service {
     service_description Check JMX DataCloud MR TotalMessagesReceived
     hostgroup_name      dc_message_router
-    check_command       check_nrpe!check_jmx_dc_mr_total_messages_received
-    use                 default-service,srv-pnp
+    check_command       check_jmx_dc_mr_total_messages_received
+    use                 jmx-service,srv-pnp
 }
 
 define service {
     service_description Check JMX DataCloud MR TotalEventsReceived
     hostgroup_name      dc_message_router
-    check_command       check_nrpe!check_jmx_dc_mr_total_events_received
-    use                 default-service,srv-pnp
+    check_command       check_jmx_dc_mr_total_events_received
+    use                 jmx-service,srv-pnp
+}
+
+## JMX DD ##
+define service {
+    service_description Check JMX DataCloud DD TotalMessagesReceived
+    hostgroup_name      dc_data_distributor
+    check_command       check_jmx_dc_dd_total_messages_received
+    use                 jmx-service,srv-pnp
 }
 ## END JMX ##
 
+
+define service {
+    service_description Check Permission Cache Process
+    hostgroup_name      permission_cache
+    check_command       check_nrpe!check_permission_cache
+    use                 default-service,srv-pnp
+}
 
 define service {
     service_description Check DC Visitor Processor
@@ -481,14 +532,14 @@ define service {
 
 define service {
     service_description Check HTTPD Iron
-    hostgroup_name      uconnect_logger
+    hostgroup_name      uconnect_logger,hostname_uconnect
     check_command       check_nrpe!check_iron
     use                 default-service,srv-pnp
 }
 
 define service {
     service_description Check HTTPD Iron Processor
-    hostgroup_name      uconnect_logger
+    hostgroup_name      uconnect_logger,hostname_uconnect
     check_command       check_nrpe!check_iron_processor
     use                 default-service,srv-pnp
 }
@@ -502,14 +553,16 @@ define service {
 
 define service {
     service_description Check STunnel Processes
-    hostgroup_name      linux
+    #hostgroup_name      linux
+    hostgroup_name      all
     check_command       check_nrpe!check_stunnel
     use                 default-service,srv-pnp
 }
 
 define service {
     service_description Check Nullmailer Process
-    hostgroup_name      linux
+    #hostgroup_name      linux
+    hostgroup_name      all
     check_command       check_nrpe!check_nullmailer
     use                 default-service,srv-pnp
 }
@@ -530,28 +583,32 @@ define service {
 
 define service {
     service_description Load Average
-    hostgroup_name      linux
+    #hostgroup_name      linux
+    hostgroup_name      all
     check_command       check_load
     use                 default-service,srv-pnp
 }
 
 define service {
     service_description Free Memory
-    hostgroup_name      linux
+    #hostgroup_name      linux
+    hostgroup_name      all
     check_command       check_mem
     use                 default-service,srv-pnp
 }
 
 define service {
     service_description SSH
-    hostgroup_name      linux
+    #hostgroup_name      linux
+    hostgroup_name      all
     check_command       check_ssh
     use                 default-service,srv-pnp
 }
 
 define service {
     service_description Processes
-    hostgroup_name      linux
+    #hostgroup_name      linux
+    hostgroup_name      all
     check_command       check_local_procs
     use                 default-service,srv-pnp
 }
@@ -592,9 +649,65 @@ define service {
 }
 
 define service {
+  service_description   Check Uconnect Rabbit Connection1
+  hostgroup_name        hostname_uconnect
+  check_command         check_nrpe!check_logfiles_rabbit_connection1
+  use                   default-service,srv-pnp
+}
+
+define service {
+  service_description   Check Uconnect Rabbit Connection2
+  hostgroup_name        hostname_uconnect
+  check_command         check_nrpe!check_logfiles_rabbit_connection2
+  use                   default-service,srv-pnp
+}
+
+define service {
+  service_description   Check Uconnect Rabbit Connection3
+  hostgroup_name        hostname_uconnect
+  check_command         check_nrpe!check_logfiles_rabbit_connection3
+  use                   default-service,srv-pnp
+}
+
+define service {
+  service_description   Check Uconnect Rabbit Connection4
+  hostgroup_name        hostname_uconnect
+  check_command         check_nrpe!check_logfiles_rabbit_connection4
+  use                   default-service,srv-pnp
+}
+
+define service {
   service_description   Check Uconnect Rabbit Authentication
   hostgroup_name        uconnect_logger
   check_command         check_nrpe!check_logfiles_rabbit_auth
+  use                   default-service,srv-pnp
+}
+
+define service {
+  service_description   Check Uconnect Rabbit Authentication1
+  hostgroup_name        hostname_uconnect
+  check_command         check_nrpe!check_logfiles_rabbit_auth1
+  use                   default-service,srv-pnp
+}
+
+define service {
+  service_description   Check Uconnect Rabbit Authentication2
+  hostgroup_name        hostname_uconnect
+  check_command         check_nrpe!check_logfiles_rabbit_auth2
+  use                   default-service,srv-pnp
+}
+
+define service {
+  service_description   Check Uconnect Rabbit Authentication3
+  hostgroup_name        hostname_uconnect
+  check_command         check_nrpe!check_logfiles_rabbit_auth3
+  use                   default-service,srv-pnp
+}
+
+define service {
+  service_description   Check Uconnect Rabbit Authentication4
+  hostgroup_name        hostname_uconnect
+  check_command         check_nrpe!check_logfiles_rabbit_auth4
   use                   default-service,srv-pnp
 }
 
@@ -642,7 +755,7 @@ define service {
 
 define service {
   service_description   Check uconnect_service 9090
-  hostgroup_name        uconnect_logger
+  hostgroup_name        uconnect_logger,hostname_uconnect
   check_command         check_uconnect_service
   use                   default-service,srv-pnp
 }

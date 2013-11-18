@@ -59,6 +59,12 @@ default['nagios']['checks']['inode']['warning']  = 20
 
 default['nagios']['logfiles']['utui']['log_file'] = "/var/log/syslog"
 default['nagios']['logfiles']['uconnect']['log_file'] = "/var/log/upstart/s2s-httpd-iron-processor.log"
+default['nagios']['logfiles']['uconnect']['log_file1'] = "/var/log/upstart/s2s-httpd-iron-processor-1.log"
+default['nagios']['logfiles']['uconnect']['log_file2'] = "/var/log/upstart/s2s-httpd-iron-processor-2.log"
+default['nagios']['logfiles']['uconnect']['log_file3'] = "/var/log/upstart/s2s-httpd-iron-processor-3.log"
+default['nagios']['logfiles']['uconnect']['log_file4'] = "/var/log/upstart/s2s-httpd-iron-processor-4.log"
+default['nagios']['logfiles']['uconnect']['log_file5'] = "/var/log/upstart/s2s-httpd-iron-processor-5.log"
+default['nagios']['logfiles']['uconnect']['log_file6'] = "/var/log/upstart/s2s-httpd-iron-processor-6.log"
 default['nagios']['checks']['utui_login_error']['pattern'] = "FAILURE (ERROR: UNABLE TO LOGIN )"
 default['nagios']['checks']['utui_publish_error']['pattern'] = "UPLOAD PUBLICATION FAILURE"
 default['nagios']['checks']['utui_smartFTP_error']['pattern'] = "WARNING: Resetting smartFTP flag"

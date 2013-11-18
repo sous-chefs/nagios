@@ -6,8 +6,9 @@ define host {
   use server
   address <%= node['ipaddress'] %>
   display_name <%= node['nagios']['server_role'] %>
-  host_name <%= node['ipaddress'] %>
-  hostgroups <%= node['nagios']['server_role'] %>,<%= node['os'] %>
+  host_name <%= node['hostname']%> - <%= node['ipaddress'] %>
+  ;hostgroups <%= node['nagios']['server_role'] %>,<%= node['os'] %>
+  hostgroups <%= node['nagios']['server_role'] %>
   alias Role: <%= node['nagios']['server_role'] %>\n Instance ID: <%= node['ec2']['instance_id'] %>\n Zone: <%= node['ec2']['placement_availability_zone'] %>\n App Environment: <%= node['app_environment'] %>\n Platform: <%= node['platform'] %>,<%= node['platform_version'] %>\n Public IP(if applicable): <%= node['ec2']['public_ipv4'] %>\n Private IP: <%= node['ipaddress'] %>\n FQDN(if applicable): <%= node['fqdn'] %>\n
   
 }
@@ -18,18 +19,19 @@ define host {
   use server
   address <%= n['ipaddress'] %>
   display_name <%= n.run_list.roles.last %>
-  host_name <%= n['ipaddress'] %>
+  host_name <%= n['hostname'] %> - <%= n['ipaddress'] %>
   notes $HOSTDISPLAYNAME$
   alias Role: <%= n.run_list.roles.last %>\n Instance ID: <%= n['ec2']['instance_id'] %>\n Zone: <%= n['ec2']['placement_availability_zone'] %>\n App Environment: <%= n['app_environment'] %>\n Platform: <%= n['platform'] %>,<%= n['platform_version'] %>\n Public IP(if applicable): <%= n['ec2']['public_ipv4'] %>\n Private IP: <%= n['ipaddress'] %>\n FQDN(if applicable): <%= n['fqdn'] %>\n Component(if applicable): <%= n['component'] %>\n
 
 
 <% if n.run_list.roles.nil? || n.run_list.roles.length == 0 -%>
-    hostgroups all,<%= n.os %>
+    ;hostgroups all,<%= n.os %>
+    hostgroups all
   <% else -%>
-    hostgroups <%= n.run_list.roles.to_a.join(",") %>,<%= n['os'] %>
+    ;hostgroups <%= n.run_list.roles.to_a.join(",") %>,<%= n['os'] %>
+    hostgroups <%= n.run_list.roles.to_a.join(",") %>
   <% end -%>
   }
   <% end -%>
-  
-  <% end -%>
 
+  <% end -%>

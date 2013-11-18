@@ -173,7 +173,7 @@ nagios_nrpecheck "check_load" do
   action :add
 end
 
-if node.roles.include?("uconnect_logger")
+if node.roles.include?("uconnect_logger") || node.roles.include?("hostname_uconnect")
   template "/home/ubuntu/uconnect" do
     source "uconnect.sudoers.erb"
     owner "root"
