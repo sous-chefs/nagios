@@ -310,3 +310,11 @@ nagios_nrpecheck 'check_nagios' do
   parameters "-F #{node["nagios"]["cache_dir"]}/status.dat -e 4 -C /usr/sbin/#{nagios_service_name}"
   action :add
 end
+
+# Place the check_graphite script in the plugins directory
+cookbook_file "#{node['nagios']['plugin_dir']}/check_graphite" do
+  source "check_graphite.erb"
+  mode 0755
+  owner "root"
+  group "root"
+end
