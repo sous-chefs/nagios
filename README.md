@@ -101,6 +101,15 @@ The following attributes are used for the Nagios server
 * `node['nagios']['ldap_authoritative']` - accepts "on" or "off". controls other authentication modules from authenticating the user if this one fails.
 * `node['nagios']['users_databag']` - the databag containing users to search for. defaults to users
 * `node['nagios']['users_databag_group']` - users databag group considered Nagios admins.  defaults to sysadmin
+* `node['nagios']['services_databag']` - the databag containing services to search for. defaults to nagios_services
+* `node['nagios']['servicegroups_databag']` - the databag containing servicegroups to search for. defaults to nagios_servicegroups
+* `node['nagios']['templates_databag']` - the databag containing templates to search for. defaults to nagios_templates
+* `node['nagios']['eventhandlers_databag']` - the databag containing eventhandlers to search for. defaults to nagios_eventhandlers
+* `node['nagios']['unmanaged_hosts_databag']` - the databag containing unmanagedhosts to search for. defaults to nagios_unmanagedhosts
+* `node['nagios']['serviceescalations_databag']` - the databag containing serviceescalations to search for. defaults to nagios_serviceescalations
+* `node['nagios']['contacts_databag']` - the databag containing contacts to search for. defaults to nagios_contacts
+* `node['nagios']['contactgroups_databag']` - the databag containing contactgroups to search for. defaults to nagios_contactgroups
+* `node['nagios']['servicedependencies_databag']` - the databag containing servicedependencies to search for. defaults to nagios_servicedependencies
 * `node['nagios']['host_name_attribute']` - node attribute to use for naming the host. Must be unique across monitored nodes. Defaults to hostname
 * `node['nagios']['regexp_matching']` - Attribute to enable [regexp matching](http://nagios.sourceforge.net/docs/3_0/configmain.html#use_regexp_matching). Defaults to 0.
 * `node['nagios']['large_installation_tweaks']` - Attribute to enable [large installation tweaks](http://nagios.sourceforge.net/docs/3_0/largeinstalltweaks.html). Defaults to 0.

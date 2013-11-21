@@ -76,17 +76,26 @@ default['nagios']['server']['src_dir'] = 'nagios'
 # for server from packages installation
 default['nagios']['server']['packages'] = %w[nagios3 nagios-nrpe-plugin nagios-images]
 
-default['nagios']['notifications_enabled']     = 0
-default['nagios']['check_external_commands']   = true
-default['nagios']['default_contact_groups']    = %w{admins}
-default['nagios']['sysadmin_email']            = 'root@localhost'
-default['nagios']['sysadmin_sms_email']        = 'root@localhost'
-default['nagios']['server_auth_method']        = 'htauth'
-default['nagios']['users_databag']             = 'users'
-default['nagios']['users_databag_group']       = 'sysadmin'
-default['nagios']['host_name_attribute']       = 'hostname'
-default['nagios']['regexp_matching']           = 0
-default['nagios']['large_installation_tweaks'] = 0
+default['nagios']['notifications_enabled']       = 0
+default['nagios']['check_external_commands']     = true
+default['nagios']['default_contact_groups']      = %w{admins}
+default['nagios']['sysadmin_email']              = 'root@localhost'
+default['nagios']['sysadmin_sms_email']          = 'root@localhost'
+default['nagios']['server_auth_method']          = 'htauth'
+default['nagios']['users_databag']               = 'users'
+default['nagios']['users_databag_group']         = 'sysadmin'
+default['nagios']['services_databag']            = 'nagios_services'
+default['nagios']['servicegroups_databag']       = 'nagios_servicegroups'
+default['nagios']['templates_databag']           = 'nagios_templates'
+default['nagios']['eventhandlers_databag']       = 'nagios_eventhandlers'
+default['nagios']['unmanaged_hosts_databag']     = 'nagios_unmanagedhosts'
+default['nagios']['serviceescalations_databag']  = 'nagios_serviceescalations'
+default['nagios']['contacts_databag']            = 'nagios_contacts'
+default['nagios']['contactgroups_databag']       = 'nagios_contactgroups'
+default['nagios']['servicedependencies_databag'] = 'nagios_servicedependencies'
+default['nagios']['host_name_attribute']         = 'hostname'
+default['nagios']['regexp_matching']             = 0
+default['nagios']['large_installation_tweaks']   = 0
 
 # for cas authentication
 default['nagios']['cas_login_url']       = 'https://example.com/cas/login'
