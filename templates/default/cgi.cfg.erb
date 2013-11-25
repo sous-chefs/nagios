@@ -30,7 +30,7 @@ url_html_path=/<%= node['nagios']['server']['vname'] %>
 # Values: 0 = disables context-sensitive help
 #         1 = enables context-sensitive help
 
-show_context_help=1
+show_context_help=<%= node['nagios']['cgi']['show_context_help'] %>
 
 # NAGIOS PROCESS CHECK COMMAND
 # This is the full path and filename of the program used to check
@@ -92,7 +92,7 @@ use_authentication=1
 # not use authorization.  You may use an asterisk (*) to
 # authorize any user who has authenticated to the web server.
 
-authorized_for_system_information=*
+authorized_for_system_information=<%= node['nagios']['cgi']['authorized_for_system_information'] %>
 
 # CONFIGURATION INFORMATION ACCESS
 # This option is a comma-delimited list of all usernames that
@@ -102,7 +102,7 @@ authorized_for_system_information=*
 # an asterisk (*) to authorize any user who has authenticated
 # to the web server.
 
-authorized_for_configuration_information=*
+authorized_for_configuration_information=<%= node['nagios']['cgi']['authorized_for_configuration_information'] %>
 
 # SYSTEM/PROCESS COMMAND ACCESS
 # This option is a comma-delimited list of all usernames that
@@ -113,7 +113,7 @@ authorized_for_configuration_information=*
 # You may use an asterisk (*) to authorize any user who has
 # authenticated to the web server.
 
-authorized_for_system_commands=*
+authorized_for_system_commands=<%= node['nagios']['cgi']['authorized_for_system_commands'] %>
 
 # GLOBAL HOST/SERVICE VIEW ACCESS
 # These two options are comma-delimited lists of all usernames that
@@ -124,8 +124,8 @@ authorized_for_system_commands=*
 # to authorize any user who has authenticated to the web server.
 
 
-authorized_for_all_services=*
-authorized_for_all_hosts=*
+authorized_for_all_services=<%= node['nagios']['cgi']['authorized_for_all_services'] %>
+authorized_for_all_hosts=<%= node['nagios']['cgi']['authorized_for_all_hosts'] %>
 
 # GLOBAL HOST/SERVICE COMMAND ACCESS
 # These two options are comma-delimited lists of all usernames that
@@ -136,8 +136,8 @@ authorized_for_all_hosts=*
 # authorization).  You may use an asterisk (*) to authorize any
 # user who has authenticated to the web server.
 
-authorized_for_all_service_commands=*
-authorized_for_all_host_commands=*
+authorized_for_all_service_commands=<%= node['nagios']['cgi']['authorized_for_all_service_commands'] %>
+authorized_for_all_host_commands=<%= node['nagios']['cgi']['authorized_for_all_host_commands'] %>
 
 # STATUSMAP BACKGROUND IMAGE
 # This option allows you to specify an image to be used as a
