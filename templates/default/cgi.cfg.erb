@@ -164,7 +164,7 @@ authorized_for_all_host_commands=<%= node['nagios']['cgi']['authorized_for_all_h
 #       4 = Circular
 #       5 = Circular (Marked Up)
 
-default_statusmap_layout=5
+default_statusmap_layout=<%= node['nagios']['cgi']['default_statusmap_layout'] %>
 
 # DEFAULT STATUSWRL LAYOUT METHOD
 # This option allows you to specify the default layout method
@@ -176,7 +176,7 @@ default_statusmap_layout=5
 #       3 = Balanced tree
 #       4 = Circular
 
-default_statuswrl_layout=4
+default_statuswrl_layout=<%= node['nagios']['cgi']['default_statuswrl_layout'] %>
 
 # STATUSWRL INCLUDE
 # This option allows you to include your own objects in the
@@ -205,6 +205,13 @@ ping_syntax=/bin/ping -n -U -c 5 $HOSTADDRESS$
 
 refresh_rate=90
 
+# ESCAPE HTML TAGS
+# This option determines whether HTML tags in host and service
+# status output is escaped in the web interface.  If enabled,
+# your plugin output will not be able to contain clickable links.
+
+escape_html_tags=<%= node['nagios']['cgi']['escape_html_tags'] %>
+
 # SOUND OPTIONS
 # These options allow you to specify an optional audio file
 # that should be played in your browser window when there are
@@ -228,3 +235,20 @@ refresh_rate=90
 #service_warning_sound=warning.wav
 #service_unknown_sound=warning.wav
 #normal_sound=noproblem.wav
+
+# URL TARGET FRAMES
+# These options determine the target frames in which notes and 
+# action URLs will open.
+
+action_url_target=<%= node['nagios']['cgi']['action_url_target'] %>
+notes_url_target=<%= node['nagios']['cgi']['notes_url_target'] %>
+
+
+# LOCK AUTHOR NAMES OPTION
+# This option determines whether users can change the author name 
+# when submitting comments, scheduling downtime.  If disabled, the 
+# author names will be locked into their contact name, as defined in Nagios.
+# Values: 0 = allow editing author names
+#         1 = lock author names (disallow editing)
+
+lock_author_names=<%= node['nagios']['cgi']['lock_author_names'] %>
