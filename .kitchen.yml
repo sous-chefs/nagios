@@ -18,3 +18,13 @@ suites:
 - name: default
   run_list:
   - recipe[nagios::client]
+- name: server
+  run_list:
+  - recipe[chef-solo-search]
+  - recipe[nagios::server]
+  attributes:
+    roles:
+    - monitoring
+    nagios:
+      additional_contacts:
+        root: true
