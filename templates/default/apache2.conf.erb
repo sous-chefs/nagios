@@ -22,6 +22,9 @@
   <% if @https -%>
   SSLEngine On
   SSLCertificateFile <%= @ssl_cert_file %>
+  <% if node['nagios']['ssl_cert_chain_file'] %>
+  SSLCertificateChainFile <%= node['nagios']['ssl_cert_chain_file'] %>
+  <% end -%>
   SSLCertificateKeyFile <%= @ssl_cert_key %>
   <% end -%>
 
