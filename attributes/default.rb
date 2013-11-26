@@ -33,6 +33,7 @@ when 'rhel', 'fedora'
   else
     default['nagios']['plugin_dir'] = '/usr/lib64/nagios/plugins'
   end
+  default['nagios']['use_epel'] = true
 else
   default['nagios']['plugin_dir'] = '/usr/lib/nagios/plugins'
 end
