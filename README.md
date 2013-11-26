@@ -1,6 +1,6 @@
 nagios Cookbook
 ===============
-[![Build Status](https://secure.travis-ci.org/opscode-cookbooks/nagios.png?branch=master)](http://travis-ci.org/opscode-cookbooks/nagios)
+[![Build Status](https://secure.travis-ci.org/tas50/nagios.png?branch=master)](http://travis-ci.org/tas50/nagios)
 
 Installs and configures Nagios server and NRPE client. Chef nodes are automatically discovered using search, and Nagios host groups are created based on Chef roles and optionally environments as well. NRPE client commands can be defined by using a LWRP, and Nagios service checks applied to hostgroups using definitions in data bag items.
 
