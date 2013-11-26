@@ -10,7 +10,7 @@ describe 'nagios::client' do
       :nagios => { :allowed_hosts => %w(test.host) }
       ).converge 'nagios::client'
 
-    expect(chef_run).to create_file_with_content "#{chef_run.node['nagios']['nrpe']['conf_dir']}/nrpe.cfg", 'allowed_hosts=127.0.0.1,test.host'
+    expect(chef_run).to render_file("#{chef_run.node['nagios']['nrpe']['conf_dir']}/nrpe.cfg").with_content('allowed_hosts=127.0.0.1,test.host')
   end
 
   it 'does not blow up when the search returns no results' do
