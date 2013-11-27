@@ -180,7 +180,7 @@ Installs the Nagios server from packages. Default for Debian / Ubuntu systems.
 Installs the Nagios server from source. Default for Red Hat / Fedora based systems as native packages for Nagios are not available in the default repositories.
 
 ### pagerduty
-Installs and configures pagerduty plugin for Nagios. You need to set a `node['nagios']['pagerduty']['key']` attribute on your server for this to work. This can be set through environments so that you can use different API keys for servers in production vs staging for instance.
+Installs and configures PagerDuty plugin for Nagios. You need to set a `node['nagios']['pagerduty']['key']` attribute on your server for this to work. This can be set through environments so that you can use different API keys for servers in production vs. staging for instance.
 
 This recipe was written based on the [Nagios Integration Guide](http://www.pagerduty.com/docs/guides/nagios-integration-guide) from PagerDuty which explains how to get an API key for your Nagios server.
 
@@ -275,8 +275,7 @@ Create a nagios\_servicegroups data bag that will contain definitions for servic
 }
 ```
 
-You can group your services by using the "servicegroups" keyword in your services data bags. For example, to have your ssh
-checks show up under the ops service group, you could define it like this:
+You can group your services by using the "servicegroups" keyword in your services data bags. For example, to have your ssh checks show up under the ops service group, you could define it like this:
 
 ```javascript
 {
@@ -288,7 +287,7 @@ checks show up under the ops service group, you could define it like this:
 ```
 
 ### Service Dependencies
-Create a nagios\_servicedependencies data bag that will contain definitions for service dependencies. Each service dependency will be named based on the id of the data bag. Each service dependency requires either a dependent host name and/or hostgroup name, dependent service description, host name and/or hostgroup name, and service description.
+Create a nagios\_servicedependencies data bag that will contain definitions for service dependencies. Each service dependency will be named based on the id of the data bag. Each service dependency requires a dependent host name and/or hostgroup name, dependent service description, host name and/or hostgroup name, and service description.
 
 ```javascript
 {
