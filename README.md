@@ -45,18 +45,29 @@ The following attributes are used by both client and server recipes.
 ### client
 The following attributes are used for the NRPE client
 
+##### installation method
 * `node['nagios']['client']['install_method']` - whether to install from package or source. Default chosen by platform based on known packages available for NRPE: debian/ubuntu 'package', Redhat/CentOS/Fedora/Scientific: source
-* `node['nagios']['plugins']['url']` - url to retrieve the plugins source
-* `node['nagios']['plugins']['version']` - version of the plugins source to download
-* `node['nagios']['plugins']['checksum']` - checksum of the plugins source tarball
-* `node['nagios']['nrpe']['home']` - home directory of NRPE, default /usr/lib/nagios
-* `node['nagios']['nrpe']['conf_dir']` - location of the nrpe configuration, default /etc/nagios
+* `node['nagios']['nrpe']['packages']` - nrpe / plugin packages to install. The default attribute for RHEL/Fedora platforms contains a bare minimum set of packages. The full list of available packages is available at: `http://dl.fedoraproject.org/pub/epel/6/x86_64/repoview/letter_n.group.html`
 * `node['nagios']['nrpe']['url']` - url to retrieve NRPE source
 * `node['nagios']['nrpe']['version']` - version of NRPE source to download
 * `node['nagios']['nrpe']['checksum']` - checksum of the NRPE source tarball
-* `node['nagios']['nrpe']['packages']` - nrpe / plugin packages to install. The default attribute for RHEL/Fedora platforms contains a bare minimum set of packages. The full list of available packages is available at: `http://dl.fedoraproject.org/pub/epel/6/x86_64/repoview/letter_n.group.html`
+* `node['nagios']['plugins']['url']` - url to retrieve the plugins source from
+* `node['nagios']['plugins']['version']` - version of the plugins source to download
+* `node['nagios']['plugins']['checksum']` - checksum of the plugins source tarball
+
+##### directories and paths
+* `node['nagios']['nrpe']['home']` - home directory of NRPE
+* `node['nagios']['nrpe']['conf_dir']` - location of the nrpe configuration
+* `node['nagios']['nrpe']['ssl_lib_dir']` - ssl directory used by NRPE
+* `node['nagios']['nrpe']['pidfile']` - location to store the NRPE pid file
+
+##### authorization and server discovery
 * `node['nagios']['server_role']` - the role that the Nagios server will have in its run list that the clients can search for.
 * `node['nagios']['allowed_hosts']` - additional hosts that are allowed to connect to this client. Must be an array of strings (i.e. `%w(test.host other.host)`). These hosts are added in addition to 127.0.0.1 and IPs that are found via search.
+
+##### misc
+* `node['nagios']['nrpe']['dont_blame_nrpe']` - allows the server to send additional values to NRPE via arguments.  this needs to be enabled for most checks to function
+* `node['nagios']['nrpe']['command_timeout']` - the amount of time NRPE will wait for a command to execute before timing out
 
 ### server
 The following attributes are used for the Nagios server
