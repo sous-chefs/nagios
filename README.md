@@ -377,6 +377,26 @@ Then, in the service data bag,
 }
 ```
 
+You can also define escalations using wildcards, like so:
+
+```javascript
+{
+  "id": "first-warning",
+  "contact_groups": "sysadmin",
+  "hostgroup_name": "*",
+  "first_notification": "1",
+  "last_notification": "0",
+  "notification_interval": "21600",
+  "escalation_period": "24x7",
+  "escalation_options": "w",
+  "hostgroup_name": "*",
+  "service_description": "*",
+  "register": 1
+}
+```
+
+This configures notifications for all warnings to repeat on a given interval (under the default config, every 6 hours). (Note that you must register this kind of escalation, as it is not a template.)
+
 ### Event Handlers
 You can optionally define event handlers to trigger on service alerts by creating a nagios\_eventhandlers data bag that will contain definitions of event handlers for services monitored via Nagios.
 
