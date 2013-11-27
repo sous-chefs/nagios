@@ -180,7 +180,7 @@ Installs the Nagios server from packages. Default for Debian / Ubuntu systems.
 Installs the Nagios server from source. Default for Red Hat / Fedora based systems as native packages for Nagios are not available in the default repositories.
 
 ### pagerduty
-Installs and configures PagerDuty plugin for Nagios. You need to set a `node['nagios']['pagerduty']['key']` attribute on your server for this to work. This can be set through environments so that you can use different API keys for servers in production vs. staging for instance.
+Installs pagerduty plugin for nagios. If you only have a single pagerduty key, you can simply set a `node['nagios']['pagerduty_key']` attribute on your server.  For multiple pagerduty key configuration see Pager Duty under Data Bags.
 
 This recipe was written based on the [Nagios Integration Guide](http://www.pagerduty.com/docs/guides/nagios-integration-guide) from PagerDuty which explains how to get an API key for your Nagios server.
 
@@ -420,6 +420,18 @@ Once you've defined an event handler you will need to add the event handler to a
 }
 ```
 
+### Pager Duty
+You can define pagerduty contacts and keys by creating nagios\_pagerduty data bags that contain the contact and
+the relevant key. Setting admin\_contactgroup to "true" will add this pagerduty contact to the admin contact group
+created by this cookbook.
+
+       {
+         "id": "pagerduty_critical",
+         "admin_contactgroup": "true",
+         "key": "a33e5ef0ac96772fbd771ddcccd3ccd0"
+       }
+
+You can add these contacts to any contactgroups you create.
 
 Monitoring Role
 ---------------
