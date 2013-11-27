@@ -50,6 +50,9 @@ The following attributes are used for the NRPE client
 * `node['nagios']['plugins']['version']` - version of the plugins source to download
 * `node['nagios']['plugins']['checksum']` - checksum of the plugins source tarball
 * `node['nagios']['nrpe']['home']` - home directory of NRPE, default /usr/lib/nagios
+* `node['nagios']['nrpe']['log_facility']` - log facility for nrpe configuration, default nil (not set)
+* `node['nagios']['nrpe']['debug']` - debug level nrpe configuration, default 0
+* `node['nagios']['nrpe']['connection_timeout']` - connection timeout for nrpe configuration, default nil (not set)
 * `node['nagios']['nrpe']['conf_dir']` - location of the nrpe configuration, default /etc/nagios
 * `node['nagios']['nrpe']['url']` - url to retrieve NRPE source
 * `node['nagios']['nrpe']['version']` - version of NRPE source to download
@@ -136,6 +139,36 @@ information about these directives, see the Nagios documentation for
 * `node['nagios']['server']['stop_apache']` - stop apache service if using nginx, default false
 * `node['nagios']['server']['redirect_root']` - if using Apache, should http://server/ redirect to http://server/nagios3 automatically, default false
 * `node['nagios']['server']['normalize_hostname']` - If set to true, normalize all hostnames in hosts.cfg to lowercase. Defaults to false.
+
+These are additional nagios.cfg options.
+
+ * `node['nagios']['conf']['max_service_check_spread']`  - Defaults to 5
+ * `node['nagios']['conf']['max_host_check_spread']`     - Defaults to 5
+ * `node['nagios']['conf']['service_check_timeout']`     - Defaults to 60
+ * `node['nagios']['conf']['host_check_timeout']`        - Defaults to 30
+ * `node['nagios']['conf']['process_performance_data']`  - Defaults to 0
+ * `node['nagios']['conf']['date_format']`               - Defaults to 'iso8601'
+ * `node['nagios']['conf']['p1_file']`                   - Defaults to `#{node['nagios']['home']}/p1.pl`
+ * `node['nagios']['conf']['debug_level']`               - Defaults to 0
+ * `node['nagios']['conf']['debug_verbosity']`           - Defaults to 1
+ * `node['nagios']['conf']['debug_file']`                - Defaults to `#{node['nagios']['state_dir']}/#{node['nagios']['server']['name']}.debug`
+ 
+ These are nagios cgi.config options.
+
+ * `node['nagios']['cgi']['show_context_help']`                         - Defaults to 1
+ * `node['nagios']['cgi']['authorized_for_system_information']`         - Defaults to '*'
+ * `node['nagios']['cgi']['authorized_for_configuration_information']`  - Defaults to '*'
+ * `node['nagios']['cgi']['authorized_for_system_commands']`            - Defaults to '*'
+ * `node['nagios']['cgi']['authorized_for_all_services']`               - Defaults to '*'
+ * `node['nagios']['cgi']['authorized_for_all_hosts']`                  - Defaults to '*'
+ * `node['nagios']['cgi']['authorized_for_all_service_commands']`       - Defaults to '*'
+ * `node['nagios']['cgi']['authorized_for_all_host_commands']`          - Defaults to '*'
+ * `node['nagios']['cgi']['default_statusmap_layout']`                  - Defaults to 5
+ * `node['nagios']['cgi']['default_statuswrl_layout']`                  - Defaults to 4
+ * `node['nagios']['cgi']['escape_html_tags']`                          - Defaults to 0
+ * `node['nagios']['cgi']['action_url_target']`                         - Defaults to '_blank'
+ * `node['nagios']['cgi']['notes_url_target']`                          - Defaults to '_blank'
+ * `node['nagios']['cgi']['lock_author_names']`                         - Defaults to 1
 
 
 Recipes
