@@ -1,9 +1,5 @@
 require 'chefspec'
-require 'berkshelf'
-
-Berkshelf.ui.mute do
-  Berkshelf::Berksfile.from_file('Berksfile').install(path: 'vendor/cookbooks/')
-end
+require 'chefspec/berkshelf'
 
 def runner(attributes = {}, environment = 'test')
   # A workaround so that ChefSpec can work with Chef environments (from https://github.com/acrmp/chefspec/issues/54)
