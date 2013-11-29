@@ -105,10 +105,13 @@ Chef::Log.info('Beginning search for nodes.  This may take some time depending o
 nodes = []
 hostgroups = []
 
+# filter monitored hosts by excluding them from the initial node search
+exclude_hosts = "NOT hostname:"+node['nagios']['server']['exclude_hosts'].join(" NOT hostname:")
+
 if node['nagios']['multi_environment_monitoring']
-  nodes = search(:node, 'hostname:*')
+  nodes = search(:node, "hostname:* #{exclude_hosts}" )
 else
-  nodes = search(:node, "hostname:* AND chef_environment:#{node.chef_environment}")
+  nodes = search(:node, "hostname:* AND chef_environment:#{node.chef_environment} #{exclude_hosts}" )
 end
 
 if nodes.empty?
