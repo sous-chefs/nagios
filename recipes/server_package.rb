@@ -33,6 +33,8 @@ if node['platform_family'] == 'debian'
 
 end
 
+include_recipe 'apache2::mod_cgi' if node['platform_family'] == 'rhel'
+
 node['nagios']['server']['packages'].each do |pkg|
   package pkg
 end

@@ -1,8 +1,9 @@
-# Author:: Joshua Sierles <joshua@37signals.com>
 #
+# Author:: Joshua Sierles <joshua@37signals.com>
 # Author:: Joshua Timberman <joshua@opscode.com>
 # Author:: Nathan Haneysmith <nathan@opscode.com>
 # Author:: Seth Chisamore <schisamo@opscode.com>
+#
 # Cookbook Name:: nagios
 # Attributes:: server
 #
@@ -31,21 +32,6 @@ default['nagios']['pagerduty']['script_url'] = 'https://raw.github.com/PagerDuty
 default['nagios']['pagerduty']['service_notification_options'] = 'w,u,c,r'
 default['nagios']['pagerduty']['host_notification_options'] = 'd,r'
 
-case node['platform_family']
-when 'debian'
-  default['nagios']['server']['install_method'] = 'package'
-  default['nagios']['server']['service_name']   = 'nagios3'
-  default['nagios']['server']['mail_command']   = '/usr/bin/mail'
-when 'rhel', 'fedora'
-  default['nagios']['server']['install_method'] = 'source'
-  default['nagios']['server']['service_name']   = 'nagios'
-  default['nagios']['server']['mail_command']   = '/bin/mail'
-else
-  default['nagios']['server']['install_method'] = 'source'
-  default['nagios']['server']['service_name']   = 'nagios'
-  default['nagios']['server']['mail_command']   = '/bin/mail'
-end
-
 default['nagios']['home']          = '/usr/lib/nagios3'
 default['nagios']['conf_dir']      = '/etc/nagios3'
 default['nagios']['config_dir']    = '/etc/nagios3/conf.d'
@@ -54,6 +40,44 @@ default['nagios']['cache_dir']     = '/var/cache/nagios3'
 default['nagios']['state_dir']     = '/var/lib/nagios3'
 default['nagios']['run_dir']       = '/var/run/nagios3'
 default['nagios']['docroot']       = '/usr/share/nagios3/htdocs'
+
+# for server from packages installation
+default['nagios']['server']['packages'] = %w[nagios3 nagios-nrpe-plugin nagios-images]
+
+# nagios server name and webserver vname.  this can be changed to allow for the installation of icinga
+default['nagios']['server']['name']  = 'nagios'
+default['nagios']['server']['vname'] = 'nagios3'
+
+case node['platform_family']
+when 'debian'
+  default['nagios']['server']['install_method'] = 'package'
+  default['nagios']['server']['service_name']   = 'nagios3'
+  default['nagios']['server']['mail_command']   = '/usr/bin/mail'
+when 'rhel', 'fedora'
+  case node['platform_version'].split('.')[0]
+  when '6'
+    default['nagios']['server']['install_method'] = 'package'
+    default['nagios']['home']          = node['kernel']['machine'] == 'x86_64' ? '/usr/lib64/nagios' : '/usr/lib/nagios'
+    default['nagios']['conf_dir']      = '/etc/nagios'
+    default['nagios']['config_dir']    = '/etc/nagios/conf.d'
+    default['nagios']['log_dir']       = '/var/log/nagios'
+    default['nagios']['cache_dir']     = '/var/log/nagios'
+    default['nagios']['state_dir']     = '/var/spool/nagios/cmd'
+    default['nagios']['run_dir']       = '/var/run'
+    default['nagios']['docroot']       = '/usr/share/nagios/html'
+    default['nagios']['server']['packages'] = %w[nagios nagios-plugins-nagios nagios-plugins-nrpe nagios-plugins-ping]
+    default['nagios']['server']['vname'] = 'nagios'
+  else
+    default['nagios']['server']['install_method'] = 'source'
+  end
+  default['nagios']['server']['service_name']   = 'nagios'
+  default['nagios']['server']['mail_command']   = '/bin/mail'
+else
+  default['nagios']['server']['install_method'] = 'source'
+  default['nagios']['server']['service_name']   = 'nagios'
+  default['nagios']['server']['mail_command']   = '/bin/mail'
+end
+
 default['nagios']['timezone']      = 'UTC'
 default['nagios']['enable_ssl']    = false
 default['nagios']['http_port']     = node['nagios']['enable_ssl'] ? '443' : '80'
@@ -63,18 +87,11 @@ default['nagios']['ssl_cert_key']  = "#{node['nagios']['conf_dir']}/certificates
 default['nagios']['ssl_req']       = '/C=US/ST=Several/L=Locality/O=Example/OU=Operations/' +
   "CN=#{node['nagios']['server_name']}/emailAddress=ops@#{node['nagios']['server_name']}"
 
-# nagios server name and webserver vname.  this can be changed to allow for the installation of icinga
-default['nagios']['server']['name']  = 'nagios'
-default['nagios']['server']['vname'] = 'nagios3'
-
 # for server from source installation
 default['nagios']['server']['url']      = 'http://prdownloads.sourceforge.net/sourceforge/nagios'
 default['nagios']['server']['version']  = '3.5.1'
 default['nagios']['server']['checksum'] = 'ca9dd68234fa090b3c35ecc8767b2c9eb743977eaf32612fa9b8341cc00a0f99'
 default['nagios']['server']['src_dir'] = 'nagios'
-
-# for server from packages installation
-default['nagios']['server']['packages'] = %w[nagios3 nagios-nrpe-plugin nagios-images]
 
 default['nagios']['notifications_enabled']     = 0
 default['nagios']['check_external_commands']   = true
