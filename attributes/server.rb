@@ -55,7 +55,7 @@ when 'debian'
   default['nagios']['server']['mail_command']   = '/usr/bin/mail'
 when 'rhel', 'fedora'
   case node['platform_version'].split('.')[0]
-  when "6"
+  when '6'
     default['nagios']['server']['install_method'] = 'package'
     default['nagios']['home']          = node['kernel']['machine'] == 'x86_64' ? '/usr/lib64/nagios' : '/usr/lib/nagios'
     default['nagios']['conf_dir']      = '/etc/nagios'

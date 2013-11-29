@@ -42,7 +42,7 @@ when 'debian'
 when 'rhel', 'fedora'
   if node['platform_family'] == 'rhel'
     case node['platform_version'].split('.')[0]
-    when "6"
+    when '6'
       default['nagios']['client']['install_method']  = 'package'
     else
       default['nagios']['client']['install_method']  = 'source'
