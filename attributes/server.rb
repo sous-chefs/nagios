@@ -127,3 +127,5 @@ default['nagios']['server']['nginx_dispatch'] = :cgi
 default['nagios']['server']['stop_apache']    = false
 default['nagios']['server']['redirect_root']  = false
 default['nagios']['server']['normalize_hostname'] = false
+# array of hostnames to exclude from being monitored
+default['nagios']['server']['exclude_hosts'] = []
