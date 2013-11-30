@@ -28,6 +28,6 @@ suites:
      nagios:
        additional_contacts:
          root: true
-   data_bags_path: test/data_bags
-   roles_path: test/roles
+data_bags_path: test/data_bags
+roles_path: test/roles
 
