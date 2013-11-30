@@ -1,8 +1,9 @@
-driver_plugin: vagrant
-driver_config:
-  require_chef_omnibus: true
-  customize:
-    memory: 512
+---
+driver:
+  name: vagrant
+
+provisioner:
+  name: chef_zero
 
 platforms:
   - name: ubuntu-12.04
@@ -15,16 +16,18 @@ platforms:
   - name: centos-5.9
 
 suites:
-- name: default
-  run_list:
-  - recipe[nagios::client]
-- name: server
-  run_list:
-  - recipe[chef-solo-search]
-  - recipe[nagios::server]
-  attributes:
-    roles:
-    - monitoring
-    nagios:
-      additional_contacts:
-        root: true
+ - name: client
+   run_list:
+   - recipe[nagios::client]
+ - name: server
+   run_list:
+   - recipe[nagios::server]
+   attributes:
+     roles:
+     - monitoring
+     nagios:
+       additional_contacts:
+         root: true
+   data_bags_path: test/data_bags
+   roles_path: test/roles
+
