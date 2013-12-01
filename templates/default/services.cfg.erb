@@ -5,7 +5,7 @@
 # monitoring service checks
 define service {
     service_description Nagios
-    hostgroup_name      <%= node['nagios']['server_role'] %>
+    hostgroup_name      all
     check_command       check-nagios
     contact_groups      admins
     use                 default-service
@@ -25,7 +25,7 @@ define service {
        if valid %>
 define service {
   service_description <%= service['description'] || service['id'] %>
-  hostgroup_name <%= service['hostgroup_name'].split(",").sort.join(",") %>
+  hostgroup_name all
   <% if service['use_existing_command'] -%>
   check_command <%= service['use_existing_command'] %>
   <% else -%>
@@ -49,7 +49,7 @@ define service {
   # this should be an escalation defined in the nagios_serviceescalation data bag
   use <%= service['use_escalation'] %>
   service_description <%= service['description'] || service['id'] %>
-  hostgroup_name <%= service['hostgroup_name'] %>
+  hostgroup_name all
 }
 <% end %>
   <% end -%>
