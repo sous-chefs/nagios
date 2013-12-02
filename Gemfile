@@ -7,6 +7,6 @@ gem 'foodcritic', '~> 3.0'
 gem 'rubocop',    '~> 0.15'
 
 group :integration do
-  gem 'test-kitchen',    '~> 1.0.0.rc.2'
+  gem 'test-kitchen',    '~> 1.0'
   gem 'kitchen-vagrant', '~> 0.11'
 end
