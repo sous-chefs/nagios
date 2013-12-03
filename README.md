@@ -255,6 +255,17 @@ You may also use an already defined command definition by omitting the command\_
 }
 ```
 
+You may also filter services by environment. This is useful if you have nagios servers in several environments but you would like a service check to only apply in one particular environment:
+
+```javascript
+{
+  "id": "ssh",
+  "hostgroup_name": "linux",
+  "environment": "staging",
+  "command_line": "$USER1$/check_ssh $HOSTADDRESS$"
+}
+```
+
 ### Service Groups
 Create a nagios\_servicegroups data bag that will contain definitions for service groups. Each server group will be named based on the id of the data bag.
 
@@ -341,6 +352,18 @@ Here's an example host definition:
   "address": "webserver1.mydmz.dmz",
   "hostgroups": ["web_servers","production_servers"],
   "id": "webserver1",
+  "notifications": 1
+}
+```
+
+Similar to services, you may also filter unmanaged hosts by environment. This is useful if you have nagios servers in several environments but you would like to monitor an unmanaged host that only exists in a particular environment:
+
+```javascript
+{
+  "address": "webserver1.mydmz.dmz",
+  "hostgroups": ["web_servers","production_servers"],
+  "id": "webserver1",
+  "environment": "production",
   "notifications": 1
 }
 ```
