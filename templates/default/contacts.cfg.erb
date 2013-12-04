@@ -26,6 +26,24 @@ define contactgroup {
   members           <%= @members.join(',') %>
 }
 
+define contactgroup {
+  contactgroup_name dbadmins
+  alias             Mongo Administrators
+  members           pagerduty_database
+}
+
+define contactgroup {
+  contactgroup_name uconnecters
+  alias             Uconnect Administrators
+  members           pagerduty_uconnect
+}
+
+define contactgroup {
+  contactgroup_name dataclouders
+  alias             DataCloud Administrators
+  members           pagerduty_datacloud
+}
+
 <% @admins.each do |a| -%>
 define contact {
   use          default-contact

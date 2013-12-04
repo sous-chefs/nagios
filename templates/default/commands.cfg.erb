@@ -16,6 +16,11 @@ command_line $USER1$/check_website_response.sh -u $ARG1$ -w $ARG2$ -c $ARG3$
 }
 
 define command {
+  command_name    check_rabbit_queues
+  command_line    $USER1$/check_rabbitmq_queue -H $ARG1$ --port 15672 --vhost $ARG2$ --queue $ARG3$ -u $ARG4$ -p $ARG5$ -w $ARG6$ -c $ARG7$
+}
+
+define command {
   command_name    check_jmx_dc_dd_total_messages_received
   command_line    $USER1$/check_jmx -U service:jmx:rmi:///jndi/rmi://$HOSTADDRESS$:9001/jmxrmi -O "DataCloud:type=DataDistributor" -A TotalMessagesReceived
 }
@@ -27,7 +32,7 @@ define command {
 
 define command {
   command_name    check_jmx_threads
-  command_line    $USER1$/check_jmx -U service:jmx:rmi:///jndi/rmi://$HOSTADDRESS$:9001/jmxrmi -O "java.lang:type=Threading" -A ThreadCount -w 100 -c 125 
+  command_line    $USER1$/check_jmx -U service:jmx:rmi:///jndi/rmi://$HOSTADDRESS$:9001/jmxrmi -O "java.lang:type=Threading" -A ThreadCount -w $ARG1$ -c $ARG2$ 
 }
 
 define command {

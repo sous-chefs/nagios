@@ -43,6 +43,7 @@ command[check_ntp]=<%= node['nagios']['plugin_dir'] %>/check_ntp_time -H <%= @nt
 <% if node.roles.include?("hostname_eventstream") %>
 #check eventstream process
 command[check_eventstream]=<%= node['nagios']['plugin_dir'] %>/check_procs -a "./eventstream.pl"
+command[check_eventstream_logging]=sudo /usr/lib/nagios/plugins/check_log3.pl -l <%= node['nagios']['logfiles']['eventstream']['syslog'] %> -s /tmp/eventstream_logging -p "<%= node['nagios']['checks']['eventstream_logging']['pattern'] %>" -c 1
 <% end %>
 
 <% if node.roles.include?("urest") %>
@@ -57,10 +58,11 @@ command[check_mongod]=<%= node['nagios']['plugin_dir'] %>/check_procs -c 1:1 -C 
 
 <% if node.roles.include?("utui") %>
 #check UTUI log for errors 
-command[check_logfiles_utui_login_error]=sudo /usr/lib/nagios/plugins/check-log-new.pl -l <%= node['nagios']['logfiles']['utui']['log_file'] %> -r 0 -s "<%= node['nagios']['checks']['utui_login_error']['pattern'] %>"
-command[check_logfiles_utui_publish_error]=sudo /usr/lib/nagios/plugins/check-log-new.pl -l <%= node['nagios']['logfiles']['utui']['log_file'] %> -r 0 -s "<%= node['nagios']['checks']['utui_publish_error']['pattern'] %>"
-command[check_logfiles_utui_smartFTP_error]=sudo /usr/lib/nagios/plugins/check-log-new.pl -l <%= node['nagios']['logfiles']['utui']['log_file'] %> -r 0 -s "<%= node['nagios']['checks']['utui_smartFTP_error']['pattern'] %>"
-command[check_logfiles_utui_ftp_upload_error]=sudo /usr/lib/nagios/plugins/check-log-new.pl -l <%= node['nagios']['logfiles']['utui']['log_file'] %> -r 0 -s "<%= node['nagios']['checks']['utui_ftp_upload_error']['pattern'] %>"
+command[check_logfiles_utui_login_error]=sudo /usr/lib/nagios/plugins/check_log3.pl -l <%= node['nagios']['logfiles']['utui']['log_file'] %> -s /tmp/utui_login_error -p "<%= node['nagios']['checks']['utui_login_error']['pattern'] %>" -c 1
+command[check_logfiles_utui_publish_error]=sudo /usr/lib/nagios/plugins/check_log3.pl -l <%= node['nagios']['logfiles']['utui']['log_file'] %> -s /tmp/utui_publish_error -p "<%= node['nagios']['checks']['utui_publish_error']['pattern'] %>" -c 1
+command[check_logfiles_utui_smartFTP_error]=sudo /usr/lib/nagios/plugins/check_log3.pl -l <%= node['nagios']['logfiles']['utui']['log_file'] %> -s /tmp/utui_smartFTP_error -p "<%= node['nagios']['checks']['utui_smartFTP_error']['pattern'] %>" -c 1
+command[check_logfiles_utui_ftp_upload_error]=sudo /usr/lib/nagios/plugins/check_log3.pl -l <%= node['nagios']['logfiles']['utui']['log_file'] %> -s /tmp/utui_ftp_upload_error -p "<%= node['nagios']['checks']['utui_ftp_upload_error']['pattern'] %>" -c 1
+command[check_logfiles_utui_publish_insert]=sudo /usr/lib/nagios/plugins/check_log3.pl -l <%= node['nagios']['logfiles']['utui']['log_file'] %> -s /tmp/utui_publish_insert_error -p "<%= node['nagios']['checks']['utui_publish_insert']['pattern'] %>" -c 1
 <% end %>
 
 <% if node.recipes.include?("openvpn") %>
@@ -101,9 +103,9 @@ command[check_iron]=<%= node['nagios']['plugin_dir'] %>/check_procs -a "./s2s_ht
 command[check_iron_processor]=<%= node['nagios']['plugin_dir'] %>/check_procs -a "./s2s_httpd_iron_processor.pl"
 #check number of files waiting to be processed in /data/store/logger/queue/process
 command[check_dir_files]=<%= node['nagios']['plugin_dir'] %>/dircount.pl /data/store/logger/queue/process 100000 150000
-#check logs for rabbit connection issues
-command[check_logfiles_rabbit_connection]=sudo /usr/lib/nagios/plugins/check-log-new.pl -l <%= node['nagios']['logfiles']['uconnect']['log_file'] %> -r 0 -s "<%= node['nagios']['checks']['rabbit_connection']['pattern'] %>"
-command[check_logfiles_rabbit_auth]=sudo /usr/lib/nagios/plugins/check-log-new.pl -l <%= node['nagios']['logfiles']['uconnect']['log_file'] %> -r 0 -s "<%= node['nagios']['checks']['rabbit_auth']['pattern'] %>"
+#check logs for rabbit connection issuesi - 0000
+command[check_logfiles_rabbit_connection]=sudo /usr/lib/nagios/plugins/check_log3.pl -l <%= node['nagios']['logfiles']['uconnect']['log_file'] %> -s /tmp/rabbit_connection -p "<%= node['nagios']['checks']['rabbit_connection']['pattern'] %>" -c 1
+command[check_logfiles_rabbit_auth]=sudo /usr/lib/nagios/plugins/check_log3.pl -l <%= node['nagios']['logfiles']['uconnect']['log_file'] %> -s /tmp/rabbit_auth -p "<%= node['nagios']['checks']['rabbit_auth']['pattern'] %>" -c 1
 <% end %>
 
 
@@ -113,41 +115,19 @@ command[check_iron]=<%= node['nagios']['plugin_dir'] %>/check_procs -a "./s2s_ht
 command[check_iron_processor]=<%= node['nagios']['plugin_dir'] %>/check_procs -a "./s2s_httpd_iron_processor.pl"
 #check number of files waiting to be processed in /data/store/logger/queue/process
 command[check_dir_files]=<%= node['nagios']['plugin_dir'] %>/dircount.pl /data/store/logger/queue/process 100000 150000
+command[check_logfiles_iron_create]=sudo /usr/lib/nagios/plugins/check_log3.pl -l <%= node['nagios']['logfiles']['uconnect']['syslog'] %> -s /tmp/iron_create -p "<%= node['nagios']['checks']['iron_create']['pattern'] %>" -c 1
+command[check_logfiles_iron_move]=sudo /usr/lib/nagios/plugins/check_log3.pl -l <%= node['nagios']['logfiles']['uconnect']['syslog'] %> -s /tmp/iron_move -p "<%= node['nagios']['checks']['iron_move']['pattern'] %>" -c 1
+command[check_logfiles_iron_write]=sudo /usr/lib/nagios/plugins/check_log3.pl -l <%= node['nagios']['logfiles']['uconnect']['syslog'] %> -s /tmp/iron_write -p "<%= node['nagios']['checks']['iron_write']['pattern'] %>" -c 1
+command[check_logfiles_iron_processor_process]=sudo /usr/lib/nagios/plugins/check_log3.pl -l <%= node['nagios']['logfiles']['uconnect']['syslog'] %> -s /tmp/iron_processor_process -p "<%= node['nagios']['checks']['iron_processor_process']['pattern'] %>" -c 1
+command[check_logfiles_iron_processor_quarantine]=sudo /usr/lib/nagios/plugins/check_log3.pl -l <%= node['nagios']['logfiles']['uconnect']['syslog'] %> -s /tmp/iron_processor_quarantine -p "<%= node['nagios']['checks']['iron_processor_quarantine']['pattern'] %>" -c 1
 
-#check logs for rabbit connection issues
-<% if node[:ec2][:instance_type].split('.').last == "small" %>
-command[check_logfiles_rabbit_connection]=sudo /usr/lib/nagios/plugins/check-log-new.pl -l <%= node['nagios']['logfiles']['uconnect']['log_file1'] %> -r 0 -s "<%= node['nagios']['checks']['rabbit_connection']['pattern'] %>"
-command[check_logfiles_rabbit_connection]=sudo /usr/lib/nagios/plugins/check-log-new.pl -l <%= node['nagios']['logfiles']['uconnect']['log_file2'] %> -r 0 -s "<%= node['nagios']['checks']['rabbit_connection']['pattern'] %>"
-command[check_logfiles_rabbit_connection]=sudo /usr/lib/nagios/plugins/check-log-new.pl -l <%= node['nagios']['logfiles']['uconnect']['log_file3'] %> -r 0 -s "<%= node['nagios']['checks']['rabbit_connection']['pattern'] %>"
-command[check_logfiles_rabbit_auth]=sudo /usr/lib/nagios/plugins/check-log-new.pl -l <%= node['nagios']['logfiles']['uconnect']['log_file1'] %> -r 0 -s "<%= node['nagios']['checks']['rabbit_auth']['pattern'] %>"
-command[check_logfiles_rabbit_auth]=sudo /usr/lib/nagios/plugins/check-log-new.pl -l <%= node['nagios']['logfiles']['uconnect']['log_file2'] %> -r 0 -s "<%= node['nagios']['checks']['rabbit_auth']['pattern'] %>"
-command[check_logfiles_rabbit_auth]=sudo /usr/lib/nagios/plugins/check-log-new.pl -l <%= node['nagios']['logfiles']['uconnect']['log_file3'] %> -r 0 -s "<%= node['nagios']['checks']['rabbit_auth']['pattern'] %>"
-<% end %>
 
-<% if node[:ec2][:instance_type].split('.').last == "medium" %>
-command[check_logfiles_rabbit_connection1]=sudo /usr/lib/nagios/plugins/check-log-new.pl -l <%= node['nagios']['logfiles']['uconnect']['log_file1'] %> -r 0 -s "<%= node['nagios']['checks']['rabbit_connection']['pattern'] %>"
-command[check_logfiles_rabbit_connection2]=sudo /usr/lib/nagios/plugins/check-log-new.pl -l <%= node['nagios']['logfiles']['uconnect']['log_file2'] %> -r 0 -s "<%= node['nagios']['checks']['rabbit_connection']['pattern'] %>"
-command[check_logfiles_rabbit_connection3]=sudo /usr/lib/nagios/plugins/check-log-new.pl -l <%= node['nagios']['logfiles']['uconnect']['log_file3'] %> -r 0 -s "<%= node['nagios']['checks']['rabbit_connection']['pattern'] %>"
-command[check_logfiles_rabbit_connection4]=sudo /usr/lib/nagios/plugins/check-log-new.pl -l <%= node['nagios']['logfiles']['uconnect']['log_file4'] %> -r 0 -s "<%= node['nagios']['checks']['rabbit_connection']['pattern'] %>"
-command[check_logfiles_rabbit_auth1]=sudo /usr/lib/nagios/plugins/check-log-new.pl -l <%= node['nagios']['logfiles']['uconnect']['log_file1'] %> -r 0 -s "<%= node['nagios']['checks']['rabbit_auth']['pattern'] %>"
-command[check_logfiles_rabbit_auth2]=sudo /usr/lib/nagios/plugins/check-log-new.pl -l <%= node['nagios']['logfiles']['uconnect']['log_file2'] %> -r 0 -s "<%= node['nagios']['checks']['rabbit_auth']['pattern'] %>"
-command[check_logfiles_rabbit_auth3]=sudo /usr/lib/nagios/plugins/check-log-new.pl -l <%= node['nagios']['logfiles']['uconnect']['log_file3'] %> -r 0 -s "<%= node['nagios']['checks']['rabbit_auth']['pattern'] %>"
-command[check_logfiles_rabbit_auth4]=sudo /usr/lib/nagios/plugins/check-log-new.pl -l <%= node['nagios']['logfiles']['uconnect']['log_file4'] %> -r 0 -s "<%= node['nagios']['checks']['rabbit_auth']['pattern'] %>"
-<% end %>
-
-<% if node[:ec2][:instance_type].split('.').last == "large" %>
-command[check_logfiles_rabbit_connection]=sudo /usr/lib/nagios/plugins/check-log-new.pl -l <%= node['nagios']['logfiles']['uconnect']['log_file1'] %> -r 0 -s "<%= node['nagios']['checks']['rabbit_connection']['pattern'] %>"
-command[check_logfiles_rabbit_connection]=sudo /usr/lib/nagios/plugins/check-log-new.pl -l <%= node['nagios']['logfiles']['uconnect']['log_file2'] %> -r 0 -s "<%= node['nagios']['checks']['rabbit_connection']['pattern'] %>"
-command[check_logfiles_rabbit_connection]=sudo /usr/lib/nagios/plugins/check-log-new.pl -l <%= node['nagios']['logfiles']['uconnect']['log_file3'] %> -r 0 -s "<%= node['nagios']['checks']['rabbit_connection']['pattern'] %>"
-command[check_logfiles_rabbit_connection]=sudo /usr/lib/nagios/plugins/check-log-new.pl -l <%= node['nagios']['logfiles']['uconnect']['log_file4'] %> -r 0 -s "<%= node['nagios']['checks']['rabbit_connection']['pattern'] %>"
-command[check_logfiles_rabbit_connection]=sudo /usr/lib/nagios/plugins/check-log-new.pl -l <%= node['nagios']['logfiles']['uconnect']['log_file5'] %> -r 0 -s "<%= node['nagios']['checks']['rabbit_connection']['pattern'] %>"
-command[check_logfiles_rabbit_connection]=sudo /usr/lib/nagios/plugins/check-log-new.pl -l <%= node['nagios']['logfiles']['uconnect']['log_file6'] %> -r 0 -s "<%= node['nagios']['checks']['rabbit_connection']['pattern'] %>"
-command[check_logfiles_rabbit_auth]=sudo /usr/lib/nagios/plugins/check-log-new.pl -l <%= node['nagios']['logfiles']['uconnect']['log_file1'] %> -r 0 -s "<%= node['nagios']['checks']['rabbit_auth']['pattern'] %>"
-command[check_logfiles_rabbit_auth]=sudo /usr/lib/nagios/plugins/check-log-new.pl -l <%= node['nagios']['logfiles']['uconnect']['log_file2'] %> -r 0 -s "<%= node['nagios']['checks']['rabbit_auth']['pattern'] %>"
-command[check_logfiles_rabbit_auth]=sudo /usr/lib/nagios/plugins/check-log-new.pl -l <%= node['nagios']['logfiles']['uconnect']['log_file3'] %> -r 0 -s "<%= node['nagios']['checks']['rabbit_auth']['pattern'] %>"
-command[check_logfiles_rabbit_auth]=sudo /usr/lib/nagios/plugins/check-log-new.pl -l <%= node['nagios']['logfiles']['uconnect']['log_file4'] %> -r 0 -s "<%= node['nagios']['checks']['rabbit_auth']['pattern'] %>"
-command[check_logfiles_rabbit_auth]=sudo /usr/lib/nagios/plugins/check-log-new.pl -l <%= node['nagios']['logfiles']['uconnect']['log_file5'] %> -r 0 -s "<%= node['nagios']['checks']['rabbit_auth']['pattern'] %>"
-command[check_logfiles_rabbit_auth]=sudo /usr/lib/nagios/plugins/check-log-new.pl -l <%= node['nagios']['logfiles']['uconnect']['log_file6'] %> -r 0 -s "<%= node['nagios']['checks']['rabbit_auth']['pattern'] %>"
+#check logs for rabbit connection issues 
+<% nodesize = node[:ec2][:instance_type].split('.').last %>
+<% num_procs = node[:uconnect][:iron_processes][nodesize] %>
+<% for i in 1..num_procs %>
+command[check_logfiles_rabbit_connection<%= i %>]=sudo /usr/lib/nagios/plugins/check_log3.pl -l <%= node['nagios']['logfiles']['uconnect']['log_file_'] %>-<%= i %>.log -s /tmp/rabbit_connection<%= i %> -p "<%= node['nagios']['checks']['rabbit_connection']['pattern'] %>" -c 1
+command[check_logfiles_rabbit_auth<%= i %>]=sudo /usr/lib/nagios/plugins/check_log3.pl -l <%= node['nagios']['logfiles']['uconnect']['log_file_'] %>-<%= i %>.log -s /tmp/rabbit_auth<%= i %> -p "<%= node['nagios']['checks']['rabbit_auth']['pattern'] %>" -c 1
 <% end %>
 <% end %>
 

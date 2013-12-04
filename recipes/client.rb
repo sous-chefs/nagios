@@ -22,6 +22,8 @@
 # limitations under the License.
 #
 
+require 'fileutils'
+
 %w{libdatetime-format-builder-perl libfile-readbackwards-perl}.each do |pkg|
   package pkg do
     action :install
@@ -36,7 +38,7 @@ if node.run_list.roles.include?(node['nagios']['server_role'])
   search = "role:openvpn* AND app_environment:#{node['app_environment']} AND placement_availability_zone:#{node['placement_availability_zone']}*"
 
   search(:node, search) do |vpn_node|
-     Chef::Log.info( "Found node #{vpn_node['ipaddress']}" )
+     Chef::Log.warn( "Found node #{vpn_node['ipaddress']}" )
      mon_host << vpn_node['ipaddress']
   end
 
@@ -174,28 +176,57 @@ nagios_nrpecheck "check_load" do
 end
 
 if node.roles.include?("uconnect_logger") || node.roles.include?("hostname_uconnect")
-  template "/home/ubuntu/uconnect" do
+  template "/tmp/uconnect" do
     source "uconnect.sudoers.erb"
     owner "root"
     group "root"
     mode 0440
   end
  
-  if ::File.exists?('/home/ubuntu/uconnect')
-    FileUtils.cp('/home/ubuntu/uconnect', '/etc/sudoers.d/uconnect')
+  if ::File.exists?('/tmp/uconnect')
+    FileUtils.cp('/tmp/uconnect', '/etc/sudoers.d/uconnect')
+  end
+end
+
+
+if node.recipes.include?("uconnect::s2s_logger_plenv")
+  nodesize = node[:ec2][:instance_type].split('.').last 
+  num_procs = node[:uconnect][:iron_processes][nodesize]
+  Chef::Log.warn( "Node is #{nodesize}, and so num of procs is #{num_procs}" ) 
+    for i in 1..num_procs
+      template "/var/log/upstart/s2s-httpd-iron-processor-#{i}.log" do
+        source "iron_processor.erb"
+        owner "root"
+        group "root"
+        mode 0644
+        action :create_if_missing
+      end
+    end  
+end
+
+if node.roles.include?("hostname_eventstream")
+  template "/tmp/eventstream" do
+    source "eventstream.sudoers.erb"
+    owner "root"
+    group "root"
+    mode 0440
+  end
+
+  if ::File.exists?('/tmp/eventstream')
+    FileUtils.cp('/tmp/eventstream', '/etc/sudoers.d/eventstream')
   end
 end
 
 if node.roles.include?("rabbitmq_server")
-  template "/home/ubuntu/rabbitmq" do
+  template "/tmp/rabbitmq" do
     source "rabbitmq.sudoers.erb"
     owner "root"
     group "root"
     mode 0440
   end
 
-  if ::File.exists?('/home/ubuntu/rabbitmq')
-    FileUtils.cp('/home/ubuntu/rabbitmq', '/etc/sudoers.d/rabbitmq')
+  if ::File.exists?('/tmp/rabbitmq')
+    FileUtils.cp('/tmp/rabbitmq', '/etc/sudoers.d/rabbitmq')
   end
 end
 

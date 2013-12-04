@@ -81,10 +81,32 @@ define service {
 }
 
 define service {
+  name                            log-service
+  use                             default-service
+  max_check_attempts              1
+  check_interval                  30
+  notification_interval           0
+}
+
+define service {
   name                            jmx-service
   use                             default-service
   check_interval                  600
   retry_interval                  180
+  contact_groups                  dataclouders
+}
+
+define service {
+  name                            uconnect-service
+  use                             default-service
+  max_check_attempts              6
+  contact_groups                  uconnecters
+}
+
+define service {
+  name                            datacloud-service
+  use                             default-service
+  contact_groups                  dataclouders
 }
 
 define service {
@@ -93,6 +115,7 @@ define service {
   max_check_attempts              1
   check_interval                  240
   notification_interval           0
+  contact_groups                  dbadmins
 }
 
 define host {

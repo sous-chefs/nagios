@@ -82,16 +82,130 @@ define service {
     service_description Check Uconnect Files to Process
     hostgroup_name      uconnect_logger,hostname_uconnect
     check_command       check_dir_files
-    use                 default-service,srv-pnp
+    use                 uconnect-service,srv-pnp
 }
 
 <% unless @main_nagios.nil? -%>
+
+#define service {
+#    service_description Check Rabbit http_requests_queue VPC US WEST
+#    <%= @designation %> <%= @main_nagios %>
+#    check_command       check_rabbit_queues!10.1.3.201!/server2server!http_requests_queue!admin!admin!100,-1,100,-1!150,-1,150,-1
+#    use                 default-service,srv-pnp
+#}
+
+#define service {
+#    service_description Check Rabbit tag_request_queue VPC US WEST
+#    <%= @designation %> <%= @main_nagios %>
+#    check_command       check_rabbit_queues!10.1.3.201!/server2server!tag_request_queue!admin!admin!100,-1,100,-1!150,-1,150,-1
+#    use                 default-service,srv-pnp
+#}
+
+#define service {
+#    service_description Check Rabbit http_response_task VPC US WEST
+#    <%= @designation %> <%= @main_nagios %>
+#    check_command       check_rabbit_queues!10.1.3.201!/server2server!http_response_task!admin!admin!100,-1,100,-1!150,-1,150,-1
+#    use                 default-service,srv-pnp
+#}
+
+#define service {
+#    service_description Check Rabbit record_requests_que VPC US WEST
+#    <%= @designation %> <%= @main_nagios %>
+#    check_command       check_rabbit_queues!10.1.3.201!/server2server!record_requests_queue!admin!admin!1000,-1,100,-1!150,-1,150,-1
+#    use                 default-service,srv-pnp
+#}
+
+define service {
+    service_description Check Rabbit http_requests_queue NON_VPC US WEST
+    <%= @designation %> <%= @main_nagios %>
+    check_command       check_rabbit_queues!ec2-50-18-37-177.us-west-1.compute.amazonaws.com!/server2server!http_requests_queue!admin!toor4cars9window14five.!100,-1,100,-1!150,-1,150,-1
+    use                 default-service,srv-pnp
+}
+
+
+define service {
+    service_description Check Rabbit tag_request_queue NON_VPC US WEST
+    <%= @designation %> <%= @main_nagios %>
+    check_command       check_rabbit_queues!ec2-50-18-37-177.us-west-1.compute.amazonaws.com!/server2server!tag_request_queue!admin!toor4cars9window14five.!100,-1,100,-1!150,-1,150,-1
+    use                 default-service,srv-pnp
+}
+
+define service {
+    service_description Check Rabbit http_response_task NON_VPC US WEST
+    <%= @designation %> <%= @main_nagios %>
+    check_command       check_rabbit_queues!ec2-50-18-37-177.us-west-1.compute.amazonaws.com!/server2server!http_response_task!admin!toor4cars9window14five.!100,-1,100,-1!150,-1,150,-1
+    use                 default-service,srv-pnp
+}
+
+#define service {
+#    service_description Check Rabbit record_requests_que NON_VPC US WEST
+#    <%= @designation %> <%= @main_nagios %>
+#    check_command       check_rabbit_queues!ec2-50-18-37-177.us-west-1.compute.amazonaws.com!/server2server!record_requests_queue!admin!toor4cars9window14five.!1000,-1,100,-1!150,-1,150,-1
+#    use                 default-service,srv-pnp
+#}
+
+define service {
+    service_description Check Rabbit http_requests_queue NON_VPC US EAST
+    <%= @designation %> <%= @main_nagios %>
+    check_command       check_rabbit_queues!ec2-23-20-138-181.compute-1.amazonaws.com!/server2server!http_requests_queue!admin!toor4cars9window14five.!100,-1,100,-1!150,-1,150,-1
+    use                 default-service,srv-pnp
+}
+
+define service {
+    service_description Check Rabbit tag_request_queue NON_VPC US EAST
+    <%= @designation %> <%= @main_nagios %>
+    check_command       check_rabbit_queues!ec2-23-20-138-181.compute-1.amazonaws.com!/server2server!tag_request_queue!admin!toor4cars9window14five.!100,-1,100,-1!150,-1,150,-1
+    use                 default-service,srv-pnp
+}
+
+define service {
+    service_description Check Rabbit http_response_task NON_VPC US EAST
+    <%= @designation %> <%= @main_nagios %>
+    check_command       check_rabbit_queues!ec2-23-20-138-181.compute-1.amazonaws.com!/server2server!http_response_task!admin!toor4cars9window14five.!100,-1,100,-1!150,-1,150,-1
+    use                 default-service,srv-pnp
+}
+
+define service {
+    service_description Check Rabbit record_requests_que NON_VPC US EAST
+    <%= @designation %> <%= @main_nagios %>
+    check_command       check_rabbit_queues!ec2-23-20-138-181.compute-1.amazonaws.com!/server2server!record_requests_queue!admin!toor4cars9window14five.!1000,-1,100,-1!150,-1,150,-1
+    use                 default-service,srv-pnp
+}
+
+define service {
+    service_description Check Rabbit http_requests_queue NON_VPC EU WEST
+    <%= @designation %> <%= @main_nagios %>
+    check_command       check_rabbit_queues!ec2-46-137-17-176.eu-west-1.compute.amazonaws.com!/server2server!http_requests_queue!admin!toor4cars9window14five.!100,-1,100,-1!150,-1,150,-1
+    use                 default-service,srv-pnp
+}
+
+define service {
+    service_description Check Rabbit tag_request_queue NON_VPC EU WEST
+    <%= @designation %> <%= @main_nagios %>
+    check_command       check_rabbit_queues!ec2-46-137-17-176.eu-west-1.compute.amazonaws.com!/server2server!tag_request_queue!admin!toor4cars9window14five.!100,-1,100,-1!150,-1,150,-1
+    use                 default-service,srv-pnp
+}
+
+define service {
+    service_description Check Rabbit http_response_task NON_VPC EU WEST
+    <%= @designation %> <%= @main_nagios %>
+    check_command       check_rabbit_queues!ec2-46-137-17-176.eu-west-1.compute.amazonaws.com!/server2server!http_response_task!admin!toor4cars9window14five.!100,-1,100,-1!150,-1,150,-1
+    use                 default-service,srv-pnp
+}
+
+define service {
+    service_description Check Rabbit record_requests_que NON_VPC EU WEST
+    <%= @designation %> <%= @main_nagios %>
+    check_command       check_rabbit_queues!ec2-46-137-17-176.eu-west-1.compute.amazonaws.com!/server2server!record_requests_queue!admin!toor4cars9window14five.!100,-1,1000,-1!150,-1,150,-1
+    use                 default-service,srv-pnp
+}
 
 define service {
     service_description Check MongoDB Backup - Cluster 1
     <%= @designation %>	<%= @main_nagios %>
     check_command       check_mongodb_backup!production_cluster_1
     use                 mongo-service,srv-pnp
+    contact_groups      dbadmins
 }
 
 define service {
@@ -99,6 +213,7 @@ define service {
     <%= @designation %>	<%= @main_nagios %>
     check_command       check_mongodb_backup!production_cluster_2
     use                 mongo-service,srv-pnp
+    contact_groups      dbadmins
 }
 
 define service {
@@ -106,6 +221,7 @@ define service {
     <%= @designation %>	<%= @main_nagios %>
     check_command       check_mongodb_snapshots!production_cluster_1
     use                 mongo-service,srv-pnp
+    contact_groups      dbadmins
 }
 
 define service {
@@ -113,6 +229,7 @@ define service {
     <%= @designation %>	<%= @main_nagios %>
     check_command       check_mongodb_snapshots!production_cluster_2
     use                 mongo-service,srv-pnp
+    contact_groups      dbadmins
 }
 
 define service {
@@ -205,35 +322,56 @@ define service {
 define service {
     service_description Check JMX DataCloud Visitor Processor Java Heap
     hostgroup_name      dc_visitor_processor
-    check_command       check_jmx_heap!<%= @vp_heap %>000000000
+    check_command       check_jmx_heap!<%= @vp_heap %>500000000
     use                 jmx-service,srv-pnp
 }
 
 define service {
     service_description Check JMX DataCloud Message Router Java Heap
     hostgroup_name      dc_message_router
-    check_command       check_jmx_heap!<%= @mr_heap %>000000000
+    check_command       check_jmx_heap!<%= @mr_heap %>500000000
     use                 jmx-service,srv-pnp
 }
 
 define service {
     service_description Check JMX DataCloud Query Aggregator Java Heap
     hostgroup_name      dc_query_aggregator
-    check_command       check_jmx_heap!<%= @qa_heap %>000000000
+    check_command       check_jmx_heap!<%= @qa_heap %>500000000
     use                 jmx-service,srv-pnp
 }
 
 define service {
     service_description Check JMX DataCloud Data Distributor Java Heap
     hostgroup_name      dc_data_distributor
-    check_command       check_jmx_heap!<%= @dd_heap %>000000000
+    check_command       check_jmx_heap!<%= @dd_heap %>500000000
     use                 jmx-service,srv-pnp
 }
 
 define service {
     service_description Check JMX DataCloud Threading
-    hostgroup_name      datacloud_component
-    check_command       check_jmx_threads
+    hostgroup_name      dc_visitor_processor
+    check_command       check_jmx_threads!250!275
+    use                 jmx-service,srv-pnp
+}
+
+define service {
+    service_description Check JMX DataCloud Threading
+    hostgroup_name      dc_query_aggregator
+    check_command       check_jmx_threads!40!60
+    use                 jmx-service,srv-pnp
+}
+
+define service {
+    service_description Check JMX DataCloud Threading
+    hostgroup_name      dc_message_router
+    check_command       check_jmx_threads!40!60
+    use                 jmx-service,srv-pnp
+}
+
+define service {
+    service_description Check JMX DataCloud Threading
+    hostgroup_name      dc_data_distributor
+    check_command       check_jmx_threads!40!60
     use                 jmx-service,srv-pnp
 }
 
@@ -534,14 +672,14 @@ define service {
     service_description Check HTTPD Iron
     hostgroup_name      uconnect_logger,hostname_uconnect
     check_command       check_nrpe!check_iron
-    use                 default-service,srv-pnp
+    use                 uconnect-service,srv-pnp
 }
 
 define service {
     service_description Check HTTPD Iron Processor
     hostgroup_name      uconnect_logger,hostname_uconnect
     check_command       check_nrpe!check_iron_processor
-    use                 default-service,srv-pnp
+    use                 uconnect-service,srv-pnp
 }
 
 define service {
@@ -617,99 +755,162 @@ define service {
   service_description   Check UTUI Logs - CDN Login Error
   hostgroup_name        utui
   check_command         check_nrpe!check_logfiles_utui_login_error
-  use                   default-service,srv-pnp
+  use                   log-service,srv-pnp
 }
 
 define service {
   service_description   Check UTUI Logs - CDN Publish Error
   hostgroup_name        utui
   check_command         check_nrpe!check_logfiles_utui_publish_error
-  use                   default-service,srv-pnp
+  use                   log-service,srv-pnp
 }
 
 define service {
   service_description   Check UTUI Logs - CDN smartFTP Error
   hostgroup_name        utui
   check_command         check_nrpe!check_logfiles_utui_smartFTP_error
-  use                   default-service,srv-pnp
+  use                   log-service,srv-pnp
 }
 
 define service {
   service_description   Check UTUI Logs - CDN FTP Upload Error
   hostgroup_name        utui
   check_command         check_nrpe!check_logfiles_utui_ftp_upload_error
-  use                   default-service,srv-pnp
+  use                   log-service,srv-pnp
+}
+
+define service {
+  service_description   Check UTUI Logs - Publish Insert
+  hostgroup_name        utui
+  check_command         check_nrpe!check_logfiles_utui_publish_insert
+  use                   log-service,srv-pnp
 }
 
 define service {
   service_description   Check Uconnect Rabbit Connection
   hostgroup_name        uconnect_logger
   check_command         check_nrpe!check_logfiles_rabbit_connection
-  use                   default-service,srv-pnp
+  use                   uconnect-service,srv-pnp
 }
+
+define service {
+  service_description   Check EventStream Logging
+  hostgroup_name        hostname_eventstream
+  check_command         check_nrpe!check_eventstream_logging
+  use                   log-service,srv-pnp
+}
+
+define service {
+  service_description   Check Uconnect Iron Create
+  hostgroup_name        hostname_uconnect
+  check_command         check_nrpe!check_logfiles_iron_create
+  use                   log-service,srv-pnp
+}
+
+define service {
+  service_description   Check Uconnect Iron Move
+  hostgroup_name        hostname_uconnect
+  check_command         check_nrpe!check_logfiles_iron_move
+  use                   log-service,srv-pnp
+}
+
+define service {
+  service_description   Check Uconnect Iron Write
+  hostgroup_name        hostname_uconnect
+  check_command         check_nrpe!check_logfiles_iron_write
+  use                   log-service,srv-pnp
+}
+
+define service {
+  service_description   Check Uconnect Iron Processor Process
+  hostgroup_name        hostname_uconnect
+  check_command         check_nrpe!check_logfiles_iron_processor_process
+  use                   log-service,srv-pnp
+}
+
+define service {
+  service_description   Check Uconnect Iron Processor Quarantine
+  hostgroup_name        hostname_uconnect
+  check_command         check_nrpe!check_logfiles_iron_processor_quarantine
+  use                   log-service,srv-pnp
+}
+
+#<% if node.recipes.include?("uconnect::s2s_logger_plenv") %>
+#<% nodesize = node[:ec2][:instance_type].split('.').last %>
+#<% num_procs = node[:uconnect][:iron_processes][nodesize] %>
+#<% for i in 1..num_procs %>
+#define service {
+#  service_description   Check Uconnect Rabbit Connection<%= i %>
+#  hostgroup_name        hostname_uconnect
+#  check_command         check_nrpe!check_logfiles_rabbit_connection<%= i %>
+#  use                   log-service,srv-pnp
+#}
+#<% end %>
+#<% end %>
+
 
 define service {
   service_description   Check Uconnect Rabbit Connection1
   hostgroup_name        hostname_uconnect
   check_command         check_nrpe!check_logfiles_rabbit_connection1
-  use                   default-service,srv-pnp
+  use                   log-service,srv-pnp
 }
 
 define service {
   service_description   Check Uconnect Rabbit Connection2
   hostgroup_name        hostname_uconnect
   check_command         check_nrpe!check_logfiles_rabbit_connection2
-  use                   default-service,srv-pnp
+  use                   log-service,srv-pnp
 }
 
-define service {
-  service_description   Check Uconnect Rabbit Connection3
-  hostgroup_name        hostname_uconnect
-  check_command         check_nrpe!check_logfiles_rabbit_connection3
-  use                   default-service,srv-pnp
-}
+#define service {
+#  service_description   Check Uconnect Rabbit Connection3
+#  hostgroup_name        hostname_uconnect
+#  check_command         check_nrpe!check_logfiles_rabbit_connection3
+#  use                   log-service,srv-pnp
+#}
 
-define service {
-  service_description   Check Uconnect Rabbit Connection4
-  hostgroup_name        hostname_uconnect
-  check_command         check_nrpe!check_logfiles_rabbit_connection4
-  use                   default-service,srv-pnp
-}
+#define service {
+#  service_description   Check Uconnect Rabbit Connection4
+#  hostgroup_name        hostname_uconnect
+#  check_command         check_nrpe!check_logfiles_rabbit_connection4
+#  use                   log-service,srv-pnp
+#}
 
 define service {
   service_description   Check Uconnect Rabbit Authentication
   hostgroup_name        uconnect_logger
   check_command         check_nrpe!check_logfiles_rabbit_auth
-  use                   default-service,srv-pnp
+  use                   log-service,srv-pnp
 }
 
 define service {
   service_description   Check Uconnect Rabbit Authentication1
   hostgroup_name        hostname_uconnect
   check_command         check_nrpe!check_logfiles_rabbit_auth1
-  use                   default-service,srv-pnp
+  use                   log-service,srv-pnp
 }
 
 define service {
   service_description   Check Uconnect Rabbit Authentication2
   hostgroup_name        hostname_uconnect
   check_command         check_nrpe!check_logfiles_rabbit_auth2
-  use                   default-service,srv-pnp
+  use                   log-service,srv-pnp
 }
 
-define service {
-  service_description   Check Uconnect Rabbit Authentication3
-  hostgroup_name        hostname_uconnect
-  check_command         check_nrpe!check_logfiles_rabbit_auth3
-  use                   default-service,srv-pnp
-}
+#define service {
+#  service_description   Check Uconnect Rabbit Authentication3
+#  hostgroup_name        hostname_uconnect
+#  check_command         check_nrpe!check_logfiles_rabbit_auth3
+#  use                   log-service,srv-pnp
+#}
 
-define service {
-  service_description   Check Uconnect Rabbit Authentication4
-  hostgroup_name        hostname_uconnect
-  check_command         check_nrpe!check_logfiles_rabbit_auth4
-  use                   default-service,srv-pnp
-}
+#define service {
+#  service_description   Check Uconnect Rabbit Authentication4
+#  hostgroup_name        hostname_uconnect
+#  check_command         check_nrpe!check_logfiles_rabbit_auth4
+#  use                   log-service,srv-pnp
+#}
 
 define service {
   service_description   Check ntp sync
@@ -757,7 +958,7 @@ define service {
   service_description   Check uconnect_service 9090
   hostgroup_name        uconnect_logger,hostname_uconnect
   check_command         check_uconnect_service
-  use                   default-service,srv-pnp
+  use                   uconnect-service,srv-pnp
 }
 
 define service {
