@@ -755,35 +755,35 @@ define service {
   service_description   Check UTUI Logs - CDN Login Error
   hostgroup_name        utui
   check_command         check_nrpe!check_logfiles_utui_login_error
-  use                   log-service,srv-pnp
+  use                   default-logfile,srv-pnp
 }
 
 define service {
   service_description   Check UTUI Logs - CDN Publish Error
   hostgroup_name        utui
   check_command         check_nrpe!check_logfiles_utui_publish_error
-  use                   log-service,srv-pnp
+  use                   default-logfile,srv-pnp
 }
 
 define service {
   service_description   Check UTUI Logs - CDN smartFTP Error
   hostgroup_name        utui
   check_command         check_nrpe!check_logfiles_utui_smartFTP_error
-  use                   log-service,srv-pnp
+  use                   default-logfile,srv-pnp
 }
 
 define service {
   service_description   Check UTUI Logs - CDN FTP Upload Error
   hostgroup_name        utui
   check_command         check_nrpe!check_logfiles_utui_ftp_upload_error
-  use                   log-service,srv-pnp
+  use                   default-logfile,srv-pnp
 }
 
 define service {
   service_description   Check UTUI Logs - Publish Insert
   hostgroup_name        utui
   check_command         check_nrpe!check_logfiles_utui_publish_insert
-  use                   log-service,srv-pnp
+  use                   default-logfile,srv-pnp
 }
 
 define service {
@@ -797,42 +797,43 @@ define service {
   service_description   Check EventStream Logging
   hostgroup_name        hostname_eventstream
   check_command         check_nrpe!check_eventstream_logging
-  use                   log-service,srv-pnp
+  use                   default-logfile,srv-pnp
 }
 
 define service {
   service_description   Check Uconnect Iron Create
   hostgroup_name        hostname_uconnect
   check_command         check_nrpe!check_logfiles_iron_create
-  use                   log-service,srv-pnp
+  use                   default-logfile,srv-pnp
 }
 
 define service {
   service_description   Check Uconnect Iron Move
   hostgroup_name        hostname_uconnect
   check_command         check_nrpe!check_logfiles_iron_move
-  use                   log-service,srv-pnp
+  use                   default-logfile,srv-pnp
 }
 
 define service {
   service_description   Check Uconnect Iron Write
   hostgroup_name        hostname_uconnect
   check_command         check_nrpe!check_logfiles_iron_write
-  use                   log-service,srv-pnp
+  use                   default-logfile,srv-pnp
 }
 
 define service {
   service_description   Check Uconnect Iron Processor Process
   hostgroup_name        hostname_uconnect
   check_command         check_nrpe!check_logfiles_iron_processor_process
-  use                   log-service,srv-pnp
+  use                   default-logfile,srv-pnp
+  event_handler		s2s-resolve
 }
 
 define service {
   service_description   Check Uconnect Iron Processor Quarantine
   hostgroup_name        hostname_uconnect
   check_command         check_nrpe!check_logfiles_iron_processor_quarantine
-  use                   log-service,srv-pnp
+  use                   default-logfile,srv-pnp
 }
 
 #<% if node.recipes.include?("uconnect::s2s_logger_plenv") %>
@@ -843,7 +844,7 @@ define service {
 #  service_description   Check Uconnect Rabbit Connection<%= i %>
 #  hostgroup_name        hostname_uconnect
 #  check_command         check_nrpe!check_logfiles_rabbit_connection<%= i %>
-#  use                   log-service,srv-pnp
+#  use                   default-logfile,srv-pnp
 #}
 #<% end %>
 #<% end %>
@@ -853,63 +854,63 @@ define service {
   service_description   Check Uconnect Rabbit Connection1
   hostgroup_name        hostname_uconnect
   check_command         check_nrpe!check_logfiles_rabbit_connection1
-  use                   log-service,srv-pnp
+  use                   default-logfile,srv-pnp
 }
 
 define service {
   service_description   Check Uconnect Rabbit Connection2
   hostgroup_name        hostname_uconnect
   check_command         check_nrpe!check_logfiles_rabbit_connection2
-  use                   log-service,srv-pnp
+  use                   default-logfile,srv-pnp
 }
 
 #define service {
 #  service_description   Check Uconnect Rabbit Connection3
 #  hostgroup_name        hostname_uconnect
 #  check_command         check_nrpe!check_logfiles_rabbit_connection3
-#  use                   log-service,srv-pnp
+#  use                   default-logfile,srv-pnp
 #}
 
 #define service {
 #  service_description   Check Uconnect Rabbit Connection4
 #  hostgroup_name        hostname_uconnect
 #  check_command         check_nrpe!check_logfiles_rabbit_connection4
-#  use                   log-service,srv-pnp
+#  use                   default-logfile,srv-pnp
 #}
 
 define service {
   service_description   Check Uconnect Rabbit Authentication
   hostgroup_name        uconnect_logger
   check_command         check_nrpe!check_logfiles_rabbit_auth
-  use                   log-service,srv-pnp
+  use                   default-logfile,srv-pnp
 }
 
 define service {
   service_description   Check Uconnect Rabbit Authentication1
   hostgroup_name        hostname_uconnect
   check_command         check_nrpe!check_logfiles_rabbit_auth1
-  use                   log-service,srv-pnp
+  use                   default-logfile,srv-pnp
 }
 
 define service {
   service_description   Check Uconnect Rabbit Authentication2
   hostgroup_name        hostname_uconnect
   check_command         check_nrpe!check_logfiles_rabbit_auth2
-  use                   log-service,srv-pnp
+  use                   default-logfile,srv-pnp
 }
 
 #define service {
 #  service_description   Check Uconnect Rabbit Authentication3
 #  hostgroup_name        hostname_uconnect
 #  check_command         check_nrpe!check_logfiles_rabbit_auth3
-#  use                   log-service,srv-pnp
+#  use                   default-logfile,srv-pnp
 #}
 
 #define service {
 #  service_description   Check Uconnect Rabbit Authentication4
 #  hostgroup_name        hostname_uconnect
 #  check_command         check_nrpe!check_logfiles_rabbit_auth4
-#  use                   log-service,srv-pnp
+#  use                   default-logfile,srv-pnp
 #}
 
 define service {

@@ -593,6 +593,11 @@ define command {
        command_line    /usr/lib/pnp4nagios/libexec/process_perfdata.pl -d HOSTPERFDATA
 }
 
+define command{
+	command_name	s2s-resolve
+	command_line	/home/ubuntu/s2s-resolve.sh SERVICESTATE$ $SERVICESTATETYPE$ $SERVICEATTEMPT$
+}
+
 # Commands added through nagios_services data bags
 <% @services.each do |service| -%>
 define command {
