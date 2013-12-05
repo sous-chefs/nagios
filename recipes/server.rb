@@ -143,16 +143,16 @@ nodes.each do |n|
   hostgroups << n['os'] unless hostgroups.include?(n['os'])
 end
 
-nagios_bags = NagiosDataBags.new
-services = nagios_bags.get('nagios_services')
-servicegroups = nagios_bags.get('nagios_servicegroups')
-templates = nagios_bags.get('nagios_templates')
-eventhandlers = nagios_bags.get('nagios_eventhandlers')
-unmanaged_hosts = nagios_bags.get('nagios_unmanagedhosts')
-serviceescalations = nagios_bags.get('nagios_serviceescalations')
-contacts = nagios_bags.get('nagios_contacts')
-contactgroups = nagios_bags.get('nagios_contactgroups')
-servicedependencies = nagios_bags.get('nagios_servicedependencies')
+nagios_bags         = NagiosDataBags.new
+services            = nagios_bags.get(node['nagios']['services_databag'])
+servicegroups       = nagios_bags.get(node['nagios']['servicegroups_databag'])
+templates           = nagios_bags.get(node['nagios']['templates_databag'])
+eventhandlers       = nagios_bags.get(node['nagios']['eventhandlers_databag'])
+unmanaged_hosts     = nagios_bags.get(node['nagios']['unmanagedhosts_databag'])
+serviceescalations  = nagios_bags.get(node['nagios']['serviceescalations_databag'])
+contacts            = nagios_bags.get(node['nagios']['contacts_databag'])
+contactgroups       = nagios_bags.get(node['nagios']['contactgroups_databag'])
+servicedependencies = nagios_bags.get(node['nagios']['servicedependencies_databag'])
 
 # Add unmanaged host hostgroups to the hostgroups array if they don't already exist
 unmanaged_hosts.each do |host|

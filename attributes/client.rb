@@ -59,9 +59,12 @@ else
   default['nagios']['nrpe']['service_name']      = 'nrpe'
 end
 
-default['nagios']['nrpe']['conf_dir']          = '/etc/nagios'
-default['nagios']['nrpe']['dont_blame_nrpe']   = 0
-default['nagios']['nrpe']['command_timeout']   = 60
+default['nagios']['nrpe']['log_facility']       = nil
+default['nagios']['nrpe']['debug']              = 0
+default['nagios']['nrpe']['conf_dir']           = '/etc/nagios'
+default['nagios']['nrpe']['dont_blame_nrpe']    = 0
+default['nagios']['nrpe']['command_timeout']    = 60
+default['nagios']['nrpe']['connection_timeout'] = nil
 
 # for plugin from source installation
 default['nagios']['plugins']['url']      = 'https://www.nagios-plugins.org/download'
