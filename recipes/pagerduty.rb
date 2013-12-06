@@ -61,6 +61,7 @@ remote_file "#{node['nagios']['plugin_dir']}/notify_pagerduty.pl" do
   action :create_if_missing
 end
 
+nagios_bags = NagiosDataBags.new
 pagerduty_contacts = nagios_bags.get('nagios_pagerduty')
 
 nagios_conf 'pagerduty' do
