@@ -22,15 +22,7 @@
 # limitations under the License.
 #
 
-node.set['nagios']['pagerduty']['key'] = node['nagios']['pagerduty_key']
-default['nagios']['pagerduty']['key'] = ''
-unless node['nagios']['pagerduty']['key'].empty?
-  default['nagios']['additional_contacts'] = { 'pagerduty' => true }
-end
-default['nagios']['pagerduty']['script_url'] = 'https://raw.github.com/PagerDuty/pagerduty-nagios-pl/master/pagerduty_nagios.pl'
-default['nagios']['pagerduty']['service_notification_options'] = 'w,u,c,r'
-default['nagios']['pagerduty']['host_notification_options'] = 'd,r'
-
+# platform specific atttributes
 case node['platform_family']
 when 'debian'
   default['nagios']['server']['install_method'] = 'package'
@@ -46,6 +38,7 @@ else
   default['nagios']['server']['mail_command']   = '/bin/mail'
 end
 
+# directories
 default['nagios']['home']          = '/usr/lib/nagios3'
 default['nagios']['conf_dir']      = '/etc/nagios3'
 default['nagios']['config_dir']    = '/etc/nagios3/conf.d'
@@ -54,6 +47,8 @@ default['nagios']['cache_dir']     = '/var/cache/nagios3'
 default['nagios']['state_dir']     = '/var/lib/nagios3'
 default['nagios']['run_dir']       = '/var/run/nagios3'
 default['nagios']['docroot']       = '/usr/share/nagios3/htdocs'
+
+# webserver configuration
 default['nagios']['timezone']      = 'UTC'
 default['nagios']['enable_ssl']    = false
 default['nagios']['http_port']     = node['nagios']['enable_ssl'] ? '443' : '80'
@@ -162,3 +157,14 @@ default['nagios']['cgi']['escape_html_tags']                         = 0
 default['nagios']['cgi']['action_url_target']                        = '_blank'
 default['nagios']['cgi']['notes_url_target']                         = '_blank'
 default['nagios']['cgi']['lock_author_names']                        = 1
+
+# backwards compatibility for the old attribute structure
+node.set['nagios']['pagerduty']['key'] = node['nagios']['pagerduty_key']
+
+default['nagios']['pagerduty']['key'] = ''
+unless node['nagios']['pagerduty']['key'].empty?
+  default['nagios']['additional_contacts'] = { 'pagerduty' => true }
+end
+default['nagios']['pagerduty']['script_url'] = 'https://raw.github.com/PagerDuty/pagerduty-nagios-pl/master/pagerduty_nagios.pl'
+default['nagios']['pagerduty']['service_notification_options'] = 'w,u,c,r'
+default['nagios']['pagerduty']['host_notification_options'] = 'd,r'
