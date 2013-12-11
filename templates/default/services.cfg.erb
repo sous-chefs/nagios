@@ -17,6 +17,15 @@ define service {
   <% unless service['hostgroup_name'].nil? || service['hostgroup_name'] == "all" || (service['environment'] && service['environment'] != node.chef_environment )
        valid = false
 
+       log "service is:"
+       log service['id']
+
+
+       breakpoint "services-debug" do
+         action :break
+       end
+
+
        service['hostgroup_name'].split(",").each do |s|
          valid = @hostgroups.include?(s) || @search_hostgroups.include?(s)
          valid || break
