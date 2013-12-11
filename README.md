@@ -360,7 +360,7 @@ Create a nagios\_servicedependencies data bag that will contain definitions for 
 
 ```javascript
 {
-  "id": "Service X depends on Service Y",
+  "id": "Service_X_depends_on_Service_Y",
   "dependent_host_name": "ServerX",
   "dependent_service_description": "Service X",
   "host_name": "ServerY",
