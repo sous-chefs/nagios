@@ -14,8 +14,17 @@ define service {
 # Services defined by data bags
 <% @services.each do |service| -%>
   <%# Do not define a service that has no hostgroup or a hostgroup that doesn't exist (including the "all" hostgroup), or a service that is not applicable in this environment %>
-  <% unless service['hostgroup_name'].nil? || service['hostgroup_name'] == "all" || (service['environment'] && service['environment'] != node.chef_environment )
+  <% unless service['hostgroup_name'].nil? || service['hostgroup_name'] == "all" || (service['environment'] && service['environment'] != node.chef_environment && ! node['nagios']['multi_environment_monitoring'] )
        valid = false
+
+       log "service is:"
+       log service['id']
+
+
+       breakpoint "services-debug" do
+         action :break
+       end
+
 
        service['hostgroup_name'].split(",").each do |s|
          valid = @hostgroups.include?(s) || @search_hostgroups.include?(s)
