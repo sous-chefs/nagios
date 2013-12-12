@@ -1,6 +1,6 @@
 nagios Cookbook
 ===============
-[![Build Status](https://secure.travis-ci.org/opscode-cookbooks/nagios.png?branch=master)](http://travis-ci.org/opscode-cookbooks/nagios)
+[![Build Status](https://secure.travis-ci.org/tas50/nagios.png?branch=master)](http://travis-ci.org/tas50/nagios)
 
 Installs and configures Nagios server and NRPE client. Chef nodes are automatically discovered using search, and Nagios host groups are created based on Chef roles and optionally environments as well. NRPE client commands can be defined by using a LWRP, and Nagios service checks applied to hostgroups using definitions in data bag items.
 
@@ -19,7 +19,7 @@ The system running the 'server' recipe should have a role named 'monitoring' so 
 ### Platform
 * Debian 6
 * Ubuntu 10.04, 12.04
-* Red Hat Enterprise Linux (CentOS/Amazon/Scientific/Oracle) 5.9, 6.4
+* Red Hat Enterprise Linux (CentOS/Amazon/Scientific/Oracle) 5.X, 6.X
 
 **Notes**: This cookbook has been tested on the listed platforms. It may work on other platforms with or without modification.
 
@@ -45,18 +45,37 @@ The following attributes are used by both client and server recipes.
 ### client
 The following attributes are used for the NRPE client
 
+##### installation method
 * `node['nagios']['client']['install_method']` - whether to install from package or source. Default chosen by platform based on known packages available for NRPE: debian/ubuntu 'package', Redhat/CentOS/Fedora/Scientific: source
 * `node['nagios']['plugins']['url']` - url to retrieve the plugins source
 * `node['nagios']['plugins']['version']` - version of the plugins source to download
 * `node['nagios']['plugins']['checksum']` - checksum of the plugins source tarball
 * `node['nagios']['nrpe']['home']` - home directory of NRPE, default /usr/lib/nagios
+* `node['nagios']['nrpe']['log_facility']` - log facility for nrpe configuration, default nil (not set)
+* `node['nagios']['nrpe']['debug']` - debug level nrpe configuration, default 0
+* `node['nagios']['nrpe']['connection_timeout']` - connection timeout for nrpe configuration, default nil (not set)
 * `node['nagios']['nrpe']['conf_dir']` - location of the nrpe configuration, default /etc/nagios
+* `node['nagios']['nrpe']['packages']` - nrpe / plugin packages to install. The default attribute for RHEL/Fedora platforms contains a bare minimum set of packages. The full list of available packages is available at: `http://dl.fedoraproject.org/pub/epel/6/x86_64/repoview/letter_n.group.html`
 * `node['nagios']['nrpe']['url']` - url to retrieve NRPE source
 * `node['nagios']['nrpe']['version']` - version of NRPE source to download
 * `node['nagios']['nrpe']['checksum']` - checksum of the NRPE source tarball
-* `node['nagios']['nrpe']['packages']` - nrpe / plugin packages to install. The default attribute for RHEL/Fedora platforms contains a bare minimum set of packages. The full list of available packages is available at: `http://dl.fedoraproject.org/pub/epel/6/x86_64/repoview/letter_n.group.html`
+* `node['nagios']['plugins']['url']` - url to retrieve the plugins source from
+* `node['nagios']['plugins']['version']` - version of the plugins source to download
+* `node['nagios']['plugins']['checksum']` - checksum of the plugins source tarball
+
+##### directories and paths
+* `node['nagios']['nrpe']['home']` - home directory of NRPE
+* `node['nagios']['nrpe']['conf_dir']` - location of the nrpe configuration
+* `node['nagios']['nrpe']['ssl_lib_dir']` - ssl directory used by NRPE
+* `node['nagios']['nrpe']['pidfile']` - location to store the NRPE pid file
+
+##### authorization and server discovery
 * `node['nagios']['server_role']` - the role that the Nagios server will have in its run list that the clients can search for.
 * `node['nagios']['allowed_hosts']` - additional hosts that are allowed to connect to this client. Must be an array of strings (i.e. `%w(test.host other.host)`). These hosts are added in addition to 127.0.0.1 and IPs that are found via search.
+
+##### misc
+* `node['nagios']['nrpe']['dont_blame_nrpe']` - allows the server to send additional values to NRPE via arguments.  this needs to be enabled for most checks to function
+* `node['nagios']['nrpe']['command_timeout']` - the amount of time NRPE will wait for a command to execute before timing out
 
 ### server
 The following attributes are used for the Nagios server
@@ -74,6 +93,7 @@ The following attributes are used for the Nagios server
 * `node['nagios']['timezone']` - Nagios timezone, defaults to UTC
 * `node['nagios']['enable_ssl]` - boolean for whether Nagios web server should be https, default false
 * `node['nagios']['ssl_cert_file']` = Location of SSL Certificate File. default "/etc/nagios3/certificates/nagios-server.pem"
+* `node['nagios']['ssl_cert_chain_file']` = Optional location of SSL Intermediate Certificate File. No default. 
 * `node['nagios']['ssl_cert_key']`  = Location of SSL Certificate Key. default "/etc/nagios3/certificates/nagios-server.pem"
 * `node['nagios']['http_port']` - port that the Apache/Nginx virtual site should listen on, determined whether ssl is enabled (443 if so, otherwise 80). Note:  You will also need to configure the listening port for either NGINX or Apache within those cookbooks.
 * `node['nagios']['server_name']` - common name to use in a server cert, default "nagios"
@@ -101,6 +121,15 @@ The following attributes are used for the Nagios server
 * `node['nagios']['ldap_authoritative']` - accepts "on" or "off". controls other authentication modules from authenticating the user if this one fails.
 * `node['nagios']['users_databag']` - the databag containing users to search for. defaults to users
 * `node['nagios']['users_databag_group']` - users databag group considered Nagios admins.  defaults to sysadmin
+* `node['nagios']['services_databag']` - the databag containing services to search for. defaults to nagios_services
+* `node['nagios']['servicegroups_databag']` - the databag containing servicegroups to search for. defaults to nagios_servicegroups
+* `node['nagios']['templates_databag']` - the databag containing templates to search for. defaults to nagios_templates
+* `node['nagios']['eventhandlers_databag']` - the databag containing eventhandlers to search for. defaults to nagios_eventhandlers
+* `node['nagios']['unmanaged_hosts_databag']` - the databag containing unmanagedhosts to search for. defaults to nagios_unmanagedhosts
+* `node['nagios']['serviceescalations_databag']` - the databag containing serviceescalations to search for. defaults to nagios_serviceescalations
+* `node['nagios']['contacts_databag']` - the databag containing contacts to search for. defaults to nagios_contacts
+* `node['nagios']['contactgroups_databag']` - the databag containing contactgroups to search for. defaults to nagios_contactgroups
+* `node['nagios']['servicedependencies_databag']` - the databag containing servicedependencies to search for. defaults to nagios_servicedependencies
 * `node['nagios']['host_name_attribute']` - node attribute to use for naming the host. Must be unique across monitored nodes. Defaults to hostname
 * `node['nagios']['regexp_matching']` - Attribute to enable [regexp matching](http://nagios.sourceforge.net/docs/3_0/configmain.html#use_regexp_matching). Defaults to 0.
 * `node['nagios']['large_installation_tweaks']` - Attribute to enable [large installation tweaks](http://nagios.sourceforge.net/docs/3_0/largeinstalltweaks.html). Defaults to 0.
@@ -127,6 +156,36 @@ information about these directives, see the Nagios documentation for
 * `node['nagios']['server']['stop_apache']` - stop apache service if using nginx, default false
 * `node['nagios']['server']['redirect_root']` - if using Apache, should http://server/ redirect to http://server/nagios3 automatically, default false
 * `node['nagios']['server']['normalize_hostname']` - If set to true, normalize all hostnames in hosts.cfg to lowercase. Defaults to false.
+
+These are additional nagios.cfg options.
+
+ * `node['nagios']['conf']['max_service_check_spread']`  - Defaults to 5
+ * `node['nagios']['conf']['max_host_check_spread']`     - Defaults to 5
+ * `node['nagios']['conf']['service_check_timeout']`     - Defaults to 60
+ * `node['nagios']['conf']['host_check_timeout']`        - Defaults to 30
+ * `node['nagios']['conf']['process_performance_data']`  - Defaults to 0
+ * `node['nagios']['conf']['date_format']`               - Defaults to 'iso8601'
+ * `node['nagios']['conf']['p1_file']`                   - Defaults to `#{node['nagios']['home']}/p1.pl`
+ * `node['nagios']['conf']['debug_level']`               - Defaults to 0
+ * `node['nagios']['conf']['debug_verbosity']`           - Defaults to 1
+ * `node['nagios']['conf']['debug_file']`                - Defaults to `#{node['nagios']['state_dir']}/#{node['nagios']['server']['name']}.debug`
+ 
+ These are nagios cgi.config options.
+
+ * `node['nagios']['cgi']['show_context_help']`                         - Defaults to 1
+ * `node['nagios']['cgi']['authorized_for_system_information']`         - Defaults to '*'
+ * `node['nagios']['cgi']['authorized_for_configuration_information']`  - Defaults to '*'
+ * `node['nagios']['cgi']['authorized_for_system_commands']`            - Defaults to '*'
+ * `node['nagios']['cgi']['authorized_for_all_services']`               - Defaults to '*'
+ * `node['nagios']['cgi']['authorized_for_all_hosts']`                  - Defaults to '*'
+ * `node['nagios']['cgi']['authorized_for_all_service_commands']`       - Defaults to '*'
+ * `node['nagios']['cgi']['authorized_for_all_host_commands']`          - Defaults to '*'
+ * `node['nagios']['cgi']['default_statusmap_layout']`                  - Defaults to 5
+ * `node['nagios']['cgi']['default_statuswrl_layout']`                  - Defaults to 4
+ * `node['nagios']['cgi']['escape_html_tags']`                          - Defaults to 0
+ * `node['nagios']['cgi']['action_url_target']`                         - Defaults to '_blank'
+ * `node['nagios']['cgi']['notes_url_target']`                          - Defaults to '_blank'
+ * `node['nagios']['cgi']['lock_author_names']`                         - Defaults to 1
 
 
 Recipes
@@ -179,7 +238,7 @@ Installs the Nagios server from packages. Default for Debian / Ubuntu systems.
 Installs the Nagios server from source. Default for Red Hat / Fedora based systems as native packages for Nagios are not available in the default repositories.
 
 ### pagerduty
-Installs and configures pagerduty plugin for Nagios. You need to set a `node['nagios']['pagerduty']['key']` attribute on your server for this to work. This can be set through environments so that you can use different API keys for servers in production vs staging for instance.
+Installs pagerduty plugin for nagios. If you only have a single pagerduty key, you can simply set a `node['nagios']['pagerduty_key']` attribute on your server.  For multiple pagerduty key configuration see Pager Duty under Data Bags.
 
 This recipe was written based on the [Nagios Integration Guide](http://www.pagerduty.com/docs/guides/nagios-integration-guide) from PagerDuty which explains how to get an API key for your Nagios server.
 
@@ -263,6 +322,17 @@ You may also use an already defined command definition by omitting the command\_
 }
 ```
 
+You may also filter services by environment. This is useful if you have nagios servers in several environments but you would like a service check to only apply in one particular environment:
+
+```javascript
+{
+  "id": "ssh",
+  "hostgroup_name": "linux",
+  "environment": "staging",
+  "command_line": "$USER1$/check_ssh $HOSTADDRESS$"
+}
+```
+
 ### Service Groups
 Create a nagios\_servicegroups data bag that will contain definitions for service groups. Each server group will be named based on the id of the data bag.
 
@@ -274,8 +344,7 @@ Create a nagios\_servicegroups data bag that will contain definitions for servic
 }
 ```
 
-You can group your services by using the "servicegroups" keyword in your services data bags. For example, to have your ssh
-checks show up under the ops service group, you could define it like this:
+You can group your services by using the "servicegroups" keyword in your services data bags. For example, to have your ssh checks show up under the ops service group, you could define it like this:
 
 ```javascript
 {
@@ -287,11 +356,11 @@ checks show up under the ops service group, you could define it like this:
 ```
 
 ### Service Dependencies
-Create a nagios\_servicedependencies data bag that will contain definitions for service dependencies. Each service dependency will be named based on the id of the data bag. Each service dependency requires either a dependent host name and/or hostgroup name, dependent service description, host name and/or hostgroup name, and service description.
+Create a nagios\_servicedependencies data bag that will contain definitions for service dependencies. Each service dependency will be named based on the id of the data bag. Each service dependency requires a dependent host name and/or hostgroup name, dependent service description, host name and/or hostgroup name, and service description.
 
 ```javascript
 {
-  "id": "Service X depends on Service Y",
+  "id": "Service_X_depends_on_Service_Y",
   "dependent_host_name": "ServerX",
   "dependent_service_description": "Service X",
   "host_name": "ServerY",
@@ -353,6 +422,18 @@ Here's an example host definition:
 }
 ```
 
+Similar to services, you may also filter unmanaged hosts by environment. This is useful if you have nagios servers in several environments but you would like to monitor an unmanaged host that only exists in a particular environment:
+
+```javascript
+{
+  "address": "webserver1.mydmz.dmz",
+  "hostgroups": ["web_servers","production_servers"],
+  "id": "webserver1",
+  "environment": "production",
+  "notifications": 1
+}
+```
+
 ### Service Escalations
 You can optionally define service escalations for the data bag defined services. Doing so involves two steps - creating the `nagios_serviceescalations` data bag and invoking it from the service. For example, to create an escalation to page managers on a 15 minute period after the 3rd page:
 
@@ -377,6 +458,26 @@ Then, in the service data bag,
 }
 ```
 
+You can also define escalations using wildcards, like so:
+
+```javascript
+{
+  "id": "first-warning",
+  "contact_groups": "sysadmin",
+  "hostgroup_name": "*",
+  "first_notification": "1",
+  "last_notification": "0",
+  "notification_interval": "21600",
+  "escalation_period": "24x7",
+  "escalation_options": "w",
+  "hostgroup_name": "*",
+  "service_description": "*",
+  "register": 1
+}
+```
+
+This configures notifications for all warnings to repeat on a given interval (under the default config, every 6 hours). (Note that you must register this kind of escalation, as it is not a template.)
+
 ### Event Handlers
 You can optionally define event handlers to trigger on service alerts by creating a nagios\_eventhandlers data bag that will contain definitions of event handlers for services monitored via Nagios.
 
@@ -400,6 +501,18 @@ Once you've defined an event handler you will need to add the event handler to a
 }
 ```
 
+### Pager Duty
+You can define pagerduty contacts and keys by creating nagios\_pagerduty data bags that contain the contact and
+the relevant key. Setting admin\_contactgroup to "true" will add this pagerduty contact to the admin contact group
+created by this cookbook.
+
+       {
+         "id": "pagerduty_critical",
+         "admin_contactgroup": "true",
+         "key": "a33e5ef0ac96772fbd771ddcccd3ccd0"
+       }
+
+You can add these contacts to any contactgroups you create.
 
 Monitoring Role
 ---------------

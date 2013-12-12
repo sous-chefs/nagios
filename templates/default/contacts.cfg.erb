@@ -64,8 +64,10 @@ define contactgroup {
 <% @serviceescalations.each do |serviceescalation| -%>
 define serviceescalation {
   name <%= serviceescalation['id'] %>
+  <% unless serviceescalation['register'] %>
   register 0
-  <% %w{use contact_groups first_notification last_notification escalation_period notification_interval}.each do |conf| %>
+  <% end %>
+  <% %w{use contacts contact_groups first_notification last_notification escalation_period escalation_options notification_interval host_name hostgroup_name service_description}.each do |conf| %>
   <% unless serviceescalation[conf].nil? %>
   <%= conf %> <%= serviceescalation[conf] %>
   <% end %>

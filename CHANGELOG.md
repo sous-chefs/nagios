@@ -3,6 +3,14 @@ nagios Cookbook CHANGELOG
 This file is used to list changes made in each version of the nagios cookbook.
 
 
+v5.0.2
+------
+### Improvement
+- **[COOK-3777](https://tickets.opscode.com/browse/COOK-3777)** - Update NRPE in nagios cookbook to 2.15
+- **[COOK-3021](https://tickets.opscode.com/browse/COOK-3021)** - NRPE LWRP updates files every run
+- Fixing up to pass rubocop
+
+
 v5.0.0
 ------
 ### Bug

@@ -61,10 +61,15 @@ remote_file "#{node['nagios']['plugin_dir']}/notify_pagerduty.pl" do
   action :create_if_missing
 end
 
-nagios_conf 'pagerduty'
+nagios_bags = NagiosDataBags.new
+pagerduty_contacts = nagios_bags.get('nagios_pagerduty')
+
+nagios_conf 'pagerduty' do
+  variables(:contacts => pagerduty_contacts)
+end
 
 cron 'Flush Pagerduty' do
   user node['nagios']['user']
   mailto 'root@localhost'
-  command "#{node['nagios']['plugin_dir']}/notify_pagerduty.pl flush"
+  command "#{::File.join(node['nagios']['plugin_dir'], 'notify_pagerduty.pl')} flush"
 end

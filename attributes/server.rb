@@ -22,15 +22,7 @@
 # limitations under the License.
 #
 
-node.set['nagios']['pagerduty']['key'] = node['nagios']['pagerduty_key']
-default['nagios']['pagerduty']['key'] = ''
-unless node['nagios']['pagerduty']['key'].empty?
-  default['nagios']['additional_contacts'] = { 'pagerduty' => true }
-end
-default['nagios']['pagerduty']['script_url'] = 'https://raw.github.com/PagerDuty/pagerduty-nagios-pl/master/pagerduty_nagios.pl'
-default['nagios']['pagerduty']['service_notification_options'] = 'w,u,c,r'
-default['nagios']['pagerduty']['host_notification_options'] = 'd,r'
-
+# platform specific atttributes
 case node['platform_family']
 when 'debian'
   default['nagios']['server']['install_method'] = 'package'
@@ -46,6 +38,7 @@ else
   default['nagios']['server']['mail_command']   = '/bin/mail'
 end
 
+# directories
 default['nagios']['home']          = '/usr/lib/nagios3'
 default['nagios']['conf_dir']      = '/etc/nagios3'
 default['nagios']['config_dir']    = '/etc/nagios3/conf.d'
@@ -54,6 +47,8 @@ default['nagios']['cache_dir']     = '/var/cache/nagios3'
 default['nagios']['state_dir']     = '/var/lib/nagios3'
 default['nagios']['run_dir']       = '/var/run/nagios3'
 default['nagios']['docroot']       = '/usr/share/nagios3/htdocs'
+
+# webserver configuration
 default['nagios']['timezone']      = 'UTC'
 default['nagios']['enable_ssl']    = false
 default['nagios']['http_port']     = node['nagios']['enable_ssl'] ? '443' : '80'
@@ -69,24 +64,33 @@ default['nagios']['server']['vname'] = 'nagios3'
 
 # for server from source installation
 default['nagios']['server']['url']      = 'http://prdownloads.sourceforge.net/sourceforge/nagios'
-default['nagios']['server']['version']  = '3.5.0'
-default['nagios']['server']['checksum'] = '469381b2954392689c85d3db733e8da4bd43b806b3d661d1a7fbd52dacc084db'
+default['nagios']['server']['version']  = '3.5.1'
+default['nagios']['server']['checksum'] = 'ca9dd68234fa090b3c35ecc8767b2c9eb743977eaf32612fa9b8341cc00a0f99'
 default['nagios']['server']['src_dir'] = 'nagios'
 
 # for server from packages installation
 default['nagios']['server']['packages'] = %w[nagios3 nagios-nrpe-plugin nagios-images]
 
-default['nagios']['notifications_enabled']     = 0
-default['nagios']['check_external_commands']   = true
-default['nagios']['default_contact_groups']    = %w{admins}
-default['nagios']['sysadmin_email']            = 'root@localhost'
-default['nagios']['sysadmin_sms_email']        = 'root@localhost'
-default['nagios']['server_auth_method']        = 'htauth'
-default['nagios']['users_databag']             = 'users'
-default['nagios']['users_databag_group']       = 'sysadmin'
-default['nagios']['host_name_attribute']       = 'hostname'
-default['nagios']['regexp_matching']           = 0
-default['nagios']['large_installation_tweaks'] = 0
+default['nagios']['notifications_enabled']       = 0
+default['nagios']['check_external_commands']     = true
+default['nagios']['default_contact_groups']      = %w{admins}
+default['nagios']['sysadmin_email']              = 'root@localhost'
+default['nagios']['sysadmin_sms_email']          = 'root@localhost'
+default['nagios']['server_auth_method']          = 'htauth'
+default['nagios']['users_databag']               = 'users'
+default['nagios']['users_databag_group']         = 'sysadmin'
+default['nagios']['services_databag']            = 'nagios_services'
+default['nagios']['servicegroups_databag']       = 'nagios_servicegroups'
+default['nagios']['templates_databag']           = 'nagios_templates'
+default['nagios']['eventhandlers_databag']       = 'nagios_eventhandlers'
+default['nagios']['unmanagedhosts_databag']      = 'nagios_unmanagedhosts'
+default['nagios']['serviceescalations_databag']  = 'nagios_serviceescalations'
+default['nagios']['contacts_databag']            = 'nagios_contacts'
+default['nagios']['contactgroups_databag']       = 'nagios_contactgroups'
+default['nagios']['servicedependencies_databag'] = 'nagios_servicedependencies'
+default['nagios']['host_name_attribute']         = 'hostname'
+default['nagios']['regexp_matching']             = 0
+default['nagios']['large_installation_tweaks']   = 0
 
 # for cas authentication
 default['nagios']['cas_login_url']       = 'https://example.com/cas/login'
@@ -127,3 +131,40 @@ default['nagios']['server']['nginx_dispatch'] = :cgi
 default['nagios']['server']['stop_apache']    = false
 default['nagios']['server']['redirect_root']  = false
 default['nagios']['server']['normalize_hostname'] = false
+
+default['nagios']['conf']['max_service_check_spread'] = 5
+default['nagios']['conf']['max_host_check_spread']    = 5
+default['nagios']['conf']['service_check_timeout']    = 60
+default['nagios']['conf']['host_check_timeout']       = 30
+default['nagios']['conf']['process_performance_data'] = 0
+default['nagios']['conf']['date_format']              = 'iso8601'
+default['nagios']['conf']['p1_file']                  = "#{node['nagios']['home']}/p1.pl"
+default['nagios']['conf']['debug_level']              = 0
+default['nagios']['conf']['debug_verbosity']          = 1
+default['nagios']['conf']['debug_file']               = "#{node['nagios']['state_dir']}/#{node['nagios']['server']['name']}.debug"
+
+default['nagios']['cgi']['show_context_help']                        = 1
+default['nagios']['cgi']['authorized_for_system_information']        = '*'
+default['nagios']['cgi']['authorized_for_configuration_information'] = '*'
+default['nagios']['cgi']['authorized_for_system_commands']           = '*'
+default['nagios']['cgi']['authorized_for_all_services']              = '*'
+default['nagios']['cgi']['authorized_for_all_hosts']                 = '*'
+default['nagios']['cgi']['authorized_for_all_service_commands']      = '*'
+default['nagios']['cgi']['authorized_for_all_host_commands']         = '*'
+default['nagios']['cgi']['default_statusmap_layout']                 = 5
+default['nagios']['cgi']['default_statuswrl_layout']                 = 4
+default['nagios']['cgi']['escape_html_tags']                         = 0
+default['nagios']['cgi']['action_url_target']                        = '_blank'
+default['nagios']['cgi']['notes_url_target']                         = '_blank'
+default['nagios']['cgi']['lock_author_names']                        = 1
+
+# backwards compatibility for the old attribute structure
+node.set['nagios']['pagerduty']['key'] = node['nagios']['pagerduty_key']
+
+default['nagios']['pagerduty']['key'] = ''
+unless node['nagios']['pagerduty']['key'].empty?
+  default['nagios']['additional_contacts'] = { 'pagerduty' => true }
+end
+default['nagios']['pagerduty']['script_url'] = 'https://raw.github.com/PagerDuty/pagerduty-nagios-pl/master/pagerduty_nagios.pl'
+default['nagios']['pagerduty']['service_notification_options'] = 'w,u,c,r'
+default['nagios']['pagerduty']['host_notification_options'] = 'd,r'

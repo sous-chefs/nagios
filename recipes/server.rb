@@ -48,7 +48,7 @@ when :apache
 else
   Chef::Log.fatal('Unknown web server option provided for Nagios server: ' <<
                   "#{node['nagios']['server']['web_server']} provided. Allowed: :nginx or :apache")
-  raise 'Unknown web server option provided for Nagios server'
+  fail 'Unknown web server option provided for Nagios server'
 end
 
 # find nagios web interface users from the defined data bag
@@ -68,7 +68,7 @@ when 'openid'
   else
     Chef::Log.fatal('OpenID authentication for Nagios is not supported on NGINX')
     Chef::Log.fatal("Set node['nagios']['server_auth_method'] attribute in your role: #{node['nagios']['server_role']}")
-    raise
+    fail
   end
 when 'cas'
   if web_srv == :apache
@@ -76,7 +76,7 @@ when 'cas'
   else
     Chef::Log.fatal('CAS authentication for Nagios is not supported on NGINX')
     Chef::Log.fatal("Set node['nagios']['server_auth_method'] attribute in your role: #{node['nagios']['server_role']}")
-    raise
+    fail
   end
 when 'ldap'
   if web_srv == :apache
@@ -84,7 +84,7 @@ when 'ldap'
   else
     Chef::Log.fatal('LDAP authentication for Nagios is not supported on NGINX')
     Chef::Log.fatal("Set node['nagios']['server_auth_method'] attribute in your role: #{node['nagios']['server_role']}")
-    raise
+    fail
   end
 else
   directory node['nagios']['conf_dir']
@@ -143,16 +143,16 @@ nodes.each do |n|
   hostgroups << n['os'] unless hostgroups.include?(n['os'])
 end
 
-nagios_bags = NagiosDataBags.new
-services = nagios_bags.get('nagios_services')
-servicegroups = nagios_bags.get('nagios_servicegroups')
-templates = nagios_bags.get('nagios_templates')
-eventhandlers = nagios_bags.get('nagios_eventhandlers')
-unmanaged_hosts = nagios_bags.get('nagios_unmanagedhosts')
-serviceescalations = nagios_bags.get('nagios_serviceescalations')
-contacts = nagios_bags.get('nagios_contacts')
-contactgroups = nagios_bags.get('nagios_contactgroups')
-servicedependencies = nagios_bags.get('nagios_servicedependencies')
+nagios_bags         = NagiosDataBags.new
+services            = nagios_bags.get(node['nagios']['services_databag'])
+servicegroups       = nagios_bags.get(node['nagios']['servicegroups_databag'])
+templates           = nagios_bags.get(node['nagios']['templates_databag'])
+eventhandlers       = nagios_bags.get(node['nagios']['eventhandlers_databag'])
+unmanaged_hosts     = nagios_bags.get(node['nagios']['unmanagedhosts_databag'])
+serviceescalations  = nagios_bags.get(node['nagios']['serviceescalations_databag'])
+contacts            = nagios_bags.get(node['nagios']['contacts_databag'])
+contactgroups       = nagios_bags.get(node['nagios']['contactgroups_databag'])
+servicedependencies = nagios_bags.get(node['nagios']['servicedependencies_databag'])
 
 # Add unmanaged host hostgroups to the hostgroups array if they don't already exist
 unmanaged_hosts.each do |host|

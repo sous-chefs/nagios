@@ -28,23 +28,23 @@ action :add do
   file_contents += " -w #{new_resource.warning_condition}" unless new_resource.warning_condition.nil?
   file_contents += " -c #{new_resource.critical_condition}" unless new_resource.critical_condition.nil?
   file_contents += " #{new_resource.parameters}" unless new_resource.parameters.nil?
-  file "#{node['nagios']['nrpe']['conf_dir']}/nrpe.d/#{new_resource.command_name}.cfg" do
+  f = file "#{node['nagios']['nrpe']['conf_dir']}/nrpe.d/#{new_resource.command_name}.cfg" do
     owner node['nagios']['user']
     group node['nagios']['group']
     mode 00640
     content file_contents
     notifies :restart, "service[#{node['nagios']['nrpe']['service_name']}]"
   end
-  new_resource.updated_by_last_action(true)
+  new_resource.updated_by_last_action(f.updated_by_last_action?)
 end
 
 action :remove do
   if ::File.exists?("#{node['nagios']['nrpe']['conf_dir']}/nrpe.d/#{new_resource.command_name}.cfg")
     Chef::Log.info "Removing #{new_resource.command_name} from #{node['nagios']['nrpe']['conf_dir']}/nrpe.d/"
-    file "#{node['nagios']['nrpe']['conf_dir']}/nrpe.d/#{new_resource.command_name}.cfg" do
+    f = file "#{node['nagios']['nrpe']['conf_dir']}/nrpe.d/#{new_resource.command_name}.cfg" do
       action :delete
       notifies :restart, "service[#{node['nagios']['nrpe']['service_name']}]"
     end
-    new_resource.updated_by_last_action(true)
+    new_resource.updated_by_last_action(f.updated_by_last_action?)
   end
 end
