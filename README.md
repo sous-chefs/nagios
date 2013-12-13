@@ -380,7 +380,7 @@ Here's an example of a template that reduces the check frequency to once per day
 {
   "id": "dailychecks",
   "check_interval": "86400",
-  "retry": "3600"
+  "retry_interval": "3600"
 }
 ```
 
