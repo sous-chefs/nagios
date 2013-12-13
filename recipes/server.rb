@@ -155,6 +155,7 @@ serviceescalations = nagios_bags.get('nagios_serviceescalations')
 contacts = nagios_bags.get('nagios_contacts')
 contactgroups = nagios_bags.get('nagios_contactgroups')
 servicedependencies = nagios_bags.get('nagios_servicedependencies')
+timeperiods = nagios_bags.get('nagios_timeperiods')
 
 # Add unmanaged host hostgroups to the hostgroups array if they don't already exist
 unmanaged_hosts.each do |host|
@@ -244,7 +245,9 @@ end
   end
 end
 
-nagios_conf "timeperiods"
+nagios_conf "timeperiods" do
+  variables(:timeperiods => timeperiods)
+end
 
 nagios_conf "templates" do
   variables(:templates => templates)

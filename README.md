@@ -371,6 +371,19 @@ Here's an example host definition:
 	  "notifications": 1
 	}
 
+Time Periods
+------------
+
+Create a nagios\_timeperiods data bag that will contain definitions for time periods.  Each time period will be named based on the id of the data bag.  Each time period requires a name and an alias.
+
+Here's an example timeperiod definition:
+
+    {
+      "id": "time_period_name",
+      "alias": "7 days, business hours 9-5",
+      "times": "sunday 09:00-17:00,monday 09:00-17:00,tuesday 09:00-17:00,wednesday 09:00-17:00,thursday 09:00-17:00,friday 09:00-17:00,saturday 09:00-17:00"
+    }
+
 Service Escalations
 -------------------
 
