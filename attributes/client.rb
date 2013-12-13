@@ -78,3 +78,4 @@ default['nagios']['nrpe']['checksum'] = '66383b7d367de25ba031d37762d83e2b55de010
 
 default['nagios']['server_role'] = 'monitoring'
 default['nagios']['allowed_hosts'] = nil
+default['nagios']['using_solo_search'] = false

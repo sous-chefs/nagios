@@ -72,6 +72,7 @@ The following attributes are used for the NRPE client
 ##### authorization and server discovery
 * `node['nagios']['server_role']` - the role that the Nagios server will have in its run list that the clients can search for.
 * `node['nagios']['allowed_hosts']` - additional hosts that are allowed to connect to this client. Must be an array of strings (i.e. `%w(test.host other.host)`). These hosts are added in addition to 127.0.0.1 and IPs that are found via search.
+* `node['nagios']['using_solo_search']` - discover server information in node data_bags even with chef solo through the use of solo-search (https://github.com/edelight/chef-solo-search)
 
 ##### misc
 * `node['nagios']['nrpe']['dont_blame_nrpe']` - allows the server to send additional values to NRPE via arguments.  this needs to be enabled for most checks to function
