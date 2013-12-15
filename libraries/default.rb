@@ -46,11 +46,11 @@ end
 def ip_to_monitor(monitored_host, server_host=node)
   # if server is not in the cloud and the monitored host is
   if server_host['cloud'].nil? && !monitored_host['cloud'].nil?
-    ip = monitored_host['cloud']['public_ipv4'].include?('.') ? monitored_host['cloud']['public_ipv4'] : monitored_host['ipaddress']
+    monitored_host['cloud']['public_ipv4'].include?('.') ? monitored_host['cloud']['public_ipv4'] : monitored_host['ipaddress']
   # if server host is in the cloud and the monitored node is as well, but they are not on the same provider
   elsif !server_host['cloud'].nil? && !monitored_host['cloud'].nil? && monitored_host['cloud']['provider'] != server_host['cloud']['provider']
-    ip = monitored_host['cloud']['public_ipv4'].include?('.') ? monitored_host['cloud']['public_ipv4'] : monitored_host['ipaddress']
+    monitored_host['cloud']['public_ipv4'].include?('.') ? monitored_host['cloud']['public_ipv4'] : monitored_host['ipaddress']
   else
-    ip = monitored_host['ipaddress']
+    monitored_host['ipaddress']
   end
 end
