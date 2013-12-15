@@ -4,7 +4,7 @@ maintainer_email  'tsmith84@gmail.com'
 license           'Apache 2.0'
 description       'Installs and configures Nagios server and the NRPE client'
 long_description  IO.read(File.join(File.dirname(__FILE__), 'README.md'))
-version           '5.1.0'
+version           '5.1.1'
 
 recipe 'nagios', 'Includes the client recipe.'
 recipe 'nagios::client', 'Installs and configures a nrpe client'
