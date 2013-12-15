@@ -27,11 +27,14 @@ define contactgroup {
 }
 
 <% @admins.each do |a| -%>
+<% # don't template out contacts that don't have the nagios hash or a nagios e-mail defined %>
+<% unless a['nagios'].nil? || a['nagios']['email'].nil?  -%>
 define contact {
   use          default-contact
   contact_name <%= a['id'] %>
-  <%= "email  #{a['nagios']['email']}" unless a['nagios'].nil? || a['nagios']['email'].nil? %>
+  email        <%= a['nagios']['email'] %>
 }
+<% end -%>
 
 <% end -%>
 
