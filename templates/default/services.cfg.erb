@@ -14,7 +14,7 @@ define service {
 # Services defined by data bags
 <% @services.each do |service| -%>
   <%# Do not define a service that has no hostgroup or a hostgroup that doesn't exist (including the "all" hostgroup), or a service that is not applicable in this environment %>
-  <% unless service['hostgroup_name'].nil? || service['hostgroup_name'] == "all" || (service['environment'] && service['environment'] != node.chef_environment )
+  <% unless service['hostgroup_name'].nil? || service['hostgroup_name'] == "all" || (service['activate_check_in_environment'] && service['activate_check_in_environment'] != node.chef_environment )
        valid = false
 
        service['hostgroup_name'].split(",").each do |s|

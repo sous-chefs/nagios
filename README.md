@@ -94,7 +94,7 @@ The following attributes are used for the Nagios server
 * `node['nagios']['timezone']` - Nagios timezone, defaults to UTC
 * `node['nagios']['enable_ssl]` - boolean for whether Nagios web server should be https, default false
 * `node['nagios']['ssl_cert_file']` = Location of SSL Certificate File. default "/etc/nagios3/certificates/nagios-server.pem"
-* `node['nagios']['ssl_cert_chain_file']` = Optional location of SSL Intermediate Certificate File. No default. 
+* `node['nagios']['ssl_cert_chain_file']` = Optional location of SSL Intermediate Certificate File. No default.
 * `node['nagios']['ssl_cert_key']`  = Location of SSL Certificate Key. default "/etc/nagios3/certificates/nagios-server.pem"
 * `node['nagios']['http_port']` - port that the Apache/Nginx virtual site should listen on, determined whether ssl is enabled (443 if so, otherwise 80). Note:  You will also need to configure the listening port for either NGINX or Apache within those cookbooks.
 * `node['nagios']['server_name']` - common name to use in a server cert, default "nagios"
@@ -170,7 +170,7 @@ These are additional nagios.cfg options.
  * `node['nagios']['conf']['debug_level']`               - Defaults to 0
  * `node['nagios']['conf']['debug_verbosity']`           - Defaults to 1
  * `node['nagios']['conf']['debug_file']`                - Defaults to `#{node['nagios']['state_dir']}/#{node['nagios']['server']['name']}.debug`
- 
+
  These are nagios cgi.config options.
 
  * `node['nagios']['cgi']['show_context_help']`                         - Defaults to 1
@@ -323,13 +323,13 @@ You may also use an already defined command definition by omitting the command\_
 }
 ```
 
-You may also filter services by environment. This is useful if you have nagios servers in several environments but you would like a service check to only apply in one particular environment:
+You may also specify that a check only be run if the nagios server is in a specific environment. This is useful if you have nagios servers in several environments but you would like a service check to only apply in one particular environment:
 
 ```javascript
 {
   "id": "ssh",
   "hostgroup_name": "linux",
-  "environment": "staging",
+  "activate_check_in_environment": "staging",
   "command_line": "$USER1$/check_ssh $HOSTADDRESS$"
 }
 ```
