@@ -46,9 +46,9 @@ define contact {
   <% end %>
   <% end %>
 }
-<% end %>
+<% end -%>
 
-# Contact Groupss from data bags
+# Contact Groups from data bags
 <% @contactgroups.each do |contactgroup| -%>
 define contactgroup {
   contactgroup_name <%= contactgroup['id'] %>
@@ -58,7 +58,7 @@ define contactgroup {
   <% end %>
   <% end %>
 }
-<% end %>
+<% end -%>
 
 # Service escalations defined by data bags
 <% @serviceescalations.each do |serviceescalation| -%>
