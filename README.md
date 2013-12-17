@@ -372,6 +372,21 @@ Create a nagios\_servicedependencies data bag that will contain definitions for 
 
 Additional directives can be defined as described in the [Nagios documentation](http://nagios.sourceforge.net/docs/3_0/objectdefinitions.html#servicedependency).
 
+### Time Periods
+Create a data bag for time periods, nagios_timeperiods by default, for timeperiod defintions.  Time periods are named based on the id of the data bag, and the id and alias are required.
+
+Here is an example timeperiod definition:
+
+```javascript
+{
+  "id": "time_period_name",
+  "alias": "This time period goes from now to then",
+  "times": "sunday 09:00-17:00,monday 09:00-17:00,tuesday 09:00-17:00,wednesday 09:00-17:00,thursday 09:00-17:00,friday 09:00-17:00,saturday 09:00-17:00"
+}
+```
+
+Additional information on defining time periods can be found in the [Nagios Documentation](http://nagios.sourceforge.net/docs/3_0/objectdefinitions.html#timeperiod).
+
 ### Templates
 Templates are optional, but allow you to specify combinations of attributes to apply to a service. Create a nagios_templates\ data bag that will contain definitions for templates to be used. Each template need only specify id and whichever parameters you want to override.
 

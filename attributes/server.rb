@@ -88,6 +88,7 @@ default['nagios']['serviceescalations_databag']  = 'nagios_serviceescalations'
 default['nagios']['contacts_databag']            = 'nagios_contacts'
 default['nagios']['contactgroups_databag']       = 'nagios_contactgroups'
 default['nagios']['servicedependencies_databag'] = 'nagios_servicedependencies'
+default['nagios']['timeperiods_databag']         = 'nagios_timeperiods'
 default['nagios']['host_name_attribute']         = 'hostname'
 default['nagios']['regexp_matching']             = 0
 default['nagios']['large_installation_tweaks']   = 0
