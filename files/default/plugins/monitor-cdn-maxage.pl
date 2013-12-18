@@ -1,15 +1,17 @@
 #!/usr/bin/perl
 
 use strict;
+use Net::Nslookup;
 use LWP::UserAgent;
 use LWP::UserAgent::DNS::Hosts;
+use Data::Dumper;
 
 my $DEBUG = 0;
 
 my $MONITORCONFIG = {
     'limelightagile' => {
         'active' => 1,
-        'dns' => '69.28.181.232',
+        'cname' => 'tealium-1.hs.llnwd.net.',
         'tests' => [
             {
                 'active' => 1,
@@ -22,10 +24,82 @@ my $MONITORCONFIG = {
             },
             {
                 'active' => 1,
+                'url' => 'https://tags.tiqcdn.com/utag/tealium/main/prod/utag.js',
+                'validate' => {
+                    'content-type' => 'application/javascript',
+                    'cache-control' => 'max-age=300',
+                    'content-encoding' => 'gzip'
+                }
+            },
+            {
+                'active' => 1,
                 'url' => 'http://tags.tiqcdn.com/utag/tealium/main/prod/utag.1.js',
                 'validate' => {
                     'content-type' => 'application/javascript',
                     'cache-control' => 'max-age=2592000',
+                    'content-encoding' => 'gzip'
+                }
+            },
+            {
+                'active' => 1,
+                'url' => 'https://tags.tiqcdn.com/utag/tealium/main/prod/utag.1.js',
+                'validate' => {
+                    'content-type' => 'application/javascript',
+                    'cache-control' => 'max-age=2592000',
+                    'content-encoding' => 'gzip'
+                }
+            },
+            {
+                'active' => 1,
+                'url' => 'http://tags.tiqcdn.com/utag/tealium/main/prod/utag.sync.js',
+                'validate' => {
+                    'content-type' => 'application/javascript',
+                    'cache-control' => 'max-age=300',
+                    'content-encoding' => 'gzip'
+                }
+            },
+            {
+                'active' => 1,
+                'url' => 'https://tags.tiqcdn.com/utag/tealium/main/prod/utag.sync.js',
+                'validate' => {
+                    'content-type' => 'application/javascript',
+                    'cache-control' => 'max-age=300',
+                    'content-encoding' => 'gzip'
+                }
+            },
+            {
+                'active' => 1,
+                'url' => 'http://tags.tiqcdn.com/utag/tiqapp/utag.v.js',
+                'validate' => {
+                    'content-type' => 'application/javascript',
+                    'cache-control' => 'max-age=1800',
+                    'content-encoding' => 'gzip'
+                }
+            },
+            {
+                'active' => 1,
+                'url' => 'https://tags.tiqcdn.com/utag/tiqapp/utag.v.js',
+                'validate' => {
+                    'content-type' => 'application/javascript',
+                    'cache-control' => 'max-age=1800',
+                    'content-encoding' => 'gzip'
+                }
+            },
+            {
+                'active' => 1,
+                'url' => 'http://tags.tiqcdn.com/utag/tealium/main/prod/utag.sub.js',
+                'validate' => {
+                    'content-type' => 'application/javascript',
+                    'cache-control' => 'max-age=3600',
+                    'content-encoding' => 'gzip'
+                }
+            },
+            {
+                'active' => 1,
+                'url' => 'https://tags.tiqcdn.com/utag/tealium/main/prod/utag.sub.js',
+                'validate' => {
+                    'content-type' => 'application/javascript',
+                    'cache-control' => 'max-age=3600',
                     'content-encoding' => 'gzip'
                 }
             }
@@ -33,7 +107,7 @@ my $MONITORCONFIG = {
     },
     'akamai' => {
         'active' => 1,
-        'dns' => '184.87.201.234',
+        'cname' => 'tags.tiqcdn.com.edgekey.net.',
         'tests' => [
             {
                 'active' => 1,
@@ -46,18 +120,90 @@ my $MONITORCONFIG = {
             },
             {
                 'active' => 1,
+                'url' => 'https://tags.tiqcdn.com/utag/tealium/main/prod/utag.js',
+                'validate' => {
+                    'content-type' => 'application/x-javascript',
+                    'cache-control' => 'max-age=300',
+                    'content-encoding' => 'gzip'
+                }
+            },
+            {
+                'active' => 1,
                 'url' => 'http://tags.tiqcdn.com/utag/tealium/main/prod/utag.1.js',
                 'validate' => {
                     'content-type' => 'application/x-javascript',
                     'cache-control' => 'max-age=2592000',
+                    'content-encoding' => 'gzip'
+                }
+            },
+            {
+                'active' => 1,
+                'url' => 'https://tags.tiqcdn.com/utag/tealium/main/prod/utag.1.js',
+                'validate' => {
+                    'content-type' => 'application/x-javascript',
+                    'cache-control' => 'max-age=2592000',
+                    'content-encoding' => 'gzip'
+                }
+            },
+            {
+                'active' => 1,
+                'url' => 'http://tags.tiqcdn.com/utag/tealium/main/prod/utag.sync.js',
+                'validate' => {
+                    'content-type' => 'application/x-javascript',
+                    'cache-control' => 'max-age=300',
+                    'content-encoding' => 'gzip'
+                }
+            },
+            {
+                'active' => 1,
+                'url' => 'https://tags.tiqcdn.com/utag/tealium/main/prod/utag.sync.js',
+                'validate' => {
+                    'content-type' => 'application/x-javascript',
+                    'cache-control' => 'max-age=300',
+                    'content-encoding' => 'gzip'
+                }
+            },
+            {
+                'active' => 1,
+                'url' => 'http://tags.tiqcdn.com/utag/tiqapp/utag.v.js',
+                'validate' => {
+                    'content-type' => 'application/x-javascript',
+                    'cache-control' => 'max-age=1800',
+                    'content-encoding' => 'gzip'
+                }
+            },
+            {
+                'active' => 1,
+                'url' => 'https://tags.tiqcdn.com/utag/tiqapp/utag.v.js',
+                'validate' => {
+                    'content-type' => 'application/x-javascript',
+                    'cache-control' => 'max-age=1800',
+                    'content-encoding' => 'gzip'
+                }
+            },
+            {
+                'active' => 1,
+                'url' => 'http://tags.tiqcdn.com/utag/tealium/main/prod/utag.sub.js',
+                'validate' => {
+                    'content-type' => 'application/x-javascript',
+                    'cache-control' => 'max-age=3600',
+                    'content-encoding' => 'gzip'
+                }
+            },
+            {
+                'active' => 1,
+                'url' => 'https://tags.tiqcdn.com/utag/tealium/main/prod/utag.sub.js',
+                'validate' => {
+                    'content-type' => 'application/x-javascript',
+                    'cache-control' => 'max-age=3600',
                     'content-encoding' => 'gzip'
                 }
             }
         ]
     },
     'edgecast' => {
-        'active' => 1,
-        'dns' => '72.21.91.109',
+        'active' => 0,
+        'cname' => 'tags.wac.8194.edgecastcdn.net.',
         'tests' => [
             {
                 'active' => 1,
@@ -70,10 +216,78 @@ my $MONITORCONFIG = {
             },
             {
                 'active' => 1,
+                'url' => 'https://tags.tiqcdn.com/utag/tealium/main/prod/utag.js',
+                'validate' => {
+                    'content-type' => 'text/javascript',
+                    'cache-control' => 'max-age=300',
+                    'content-encoding' => 'gzip'
+                }
+            },
+            {
+                'active' => 1,
                 'url' => 'http://tags.tiqcdn.com/utag/tealium/main/prod/utag.1.js',
                 'validate' => {
                     'content-type' => 'text/javascript',
                     'cache-control' => 'max-age=2592000',
+                    'content-encoding' => 'gzip'
+                }
+            },
+            {
+                'active' => 1,
+                'url' => 'https://tags.tiqcdn.com/utag/tealium/main/prod/utag.1.js',
+                'validate' => {
+                    'content-type' => 'text/javascript',
+                    'cache-control' => 'max-age=2592000',
+                    'content-encoding' => 'gzip'
+                }
+            },
+            {
+                'active' => 1,
+                'url' => 'http://tags.tiqcdn.com/utag/tealium/main/prod/utag.sync.js',
+                'validate' => {
+                    'content-type' => 'text/javascript',
+                    'cache-control' => 'max-age=300'
+                }
+            },
+            {
+                'active' => 1,
+                'url' => 'https://tags.tiqcdn.com/utag/tealium/main/prod/utag.sync.js',
+                'validate' => {
+                    'content-type' => 'text/javascript',
+                    'cache-control' => 'max-age=300'
+                }
+            },
+            {
+                'active' => 1,
+                'url' => 'http://tags.tiqcdn.com/utag/tiqapp/utag.v.js',
+                'validate' => {
+                    'content-type' => 'text/javascript',
+                    'cache-control' => 'max-age=1800'
+                }
+            },
+            {
+                'active' => 1,
+                'url' => 'https://tags.tiqcdn.com/utag/tiqapp/utag.v.js',
+                'validate' => {
+                    'content-type' => 'text/javascript',
+                    'cache-control' => 'max-age=1800'
+                }
+            },
+            {
+                'active' => 1,
+                'url' => 'http://tags.tiqcdn.com/utag/tealium/main/prod/utag.sub.js',
+                'validate' => {
+                    'content-type' => 'text/javascript',
+                    'cache-control' => 'max-age=3600',
+                    'content-encoding' => 'gzip'
+                }
+            },
+            {
+                'active' => 1,
+                'url' => 'https://tags.tiqcdn.com/utag/tealium/main/prod/utag.sub.js',
+                'validate' => {
+                    'content-type' => 'text/javascript',
+                    'cache-control' => 'max-age=3600',
                     'content-encoding' => 'gzip'
                 }
             }
@@ -86,10 +300,13 @@ my @result;
 for my $key(keys %$MONITORCONFIG){
     if ($MONITORCONFIG->{$key}->{'active'}) {
         debug("MONITORING: $key");
-        LWP::UserAgent::DNS::Hosts->register_host('tags.tiqcdn.com' => $MONITORCONFIG->{$key}->{'dns'});
+        my $dns = nslookup(host => $MONITORCONFIG->{$key}->{'cname'}, type => "A");
+
+        LWP::UserAgent::DNS::Hosts->register_host('tags.tiqcdn.com' => $dns);
         LWP::UserAgent::DNS::Hosts->enable_override;
         
-        my $ua  = LWP::UserAgent->new;
+#        my $ua  = LWP::UserAgent->new;
+        my $ua  = LWP::UserAgent->new(ssl_opts => { verify_hostname => 1 });
         $ua->default_header('Accept-Encoding' => 'gzip,deflate,sdch');
 
         my @tests = @{$MONITORCONFIG->{$key}->{'tests'}};
@@ -114,11 +331,11 @@ for my $key(keys %$MONITORCONFIG){
 
 
 if (!@result) {
-    print "Check CDN Max Age OK\n";
+    print "OK - (0)\n";
     exit 0;
 }else{
     for my $r(@result){
-        print "Check CDN Max Age CRITICAL - $r\n";
+        print "CRITICAL - $r\n";
     }
     exit 2;
 }

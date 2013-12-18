@@ -29,8 +29,9 @@ include_recipe "perl"
 include_recipe "zookeeper_tealium::client_python"
 include_recipe "tealium_bongo::packages"
 include_recipe "pnp4nagios_tealium"
+include_recipe "nagios::nsca_server"
 
-%w{make libmodule-install-perl libyaml-perl libyaml-syck-perl libwww-perl libnagios-plugin-perl}.each do |pkg|
+%w{make libnet-nslookup-perl libmodule-install-perl libyaml-perl libyaml-syck-perl libwww-perl libnagios-plugin-perl}.each do |pkg|
   package pkg do
     action :install
   end
@@ -112,7 +113,6 @@ else
  
   nodes = []
   nodes1.each do |n|
-    #if node.roles.include?("urest") 
     if n.roles.include?("base")
       nodes << n
     end
@@ -120,24 +120,7 @@ else
  
   #nodes = search(:node, "hostname:[* TO *] AND app_environment:#{node[:app_environment]} AND placement_availability_zone:#{region}*")
   ##nodes = search(:node, "hostname:[* TO *] AND app_environment:#{node[:monitored_environment]} AND placement_availability_zone:#{node[:monitored_region]}*")
-  
-  ##quick fix for datacloud and sitemap
-  #datacloud = search(:node, "role:datacloud_component AND placement_availability_zone:#{region}*")
-  #sitemap = search(:node, "role:sitemap_audit AND placement_availability_zone:#{region}* AND app_environment:production_vpc*")
-  #servers = search(:node, "role:#{node['nagios']['server_role']} AND app_environment:#{node[:monitored_environment]}")
-
-  #if node['app_environment'] == "production_vpc2" || node['app_environment'] == "production_vpc3"
-  #   both = datacloud.concat(servers)
-  #   three = both.concat(sitemap)
-  #     Chef::Log.warn("Nodes are #{nodes}, datacloud is #{datacloud}, servers are #{servers} and both are #{both}")
-  #   nodes = nodes.concat(three)
-  #else 
-  #   nodes = nodes.concat(servers)     
-  #end 
-
 end
-
-Chef::Log.warn("Nodes are #{nodes}")
 
 if nodes.empty?
   Chef::Log.warn("No nodes returned from search, using this node so hosts.cfg has data")
@@ -165,8 +148,6 @@ if services.nil? || services.empty?
   Chef::Log.info("No services returned from data bag search.")
   services = Array.new
 end
-
-Chef::Log.warn("Services are: #{services}")
 
 # Load search defined Nagios hostgroups from the nagios_hostgroups data bag and find nodes
 begin
@@ -198,8 +179,6 @@ search(:role, "*:*") do |r|
     service_hosts[r.name] = n['hostname']
   end
 end
-
-Chef::Log.warn("Service_hosts are: #{service_hosts}")
 
 if node['public_domain']
   public_domain = node['public_domain']
@@ -265,13 +244,13 @@ end
 domain = node[:domain]
 
 case domain
-when "prod.us-w1"
+when "prod1.us-w1"
   url = "us-west-1-vpc.nagios.ops.tlium.com/nagios3/"
-when "prod.us-e1"
+when "prod1.us-e1"
   url = "us-east-1-vpc.nagios.ops.tlium.com/nagios3/"
-when "prod-1.eu-w1"
+when "prod1.eu-w1"
   url = "eu-west-1-vpc.nagios.ops.tlium.com/nagios3/"
-when "no.domain.name.set"
+when "us-west-1.compute.internal"
   url = "us-west-1.nagios.ops.tlium.com/nagios3/"
 when "eu-w1"
   url = "eu-west-1.nagios.ops.tlium.com/nagios3/"
@@ -291,14 +270,48 @@ dcmr = search(:node, "role:dc_message_router AND app_environment:production*")
 dcqa = search(:node, "role:dc_query_aggregator AND app_environment:production*")
 dcdd = search(:node, "role:dc_data_distributor AND app_environment:production*")
 
+if dcvp.empty?
+vp_heap = 10
+else
 vp_heap = dcvp.last[:datacloud][:java_options].match(/^\DX{1}[a-z]{2}\d[g]\s\DX{1}[a-z]{2}(\d)[g]/)[1]
+end
+
+if dcmr.empty?
+mr_heap = 10
+else
 mr_heap = dcmr.last[:datacloud][:java_options].match(/^\DX{1}[a-z]{2}\d[g]\s\DX{1}[a-z]{2}(\d)[g]/)[1]
+end
+
+if dcqa.empty? 
+qa_heap = 10
+else
 qa_heap = dcqa.last[:datacloud][:java_options].match(/^\DX{1}[a-z]{2}\d[g]\s\DX{1}[a-z]{2}(\d)[g]/)[1]
+end
+
+if dcdd.empty?
+dd_heap = 10
+else
 dd_heap = dcdd.last[:datacloud][:java_options].match(/^\DX{1}[a-z]{2}\d[g]\s\DX{1}[a-z]{2}(\d)[g]/)[1]
+end
+
+if node[:monitored_region].nil?
+uconnects = []
+else
+  uconnects = []
+  search = search(:node, "domain:prod* AND app_environment:production* AND placement_availability_zone:#{region}*")
+    search.each do |n|
+      if n.recipes.include?("uconnect::s2s_logger_plenv")
+        uconnects << n
+      end
+    end
+end
+
+Chef::Log.warn("Uconnects are: #{uconnects}")
+
+designation = "host_name"
 
 if node[:ec2][:local_ipv4] == "10.1.2.7"
 main_nagios = "#{node['hostname']} - #{node[:ipaddress]}"
-designation = "host_name"
 
   template "/home/ubuntu/nagios" do
     source "nagios.sudoers.erb"
@@ -320,7 +333,8 @@ designation = "host_name"
       :vp_heap => vp_heap,
       :mr_heap => mr_heap,
       :qa_heap => qa_heap,
-      :dd_heap => dd_heap
+      :dd_heap => dd_heap,
+      :uconnects => uconnects
     )
   end
 else
@@ -331,7 +345,9 @@ else
       :vp_heap => vp_heap,
       :mr_heap => mr_heap,
       :qa_heap => qa_heap,
-      :dd_heap => dd_heap
+      :dd_heap => dd_heap,
+      :uconnects => uconnects,
+      :designation => designation
     )
   end
 end
@@ -367,12 +383,5 @@ nagios_nrpecheck "check_nagios" do
   parameters "-F #{node["nagios"]["cache_dir"]}/status.dat -e 4 -C /usr/sbin/#{node['nagios']['server']['service_name']}"
   action :add
 end
-
-#template "/home/ubuntu/testingJack" do
-#    source "testingJack.erb"
-#    owner "root"
-#    group "root"
-#    mode 0440
-#  end
 
 include_recipe "nagios::pagerduty"

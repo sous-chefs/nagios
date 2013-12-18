@@ -44,13 +44,13 @@ end
 domain = node[:domain]
 
 case domain
-when "prod.us-w1"
+when "prod1.us-w1"
   region = "us_west_1_vpc"
-when "prod.us-e1"
+when "prod1.us-e1"
   region = "us_east_1_vpc"
-when "prod-1.eu-w1"
+when "prod1.eu-w1"
   region = "eu_west_1_vpc"
-when "no.domain.name.set"
+when "us-west-1.compute.internal"
   region = "us_west_1"
 when "eu-w1"
   region = "eu_west_1"

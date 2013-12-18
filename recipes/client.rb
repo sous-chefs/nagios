@@ -22,6 +22,9 @@
 # limitations under the License.
 #
 
+include_recipe "nagios::passive_crons"
+include_recipe "nagios::sudoers"
+
 require 'fileutils'
 
 %w{libdatetime-format-builder-perl libfile-readbackwards-perl}.each do |pkg|
@@ -55,7 +58,7 @@ else
     Chef::Log.warn( "Searching for Nagios servers -- Search is: #{search}" );
     
  search(:node, search) do |nagios_node|
-     Chef::Log.info( "Found Nagios node #{nagios_node['ipaddress']}" )
+     Chef::Log.warn( "Found Nagios node #{nagios_node['ipaddress']}" )
      mon_host << nagios_node['ipaddress']
  end
 
@@ -116,7 +119,7 @@ else
     search = "role:#{node['nagios']['server_role']} AND placement_availability_zone:#{region}* AND app_environment:#{node[:app_environment]}"
 
     search(:node, search) do |nagios_node|
-      Chef::Log.info( "Found Nagios server for NTP at #{nagios_node['ipaddress']}" )
+      Chef::Log.warn( "Found Nagios server for NTP at #{nagios_node['ipaddress']}" )
       ntp_server =  nagios_node['ipaddress']
     end   
 
@@ -175,74 +178,6 @@ nagios_nrpecheck "check_load" do
   action :add
 end
 
-if node.roles.include?("uconnect_logger") || node.roles.include?("hostname_uconnect")
-  template "/tmp/uconnect" do
-    source "uconnect.sudoers.erb"
-    owner "root"
-    group "root"
-    mode 0440
-  end
- 
-  if ::File.exists?('/tmp/uconnect')
-    FileUtils.cp('/tmp/uconnect', '/etc/sudoers.d/uconnect')
-  end
-end
-
-
-if node.recipes.include?("uconnect::s2s_logger_plenv")
-  nodesize = node[:ec2][:instance_type].split('.').last 
-  num_procs = node[:uconnect][:iron_processes][nodesize]
-  Chef::Log.warn( "Node is #{nodesize}, and so num of procs is #{num_procs}" ) 
-    for i in 1..num_procs
-      template "/var/log/upstart/s2s-httpd-iron-processor-#{i}.log" do
-        source "iron_processor.erb"
-        owner "root"
-        group "root"
-        mode 0644
-        action :create_if_missing
-      end
-    end  
-end
-
-if node.roles.include?("hostname_eventstream")
-  template "/tmp/eventstream" do
-    source "eventstream.sudoers.erb"
-    owner "root"
-    group "root"
-    mode 0440
-  end
-
-  if ::File.exists?('/tmp/eventstream')
-    FileUtils.cp('/tmp/eventstream', '/etc/sudoers.d/eventstream')
-  end
-end
-
-if node.roles.include?("rabbitmq_server")
-  template "/tmp/rabbitmq" do
-    source "rabbitmq.sudoers.erb"
-    owner "root"
-    group "root"
-    mode 0440
-  end
-
-  if ::File.exists?('/tmp/rabbitmq')
-    FileUtils.cp('/tmp/rabbitmq', '/etc/sudoers.d/rabbitmq')
-  end
-end
-
-if node.roles.include?("utui")
-  template "/home/ubuntu/utui" do
-    source "utui.sudoers.erb"
-    owner "root"
-    group "root"
-    mode 0440
-  end
-
-  if ::File.exists?('/home/ubuntu/utui')
-    FileUtils.cp('/home/ubuntu/utui', '/etc/sudoers.d/utui')
-  end
-end
-
 if node.roles.include?("server2server")
   nagios_nrpecheck "check_all_disks" do
      command "#{node['nagios']['plugin_dir']}/check_disk"
@@ -276,3 +211,5 @@ nagios_nrpecheck "check_users" do
   critical_condition "30"
   action :add
 end
+
+include_recipe "nagios::nsca_client"

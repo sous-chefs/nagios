@@ -478,6 +478,11 @@ define command {
 
 # dummy commands for passive checks
 
+define command{ 
+        command_name check_dummy 
+        command_line $USER1$/check_dummy $ARG1$ 
+ }
+
 define command {
 	command_name	no-disk-checks
 	command_line	/usr/local/nagios/libexec/check_dummy 2 "CRITICAL: Results of disk checks not coming in!"

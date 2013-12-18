@@ -1,0 +1,10 @@
+# Ubuntu upstart file at /etc/init/nsca.conf
+ 
+kill timeout 5 # wait 5s between SIGTERM and SIGKILL.
+
+start on runlevel [2345]
+stop on runlevel [06]
+
+setuid nagios
+
+exec /usr/lib/nagios/plugins/nsca -c /etc/nagios3/nsca.cfg 2>&1

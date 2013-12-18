@@ -1,0 +1,11 @@
+#!/bin/sh
+
+/usr/lib/nagios/plugins/check_log3_passive.pl -l <%= node['nagios']['logfiles']['utui']['log_file'] %> -S 'Check UTUI Logs CDN Login Error' -s /tmp/utui_login_error -p <%= node['nagios']['checks']['utui_login_error']['pattern'] %> -c 1 > /dev/null
+
+/usr/lib/nagios/plugins/check_log3_passive.pl -l <%= node['nagios']['logfiles']['utui']['log_file'] %> -S 'Check UTUI Logs CDN Publish Error' -s /tmp/utui_publish_erro -p <%= node['nagios']['checks']['utui_publish_error']['pattern'] %> -c 1 > /dev/null
+
+/usr/lib/nagios/plugins/check_log3_passive.pl -l <%= node['nagios']['logfiles']['utui']['log_file'] %> -S 'Check UTUI Logs CDN smartFTP Error' -s /tmp/utui_smartFTP_error -p <%= node['nagios']['checks']['utui_smartFTP_error']['pattern'] %> -c 1 > /dev/null
+
+/usr/lib/nagios/plugins/check_log3_passive.pl -l <%= node['nagios']['logfiles']['utui']['log_file'] %> -S 'Check UTUI Logs CDN FTP Upload Error' -s /tmp/utui_ftp_upload_error -p <%= node['nagios']['checks']['utui_ftp_upload_error']['pattern'] %> -c 1 > /dev/null
+
+/usr/lib/nagios/plugins/check_log3_passive.pl -l <%= node['nagios']['logfiles']['utui']['log_file'] %> -S 'Check UTUI Logs Publish Insert' -s /tmp/utui_publish_insert_error -p <%= node['nagios']['checks']['utui_publish_insert']['pattern'] %> -c 1 > /dev/null
