@@ -43,7 +43,7 @@ end
 #   (where other is defined by node['cloud']['provider'])
 # if the cloud IP is nil then use the standard IP address attribute.  This is a work around
 #   for OHAI incorrectly identifying systems on Cisco hardware as being in Rackspace
-def ip_to_monitor(monitored_host, server_host=node)
+def ip_to_monitor(monitored_host, server_host = node)
   # if server is not in the cloud and the monitored host is
   if server_host['cloud'].nil? && !monitored_host['cloud'].nil?
     monitored_host['cloud']['public_ipv4'].include?('.') ? monitored_host['cloud']['public_ipv4'] : monitored_host['ipaddress']
