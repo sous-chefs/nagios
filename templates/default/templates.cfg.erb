@@ -78,6 +78,8 @@ define service {
   notification_options            w,u,c,r
   notification_interval           <%= nagios_interval(nagios_attr(:default_service)[:notification_interval]) %>
   notification_period             24x7
+  notes_url                       <%= nagios_attr(:default_service)[:notes_url] %>
+  action_url                      <%= nagios_attr(:default_service)[:action_url] %>
   register                        0
 }
 
