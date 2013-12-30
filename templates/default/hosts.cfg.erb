@@ -24,8 +24,10 @@ define host {
   if !node['ec2'].nil? && node['ec2']['network_interfaces_macs'].first[1].include?('vpc_id')
     if (!n['ec2'].nil? && n['ec2']['network_interfaces_macs'].first[1].include?('vpc_id')) && (node['ec2']['network_interfaces_macs'].first[1].vpc_id == n['ec2']['network_interfaces_macs'].first[1].vpc_id)
       ip = n['ipaddress']
-    else
+    elsif !n['ec2'].nil?
       ip = n['ec2']['public_ipv4']
+    else
+      ip = n['ipaddress']
     end
   elsif node['cloud'].nil? && !n['cloud'].nil?
     ip = n['cloud']['public_ipv4'].include?('.') ? n['cloud']['public_ipv4'] : n['ipaddress']
