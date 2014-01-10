@@ -522,11 +522,13 @@ You can define pagerduty contacts and keys by creating nagios\_pagerduty data ba
 the relevant key. Setting admin\_contactgroup to "true" will add this pagerduty contact to the admin contact group
 created by this cookbook.
 
-       {
-         "id": "pagerduty_critical",
-         "admin_contactgroup": "true",
-         "key": "a33e5ef0ac96772fbd771ddcccd3ccd0"
-       }
+```javascript
+{
+  "id": "pagerduty_critical",
+  "admin_contactgroup": "true",
+  "key": "a33e5ef0ac96772fbd771ddcccd3ccd0"
+}
+```
 
 You can add these contacts to any contactgroups you create.
 
