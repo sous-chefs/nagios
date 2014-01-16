@@ -294,7 +294,7 @@ Example `nagios_contactgroup` data bag item
 {
   "id": "non_admins",
   "alias": "Non-Administrator Contacts",
-  "members": "devs helpdesk managers"
+  "members": "devs,helpdesk,managers"
 }
 ```
 
