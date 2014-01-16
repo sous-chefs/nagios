@@ -19,7 +19,7 @@ define timeperiod {
 define timeperiod {
   timeperiod_name  <%= timeperiods['id'] %>
   alias            <%= timeperiods['alias'] %>
-  <% timeperiods['times'].split(',').each do |conf| %>
+  <% timeperiods['times'].each do |conf| %>
   <%= conf %>
   <% end %>
 }

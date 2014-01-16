@@ -381,7 +381,15 @@ Here is an example timeperiod definition:
 {
   "id": "time_period_name",
   "alias": "This time period goes from now to then",
-  "times": "sunday 09:00-17:00,monday 09:00-17:00,tuesday 09:00-17:00,wednesday 09:00-17:00,thursday 09:00-17:00,friday 09:00-17:00,saturday 09:00-17:00"
+  "times": [
+    "sunday 09:00-17:00",
+    "monday 09:00-17:00",
+    "tuesday 09:00-17:00",
+    "wednesday 09:00-17:00",
+    "thursday 09:00-17:00",
+    "friday 09:00-17:00",
+    "saturday 09:00-17:00"
+  ]
 }
 ```
 
