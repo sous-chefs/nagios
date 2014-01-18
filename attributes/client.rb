@@ -67,7 +67,7 @@ default['nagios']['nrpe']['command_timeout']    = 60
 default['nagios']['nrpe']['connection_timeout'] = nil
 
 # for plugin from source installation
-default['nagios']['plugins']['url']      = 'https://www.nagios-plugins.org/download'
+default['nagios']['plugins']['url']      = 'https://www.monitoring-plugins.org/download/'
 default['nagios']['plugins']['version']  = '1.5'
 default['nagios']['plugins']['checksum'] = 'fcc55e23bbf1c70bcf1a90749d30249955d4668a9b776b2521da023c5c2f2170'
 
