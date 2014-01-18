@@ -4,6 +4,8 @@ AllCops:
 
 AlignParameters:
   Enabled: false
+CyclomaticComplexity:
+  Enabled: false
 Encoding:
   Enabled: false
 HashSyntax:
