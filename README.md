@@ -29,7 +29,7 @@ The system running the 'server' recipe should have a role named 'monitoring' so 
 * nginx
 * nginx_simplecgi
 * php
-* yum
+* yum-epel (note: this requires yum cookbook v3.0, which breaks compatibility with many other cookbooks)
 
 
 Attributes

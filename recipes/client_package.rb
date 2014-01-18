@@ -23,7 +23,7 @@
 # fedora 17 and later don't require epel
 if platform_family?('rhel', 'fedora')
   unless platform?('fedora') && node['platform_version'] < 17
-    include_recipe 'yum::epel'
+    include_recipe 'yum-epel'
   end
 end
 
