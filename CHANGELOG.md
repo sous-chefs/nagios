@@ -2,6 +2,24 @@ nagios Cookbook CHANGELOG
 =========================
 This file is used to list changes made in each version of the nagios cookbook.
 
+v5.2.0
+------
+### Breaking changes
+- This release requires yum-epel, which requires the yum v3.0 cookbook. This may break other cookbooks in your environment
+
+### Bug
+- Change yum cookbook dependency to yum-epel dependecy as yum cookbook v3.0 removed epel repo setup functionality
+- Several fixes to the Readme examples
+
+### Improvement
+- Use the new monitoring-plugins.org address for the Nagios Plugins during source installs
+- The version of apt defined in the Berksfile is no longer constrained
+- Find all nodes by searching by node not hostname to workaround failures in ohai determining the hostname
+
+### New Feature
+- Allow defining of time periods via new data bag nagios_timeperiods.  See the Readme for additional details
+
+
 v5.1.0
 ------
 ### Bug
