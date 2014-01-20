@@ -17,8 +17,8 @@ This cookbook relies heavily on multiple data bags. See __Data Bag__ below.
 The system running the 'server' recipe should have a role named 'monitoring' so that NRPE clients can authorize monitoring from that system. This role name is configurable via an attribute. See __Attributes__ below.
 
 ### Platform
-* Debian 6
-* Ubuntu 10.04, 12.04
+* Debian 6.X, 7.X
+* Ubuntu 10.04, 12.04, 13.04
 * Red Hat Enterprise Linux (CentOS/Amazon/Scientific/Oracle) 5.X, 6.X
 
 **Notes**: This cookbook has been tested on the listed platforms. It may work on other platforms with or without modification.
