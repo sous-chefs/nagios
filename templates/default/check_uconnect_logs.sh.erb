@@ -1,7 +1,5 @@
 #!/bin/sh
 
-/usr/lib/nagios/plugins/check_log3_passive.pl -l <%= node['nagios']['logfiles']['uconnect']['syslog'] %> -S 'Check Uconnect Iron Create' -s /tmp/iron_create -p <%= node['nagios']['checks']['iron_create']['pattern'] %> -c 1 > /dev/null
-
 /usr/lib/nagios/plugins/check_log3_passive.pl -l <%= node['nagios']['logfiles']['uconnect']['syslog'] %> -S 'Check Uconnect Iron Move' -s /tmp/iron_move -p <%= node['nagios']['checks']['iron_move']['pattern'] %> -c 1 > /dev/null
 
 /usr/lib/nagios/plugins/check_log3_passive.pl -l <%= node['nagios']['logfiles']['uconnect']['syslog'] %> -S 'Check Uconnect Iron Processor Process' -s /tmp/iron_processor_process -p <%= node['nagios']['checks']['iron_processor_process']['pattern'] %> -c 1 > /dev/null
@@ -9,3 +7,5 @@
 /usr/lib/nagios/plugins/check_log3_passive.pl -l <%= node['nagios']['logfiles']['uconnect']['syslog'] %> -S 'Check Uconnect Iron Processor Quarantine' -s /tmp/iron_processor_quarantine -p <%= node['nagios']['checks']['iron_processor_quarantine']['pattern'] %> -c 1 > /dev/null
 
 /usr/lib/nagios/plugins/check_log3_passive.pl -l <%= node['nagios']['logfiles']['uconnect']['syslog'] %> -S 'Check Uconnect Iron Write' -s /tmp/iron_write -p <%= node['nagios']['checks']['iron_write']['pattern'] %> -c 1 > /dev/null
+
+/usr/lib/nagios/plugins/check_log3_passive.pl -l <%= node['nagios']['logfiles']['uconnect']['syslog'] %> -S 'Check Uconnect Iron Create' -s /tmp/iron_create -p <%= node['nagios']['checks']['iron_create']['pattern'] %> -c 1 > /dev/null

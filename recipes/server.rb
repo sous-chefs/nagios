@@ -21,9 +21,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-unless node[:monitored_region].nil?
   include_recipe "java"
-end
 
 include_recipe "perl"
 include_recipe "zookeeper_tealium::client_python"
@@ -105,11 +103,11 @@ end
 region = node[:ec2][:placement_availability_zone].match(/^(.*-\d+)[^-]+$/)[1]
 
 if node[:monitored_region].nil? 
-  nodes = search(:node, "hostname:[* TO *] AND app_environment:#{node[:app_environment]} AND placement_availability_zone:#{region}*")
+  nodes = search(:node, "hostname:[* TO *] AND app_environment:#{node[:app_environment]} AND placement_availability_zone:#{region}* AND tealium_use_nagios:true")
 else
 
-  nodes1 = search(:node, "domain:prod* AND app_environment:production* AND placement_availability_zone:#{region}*")
-  #nodes1 = search(:node, "domain:prod* AND app_environment:production* AND placement_availability_zone:#{region}* AND tealium_use_nagios:true")
+  #nodes1 = search(:node, "domain:prod* AND app_environment:production* AND placement_availability_zone:#{region}*")
+  nodes1 = search(:node, "domain:prod* AND app_environment:production* AND placement_availability_zone:#{region}* AND tealium_use_nagios:true")
  
   nodes = []
   nodes1.each do |n|
@@ -273,25 +271,25 @@ dcdd = search(:node, "role:dc_data_distributor AND app_environment:production*")
 if dcvp.empty?
 vp_heap = 10
 else
-vp_heap = dcvp.last[:datacloud][:java_options].match(/^\DX{1}[a-z]{2}\d[g]\s\DX{1}[a-z]{2}(\d)[g]/)[1]
+vp_heap = dcvp.last[:datacloud][:visitor_processor][:java_options].match(/^\DX{1}[a-z]{2}\d[g]\s\DX{1}[a-z]{2}(\d)[g]/)[1]
 end
 
 if dcmr.empty?
 mr_heap = 10
 else
-mr_heap = dcmr.last[:datacloud][:java_options].match(/^\DX{1}[a-z]{2}\d[g]\s\DX{1}[a-z]{2}(\d)[g]/)[1]
+mr_heap = dcmr.last[:datacloud][:message_router][:java_options].match(/^\DX{1}[a-z]{2}\d{1,3}(m|g)\s\DX{1}[a-z]{2}(\d{1,3})(m|g)/)[2]
 end
 
 if dcqa.empty? 
 qa_heap = 10
 else
-qa_heap = dcqa.last[:datacloud][:java_options].match(/^\DX{1}[a-z]{2}\d[g]\s\DX{1}[a-z]{2}(\d)[g]/)[1]
+qa_heap = dcqa.last[:datacloud][:query_aggregator][:java_options].match(/^\DX{1}[a-z]{2}\d[g]\s\DX{1}[a-z]{2}(\d)[g]/)[1]
 end
 
 if dcdd.empty?
 dd_heap = 10
 else
-dd_heap = dcdd.last[:datacloud][:java_options].match(/^\DX{1}[a-z]{2}\d[g]\s\DX{1}[a-z]{2}(\d)[g]/)[1]
+dd_heap = dcdd.last[:datacloud][:data_distributor][:java_options].match(/^\DX{1}[a-z]{2}\d[g]\s\DX{1}[a-z]{2}(\d)[g]/)[1]
 end
 
 if node[:monitored_region].nil?

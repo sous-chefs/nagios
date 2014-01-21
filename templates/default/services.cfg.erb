@@ -116,6 +116,13 @@ define service {
 #}
 
 define service {
+    service_description Check Rabbit vp_to_vs_visitor_result NON_VPC US WEST
+    <%= @designation %> <%= @main_nagios %>
+    check_command       check_rabbit_queues!ec2-50-18-37-177.us-west-1.compute.amazonaws.com!/server2server!vp_to_vs_visitor_result!admin!toor4cars9window14five.!250,-1,200,-1!300,-1,250,-1
+    use                 default-service,srv-pnp
+}
+
+define service {
     service_description Check Rabbit http_requests_queue NON_VPC US WEST
     <%= @designation %> <%= @main_nagios %>
     check_command       check_rabbit_queues!ec2-50-18-37-177.us-west-1.compute.amazonaws.com!/server2server!http_requests_queue!admin!toor4cars9window14five.!2500,-1,500,-1!3000,-1,600,-1
@@ -143,6 +150,13 @@ define service {
 #    check_command       check_rabbit_queues!ec2-50-18-37-177.us-west-1.compute.amazonaws.com!/server2server!record_requests_queue!admin!toor4cars9window14five.!500,-1,1000,-1!750,-1,1250,-1
 #    use                 default-service,srv-pnp
 #}
+
+define service {
+    service_description Check Rabbit vp_to_vs_visitor_result NON_VPC US EAST
+    <%= @designation %> <%= @main_nagios %>
+    check_command       check_rabbit_queues!ec2-23-20-138-181.compute-1.amazonaws.com!/server2server!vp_to_vs_visitor_result!admin!toor4cars9window14five.!250,-1,200,-1!300,-1,250,-1
+    use                 default-service,srv-pnp
+}
 
 define service {
     service_description Check Rabbit http_requests_queue NON_VPC US EAST
@@ -173,9 +187,16 @@ define service {
 }
 
 define service {
+    service_description Check Rabbit vp_to_vs_visitor_result NON_VPC EU WEST
+    <%= @designation %> <%= @main_nagios %>
+    check_command       check_rabbit_queues!ec2-46-137-17-176.eu-west-1.compute.amazonaws.com!/server2server!vp_to_vs_visitor_result!admin!toor4cars9window14five.!250,-1,200,-1!300,-1,250,-1
+    use                 default-service,srv-pnp
+}
+
+define service {
     service_description Check Rabbit http_requests_queue NON_VPC EU WEST
     <%= @designation %> <%= @main_nagios %>
-    check_command       check_rabbit_queues!ec2-46-137-17-176.eu-west-1.compute.amazonaws.com!/server2server!http_requests_queue!admin!toor4cars9window14five.!2500,-1,500,-1!3000,-1,6\00,-1
+    check_command       check_rabbit_queues!ec2-46-137-17-176.eu-west-1.compute.amazonaws.com!/server2server!http_requests_queue!admin!toor4cars9window14five.!2500,-1,500,-1!3000,-1,600,-1
     use                 default-service,srv-pnp
 }
 
@@ -284,6 +305,13 @@ define service {
 }
 
 define service {
+    service_description Check Visitor Service HTTP 8085
+    hostgroup_name      dc_visitor_service
+    check_command       check_tcp!8085
+    use                 default-service,srv-pnp
+}
+
+define service {
     service_description Nagios HTTP Auth
     hostgroup_name      nagios
     check_command       check_nagios_auth
@@ -372,6 +400,13 @@ define service {
     service_description Check JMX DataCloud Threading
     hostgroup_name      dc_data_distributor
     check_command       check_jmx_threads!40!60
+    use                 jmx-service,srv-pnp
+}
+
+define service {
+    service_description Check JMX DataCloud Threading
+    hostgroup_name      dc_visitor_service
+    check_command       check_jmx_threads!60!70
     use                 jmx-service,srv-pnp
 }
 
@@ -560,6 +595,49 @@ define service {
     check_command       check_jmx_dc_dd_total_messages_received
     use                 jmx-service,srv-pnp
 }
+
+## JMX VS ##
+define service {
+    service_description Check JMX DataCloud VS TotalVisitorsRequestReceivedCount
+    hostgroup_name      dc_visitor_service
+    check_command       check_jmx_dc_vs_total_visitors_request_received_count
+    use                 jmx-service,srv-pnp
+}
+
+define service {
+    service_description Check JMX DataCloud VS TotalVisitorsFoundInCacheCount
+    hostgroup_name      dc_visitor_service
+    check_command       check_jmx_dc_vs_total_visitors_found_in_cache_count
+    use                 jmx-service,srv-pnp
+}
+
+define service {
+    service_description Check JMX DataCloud VS TotalVisitorsIsStaleInCacheCount
+    hostgroup_name      dc_visitor_service
+    check_command       check_jmx_dc_vs_total_visitors_is_stale_in_cache_count
+    use                 jmx-service,srv-pnp
+}
+
+define service {
+    service_description Check JMX DataCloud VS TotalVisitorsRequestSendToVPCount
+    hostgroup_name      dc_visitor_service
+    check_command       check_jmx_dc_vs_total_visitors_request_send_to_vp_count
+    use                 jmx-service,srv-pnp
+}
+
+define service {
+    service_description Check JMX DataCloud VS TotalVisitorsRequestRecievedFromVPCount
+    hostgroup_name      dc_visitor_service
+    check_command       check_jmx_dc_vs_total_visitors_request_recieved_from_vp_count
+    use                 jmx-service,srv-pnp
+}
+
+define service {
+    service_description Check JMX DataCloud VS CurrentVisitorCacheSize
+    hostgroup_name      dc_visitor_service
+    check_command       check_jmx_dc_vs_current_visitor_cache_size
+    use                 jmx-service,srv-pnp
+}
 ## END JMX ##
 
 
@@ -574,6 +652,13 @@ define service {
     service_description Check DC Visitor Processor
     hostgroup_name      dc_visitor_processor
     check_command       check_nrpe!check_visitor_processor
+    use                 default-service,srv-pnp
+}
+
+define service {
+    service_description Check DC Visitor Service
+    hostgroup_name      dc_visitor_service
+    check_command       check_nrpe!check_visitor_service
     use                 default-service,srv-pnp
 }
 

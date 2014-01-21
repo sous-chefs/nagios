@@ -128,6 +128,11 @@ command[check_message_router]=<%= node['nagios']['plugin_dir'] %>/check_procs -a
 command[check_message_router]=<%= node['nagios']['plugin_dir'] %>/check_procs -a "/var/lib/sources/data_cloud/visitor_profile_processor.one-jar.jar data_distributor"
 <% end %>
 
+<% if node.roles.include?("dc_visitor_service") %>
+#check DC VS process
+command[check_visitor_service]=<%= node['nagios']['plugin_dir'] %>/check_procs -a "/var/lib/sources/data_cloud/visitor_profile_processor.one-jar.jar visitor_service"
+<% end %>
+
 <% if node.roles.include?("permission_cache") %>
 #check permission cache process
 command[check_permission_cache]=<%= node['nagios']['plugin_dir'] %>/check_procs -a "/var/lib/sources/permission_cache/permission_cache.one-jar.jar"

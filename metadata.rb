@@ -14,6 +14,7 @@ depends "zookeeper_tealium"
 depends "tealium_bongo"
 depends "python"
 depends "pnp4nagios_tealium"
+depends "set-hostname"
 
 %w{ apache2 build-essential php nginx nginx_simplecgi }.each do |cb|
   depends cb

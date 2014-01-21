@@ -24,7 +24,7 @@ search(:node, search) do |nagios_node|
   nagios_server =  nagios_node['ipaddress']
 end
 
-if node.recipes.include?("uconnect::s2s_logger_plenv")
+if node.recipes.include?("uconnect::s2s_logger_plenv") && node[:tealium][:use_nagios] == true
   nodesize = node[:ec2][:instance_type].split('.').last
   num_procs = node[:uconnect][:iron_processes][nodesize]
   Chef::Log.warn( "Node is #{nodesize}, and so num of procs is #{num_procs}" )
@@ -71,10 +71,15 @@ if node.recipes.include?("uconnect::s2s_logger_plenv")
       end
 end
 
-if node.roles.include?("hostname_eventstream")
+if node.roles.include?("hostname_eventstream") && node[:tealium][:use_nagios] == true
   cron "Check Eventstream Logs" do
     minute "*/15"
     command "/bin/sleep `/usr/bin/expr $RANDOM \\% 90` &> /dev/null ; /usr/lib/nagios/plugins/Check_Eventstream_Logs.sh"
+    #minute "0"
+    #hour "20"
+    #day "1"
+    #month "11"
+    #command "/usr/lib/nagios/plugins/Check_Eventstream_Logs.sh"
   end
 
   template "/usr/lib/nagios/plugins/Check_Eventstream_Logs.sh" do
@@ -95,7 +100,7 @@ if node.roles.include?("hostname_eventstream")
   end
 end
 
-if node.roles.include?("uconnect_logger")
+if node.roles.include?("uconnect_logger") && node[:tealium][:use_nagios] == true
 
       cron "Check Rabbit Authentication" do
         minute "*/15"
@@ -118,7 +123,7 @@ if node.roles.include?("uconnect_logger")
       end
 end
 
-if node.roles.include?("utui")
+if node.roles.include?("utui") && node[:tealium][:use_nagios] == true
   cron "Check UTUI Logs" do
     minute "*/15"
     command "/bin/sleep `/usr/bin/expr $RANDOM \\% 90` &> /dev/null ; /usr/lib/nagios/plugins/Check_UTUI_Logs.sh"
