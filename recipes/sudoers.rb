@@ -17,54 +17,42 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-if node.roles.include?("uconnect_logger") || node.roles.include?("hostname_uconnect")
-  template "/tmp/uconnect" do
-    source "uconnect.sudoers.erb"
-    owner "root"
-    group "root"
-    mode 0440
-  end
-
-  if ::File.exists?('/tmp/uconnect')
-    FileUtils.cp('/tmp/uconnect', '/etc/sudoers.d/uconnect')
+if node.roles.include?("hostname_eventstream")
+  sudo "nagios" do
+    user "nagios"
+    runas "ALL"
+    commands ["/usr/lib/nagios/plugins/check_log3_passive.pl"]
+    host "ALL"
+    nopasswd true
   end
 end
 
-if node.roles.include?("hostname_eventstream")
-  template "/tmp/eventstream" do
-    source "eventstream.sudoers.erb"
-    owner "root"
-    group "root"
-    mode 0440
-  end
-
-  if ::File.exists?('/tmp/eventstream')
-    FileUtils.cp('/tmp/eventstream', '/etc/sudoers.d/eventstream')
+if node.roles.include?("uconnect_logger") || node.roles.include?("hostname_uconnect")
+  sudo "nagios" do
+    user "nagios"
+    runas "ALL"
+    commands ["/usr/lib/nagios/plugins/check_log3_passive.pl"]
+    host "ALL"
+    nopasswd true
   end
 end
 
 if node.roles.include?("rabbitmq_server")
-  template "/tmp/rabbitmq" do
-    source "rabbitmq.sudoers.erb"
-    owner "root"
-    group "root"
-    mode 0440
-  end
-
-  if ::File.exists?('/tmp/rabbitmq')
-    FileUtils.cp('/tmp/rabbitmq', '/etc/sudoers.d/rabbitmq')
+  sudo "nagios" do
+    user "nagios"
+    runas "ALL"
+    commands ["/usr/lib/nagios/plugins/check_rabbitmq_unackd.py"]
+    host "ALL"
+    nopasswd true
   end
 end
 
 if node.roles.include?("utui")
-  template "/home/ubuntu/utui" do
-    source "utui.sudoers.erb"
-    owner "root"
-    group "root"
-    mode 0440
-  end
-
-  if ::File.exists?('/home/ubuntu/utui')
-    FileUtils.cp('/home/ubuntu/utui', '/etc/sudoers.d/utui')
+  sudo "nagios" do
+    user "nagios"
+    runas "ALL"
+    commands ["/usr/lib/nagios/plugins/check_log3_passive.pl"]
+    host "ALL"
+    nopasswd true
   end
 end
