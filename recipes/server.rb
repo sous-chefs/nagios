@@ -369,6 +369,8 @@ nagios_conf "hosts" do
   )
 end
 
+include_recipe "nagios::pagerduty"
+
 service "nagios" do
   service_name node['nagios']['server']['service_name']
   supports :status => true, :restart => true, :reload => true
@@ -382,4 +384,4 @@ nagios_nrpecheck "check_nagios" do
   action :add
 end
 
-include_recipe "nagios::pagerduty"
+#include_recipe "nagios::pagerduty"

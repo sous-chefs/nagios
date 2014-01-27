@@ -125,7 +125,7 @@ define service{
   passive_checks_enabled          1                # We want only passive checking 
   flap_detection_enabled          0 
   register                        0                # This is a template, not a real service 
-  is_volatile                     0 
+  is_volatile                     1 
   check_period                    24x7 
   max_check_attempts              1 
   normal_check_interval           5 

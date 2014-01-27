@@ -163,6 +163,40 @@ define command {
   command_line    $USER1$/check_jmx -U service:jmx:rmi:///jndi/rmi://$HOSTADDRESS$:9004/jmxrmi -O "DataCloud:type=VisitorProcessorCluster" -A RebalancedObjectsSent
 }
 
+define command {
+  command_name    check_jmx_dc_vs_total_visitors_request_reveived_count
+  command_line    $USER1$/check_jmx -U service:jmx:rmi:///jndi/rmi://$HOSTADDRESS$:9005/jmxrmi -O "DataCloud:type=VisitorService" -A TotalVisitorsRequestReceivedCount
+}
+
+define command {
+  command_name    check_jmx_dc_vs_total_visitors_found_in_cache_count
+  command_line    $USER1$/check_jmx -U service:jmx:rmi:///jndi/rmi://$HOSTADDRESS$:9005/jmxrmi -O "DataCloud:type=VisitorService" -A TotalVisitorsFoundInCacheCount
+}
+
+define command {
+  command_name    check_jmx_dc_vs_total_visitors_is_stale_in_cache_count
+  command_line    $USER1$/check_jmx -U service:jmx:rmi:///jndi/rmi://$HOSTADDRESS$:9005/jmxrmi -O "DataCloud:type=VisitorService" -A TotalVisitorsIsStaleInCacheCount
+}
+
+define command {
+  command_name    check_jmx_dc_vs_total_visitors_request_send_to_vp_count
+  command_line    $USER1$/check_jmx -U service:jmx:rmi:///jndi/rmi://$HOSTADDRESS$:9005/jmxrmi -O "DataCloud:type=VisitorService" -A TotalVisitorsRequestSendToVPCount
+}
+
+define command {
+  command_name    check_jmx_dc_vs_total_visitors_request_recieved_from_vp_count
+  command_line    $USER1$/check_jmx -U service:jmx:rmi:///jndi/rmi://$HOSTADDRESS$:9005/jmxrmi -O "DataCloud:type=VisitorService" -A TotalVisitorsRequestReceivedFromVPCount
+}
+
+define command {
+  command_name    check_jmx_dc_vs_current_visitor_cache_size
+  command_line    $USER1$/check_jmx -U service:jmx:rmi:///jndi/rmi://$HOSTADDRESS$:9005/jmxrmi -O "DataCloud:type=VisitorService" -A CurrentVisitorCacheSize
+}
+
+define command {
+  command_name    check_jmx_dc_vs_total_visitors_request_received_count
+  command_line    $USER1$/check_jmx -U service:jmx:rmi:///jndi/rmi://$HOSTADDRESS$:9005/jmxrmi -O "DataCloud:type=VisitorService" -A TotalVisitorsRequestReceivedCount
+}
 <% else -%>
 
 define command {
