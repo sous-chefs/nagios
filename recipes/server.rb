@@ -242,72 +242,82 @@ end
 nagios_conf node['nagios']['server']['name'] do
   config_subdir false
   source 'nagios.cfg.erb'
-  cookbook node['nagios']['nagios_template_cookbook']
-  variables(:nagios_service_name => nagios_service_name)
+  cookbook node['nagios']['server']['templates']['nagios']['cookbook']
+  variables(:nagios_service_name => nagios_service_name,
+            :custom_vars => node['nagios']['server']['templates']['nagios']['vars'])
 end
 
 nagios_conf 'cgi' do
   config_subdir false
-  cookbook node['nagios']['cgi_template_cookbook']
-  variables(:nagios_service_name => nagios_service_name)
+  cookbook node['nagios']['server']['templates']['cgi']['cookbook']
+  variables(:nagios_service_name => nagios_service_name,
+            :custom_vars => node['nagios']['server']['templates']['cgi']['vars'])
 end
 
 nagios_conf 'timeperiods' do
-  cookbook node['nagios']['timeperiods_template_cookbook']
-  variables(:timeperiods => timeperiods)
+  cookbook node['nagios']['server']['templates']['timeperiods']['cookbook']
+  variables(:timeperiods => timeperiods,
+            :custom_vars => node['nagios']['server']['templates']['timeperiods']['vars'])
 end
 
 nagios_conf 'templates' do
-  cookbook node['nagios']['templates_template_cookbook']
-  variables(:templates => templates)
+  cookbook node['nagios']['server']['templates']['templates']['cookbook']
+  variables(:templates => templates,
+            :custom_vars => node['nagios']['server']['templates']['templates']['vars'])
 end
 
 nagios_conf 'commands' do
-  cookbook node['nagios']['commands_template_cookbook']
+  cookbook node['nagios']['server']['templates']['commands']['cookbook']
   variables(:services => services,
-            :eventhandlers => eventhandlers)
+            :eventhandlers => eventhandlers,
+            :custom_vars => node['nagios']['server']['templates']['commands']['vars'])
 end
 
 nagios_conf 'services' do
- cookbook node['nagios']['services_template_cookbook']
+  cookbook node['nagios']['server']['templates']['services']['cookbook']
   variables(:service_hosts => service_hosts,
             :services => services,
             :search_hostgroups => hostgroup_list,
-            :hostgroups => hostgroups)
+            :hostgroups => hostgroups,
+            :custom_vars => node['nagios']['server']['templates']['services']['vars'])
 end
 
 nagios_conf 'servicegroups' do
-   cookbook node['nagios']['servicegroups_template_cookbook']
-
-  variables(:servicegroups => servicegroups)
+  cookbook node['nagios']['server']['templates']['servicegroups']['cookbook']
+  variables(:servicegroups => servicegroups,
+            :custom_vars => node['nagios']['server']['templates']['servicegroups']['vars'])
 end
 
 nagios_conf 'contacts' do
-  cookbook node['nagios']['contacts_template_cookbook']
+  cookbook node['nagios']['server']['templates']['contacts']['cookbook']
   variables(:admins => sysadmins,
             :members => members,
             :contacts => contacts,
             :contactgroups => contactgroups,
-            :serviceescalations => serviceescalations)
+            :serviceescalations => serviceescalations,
+            :custom_vars => node['nagios']['server']['templates']['contacts']['vars'])
 end
 
 nagios_conf 'hostgroups' do
-  cookbook node['nagios']['hostgroups_template_cookbook']
+  cookbook node['nagios']['server']['templates']['hostgroups']['cookbook']
   variables(:hostgroups => hostgroups,
             :search_hostgroups => hostgroup_list,
-            :search_nodes => hostgroup_nodes)
+            :search_nodes => hostgroup_nodes,
+            :custom_vars => node['nagios']['server']['templates']['hostgroups']['vars'])
 end
 
 nagios_conf 'hosts' do
-  cookbook node['nagios']['hosts_template_cookbook']
+  cookbook node['nagios']['server']['templates']['hosts']['cookbook']
   variables(:nodes => nodes,
             :unmanaged_hosts => unmanaged_hosts,
-            :hostgroups => hostgroups)
+            :hostgroups => hostgroups,
+            :custom_vars => node['nagios']['server']['templates']['hosts']['vars'])
 end
 
 nagios_conf 'servicedependencies' do
-  cookbook node['nagios']['servicedependencies_template_cookbook']
-  variables(:servicedependencies => servicedependencies)
+  cookbook node['nagios']['server']['templates']['servicedependencies']['cookbook']
+  variables(:servicedependencies => servicedependencies,
+            :custom_vars => node['nagios']['server']['templates']['servicedependencies']['vars'])
 end
 
 service 'nagios' do
