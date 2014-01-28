@@ -242,26 +242,34 @@ end
 nagios_conf node['nagios']['server']['name'] do
   config_subdir false
   source 'nagios.cfg.erb'
+  cookbook node['nagios']['nagios_template_cookbook']
   variables(:nagios_service_name => nagios_service_name)
 end
 
 nagios_conf 'cgi' do
   config_subdir false
+  cookbook node['nagios']['cgi_template_cookbook']
   variables(:nagios_service_name => nagios_service_name)
 end
 
-nagios_conf 'timeperiods'
+nagios_conf 'timeperiods' do
+  cookbook node['nagios']['timeperiods_template_cookbook']
+  variables(:timeperiods => timeperiods)
+end
 
 nagios_conf 'templates' do
+  cookbook node['nagios']['templates_template_cookbook']
   variables(:templates => templates)
 end
 
 nagios_conf 'commands' do
+  cookbook node['nagios']['commands_template_cookbook']
   variables(:services => services,
             :eventhandlers => eventhandlers)
 end
 
 nagios_conf 'services' do
+ cookbook node['nagios']['services_template_cookbook']
   variables(:service_hosts => service_hosts,
             :services => services,
             :search_hostgroups => hostgroup_list,
@@ -269,10 +277,13 @@ nagios_conf 'services' do
 end
 
 nagios_conf 'servicegroups' do
+   cookbook node['nagios']['servicegroups_template_cookbook']
+
   variables(:servicegroups => servicegroups)
 end
 
 nagios_conf 'contacts' do
+  cookbook node['nagios']['contacts_template_cookbook']
   variables(:admins => sysadmins,
             :members => members,
             :contacts => contacts,
@@ -281,18 +292,21 @@ nagios_conf 'contacts' do
 end
 
 nagios_conf 'hostgroups' do
+  cookbook node['nagios']['hostgroups_template_cookbook']
   variables(:hostgroups => hostgroups,
             :search_hostgroups => hostgroup_list,
             :search_nodes => hostgroup_nodes)
 end
 
 nagios_conf 'hosts' do
+  cookbook node['nagios']['hosts_template_cookbook']
   variables(:nodes => nodes,
             :unmanaged_hosts => unmanaged_hosts,
             :hostgroups => hostgroups)
 end
 
 nagios_conf 'servicedependencies' do
+  cookbook node['nagios']['servicedependencies_template_cookbook']
   variables(:servicedependencies => servicedependencies)
 end
 

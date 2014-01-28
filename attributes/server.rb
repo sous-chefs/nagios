@@ -92,6 +92,21 @@ default['nagios']['host_name_attribute']         = 'hostname'
 default['nagios']['regexp_matching']             = 0
 default['nagios']['large_installation_tweaks']   = 0
 
+
+# for overriding nagios templates with your own. By default it'll use the
+# included one with this cookbook.
+default['nagios']['nagios_template_cookbook'] = 'nagios' 
+default['nagios']['cgi_template_cookbook'] = 'nagios' 
+default['nagios']['timeperiods_template_cookbook'] = 'nagios' 
+default['nagios']['templates_template_cookbook'] = 'nagios' 
+default['nagios']['commands_template_cookbook'] = 'nagios' 
+default['nagios']['services_template_cookbook'] = 'nagios'
+default['nagios']['servicegroups_template_cookbook'] = 'nagios'
+default['nagios']['contacts_template_cookbook'] = 'nagios'
+default['nagios']['hostgroups_template_cookbook'] = 'nagios'
+default['nagios']['hosts_template_cookbook'] = 'nagios'
+default['nagios']['servicedependencies_template_cookbook'] = 'nagios'
+
 # for cas authentication
 default['nagios']['cas_login_url']       = 'https://example.com/cas/login'
 default['nagios']['cas_validate_url']    = 'https://example.com/cas/serviceValidate'
