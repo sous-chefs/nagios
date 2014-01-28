@@ -71,8 +71,10 @@ The following attributes are used for the NRPE client
 
 ##### authorization and server discovery
 * `node['nagios']['server_role']` - the role that the Nagios server will have in its run list that the clients can search for.
+* `node['nagios']['nodes_search_query']` - The search query for finding all the nodes you want the nagios server to check. Defaults to "hostname:* AND chef_environment:#{node.chef_environment}". However, if you set the node['nagios']['multi_environment_monitoring'] to true, it will always be "hostname:*".
 * `node['nagios']['allowed_hosts']` - additional hosts that are allowed to connect to this client. Must be an array of strings (i.e. `%w(test.host other.host)`). These hosts are added in addition to 127.0.0.1 and IPs that are found via search.
 * `node['nagios']['using_solo_search']` - discover server information in node data_bags even with chef solo through the use of solo-search (https://github.com/edelight/chef-solo-search)
+* 
 
 ##### misc
 * `node['nagios']['nrpe']['dont_blame_nrpe']` - allows the server to send additional values to NRPE via arguments.  this needs to be enabled for most checks to function
@@ -136,6 +138,18 @@ The following attributes are used for the Nagios server
 * `node['nagios']['large_installation_tweaks']` - Attribute to enable [large installation tweaks](http://nagios.sourceforge.net/docs/3_0/largeinstalltweaks.html). Defaults to 0.
 * `node['nagios']['templates']`
 * `node['nagios']['interval_length']` - minimum interval.
+
+* `node['nagios']['server']['templates']['nagios']['cookbook']` - Sets from what cookbook the nagios.cfg.erb template should come from. Defaults to this cookbook.
+* `node['nagios']['server']['templates']['cgi']['cookbook']`  - Sets from what cookbook the cgi.cfg.erb template should come from. Defaults to this cookbook. 
+* `node['nagios']['server']['templates']['timeperiods']['cookbook']`  - Sets from what cookbook the timeperiods.cfg.erb template should come from. Defaults to this cookbook.
+* `node['nagios']['server']['templates']['templates']['cookbook']`  - Sets from what cookbook the templates.cfg.erb template should come from. Defaults to this cookbook.
+* `node['nagios']['server']['templates']['commands']['cookbook']`  - Sets from what cookbook the commands.cfg.erb template should come from. Defaults to this cookbook.
+* `node['nagios']['server']['templates']['services']['cookbook']`  - Sets from what cookbook the services.cfg.erb template should come from. Defaults to this cookbook.
+* `node['nagios']['server']['templates']['servicegroups']['cookbook']`  - Sets from what cookbook the servicegroups.cfg.erb template should come from. Defaults to this cookbook.
+* `node['nagios']['server']['templates']['contacts']['cookbook']`  - Sets from what cookbook the contacts.cfg.erb template should come from. Defaults to this cookbook.
+* `node['nagios']['server']['templates']['hostgroups']['cookbook']` - Sets from what cookbook the hostgroups.cfg.erb template should come from. Defaults to this cookbook.
+* `node['nagios']['server']['templates']['hosts']['cookbook']`  - Sets from what cookbook the hosts.cfg.erb template should come from. Defaults to this cookbook.
+* `node['nagios']['server']['templates']['servicedependencies']['cookbook']`  - Sets from what cookbook the servicedependencies.cfg.erb template should come from. Defaults to this cookbook.
 
 These set directives in the default host template. Unless explicitly
 overridden, they will be inheirited by the host definitions for each
