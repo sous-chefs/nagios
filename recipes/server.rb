@@ -150,6 +150,7 @@ templates           = nagios_bags.get(node['nagios']['templates_databag'])
 eventhandlers       = nagios_bags.get(node['nagios']['eventhandlers_databag'])
 unmanaged_hosts     = nagios_bags.get(node['nagios']['unmanagedhosts_databag'])
 serviceescalations  = nagios_bags.get(node['nagios']['serviceescalations_databag'])
+hostescalations     = nagios_bags.get(node['nagios']['hostescalations_databag'])
 contacts            = nagios_bags.get(node['nagios']['contacts_databag'])
 contactgroups       = nagios_bags.get(node['nagios']['contactgroups_databag'])
 servicedependencies = nagios_bags.get(node['nagios']['servicedependencies_databag'])
@@ -280,7 +281,8 @@ nagios_conf 'contacts' do
             :members => members,
             :contacts => contacts,
             :contactgroups => contactgroups,
-            :serviceescalations => serviceescalations)
+            :serviceescalations => serviceescalations,
+            :hostescalations => hostescalations)
 end
 
 nagios_conf 'hostgroups' do
