@@ -24,23 +24,26 @@
 
 # determine hosts that NRPE will allow monitoring from
 mon_host = ['127.0.0.1']
+mon_interface = node['nagios']['monitoring_interface']
 
 # put all nagios servers that you find in the NPRE config.
 if node.run_list.roles.include?(node['nagios']['server_role'])
-  mon_host << node['ipaddress']
+  mon_host << (node['network']["ipaddress_#{mon_interface}"] || node['ipaddress'])
 elsif node['nagios']['multi_environment_monitoring']
   search(:node, "role:#{node['nagios']['server_role']}") do |n|
-    mon_host << n['ipaddress']
+    mon_host << (n['network']["ipaddress_#{mon_interface}"] || n['ipaddress'])
   end
 elsif !Chef::Config[:solo] || node['nagios']['using_solo_search']
   search(:node, "role:#{node['nagios']['server_role']} AND chef_environment:#{node.chef_environment}") do |n|
-    mon_host << n['ipaddress']
+    mon_host << (n['network']["ipaddress_#{mon_interface}"] || n['ipaddress'])
   end
 end
+
 # on the first run, search isn't available, so if you're the nagios server, go
 # ahead and put your own IP address in the NRPE config (unless it's already there).
 if node.run_list.roles.include?(node['nagios']['server_role'])
-  mon_host << node['ipaddress'] unless mon_host.include?(node['ipaddress'])
+  ipaddr = (node['network']["ipaddress_#{mon_interface}"] || node['ipaddress'])
+  monhost << ipaddr unless mon_host.include?(ipaddr)
 end
 
 mon_host.concat node['nagios']['allowed_hosts'] if node['nagios']['allowed_hosts']
