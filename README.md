@@ -144,6 +144,8 @@ information about these directives, see the Nagios documentation for
 [host definitions](http://nagios.sourceforge.net/docs/3_0/objectdefinitions.html#host).
 
 * `node['nagios']['default_host']['flap_detection']` - Defaults to `true`.
+* `node['nagios']['default_host']['notes_url']` - Defaults to `null`.
+* `node['nagios']['default_host']['action_url']` - Defaults to `null`.
 * `node['nagios']['default_host']['check_period']` - Defaults to `'24x7'`.
 * `node['nagios']['default_host']['check_interval']` - In seconds. Must be divisible by `node['nagios']['interval_length']`. Defaults to `15`.
 * `node['nagios']['default_host']['retry_interval']` - In seconds. Must be divisible by `node['nagios']['interval_length']`. Defaults to `15`.
