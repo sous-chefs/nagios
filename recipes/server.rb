@@ -54,12 +54,19 @@ end
 # find nagios web interface users from the defined data bag
 user_databag = node['nagios']['users_databag'].to_sym
 group = node['nagios']['users_databag_group']
+
+sysadmins = []
+
 begin
-  sysadmins = search(user_databag, "groups:#{group} NOT action:remove")
+  search(user_databag, "groups:#{group} NOT action:remove") { |d| sysadmins << d unless d['nagios'].nil? || d['nagios']['email'].nil? }
 rescue Net::HTTPServerException
-  Chef::Log.fatal("Could not find appropriate items in the \"#{node['nagios']['users_databag']}\" databag.  Check to make sure the databag exists and if you have set the \"users_databag_group\" that users in that group exist")
-  raise 'Could not find appropriate items in the "users" databag.  Check to make sure there is a users databag and if you have set the "users_databag_group" that users in that group exist'
+  Chef::Log.fatal("\"#{node['nagios']['users_databag']}\" databag could not be found.")
+  raise "\"#{node['nagios']['users_databag']}\" databag could not be found."
 end
+
+Chef::Log.info("Could not find users in the \"#{node['nagios']['users_databag']}\" databag with the \"#{group}\" group.  If you are
+expecting contacts other than pagerduty contacts, make sure the databag exists and, if you have set the \"users_databag_group\", tha
+t users in that group exist.") if sysadmins.empty?
 
 case node['nagios']['server_auth_method']
 when 'openid'
