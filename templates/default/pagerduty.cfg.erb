@@ -11,8 +11,8 @@ define command {
        command_name     notify-host-by-pagerduty
        command_line     <%= ::File.join(node['nagios']['plugin_dir'], "notify_pagerduty.pl") %> enqueue -f pd_nagios_object=host
 }
-<% unless node["nagios"]["pagerduty_key"].empty? -%>
 
+<% unless node['nagios']['pagerduty']['key'].nil? || node['nagios']['pagerduty']['key'].empty? -%>
 define contact {
        contact_name                             pagerduty
        alias                                    PagerDuty Pseudo-Contact
