@@ -137,6 +137,7 @@ The following attributes are used for the Nagios server
 * `node['nagios']['large_installation_tweaks']` - Attribute to enable [large installation tweaks](http://nagios.sourceforge.net/docs/3_0/largeinstalltweaks.html). Defaults to 0.
 * `node['nagios']['templates']`
 * `node['nagios']['interval_length']` - minimum interval.
+* `node['nagios']['brokers']` - Hash of broker modules to include in the config. Hash key is the path to the broker module, the value is any parameters to pass to it.
 
 These set directives in the default host template. Unless explicitly
 overridden, they will be inheirited by the host definitions for each

@@ -26,6 +26,9 @@ lock_file=<%= node['nagios']['run_dir'] %>/<%= node['nagios']['server']['vname']
 temp_file=<%= node['nagios']['cache_dir'] %>/<%= node['nagios']['server']['name'] %>.tmp
 temp_path=/tmp
 event_broker_options=-1
+<% node['nagios']['brokers'].each do |brokerPath, brokerConfig| -%>
+broker_module=<%= brokerPath %> <%= brokerConfig %>
+<% end -%>
 
 log_rotation_method=d
 log_archive_path=<%= node['nagios']['log_dir'] %>/archives
