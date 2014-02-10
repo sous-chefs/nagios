@@ -15,7 +15,8 @@ define host {
 define host {
   use server
   address <%= ip_to_monitor(n) %>
-  host_name <%= node['nagios']['server']['normalize_hostname'] ? n[node['nagios']['host_name_attribute']].downcase : n[node['nagios']['host_name_attribute']] %>
+  <% host_name = (n[node['nagios']['host_name_attribute']] ? n[node['nagios']['host_name_attribute']] : n.name) -%>
+  host_name <%= node['nagios']['server']['normalize_hostname'] ? host_name.downcase : host_name %>
   <% if node['nagios']['multi_environment_monitoring'] -%>
   <% if n['roles'].nil? || n['roles'].length == 0 -%>
   hostgroups all,<%= n['os'] %>, <%= n.chef_environment %>
