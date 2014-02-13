@@ -118,7 +118,7 @@ The following attributes are used for the Nagios server
 * `node['nagios']['cas_validate_server']` - whether to validate the server cert. Defaults to off.
 * `node['nagios']['cas_root_proxy_url']` - if set, sets the url that the cas server redirects to after auth.
 * `node['nagios']['ldap_bind_dn']` - DN used to bind to the server when searching for ldap entries.
-* `node['nagios']['ldap_bind_password']` - bind password used with the DN provided for searcing ldap.
+* `node['nagios']['ldap_bind_password']` - bind password used with the DN provided for searching ldap.
 * `node['nagios']['ldap_url']` - ldap url and search parameters.
 * `node['nagios']['ldap_authoritative']` - accepts "on" or "off". controls other authentication modules from authenticating the user if this one fails.
 * `node['nagios']['users_databag']` - the databag containing users to search for. defaults to users
@@ -141,8 +141,8 @@ The following attributes are used for the Nagios server
 * `node['nagios']['brokers']` - Hash of broker modules to include in the config. Hash key is the path to the broker module, the value is any parameters to pass to it.
 
 These set directives in the default host template. Unless explicitly
-overridden, they will be inheirited by the host definitions for each
-disovered node and `nagios_unmanagedhosts` data bag. For more
+overridden, they will be inherited by the host definitions for each
+discovered node and `nagios_unmanagedhosts` data bag. For more
 information about these directives, see the Nagios documentation for
 [host definitions](http://nagios.sourceforge.net/docs/3_0/objectdefinitions.html#host).
 
@@ -685,8 +685,9 @@ License & Authors
 
 ```text
 Copyright 2009, 37signals
-Copyright 2009-2013, Opscode, Inc
+Copyright 2009-2013, Chef, Inc
 Copyright 2012, Webtrends Inc.
+Copyright 2013-2014, Limelight Networks, Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
