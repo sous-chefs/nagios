@@ -39,14 +39,26 @@ else
 end
 
 # directories
-default['nagios']['home']          = '/usr/lib/nagios3'
-default['nagios']['conf_dir']      = '/etc/nagios3'
-default['nagios']['config_dir']    = '/etc/nagios3/conf.d'
-default['nagios']['log_dir']       = '/var/log/nagios3'
-default['nagios']['cache_dir']     = '/var/cache/nagios3'
-default['nagios']['state_dir']     = '/var/lib/nagios3'
-default['nagios']['run_dir']       = '/var/run/nagios3'
-default['nagios']['docroot']       = '/usr/share/nagios3/htdocs'
+case node['platform_family']
+when 'rhel', 'fedora'
+  default['nagios']['home']          = '/var/spool/nagios'
+  default['nagios']['conf_dir']      = '/etc/nagios'
+  default['nagios']['config_dir']    = '/etc/nagios/conf.d'
+  default['nagios']['log_dir']       = '/var/log/nagios'
+  default['nagios']['cache_dir']     = '/var/log/nagios'
+  default['nagios']['state_dir']     = '/var/log/nagios'
+  default['nagios']['run_dir']       = '/var/run'
+  default['nagios']['docroot']       = '/usr/share/nagios/htmp'
+else
+  default['nagios']['home']          = '/usr/lib/nagios3'
+  default['nagios']['conf_dir']      = '/etc/nagios3'
+  default['nagios']['config_dir']    = '/etc/nagios3/conf.d'
+  default['nagios']['log_dir']       = '/var/log/nagios3'
+  default['nagios']['cache_dir']     = '/var/cache/nagios3'
+  default['nagios']['state_dir']     = '/var/lib/nagios3'
+  default['nagios']['run_dir']       = '/var/run/nagios3'
+  default['nagios']['docroot']       = '/usr/share/nagios3/htdocs'
+end
 
 # webserver configuration
 default['nagios']['timezone']      = 'UTC'
