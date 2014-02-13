@@ -24,6 +24,9 @@ default['nagios']['multi_environment_monitoring'] = false
 default['nagios']['user']  = 'nagios'
 default['nagios']['group'] = 'nagios'
 
+# Allow specifying an interface to use for monitoring traffic
+default['nagios']['monitoring_interface'] = nil
+
 case node['platform_family']
 when 'debian'
   default['nagios']['plugin_dir'] = '/usr/lib/nagios/plugins'
