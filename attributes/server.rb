@@ -28,14 +28,17 @@ when 'debian'
   default['nagios']['server']['install_method'] = 'package'
   default['nagios']['server']['service_name']   = 'nagios3'
   default['nagios']['server']['mail_command']   = '/usr/bin/mail'
+  default['nagios']['server']['allow_empty_hostgroup'] = ''
 when 'rhel', 'fedora'
   default['nagios']['server']['install_method'] = 'source'
   default['nagios']['server']['service_name']   = 'nagios'
   default['nagios']['server']['mail_command']   = '/bin/mail'
+  default['nagios']['server']['allow_empty_hostgroup']   = '1'
 else
   default['nagios']['server']['install_method'] = 'source'
   default['nagios']['server']['service_name']   = 'nagios'
   default['nagios']['server']['mail_command']   = '/bin/mail'
+  default['nagios']['server']['allow_empty_hostgroup']   = '1'
 end
 
 # directories
