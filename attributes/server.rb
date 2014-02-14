@@ -48,7 +48,7 @@ when 'rhel', 'fedora'
   default['nagios']['cache_dir']     = '/var/log/nagios'
   default['nagios']['state_dir']     = '/var/log/nagios'
   default['nagios']['run_dir']       = '/var/run'
-  default['nagios']['docroot']       = '/usr/share/nagios/htmp'
+  default['nagios']['docroot']       = '/usr/share/nagios/html'
 else
   default['nagios']['home']          = '/usr/lib/nagios3'
   default['nagios']['conf_dir']      = '/etc/nagios3'
