@@ -99,7 +99,7 @@ else
     source 'htpasswd.users.erb'
     owner node['nagios']['user']
     group web_group
-    mode 00640
+    mode '0640'
     variables(:sysadmins => sysadmins)
   end
 end
@@ -211,19 +211,19 @@ end
 directory "#{node['nagios']['conf_dir']}/dist" do
   owner node['nagios']['user']
   group node['nagios']['group']
-  mode 00755
+  mode '0755'
 end
 
 directory node['nagios']['state_dir'] do
   owner node['nagios']['user']
   group node['nagios']['group']
-  mode 00751
+  mode '0751'
 end
 
 directory "#{node['nagios']['state_dir']}/rw" do
   owner node['nagios']['user']
   group web_group
-  mode 02710
+  mode '2710'
 end
 
 execute 'archive-default-nagios-object-definitions' do
@@ -234,7 +234,7 @@ end
 directory "#{node['nagios']['conf_dir']}/certificates" do
   owner web_user
   group web_group
-  mode 00700
+  mode '0700'
 end
 
 bash 'Create SSL Certificates' do
