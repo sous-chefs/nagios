@@ -37,14 +37,14 @@ include_recipe 'nginx'
   end
 end
 
-case dispatch_type = node['nagios']['server']['nginx_dispatch'].to_sym
-when :cgi
+case dispatch_type = node['nagios']['server']['nginx_dispatch']
+when 'cgi'
   node.set['nginx_simplecgi']['cgi'] = true
   include_recipe 'nginx_simplecgi::setup'
-when :php
+when 'php'
   node.set['nginx_simplecgi']['php'] = true
   include_recipe 'nginx_simplecgi::setup'
-when :both
+when 'both'
   node.set['nginx_simplecgi']['php'] = true
   node.set['nginx_simplecgi']['cgi'] = true
   include_recipe 'nginx_simplecgi::setup'
@@ -66,12 +66,9 @@ template File.join(node['nginx']['dir'], 'sites-available', 'nagios3.conf') do
     :fqdn          => node['fqdn'],
     :nagios_url    => node['nagios']['url'],
     :chef_env =>  node.chef_environment == '_default' ? 'default' : node.chef_environment,
-    :htpasswd_file => File.join(
-      node['nagios']['conf_dir'],
-      'htpasswd.users'
-    ),
-    :cgi => [:cgi, :both].include?(dispatch_type.to_sym),
-    :php => [:php, :both].include?(dispatch_type.to_sym)
+    :htpasswd_file => File.join(node['nagios']['conf_dir'],'htpasswd.users'),
+    :cgi => ['cgi', 'both'].include?(dispatch_type),
+    :php => ['php', 'both'].include?(dispatch_type)
   )
   if File.symlink?(File.join(node['nginx']['dir'], 'sites-enabled', 'nagios3.conf'))
     notifies :reload, 'service[nginx]', :immediately

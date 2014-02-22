@@ -32,22 +32,20 @@ else
 end
 
 # configure either Apache2 or NGINX
-web_srv = node['nagios']['server']['web_server'].to_sym
-
-case web_srv
-when :nginx
+case node['nagios']['server']['web_server']
+when 'nginx'
   Chef::Log.info 'Setting up Nagios server via NGINX'
   include_recipe 'nagios::nginx'
   web_user = node['nginx']['user']
   web_group = node['nginx']['group'] || web_user
-when :apache
+when 'apache'
   Chef::Log.info 'Setting up Nagios server via Apache2'
-  include_recipe 'nagios::apache'
+  include_recipe 'nagios:'apache''
   web_user = node['apache']['user']
   web_group = node['apache']['group'] || web_user
 else
   Chef::Log.fatal('Unknown web server option provided for Nagios server: ' <<
-                  "#{node['nagios']['server']['web_server']} provided. Allowed: :nginx or :apache")
+                  "#{node['nagios']['server']['web_server']} provided. Allowed: 'nginx' or 'apache'")
   fail 'Unknown web server option provided for Nagios server'
 end
 
@@ -70,7 +68,7 @@ t users in that group exist.") if sysadmins.empty?
 
 case node['nagios']['server_auth_method']
 when 'openid'
-  if web_srv == :apache
+  if web_srv == 'apache'
     include_recipe 'apache2::mod_auth_openid'
   else
     Chef::Log.fatal('OpenID authentication for Nagios is not supported on NGINX')
@@ -78,7 +76,7 @@ when 'openid'
     fail
   end
 when 'cas'
-  if web_srv == :apache
+  if web_srv == 'apache'
     include_recipe 'apache2::mod_auth_cas'
   else
     Chef::Log.fatal('CAS authentication for Nagios is not supported on NGINX')
@@ -86,7 +84,7 @@ when 'cas'
     fail
   end
 when 'ldap'
-  if web_srv == :apache
+  if web_srv == 'apache'
     include_recipe 'apache2::mod_authnz_ldap'
   else
     Chef::Log.fatal('LDAP authentication for Nagios is not supported on NGINX')
