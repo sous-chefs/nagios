@@ -68,9 +68,9 @@ template File.join(node['nginx']['dir'], 'sites-available', 'nagios3.conf') do
     :fqdn          => node['fqdn'],
     :nagios_url    => node['nagios']['url'],
     :chef_env =>  node.chef_environment == '_default' ? 'default' : node.chef_environment,
-    :htpasswd_file => File.join(node['nagios']['conf_dir'],'htpasswd.users'),
-    :cgi => ['cgi', 'both'].include?(dispatch_type),
-    :php => ['php', 'both'].include?(dispatch_type)
+    :htpasswd_file => File.join(node['nagios']['conf_dir'], 'htpasswd.users'),
+    :cgi => %w(cgi both).include?(dispatch_type),
+    :php => %w(php both).include?(dispatch_type)
   )
   if File.symlink?(File.join(node['nginx']['dir'], 'sites-enabled', 'nagios3.conf'))
     notifies :reload, 'service[nginx]', :immediately
