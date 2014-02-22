@@ -106,7 +106,7 @@ end
   directory node['nagios'][dir] do
     owner node['nagios']['user']
     group node['nagios']['group']
-    mode 00755
+    mode '0755'
   end
 
 end
@@ -114,7 +114,7 @@ end
 directory "/usr/lib/#{node['nagios']['server']['vname']}" do
   owner node['nagios']['user']
   group node['nagios']['group']
-  mode 00755
+  mode '0755'
 end
 
 link "#{node['nagios']['conf_dir']}/stylesheets" do

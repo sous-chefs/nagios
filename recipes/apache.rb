@@ -27,7 +27,7 @@ public_domain = node['public_domain'] || node['domain']
 
 template "#{node['apache']['dir']}/sites-available/#{node['nagios']['server']['vname']}.conf" do
   source 'apache2.conf.erb'
-  mode 00644
+  mode '0644'
   variables(
     :public_domain => public_domain,
     :nagios_url    => node['nagios']['url'],

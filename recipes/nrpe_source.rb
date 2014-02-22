@@ -36,13 +36,13 @@ if node['nagios']['client']['install_method'] == 'source'
     source 'nagios-nrpe-server.erb'
     owner node['nagios']['user']
     group node['nagios']['group']
-    mode  00755
+    mode  '0755'
   end
 
   directory node['nagios']['nrpe']['conf_dir'] do
     owner node['nagios']['user']
     group node['nagios']['group']
-    mode  00755
+    mode  '0755'
   end
 else
   install_type = 'install-plugin'
