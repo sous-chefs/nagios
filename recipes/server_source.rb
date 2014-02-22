@@ -1,5 +1,6 @@
 #
 # Author:: Seth Chisamore <schisamo@opscode.com>
+# Author:: Tim Smith <tsmith@limelight.com>
 # Cookbook Name:: nagios
 # Recipe:: server_source
 #

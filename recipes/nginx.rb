@@ -1,3 +1,5 @@
+#
+# Author:: Tim Smith <tsmith@limelight.com>
 # Cookbook Name:: nagios
 # Recipe:: nginx
 #
