@@ -37,12 +37,6 @@ include_recipe 'nginx'
   end
 end
 
-if node['public_domain']
-  public_domain = node['public_domain']
-else
-  public_domain = node['domain']
-end
-
 case dispatch_type = node['nagios']['server']['nginx_dispatch'].to_sym
 when :cgi
   node.set['nginx_simplecgi']['cgi'] = true
@@ -60,9 +54,9 @@ end
 
 template File.join(node['nginx']['dir'], 'sites-available', 'nagios3.conf') do
   source 'nginx.conf.erb'
-  mode 00644
+  mode '0644'
   variables(
-    :public_domain => public_domain,
+    :public_domain => node['public_domain'] || node['domain'],
     :listen_port   => node['nagios']['http_port'],
     :https         => node['nagios']['enable_ssl'],
     :ssl_cert_file => node['nagios']['ssl_cert_file'],
@@ -79,7 +73,7 @@ template File.join(node['nginx']['dir'], 'sites-available', 'nagios3.conf') do
     :cgi => [:cgi, :both].include?(dispatch_type.to_sym),
     :php => [:php, :both].include?(dispatch_type.to_sym)
   )
-  if ::File.symlink?(File.join(node['nginx']['dir'], 'sites-enabled', 'nagios3.conf'))
+  if File.symlink?(File.join(node['nginx']['dir'], 'sites-enabled', 'nagios3.conf'))
     notifies :reload, 'service[nginx]', :immediately
   end
 end
