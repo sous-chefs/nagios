@@ -146,7 +146,7 @@ end
 
 # Add all unique platforms to the array of hostgroups
 nodes.each do |n|
-  hostgroups << n['os'] unless hostgroups.include?(n['os'])
+  hostgroups << n['os'] unless hostgroups.include?(n['os']) || n['os'].nil?
 end
 
 nagios_bags         = NagiosDataBags.new
