@@ -25,6 +25,10 @@ external_command_buffer_slots=4096
 lock_file=<%= node['nagios']['run_dir'] %>/<%= node['nagios']['server']['vname'] %>.pid
 temp_file=<%= node['nagios']['cache_dir'] %>/<%= node['nagios']['server']['name'] %>.tmp
 temp_path=/tmp
+
+<% node['nagios']['conf']['broker_modules'].each do |brokermodule| -%>
+<%= "broker_module=#{brokermodule}"%>
+<% end %>
 event_broker_options=-1
 <% node['nagios']['brokers'].each do |brokerPath, brokerConfig| -%>
 broker_module=<%= brokerPath %> <%= brokerConfig %>

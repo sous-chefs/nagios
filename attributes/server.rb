@@ -162,6 +162,7 @@ default['nagios']['conf']['p1_file']                  = "#{node['nagios']['home'
 default['nagios']['conf']['debug_level']              = 0
 default['nagios']['conf']['debug_verbosity']          = 1
 default['nagios']['conf']['debug_file']               = "#{node['nagios']['state_dir']}/#{node['nagios']['server']['name']}.debug"
+default['nagios']['conf']['broker_modules']           = %w{}
 
 default['nagios']['cgi']['show_context_help']                        = 1
 default['nagios']['cgi']['authorized_for_system_information']        = '*'
