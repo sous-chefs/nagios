@@ -84,6 +84,8 @@ The following attributes are used for the Nagios server
 
 * `node['nagios']['server']['install_method']` - whether to install from package or source. Default chosen by platform based on known packages available for Nagios: debian/ubuntu 'package', redhat/centos/fedora/scientific: source
 * `node['nagios']['server']['service_name']` - name of the service used for Nagios, default chosen by platform, debian/ubuntu "nagios3", redhat family "nagios", all others, "nagios"
+* `node['nagios']['server']['allow_empty_hostgroup']` - older Nagios releases do not support option, activate and set to default of "1" for Nagios >= 3.4.0
+
 * `node['nagios']['home']` - Nagios main home directory, default "/usr/lib/nagios3"
 * `node['nagios']['conf_dir']` - location where main Nagios config lives, default "/etc/nagios3"
 * `node['nagios']['config_dir']` - location where included configuration files live, default "/etc/nagios3/conf.d"
@@ -100,7 +102,6 @@ The following attributes are used for the Nagios server
 * `node['nagios']['http_port']` - port that the Apache/Nginx virtual site should listen on, determined whether ssl is enabled (443 if so, otherwise 80). Note:  You will also need to configure the listening port for either NGINX or Apache within those cookbooks.
 * `node['nagios']['server_name']` - common name to use in a server cert, default "nagios"
 * `node['nagios']['ssl_req']` - info to use in a cert, default `/C=US/ST=Several/L=Locality/O=Example/OU=Operations/CN=#{node['nagios']['server_name']}/emailAddress=ops@#{node['nagios']['server_name']}`
-
 *  `node['nagios']['server']['url']` - url to download the server source from if installing from source
 *  `node['nagios']['server']['version']` - version of the server source to download
 *  `node['nagios']['server']['checksum']` - checksum of the source files

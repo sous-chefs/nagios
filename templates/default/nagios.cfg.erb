@@ -123,7 +123,9 @@ service_freshness_check_interval=60
 check_host_freshness=0
 host_freshness_check_interval=60
 additional_freshness_latency=15
-<% if node['nagios']['server']['install_method'] == 'source' -%>allow_empty_hostgroup_assignment=1<% end -%>
+<% unless node['nagios']['server']['allow_empty_hostgroup'].nil? -%>
+allow_empty_hostgroup_assignment=<%= node['nagios']['server']['allow_empty_hostgroup'] %>
+<% end -%>
 
 enable_flap_detection=1
 low_service_flap_threshold=5.0
