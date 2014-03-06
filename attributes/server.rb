@@ -84,7 +84,12 @@ default['nagios']['server']['src_dir'] = 'nagios'
 # for server from packages installation
 default['nagios']['server']['packages'] = %w[nagios3 nagios-nrpe-plugin nagios-images]
 
-default['nagios']['notifications_enabled']       = 0
+default['nagios']['notifications_enabled']         = 0
+default['nagios']['execute_service_checks']        = 1
+default['nagios']['accept_passive_service_checks'] = 1
+default['nagios']['execute_host_checks']           = 1
+default['nagios']['accept_passive_host_checks']    = 1
+
 default['nagios']['check_external_commands']     = true
 default['nagios']['default_contact_groups']      = %w{admins}
 default['nagios']['sysadmin_email']              = 'root@localhost'

@@ -85,10 +85,10 @@ interval_length=<%= node['nagios']['interval_length'] %>
 
 use_aggressive_host_checking=0
 
-execute_service_checks=1
-accept_passive_service_checks=1
-execute_host_checks=1
-accept_passive_host_checks=1
+execute_service_checks=<%= node['nagios']['execute_service_checks'] %>
+accept_passive_service_checks=<%= node['nagios']['accept_passive_service_checks'] %>
+execute_host_checks=<%= node['nagios']['execute_host_checks'] %>
+accept_passive_host_checks=<%= node['nagios']['accept_passive_host_checks'] %>
 
 enable_notifications=<%= node['nagios']['notifications_enabled'] %>
 enable_event_handlers=1
