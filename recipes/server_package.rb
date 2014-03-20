@@ -25,7 +25,7 @@ if node['platform_family'] == 'debian'
   # We generate it randomly as it's overwritten later in the config templates
   random_initial_password = rand(36**16).to_s(36)
 
-  %w{adminpassword adminpassword-repeat}.each do |setting|
+  %w(adminpassword adminpassword-repeat).each do |setting|
     execute "debconf-set-selections::#{node['nagios']['server']['vname']}-cgi::#{node['nagios']['server']['vname']}/#{setting}" do
       command "echo #{node['nagios']['server']['vname']}-cgi #{node['nagios']['server']['vname']}/#{setting} password #{random_initial_password} | debconf-set-selections"
       not_if "dpkg -l #{node['nagios']['server']['vname']}"
