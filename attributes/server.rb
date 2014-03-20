@@ -68,7 +68,7 @@ default['nagios']['http_port']     = node['nagios']['enable_ssl'] ? '443' : '80'
 default['nagios']['server_name']   = node.key?(:domain) ? "nagios.#{domain}" : 'nagios'
 default['nagios']['ssl_cert_file'] = "#{node['nagios']['conf_dir']}/certificates/nagios-server.pem"
 default['nagios']['ssl_cert_key']  = "#{node['nagios']['conf_dir']}/certificates/nagios-server.pem"
-default['nagios']['ssl_req']       = '/C=US/ST=Several/L=Locality/O=Example/OU=Operations/' +
+default['nagios']['ssl_req']       = '/C=US/ST=Several/L=Locality/O=Example/OU=Operations/' \
   "CN=#{node['nagios']['server_name']}/emailAddress=ops@#{node['nagios']['server_name']}"
 
 # nagios server name and webserver vname.  this can be changed to allow for the installation of icinga
@@ -82,7 +82,7 @@ default['nagios']['server']['checksum'] = 'ca9dd68234fa090b3c35ecc8767b2c9eb7439
 default['nagios']['server']['src_dir'] = 'nagios'
 
 # for server from packages installation
-default['nagios']['server']['packages'] = %w[nagios3 nagios-nrpe-plugin nagios-images]
+default['nagios']['server']['packages'] = %w(nagios3 nagios-nrpe-plugin nagios-images)
 
 default['nagios']['notifications_enabled']         = 0
 default['nagios']['execute_service_checks']        = 1
@@ -91,7 +91,7 @@ default['nagios']['execute_host_checks']           = 1
 default['nagios']['accept_passive_host_checks']    = 1
 
 default['nagios']['check_external_commands']     = true
-default['nagios']['default_contact_groups']      = %w{admins}
+default['nagios']['default_contact_groups']      = %w(admins)
 default['nagios']['sysadmin_email']              = 'root@localhost'
 default['nagios']['sysadmin_sms_email']          = 'root@localhost'
 default['nagios']['server_auth_method']          = 'htauth'

@@ -35,9 +35,9 @@ else
 end
 
 pkgs = value_for_platform_family(
-  %w{ rhel fedora } => %w{ openssl-devel gd-devel tar },
-  'debian' => %w{ libssl-dev libgd2-xpm-dev bsd-mailx tar },
-  'default' => %w{ libssl-dev libgd2-xpm-dev bsd-mailx tar }
+  %w( rhel fedora ) => %w( openssl-devel gd-devel tar ),
+  'debian' => %w( libssl-dev libgd2-xpm-dev bsd-mailx tar ),
+  'default' => %w( libssl-dev libgd2-xpm-dev bsd-mailx tar )
 )
 
 pkgs.each do |pkg|
@@ -102,7 +102,7 @@ directory node['nagios']['config_dir'] do
   mode 00755
 end
 
-%w{ cache_dir log_dir run_dir }.each do |dir|
+%w( cache_dir log_dir run_dir ).each do |dir|
 
   directory node['nagios'][dir] do
     owner node['nagios']['user']
