@@ -90,6 +90,11 @@ default['nagios']['accept_passive_service_checks'] = 1
 default['nagios']['execute_host_checks']           = 1
 default['nagios']['accept_passive_host_checks']    = 1
 
+default['nagios']['obsess_over_services'] = 0
+default['nagios']['ocsp_command']         = nil
+default['nagios']['obsess_over_hosts']    = 0
+default['nagios']['ochp_command']         = nil
+
 default['nagios']['check_external_commands']     = true
 default['nagios']['default_contact_groups']      = %w{admins}
 default['nagios']['sysadmin_email']              = 'root@localhost'

@@ -110,10 +110,18 @@ process_performance_data=<%= node['nagios']['conf']['process_performance_data'] 
 #host_perfdata_file_processing_command=process-host-perfdata-file
 #service_perfdata_file_processing_command=process-service-perfdata-file
 
-obsess_over_services=0
+obsess_over_services=<%= node['nagios']['obsess_over_services'] %>
+<% if node['nagios']['ocsp_command'] -%>
+oscp_command='<%= node['nagios']['ocsp_command'] %>'
+<% else -%>
 #ocsp_command=somecommand
-obsess_over_hosts=0
+<% end -%>
+obsess_over_hosts=<%= node['nagios']['obsess_over_hosts'] %>
+<% if node['nagios']['ochp_command'] -%>
+ochp_command='<%= node['nagios']['ochp_command'] %>'
+<% else -%>
 #ochp_command=somecommand
+<% end -%>
 translate_passive_host_checks=0
 passive_host_checks_are_soft=0
 check_for_orphaned_services=1
