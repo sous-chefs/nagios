@@ -1,7 +1,7 @@
 require 'spec_helper'
 
-describe 'nagios::server' do
-  let(:chef_run) { runner.converge 'nagios::server' }
+describe 'nagios::default' do
+  let(:chef_run) { runner.converge 'nagios::default' }
   subject { chef_run }
   before do
     stub_search(:users, 'groups:sysadmin NOT action:remove').and_return([])
