@@ -6,3 +6,4 @@ script:
   - bundle exec rspec --color --format progress
   - bundle exec foodcritic -f any --tags ~FC003 --tags ~FC015 --tags ~FC023 .
   - bundle exec rubocop
+
