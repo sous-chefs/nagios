@@ -19,8 +19,12 @@
 # limitations under the License.
 #
 
-if node['platform_family'] == 'debian'
-
+case node['platform_family']
+when 'rhel', 'fedora'
+  unless platform?('fedora') && node['platform_version'] < 17
+    include_recipe 'yum-epel' # setup epel old rhel and pre Fedora 17
+  end
+when 'debian'
   # Nagios package requires to enter the admin password
   # We generate it randomly as it's overwritten later in the config templates
   random_initial_password = rand(36**16).to_s(36)
@@ -31,7 +35,6 @@ if node['platform_family'] == 'debian'
       not_if "dpkg -l #{node['nagios']['server']['vname']}"
     end
   end
-
 end
 
 node['nagios']['server']['packages'].each do |pkg|
