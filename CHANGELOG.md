@@ -2,6 +2,30 @@ nagios Cookbook CHANGELOG
 =========================
 This file is used to list changes made in each version of the nagios cookbook.
 
+v5.3.0
+------
+### Breaking changes
+- Directories for RHEL installations have been updated to use correct RHEL directories vs. Debian directories. You may need to override these directories with the existing directories to not break existing installations on RHEL. Proceed with caution.
+
+### Bug
+- Cookbook no longer fails the run if a node has no roles
+- Cookbook no longer fails if there are no users defined in the data bag
+- Cookbook no longer fails if a node has no hostname
+- Cookbook no longer fails if the node does not have a defined OS
+- Fix incorrect Pagerduty key usage
+- Allowed NRPE hosts were not being properly determined due to bad logic and a typo
+
+### Improvement
+- Improve Test-Kitchen support with newer RHEL point releases, Ubuntu 13.04, and Debian 6/7
+- Simplified logic in web server detection for determining public domain and switches from symbols to strings throughout
+
+### New Feature
+- Support for Nagios host escalations via a new data bag.  See the readme for additional details
+- New attribute node['nagios']['monitoring_interface'] to allow specifying a specific network interface's IP to monitor
+- You can now define the values for execute_service_checks, accept_passive_service_checks, execute_host_checks, and accept_passive_host_checks via attributes
+- You can now define the values for obsess_over_services and obsess_over_hosts settings via attributes
+
+
 v5.2.0
 ------
 ### Breaking changes

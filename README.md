@@ -46,6 +46,8 @@ The following attributes are used by both client and server recipes.
 ### client
 The following attributes are used for the NRPE client
 
+`NOTE`:  The current release (5.3.0) is the last version that will include client functionality.  The next release of this cookbook will be server only, and require the use of the nrpe cookbook at: https://github.com/tas50/chef-nrpe
+
 ##### installation method
 * `node['nagios']['client']['install_method']` - whether to install from package or source. Default chosen by platform based on known packages available for NRPE: debian/ubuntu 'package', Redhat/CentOS/Fedora/Scientific: source
 * `node['nagios']['plugins']['url']` - url to retrieve the plugins source
