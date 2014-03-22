@@ -21,13 +21,13 @@ platforms:
   - name: debian-6.0.8
     run_list:
     - recipe[apt::default]
+  - name: freebsd-9.2
+    run_list:
+    - recipe[freebsd::portsnap]
   - name: centos-6.5
   - name: centos-5.10
 
 suites:
- - name: client
-   run_list:
-   - recipe[nagios::client]
  - name: server
    run_list:
    - recipe[nagios::server]
