@@ -122,13 +122,6 @@ link "#{node['nagios']['conf_dir']}/stylesheets" do
   to "#{node['nagios']['docroot']}/stylesheets"
 end
 
-# if nrpe client is not being installed by source then we need the NRPE plugin
-if node['nagios']['client']['install_method'] == 'package'
-
-  include_recipe 'nagios::nrpe_source'
-
-end
-
 if web_srv == 'apache'
   apache_module 'cgi' do
     enable :true
