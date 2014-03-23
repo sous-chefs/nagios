@@ -22,7 +22,7 @@
 # Package pre-reqs
 
 include_recipe 'build-essential'
-include_recipe 'php'
+include_recipe 'php::default'
 include_recipe 'php::module_gd'
 
 web_srv = node['nagios']['server']['web_server']
@@ -44,6 +44,10 @@ pkgs.each do |pkg|
   package pkg do
     action :install
   end
+end
+
+user node['nagios']['user'] do
+  action :modify
 end
 
 group node['nagios']['group'] do

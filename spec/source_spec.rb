@@ -24,4 +24,31 @@ describe 'nagios::default' do
     expect(chef_run).to include_recipe 'nagios::server_source'
   end
 
+  it 'should include the php::default recipe' do
+    expect(chef_run).to include_recipe 'php::default'
+  end
+
+  it 'should include the php::module_gd recipe' do
+    expect(chef_run).to include_recipe 'php::module_gd'
+  end
+
+  it 'should include source install dependency packages' do
+    expect(chef_run).to install_package 'libssl-dev'
+    expect(chef_run).to install_package 'libgd2-xpm-dev'
+    expect(chef_run).to install_package 'bsd-mailx'
+    expect(chef_run).to install_package 'tar'
+  end
+
+  it 'should create nagios user and group' do
+    expect(chef_run).to create_user chef_run.node['nagios']['user']
+    expect(chef_run).to create_group chef_run.node['nagios']['group']
+  end
+
+  it 'should create nagios directories' do
+    expect(chef_run).to create_directory chef_run.node['nagios']['config_dir']
+    expect(chef_run).to create_directory chef_run.node['nagios']['cache_dir']
+    expect(chef_run).to create_directory chef_run.node['nagios']['log_dir']
+    expect(chef_run).to create_directory chef_run.node['nagios']['run_dir']
+    expect(chef_run).to create_directory "/usr/lib/#{chef_run.node['nagios']['server']['vname']}"
+  end
 end
