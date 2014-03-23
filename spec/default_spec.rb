@@ -7,14 +7,14 @@ describe 'nagios::default' do
   end
   subject { chef_run }
   before do
-    ChefSpec::Server.create_data_bag('users', {
-      'tsmith' => {
-        'group' => 'sysadmin'
-      },
-      'bsmith' => {
-        'group' => 'users'
+    ChefSpec::Server.create_data_bag('users',
+                                       'tsmith' => {
+                                         'group' => 'sysadmin'
+                                       },
+                                       'bsmith' => {
+                                         'group' => 'users'
       }
-    })
+    )
 
     stub_command('dpkg -l nagios3').and_return(true)
   end
