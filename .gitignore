@@ -33,6 +33,7 @@ Berksfile.lock
 .kitchen
 .kitchen.local.yml
 vendor/
+.coverage/
 
 #vagrant stuff
 .vagrant/
