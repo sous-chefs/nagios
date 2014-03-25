@@ -323,7 +323,8 @@ end
 service 'nagios' do
   service_name nagios_service_name
   supports :status => true, :restart => true, :reload => true
-  action [:enable, :start]
+  action :enable
+  notifies :restart, "service[nagios]", :delayed
 end
 
 # Add the NRPE check to monitor the Nagios server
