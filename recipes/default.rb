@@ -64,6 +64,8 @@ Chef::Log.info("Could not find users in the \"#{node['nagios']['users_databag']}
 expecting contacts other than pagerduty contacts, make sure the databag exists and, if you have set the \"users_databag_group\", tha
 t users in that group exist.") if sysadmins.empty?
 
+web_srv = node['nagios']['server']['web_server']
+
 case node['nagios']['server_auth_method']
 when 'openid'
   if web_srv == 'apache'

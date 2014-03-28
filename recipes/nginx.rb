@@ -24,7 +24,7 @@ end
 
 # This doesn't use value_for_platform_family so that it can specify version ranges - COOK-2891
 if platform_family?('rhel') || platform_family?('fedora')
-  node.set['nagios']['server']['nginx_dispatch'] = :both
+  node.set['nagios']['server']['nginx_dispatch'] = 'both'
   if node['platform_version'].to_f < 6
     node.set['nginx']['install_method'] = 'source'
   end

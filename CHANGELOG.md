@@ -2,6 +2,12 @@ nagios Cookbook CHANGELOG
 =========================
 This file is used to list changes made in each version of the nagios cookbook.
 
+
+v5.3.4
+------
+### Bug
+- Fixed two bugs that prevented Apache/NGINX web server setups from configuring correctly 
+
 v5.3.2
 ------
 ### Bug
