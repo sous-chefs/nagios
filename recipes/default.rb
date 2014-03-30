@@ -148,6 +148,9 @@ nodes.each do |n|
   hostgroups << n['os'] unless hostgroups.include?(n['os']) || n['os'].nil?
 end
 
+# Hack to deal with the nagios server being the first linux system
+hostgroups << node['os'] unless hostgroups.include?(node['os']) || node['os'].nil?
+
 nagios_bags         = NagiosDataBags.new
 services            = nagios_bags.get(node['nagios']['services_databag'])
 servicegroups       = nagios_bags.get(node['nagios']['servicegroups_databag'])
