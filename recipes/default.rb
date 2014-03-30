@@ -64,6 +64,9 @@ Chef::Log.info("Could not find users in the \"#{node['nagios']['users_databag']}
 expecting contacts other than pagerduty contacts, make sure the databag exists and, if you have set the \"users_databag_group\", tha
 t users in that group exist.") if sysadmins.empty?
 
+# install nagios service either from source of package
+include_recipe "nagios::server_#{node['nagios']['server']['install_method']}"
+
 web_srv = node['nagios']['server']['web_server']
 
 case node['nagios']['server_auth_method']
@@ -101,9 +104,6 @@ else
     variables(:sysadmins => sysadmins)
   end
 end
-
-# install nagios service either from source of package
-include_recipe "nagios::server_#{node['nagios']['server']['install_method']}"
 
 # find nodes to monitor.  Search in all environments if multi_environment_monitoring is enabled
 Chef::Log.info('Beginning search for nodes.  This may take some time depending on your node count')
