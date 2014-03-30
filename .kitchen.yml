@@ -30,7 +30,7 @@ platforms:
 suites:
  - name: server
    run_list:
-   - recipe[nagios::server]
+   - recipe[nagios::default]
    attributes:
      roles:
      - monitoring
