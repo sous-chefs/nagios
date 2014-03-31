@@ -110,6 +110,12 @@ define service {
 }
 
 define service {
+  name                            ftp-error-service
+  use                             passive-service
+  contact_groups                  ftp_error
+}
+
+define service {
   name                            mongo-service
   use                             default-service
   max_check_attempts              1
@@ -138,6 +144,12 @@ define service{
   notification_options            w,u,c,r 
   stalking_options                w,c,u 
 } 
+
+define service{
+  use                             passive-service
+  name                            passive-service-auto-healers
+  contact_groups                  auto-healers
+}
 
 define host {
    name       host-pnp

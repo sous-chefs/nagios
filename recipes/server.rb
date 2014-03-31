@@ -103,11 +103,14 @@ end
 region = node[:ec2][:placement_availability_zone].match(/^(.*-\d+)[^-]+$/)[1]
 
 if node[:monitored_region].nil? 
-  nodes = search(:node, "hostname:[* TO *] AND app_environment:#{node[:app_environment]} AND placement_availability_zone:#{region}* AND tealium_use_nagios:true")
+  #nodes = search(:node, "hostname:[* TO *] AND app_environment:#{node[:app_environment]} AND placement_availability_zone:#{region}* AND tealium_use_nagios:true")
+  nodes = search(:node, "app_environment:#{node[:app_environment]} AND placement_availability_zone:#{region}* AND tealium_use_nagios:true NOT domain:prod*")
 else
 
   #nodes1 = search(:node, "domain:prod* AND app_environment:production* AND placement_availability_zone:#{region}*")
   nodes1 = search(:node, "domain:prod* AND app_environment:production* AND placement_availability_zone:#{region}* AND tealium_use_nagios:true")
+
+Chef::Log.warn("***********Nodes are #{nodes1}*************")
  
   nodes = []
   nodes1.each do |n|
@@ -242,11 +245,11 @@ end
 domain = node[:domain]
 
 case domain
-when "prod1.us-w1"
+when "prod1.us-w1.int.ops.tlium.com"
   url = "us-west-1-vpc.nagios.ops.tlium.com/nagios3/"
-when "prod1.us-e1"
+when "prod1.us-e1.int.ops.tlium.com"
   url = "us-east-1-vpc.nagios.ops.tlium.com/nagios3/"
-when "prod1.eu-w1"
+when "prod1.eu-w1.int.ops.tlium.com"
   url = "eu-west-1-vpc.nagios.ops.tlium.com/nagios3/"
 when "us-west-1.compute.internal"
   url = "us-west-1.nagios.ops.tlium.com/nagios3/"
@@ -298,7 +301,7 @@ else
   uconnects = []
   search = search(:node, "domain:prod* AND app_environment:production* AND placement_availability_zone:#{region}*")
     search.each do |n|
-      if n.recipes.include?("uconnect::s2s_logger_plenv")
+      if n.recipes.include?("uconnect::s2s_logger_plenv") || n.recipes.include?("uconnect")
         uconnects << n
       end
     end

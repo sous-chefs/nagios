@@ -62,8 +62,8 @@ default['nagios']['server']['checksum'] = 'a5c693f9af22410cc17d6da9c0df9bd65c47d
 default['nagios']['notifications_enabled']   = 0
 default['nagios']['check_external_commands'] = true
 default['nagios']['default_contact_groups']  = %w(admins)
-default['nagios']['sysadmin_email']          = "root@localhost"
-default['nagios']['sysadmin_sms_email']      = "root@localhost"
+default['nagios']['sysadmin_email']          = "devops@tealium.com"
+default['nagios']['sysadmin_sms_email']      = "devops@tealium.com"
 default['nagios']['server_auth_method']      = "openid"
 
 # This setting is effectively sets the minimum interval (in seconds) nagios can handle.

@@ -46,6 +46,18 @@ define contact {
        pager                                    4cdb08b3737d4e648300ce5a87191bb9
 }
 
+define contact {
+       contact_name                             pagerduty_ftp_error
+       alias                                    PagerDuty Pseudo-Contact
+       service_notification_period              24x7
+       host_notification_period                 24x7
+       service_notification_options             w,u,c,r
+       host_notification_options                d,r
+       service_notification_commands            notify-service-by-pagerduty
+       host_notification_commands               notify-host-by-pagerduty
+       pager                                    45b11345461645a48bb84d591b526735
+}
+
 define command {
        command_name     notify-service-by-pagerduty
        command_line     /usr/lib/nagios/plugins/pagerduty_nagios.pl enqueue -f pd_nagios_object=service -f pd_description="$SERVICEDESC$ : $SERVICEOUTPUT$ : $HOSTALIAS$"

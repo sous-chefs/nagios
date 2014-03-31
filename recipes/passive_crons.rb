@@ -24,7 +24,8 @@ search(:node, search) do |nagios_node|
   nagios_server =  nagios_node['ipaddress']
 end
 
-if node.recipes.include?("uconnect::s2s_logger_plenv") && node[:tealium][:use_nagios] == true
+#if node.recipes.include?("uconnect::s2s_logger_plenv") && node[:tealium][:use_nagios] == true
+if node.recipes.include?("uconnect::s2s_logger_plenv") || node.roles.include?("uconnect_logger")
   nodesize = node[:ec2][:instance_type].split('.').last
   num_procs = node[:uconnect][:iron_processes][nodesize]
   Chef::Log.warn( "Node is #{nodesize}, and so num of procs is #{num_procs}" )
@@ -100,30 +101,33 @@ if node.roles.include?("hostname_eventstream") && node[:tealium][:use_nagios] ==
   end
 end
 
-if node.roles.include?("uconnect_logger") && node[:tealium][:use_nagios] == true
+#if node.roles.include?("uconnect_logger") && node[:tealium][:use_nagios] == true
+#
+#      cron "Check Rabbit Authentication" do
+#        minute "*/15"
+#        command "/bin/sleep `/usr/bin/expr $RANDOM \\% 90` &> /dev/null ; /usr/lib/nagios/plugins/check_log3_passive.pl -l #{node['nagios']['logfiles']['uconnect']['log_file']} -S 'Check Uconnect Rabbit Authentication' -s /tmp/rabbit_auth -p '#{node['nagios']['checks']['rabbit_auth']['pattern']}' -c 1 > /dev/null"
+#      end
+#
+#      cron "Check Rabbit Connection" do
+#        minute "*/15"
+#        command "/bin/sleep `/usr/bin/expr $RANDOM \\% 90` &> /dev/null ; /usr/lib/nagios/plugins/check_log3_passive.pl -l #{node['nagios']['logfiles']['uconnect']['log_file']} -S 'Check Uconnect Rabbit Connection' -s /tmp/rabbit_connection -p #{node['nagios']['checks']['rabbit_connection']['pattern']} -c 1 > /dev/null"
+#      end
+#
+#      template "/usr/lib/nagios/plugins/check_log3_passive.pl" do
+#        source "check_log3_passive.pl.erb"
+#        owner "root"
+#        group "root"
+#        mode 0755
+#        variables(
+#        :nagios_server => nagios_server
+#        )
+#      end
+#end
 
-      cron "Check Rabbit Authentication" do
-        minute "*/15"
-        command "/bin/sleep `/usr/bin/expr $RANDOM \\% 90` &> /dev/null ; /usr/lib/nagios/plugins/check_log3_passive.pl -l #{node['nagios']['logfiles']['uconnect']['log_file']} -S 'Check Uconnect Rabbit Authentication' -s /tmp/rabbit_auth -p '#{node['nagios']['checks']['rabbit_auth']['pattern']}' -c 1 > /dev/null"
-      end
-
-      cron "Check Rabbit Connection" do
-        minute "*/15"
-        command "/bin/sleep `/usr/bin/expr $RANDOM \\% 90` &> /dev/null ; /usr/lib/nagios/plugins/check_log3_passive.pl -l #{node['nagios']['logfiles']['uconnect']['log_file']} -S 'Check Uconnect Rabbit Connection' -s /tmp/rabbit_connection -p #{node['nagios']['checks']['rabbit_connection']['pattern']} -c 1 > /dev/null"
-      end
-
-      template "/usr/lib/nagios/plugins/check_log3_passive.pl" do
-        source "check_log3_passive.pl.erb"
-        owner "root"
-        group "root"
-        mode 0755
-        variables(
-        :nagios_server => nagios_server
-        )
-      end
-end
-
-if node.roles.include?("utui") && node[:tealium][:use_nagios] == true
+if node.roles.include?("utui")
+ 
+  Chef::Log.warn( "Node roles are #{node.roles}.")
+ 
   cron "Check UTUI Logs" do
     minute "*/15"
     command "/bin/sleep `/usr/bin/expr $RANDOM \\% 90` &> /dev/null ; /usr/lib/nagios/plugins/Check_UTUI_Logs.sh"
@@ -142,7 +146,7 @@ if node.roles.include?("utui") && node[:tealium][:use_nagios] == true
     group "root"
     mode 0755
     variables(
-      :nagios_server => "10.168.62.87"
+      :nagios_server => "10.168.13.173"
     )
   end
 end

@@ -22,9 +22,6 @@
 # limitations under the License.
 #
 
-include_recipe "nagios::passive_crons"
-include_recipe "nagios::sudoers"
-
 require 'fileutils'
 
 %w{libdatetime-format-builder-perl libfile-readbackwards-perl}.each do |pkg|
@@ -212,4 +209,6 @@ nagios_nrpecheck "check_users" do
   action :add
 end
 
+include_recipe "nagios::passive_crons"
+include_recipe "nagios::sudoers"
 include_recipe "nagios::nsca_client"

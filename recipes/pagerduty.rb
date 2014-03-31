@@ -49,11 +49,11 @@ domain = DNSHelpers.get_domain(node)
 Chef::Log.warn("THE DOMAIN IS #{domain}***********************************")
 
 case domain
-when "prod1.us-w1"
+when "prod1.us-w1.int.ops.tlium.com"
   region = "us_west_1_vpc"
-when "prod1.us-e1"
+when "prod1.us-e1.int.ops.tlium.com"
   region = "us_east_1_vpc"
-when "prod1.eu-w1"
+when "prod1.eu-w1.int.ops.tlium.com"
   region = "eu_west_1_vpc"
 when "us-west-1.compute.internal"
   region = "us_west_1"

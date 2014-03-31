@@ -100,7 +100,7 @@ command[check_dir_files]=<%= node['nagios']['plugin_dir'] %>/dircount.pl /data/s
 <% end %>
 
 
-<% if node.recipes.include?("uconnect::s2s_logger_plenv") %>
+<% if node.recipes.include?("uconnect::s2s_logger_plenv") || node.roles.include?("uconnect_logger") %>
 #check iron processes
 command[check_iron]=<%= node['nagios']['plugin_dir'] %>/check_procs -a "./s2s_httpd_iron.pl"
 command[check_iron_processor]=<%= node['nagios']['plugin_dir'] %>/check_procs -a "./s2s_httpd_iron_processor.pl"
