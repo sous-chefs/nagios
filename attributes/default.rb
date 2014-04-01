@@ -92,7 +92,12 @@ default['nagios']['ssl_req']       = '/C=US/ST=Several/L=Locality/O=Example/OU=O
 
 # nagios server name and webserver vname.  this can be changed to allow for the installation of icinga
 default['nagios']['server']['name']  = 'nagios'
-default['nagios']['server']['vname'] = 'nagios3'
+case node['platform_family']
+when 'rhel', 'fedora'
+  default['nagios']['server']['vname'] = 'nagios'
+else
+  default['nagios']['server']['vname'] = 'nagios3'
+end
 
 # for server from source installation
 default['nagios']['server']['url']      = 'http://prdownloads.sourceforge.net/sourceforge/nagios'
