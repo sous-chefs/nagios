@@ -49,6 +49,7 @@ when 'debian'
   default['nagios']['server']['service_name']   = 'nagios3'
   default['nagios']['server']['mail_command']   = '/usr/bin/mail'
 when 'rhel', 'fedora'
+  default['nagios']['conf']['p1_file']          = '/usr/sbin/p1.pl'
   # install via package on RHEL releases less than 6, otherwise use packages
   if node['platform_family'] == 'rhel' && node['platform_version'].to_i < 6
     default['nagios']['server']['install_method'] = 'source'
@@ -61,6 +62,7 @@ else
   default['nagios']['server']['install_method'] = 'source'
   default['nagios']['server']['service_name']   = 'nagios'
   default['nagios']['server']['mail_command']   = '/bin/mail'
+  default['nagios']['conf']['p1_file']          = "#{node['nagios']['home']}/p1.pl"
 end
 
 # directories
@@ -196,7 +198,6 @@ default['nagios']['conf']['service_check_timeout']    = 60
 default['nagios']['conf']['host_check_timeout']       = 30
 default['nagios']['conf']['process_performance_data'] = 0
 default['nagios']['conf']['date_format']              = 'iso8601'
-default['nagios']['conf']['p1_file']                  = "#{node['nagios']['home']}/p1.pl"
 default['nagios']['conf']['debug_level']              = 0
 default['nagios']['conf']['debug_verbosity']          = 1
 default['nagios']['conf']['debug_file']               = "#{node['nagios']['state_dir']}/#{node['nagios']['server']['name']}.debug"
