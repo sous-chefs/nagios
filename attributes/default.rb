@@ -49,7 +49,12 @@ when 'debian'
   default['nagios']['server']['service_name']   = 'nagios3'
   default['nagios']['server']['mail_command']   = '/usr/bin/mail'
 when 'rhel', 'fedora'
-  default['nagios']['server']['install_method'] = 'source'
+  # install via package on RHEL releases less than 6, otherwise use packages
+  if node['platform_family'] == 'rhel' && node['platform_version'].to_i < 6
+    default['nagios']['server']['install_method'] = 'source'
+  else
+    default['nagios']['server']['install_method'] = 'package'
+  end
   default['nagios']['server']['service_name']   = 'nagios'
   default['nagios']['server']['mail_command']   = '/bin/mail'
 else
