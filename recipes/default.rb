@@ -215,6 +215,15 @@ directory "#{node['nagios']['conf_dir']}/dist" do
   mode '0755'
 end
 
+
+# resource.cfg differs on RPM and tarball based systems
+when 'rhel', 'fedora'
+directory node['nagios']['resource_dir'] do
+  owner "root"
+  group node['nagios']['group']
+  mode '0750'
+end
+
 directory node['nagios']['state_dir'] do
   owner node['nagios']['user']
   group node['nagios']['group']

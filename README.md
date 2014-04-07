@@ -54,6 +54,7 @@ The following attributes are used for the Nagios server
 * `node['nagios']['server']['service_name']` - name of the service used for Nagios, default chosen by platform, debian/ubuntu "nagios3", redhat family "nagios", all others, "nagios"
 * `node['nagios']['home']` - Nagios main home directory, default "/usr/lib/nagios3"
 * `node['nagios']['conf_dir']` - location where main Nagios config lives, default "/etc/nagios3"
+* `node['nagios']['resource_dir']` - location for recources, default "/etc/nagios3"
 * `node['nagios']['config_dir']` - location where included configuration files live, default "/etc/nagios3/conf.d"
 * `node['nagios']['log_dir']` - location of Nagios logs, default "/var/log/nagios3"
 * `node['nagios']['cache_dir']` - location of cached data, default "/var/cache/nagios3"

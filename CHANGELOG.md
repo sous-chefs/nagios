@@ -3,6 +3,11 @@ nagios Cookbook CHANGELOG
 This file is used to list changes made in each version of the nagios cookbook.
 
 
+v5.3.5
+------
+### Bug
+- Add 'resource_dir' to template for RHEL package based deployment
+
 v5.3.4
 ------
 ### Bug
