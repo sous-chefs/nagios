@@ -219,7 +219,7 @@ end
 # resource.cfg differs on RPM and tarball based systems
 when 'rhel', 'fedora'
 directory node['nagios']['resource_dir'] do
-  owner "root"
+  owner 'root'
   group node['nagios']['group']
   mode '0750'
 end
