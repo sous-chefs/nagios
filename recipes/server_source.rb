@@ -116,6 +116,12 @@ end
 
 end
 
+directory ::File.join(node['nagios']['log_dir'], 'archives') do
+  owner node['nagios']['user']
+  group node['nagios']['group']
+  mode '0755'
+end
+
 directory "/usr/lib/#{node['nagios']['server']['vname']}" do
   owner node['nagios']['user']
   group node['nagios']['group']
