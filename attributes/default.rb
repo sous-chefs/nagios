@@ -42,12 +42,35 @@ else
   default['nagios']['plugin_dir'] = '/usr/lib/nagios/plugins'
 end
 
+# directories
+case node['platform_family']
+when 'rhel', 'fedora'
+  default['nagios']['home']          = '/var/spool/nagios'
+  default['nagios']['conf_dir']      = '/etc/nagios'
+  default['nagios']['config_dir']    = '/etc/nagios/conf.d'
+  default['nagios']['log_dir']       = '/var/log/nagios'
+  default['nagios']['cache_dir']     = '/var/log/nagios'
+  default['nagios']['state_dir']     = '/var/log/nagios'
+  default['nagios']['run_dir']       = '/var/run'
+  default['nagios']['docroot']       = '/usr/share/nagios/html'
+else
+  default['nagios']['home']          = '/usr/lib/nagios3'
+  default['nagios']['conf_dir']      = '/etc/nagios3'
+  default['nagios']['config_dir']    = '/etc/nagios3/conf.d'
+  default['nagios']['log_dir']       = '/var/log/nagios3'
+  default['nagios']['cache_dir']     = '/var/cache/nagios3'
+  default['nagios']['state_dir']     = '/var/lib/nagios3'
+  default['nagios']['run_dir']       = '/var/run/nagios3'
+  default['nagios']['docroot']       = '/usr/share/nagios3/htdocs'
+end
+
 # platform specific atttributes
 case node['platform_family']
 when 'debian'
   default['nagios']['server']['install_method'] = 'package'
   default['nagios']['server']['service_name']   = 'nagios3'
   default['nagios']['server']['mail_command']   = '/usr/bin/mail'
+  default['nagios']['conf']['p1_file']          = "#{node['nagios']['home']}/p1.pl"
 when 'rhel', 'fedora'
   default['nagios']['conf']['p1_file']          = '/usr/sbin/p1.pl'
   # install via package on RHEL releases less than 6, otherwise use packages
@@ -65,28 +88,8 @@ else
   default['nagios']['conf']['p1_file']          = "#{node['nagios']['home']}/p1.pl"
 end
 
-# directories
-case node['platform_family']
-when 'rhel', 'fedora'
-  default['nagios']['home']          = '/var/spool/nagios'
-  default['nagios']['conf_dir']      = '/etc/nagios'
-  default['nagios']['resource_dir']  = '/etc/nagios/private'
-  default['nagios']['config_dir']    = '/etc/nagios/conf.d'
-  default['nagios']['log_dir']       = '/var/log/nagios'
-  default['nagios']['cache_dir']     = '/var/log/nagios'
-  default['nagios']['state_dir']     = '/var/log/nagios'
-  default['nagios']['run_dir']       = '/var/run'
-  default['nagios']['docroot']       = '/usr/share/nagios/html'
-else
-  default['nagios']['home']          = '/usr/lib/nagios3'
-  default['nagios']['conf_dir']      = '/etc/nagios3'
-  default['nagios']['resource_dir']  = '/etc/nagios3'
-  default['nagios']['config_dir']    = '/etc/nagios3/conf.d'
-  default['nagios']['log_dir']       = '/var/log/nagios3'
-  default['nagios']['cache_dir']     = '/var/cache/nagios3'
-  default['nagios']['state_dir']     = '/var/lib/nagios3'
-  default['nagios']['run_dir']       = '/var/run/nagios3'
-  default['nagios']['docroot']       = '/usr/share/nagios3/htdocs'
+if node['nagios']['server']['install_method'] == 'source'
+  default['nagios']['conf']['p1_file'] = nil
 end
 
 # webserver configuration
