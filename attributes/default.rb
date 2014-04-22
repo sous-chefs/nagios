@@ -48,6 +48,7 @@ when 'debian'
   default['nagios']['server']['install_method'] = 'package'
   default['nagios']['server']['service_name']   = 'nagios3'
   default['nagios']['server']['mail_command']   = '/usr/bin/mail'
+  default['nagios']['conf']['p1_file']          = "#{node['nagios']['home']}/p1.pl"
 when 'rhel', 'fedora'
   default['nagios']['conf']['p1_file']          = '/usr/sbin/p1.pl'
   # install via package on RHEL releases less than 6, otherwise use packages
