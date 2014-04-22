@@ -142,7 +142,9 @@ high_host_flap_threshold=20.0
 date_format=<%= node['nagios']['conf']['date_format'] %>
 
 use_timezone=<%= node['nagios']['timezone'] %>
+<% if node['nagios']['conf']['p1_file'] %>
 p1_file=<%= node['nagios']['conf']['p1_file'] %>
+<% end %>
 enable_embedded_perl=1
 use_embedded_perl_implicitly=1
 
