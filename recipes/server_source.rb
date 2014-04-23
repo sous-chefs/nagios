@@ -27,7 +27,7 @@ include_recipe 'php::module_gd'
 
 # the source install of nagios from this recipe does not include embedded perl support
 # so unless the user explicitly set the p1_file attribute, we want to clear it
-node.set_unless['nagios']['conf']['p1_file'] = nil
+node.default['nagios']['conf']['p1_file'] = nil
 
 web_srv = node['nagios']['server']['web_server']
 
