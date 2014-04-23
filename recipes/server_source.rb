@@ -47,7 +47,7 @@ pkgs.each do |pkg|
 end
 
 user node['nagios']['user'] do
-  action :modify
+  action :create
 end
 
 group node['nagios']['group'] do
