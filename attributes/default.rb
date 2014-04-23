@@ -88,10 +88,6 @@ else
   default['nagios']['conf']['p1_file']          = "#{node['nagios']['home']}/p1.pl"
 end
 
-if node['nagios']['server']['install_method'] == 'source'
-  default['nagios']['conf']['p1_file'] = nil
-end
-
 # webserver configuration
 default['nagios']['timezone']      = 'UTC'
 default['nagios']['enable_ssl']    = false
