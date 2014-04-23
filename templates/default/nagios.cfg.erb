@@ -10,7 +10,7 @@ cfg_dir=<%= node['nagios']['config_dir'] %>
 object_cache_file=<%= node['nagios']['cache_dir'] %>/objects.cache
 precached_object_file=<%= node['nagios']['cache_dir'] %>/objects.precache
 
-resource_file=<%= node['nagios']['conf_dir'] %>/resource.cfg
+resource_file=<%= node['nagios']['resource_dir'] %>/resource.cfg
 status_file=<%= node['nagios']['cache_dir'] %>/status.dat
 status_update_interval=10
 <%= node['nagios']['server']['name'] %>_user=<%= node['nagios']['user'] %>
