@@ -59,7 +59,7 @@ group node['nagios']['group'] do
     node['nagios']['user'],
     web_srv == 'nginx' ? node['nginx']['user'] : node['apache']['user']
   ]
-  action :modify
+  action :create
 end
 
 version = node['nagios']['server']['version']
