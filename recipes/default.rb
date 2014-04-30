@@ -42,7 +42,7 @@ when 'apache'
   web_user = node['apache']['user']
   web_group = node['apache']['group'] || web_user
 else
-  Chef::Log.fatal('Unknown web server option provided for Nagios server: ' <<
+  Chef::Log.fatal('Unknown web server option provided for Nagios server: ' \
                   "#{node['nagios']['server']['web_server']} provided. Allowed: 'nginx' or 'apache'")
   fail 'Unknown web server option provided for Nagios server'
 end
@@ -255,7 +255,7 @@ bash 'Create SSL Certificates' do
   openssl req -subj "#{node['nagios']['ssl_req']}" -new -x509 -nodes -sha1 -days 3650 -key nagios-server.key > nagios-server.crt
   cat nagios-server.key nagios-server.crt > nagios-server.pem
   EOH
-  not_if { ::File.exists?(node['nagios']['ssl_cert_file']) }
+  not_if { ::File.exist?(node['nagios']['ssl_cert_file']) }
 end
 
 nagios_conf node['nagios']['server']['name'] do
