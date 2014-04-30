@@ -16,6 +16,8 @@ This cookbook relies heavily on multiple data bags. See __Data Bag__ below.
 
 The system running this cookbooks should have a role named 'monitoring' so that NRPE clients can authorize monitoring from that system. This role name is configurable via an attribute. See __Attributes__ below.
 
+The functionality that was previously in the nagios::client recipe has been moved to its own NRPE cookbook at https://github.com/tas50/chef-nrpe
+
 ### Platform
 * Debian 6.X, 7.X
 * Ubuntu 10.04, 12.04, 13.04
@@ -34,21 +36,13 @@ The system running this cookbooks should have a role named 'monitoring' so that 
 
 Attributes
 ----------
-### default
-The following attributes are used by both client and server recipes.
 
+### default
 * `node['nagios']['user']` - Nagios user, default 'nagios'.
 * `node['nagios']['group']` - Nagios group, default 'nagios'.
 * `node['nagios']['plugin_dir']` - location where Nagios plugins go, default '/usr/lib/nagios/plugins'.
 * `node['nagios']['multi_environment_monitoring']` - Chef server will monitor hosts in all environments, not just its own, default 'false'
 * `node['nagios']['monitoring_interface']` - If set, will use the specified interface for all nagios monitoring network traffic. Defaults to `nil`
-
-### client
-The functionality that was previously in the nagios::client recipe has been moved to its own NRPE cookbook at https://github.com/tas50/chef-nrpe
-
-
-### server
-The following attributes are used for the Nagios server
 
 * `node['nagios']['server']['install_method']` - whether to install from package or source. Default chosen by platform based on known packages available for Nagios: debian/ubuntu 'package', redhat/centos/fedora/scientific: source
 * `node['nagios']['server']['service_name']` - name of the service used for Nagios, default chosen by platform, debian/ubuntu "nagios3", redhat family "nagios", all others, "nagios"
