@@ -14,7 +14,7 @@ Because of the heavy use of search, this recipe will not work with Chef Solo, as
 
 This cookbook relies heavily on multiple data bags. See __Data Bag__ below.
 
-The system running the 'server' recipe should have a role named 'monitoring' so that NRPE clients can authorize monitoring from that system. This role name is configurable via an attribute. See __Attributes__ below.
+The system running this cookbooks should have a role named 'monitoring' so that NRPE clients can authorize monitoring from that system. This role name is configurable via an attribute. See __Attributes__ below.
 
 ### Platform
 * Debian 6.X, 7.X
