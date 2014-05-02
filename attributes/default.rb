@@ -22,6 +22,7 @@
 
 # Allow a Nagios server to monitor hosts in multiple environments.
 default['nagios']['multi_environment_monitoring'] = false
+default['nagios']['multi_environments'] = []
 
 default['nagios']['user']  = 'nagios'
 default['nagios']['group'] = 'nagios'
