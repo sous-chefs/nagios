@@ -110,7 +110,7 @@ Chef::Log.info('Beginning search for nodes.  This may take some time depending o
 nodes = []
 hostgroups = []
 multi_env = node['nagios']['multi_environments']
-multi_env_search = multi_env.empty? ? "" : " AND (chef_environment:"+multi_env.join(" OR chef_environment:")+")"
+multi_env_search = multi_env.empty? ? '' : ' AND (chef_environment:' + multi_env.join(' OR chef_environment:') + ')'
 
 if node['nagios']['multi_environment_monitoring']
   nodes = search(:node, "name:*#{multi_env_search}")
