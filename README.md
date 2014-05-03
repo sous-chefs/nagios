@@ -509,28 +509,12 @@ default_attributes(
 $ knife role from file monitoring.rb
 ```
 
-
-Definitions
------------
-### nagios\_conf
-This definition is used to drop in a configuration file in the base Nagios configuration directory's conf.d. This can be used for customized configurations for various services.
-
-
-Libraries
----------
-### default
-The library included with the cookbook provides some helper methods used in templates.
-
-* `nagios_boolean`
-* `nagios_interval` - calculates interval based on interval length and a given number of seconds.
-* `nagios_attr` - retrieves a nagios attribute from the node.
-
 Usage
 -----
 ### server setup
 Create a role named '`monitoring`', and add the nagios server recipe to the `run_list`. See __Monitoring Role__ above for an example.
 
-Apply the Nagios client recipe to nodes in order to install the NRPE client
+Apply the nrpe cookbook to nodes in order to install the NRPE client
 
 By default the Nagios server will only monitor systems in its same environment. To change this set the `multi_environment_monitoring` attribute. See __Attributes__
 
@@ -539,7 +523,7 @@ Create data bag items in the `users` data bag for each administer you would like
 At this point you now have a minimally functional Nagios server, however the server will lack any service checks outside of the single Nagios Server health check.
 
 ### defining checks
-NRPE commands are defined in recipes using the nrpecheck LWRP provider. For base system monitoring such as load, ssh, memory, etc you may want to create a cookbook in your environment that defines each monitoring command via the LWRP. See the examples folder for an example of base monitoring.
+NRPE commands are defined in recipes using the nrpe_check LWRP provider in the nrpe cookbooks. For base system monitoring such as load, ssh, memory, etc you may want to create a cookbook in your environment that defines each monitoring command via the LWRP.
 
 With NRPE commands created using the LWRP you will need to define Nagios services to use those commands. These services are defined using the `nagios_services` data bag and applied to roles and/or environments. See __Services__
 
