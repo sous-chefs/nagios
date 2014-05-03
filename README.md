@@ -495,7 +495,7 @@ Create a role to use for the monitoring server. The role name should match the v
 name 'monitoring'
 description 'Monitoring server'
 run_list(
-  'recipe[nagios::server]'
+  'recipe[nagios::default]'
 )
 
 default_attributes(
@@ -559,7 +559,7 @@ Add override_attributes to your `monitoring` role:
 name 'monitoring'
 description 'Monitoring Server'
 run_list(
-  'recipe[nagios::server]',
+  'recipe[nagios:default]',
   'recipe[postfix]'
 )
 
@@ -581,14 +581,14 @@ $ knife role from file monitoring.rb
 License & Authors
 -----------------
 - Author:: Joshua Sierles <joshua@37signals.com>
-- Author:: Nathan Haneysmith <nathan@opscode.com>
-- Author:: Joshua Timberman <joshua@opscode.com>
-- Author:: Seth Chisamore <schisamo@opscode.com>
+- Author:: Nathan Haneysmith <nathan@getchef.com>
+- Author:: Joshua Timberman <joshua@getchef.com>
+- Author:: Seth Chisamore <schisamo@getchef.com>
 - Author:: Tim Smith <tsmith84@gmail.com>
 
 ```text
 Copyright 2009, 37signals
-Copyright 2009-2013, Chef, Inc
+Copyright 2009-2013, Chef Software, Inc
 Copyright 2012, Webtrends Inc.
 Copyright 2013-2014, Limelight Networks, Inc.
 
