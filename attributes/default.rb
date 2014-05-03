@@ -1,10 +1,10 @@
 #
-# Author:: Seth Chisamore <schisamo@opscode.com>
+# Author:: Seth Chisamore <schisamo@getchef.com>
 # Author:: Tim Smith <tsmith@limelight.com>
 # Cookbook Name:: nagios
 # Attributes:: default
 #
-# Copyright 2011-2013, Opscode, Inc
+# Copyright 2011-2013, Chef Software, Inc.
 # Copyright 2013-2014, Limelight Networks, Inc
 #
 # Licensed under the Apache License, Version 2.0 (the "License");

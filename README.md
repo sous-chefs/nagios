@@ -584,7 +584,7 @@ License & Authors
 - Author:: Nathan Haneysmith <nathan@getchef.com>
 - Author:: Joshua Timberman <joshua@getchef.com>
 - Author:: Seth Chisamore <schisamo@getchef.com>
-- Author:: Tim Smith <tsmith84@gmail.com>
+- Author:: Tim Smith <tsmith@limelight.com>
 
 ```text
 Copyright 2009, 37signals
