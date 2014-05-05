@@ -66,7 +66,7 @@ show_context_help=<%= node['nagios']['cgi']['show_context_help'] %>
 # authentication (bad idea), while any other value will make them
 # use the authentication functions (the default).
 
-use_authentication=0
+use_authentication=1
 
 # DEFAULT USER
 # Setting this variable will define a default user name that can
@@ -82,7 +82,7 @@ use_authentication=0
 # define this variable, anyone who has not authenticated to the web
 # server will inherit all rights you assign to this user!
 
-default_user_name=sal
+#default_user_name=guest
 
 # SYSTEM/PROCESS INFORMATION ACCESS
 # This option is a comma-delimited list of all usernames that
