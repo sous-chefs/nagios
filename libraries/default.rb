@@ -45,8 +45,25 @@ end
 # if the cloud IP is nil then use the standard IP address attribute.  This is a work around
 #   for OHAI incorrectly identifying systems on Cisco hardware as being in Rackspace
 def ip_to_monitor(monitored_host, server_host = node)
+  # if monitoring_address is specified implicitly use that
+  attrib_value = nil
+  if !node['nagios']['monitoring_attribute'].nil?
+    attrib_value=monitored_host
+    path_ary = node['nagios']['monitoring_attribute'].split('.')
+    path_ary.each do |k|
+      if attrib_value and attrib_value.has_key?(k)
+        attrib_value = attrib_value[k]
+      elsif attrib_value and attrib_value.respond_to? k
+        attrib_value = attrib_value.send(k)
+      else
+        attrib_value = nil
+      end
+    end
+  end
+  if attrib_value
+    attrib_value
   # if interface to monitor is specified implicitly use that
-  if node['nagios']['monitoring_interface'] && node['network']["ipaddress_#{node['nagios']['monitoring_interface']}"]
+  elsif node['nagios']['monitoring_interface'] && node['network']["ipaddress_#{node['nagios']['monitoring_interface']}"]
     node['network']["ipaddress_#{node['nagios']['monitoring_interface']}"]
   # if server is not in the cloud and the monitored host is
   elsif server_host['cloud'].nil? && !monitored_host['cloud'].nil?

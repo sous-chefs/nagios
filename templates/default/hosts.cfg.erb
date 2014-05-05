@@ -30,6 +30,18 @@ define host {
   hostgroups all,<%= (n['roles'] & @hostgroups).sort.join(",") %>,<%= n['os'] %>
   <% end -%>
   <% end -%>
+  <% # support for disabling alerts based on node settings.
+  # State information within nagios itself will override this attribute
+  if n['nagios'].nil?
+    notifications = "1"
+  else
+    if n['nagios']['host_notifications_enabled'] == 0
+      notifications = "0"
+    else
+      notifications = "1"
+    end
+  end %>
+  notifications_enabled <%= notifications %>
 }
 <% end -%>
 <% end -%>
