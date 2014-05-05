@@ -1,10 +1,10 @@
 #
-# Author:: Seth Chisamore <schisamo@opscode.com>
+# Author:: Seth Chisamore <schisamo@getchef.com>
 # Author:: Tim Smith <tsmith@limelight.com>
 # Cookbook Name:: nagios
 # Recipe:: server_package
 #
-# Copyright 2011-2013, Opscode, Inc
+# Copyright 2011-2013, Chef Software, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -22,7 +22,7 @@
 case node['platform_family']
 when 'rhel', 'fedora'
   unless platform?('fedora') && node['platform_version'] < 17
-    include_recipe 'yum-epel' # setup epel old rhel and pre Fedora 17
+    include_recipe 'yum-epel' # setup epel on old rhel and pre Fedora 17
   end
 when 'debian'
   # Nagios package requires to enter the admin password

@@ -1,10 +1,10 @@
 #
-# Author:: Seth Chisamore <schisamo@opscode.com>
+# Author:: Seth Chisamore <schisamo@getchef.com>
 # Author:: Tim Smith <tsmith@limelight.com>
 # Cookbook Name:: nagios
 # Attributes:: default
 #
-# Copyright 2011-2013, Opscode, Inc
+# Copyright 2011-2013, Chef Software, Inc.
 # Copyright 2013-2014, Limelight Networks, Inc
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -45,22 +45,6 @@ else
   default['nagios']['plugin_dir'] = '/usr/lib/nagios/plugins'
 end
 
-# platform specific atttributes
-case node['platform_family']
-when 'debian'
-  default['nagios']['server']['install_method'] = 'package'
-  default['nagios']['server']['service_name']   = 'nagios3'
-  default['nagios']['server']['mail_command']   = '/usr/bin/mail'
-when 'rhel', 'fedora'
-  default['nagios']['server']['install_method'] = 'source'
-  default['nagios']['server']['service_name']   = 'nagios'
-  default['nagios']['server']['mail_command']   = '/bin/mail'
-else
-  default['nagios']['server']['install_method'] = 'source'
-  default['nagios']['server']['service_name']   = 'nagios'
-  default['nagios']['server']['mail_command']   = '/bin/mail'
-end
-
 # directories
 case node['platform_family']
 when 'rhel', 'fedora'
@@ -83,6 +67,30 @@ else
   default['nagios']['docroot']       = '/usr/share/nagios3/htdocs'
 end
 
+# platform specific atttributes
+case node['platform_family']
+when 'debian'
+  default['nagios']['server']['install_method'] = 'package'
+  default['nagios']['server']['service_name']   = 'nagios3'
+  default['nagios']['server']['mail_command']   = '/usr/bin/mail'
+  default['nagios']['conf']['p1_file']          = "#{node['nagios']['home']}/p1.pl"
+when 'rhel', 'fedora'
+  default['nagios']['conf']['p1_file']          = '/usr/sbin/p1.pl'
+  # install via package on RHEL releases less than 6, otherwise use packages
+  if node['platform_family'] == 'rhel' && node['platform_version'].to_i < 6
+    default['nagios']['server']['install_method'] = 'source'
+  else
+    default['nagios']['server']['install_method'] = 'package'
+  end
+  default['nagios']['server']['service_name']   = 'nagios'
+  default['nagios']['server']['mail_command']   = '/bin/mail'
+else
+  default['nagios']['server']['install_method'] = 'source'
+  default['nagios']['server']['service_name']   = 'nagios'
+  default['nagios']['server']['mail_command']   = '/bin/mail'
+  default['nagios']['conf']['p1_file']          = "#{node['nagios']['home']}/p1.pl"
+end
+
 # webserver configuration
 default['nagios']['timezone']      = 'UTC'
 default['nagios']['enable_ssl']    = false
@@ -95,7 +103,12 @@ default['nagios']['ssl_req']       = '/C=US/ST=Several/L=Locality/O=Example/OU=O
 
 # nagios server name and webserver vname.  this can be changed to allow for the installation of icinga
 default['nagios']['server']['name']  = 'nagios'
-default['nagios']['server']['vname'] = 'nagios3'
+case node['platform_family']
+when 'rhel', 'fedora'
+  default['nagios']['server']['vname'] = 'nagios'
+else
+  default['nagios']['server']['vname'] = 'nagios3'
+end
 
 # for server from source installation
 default['nagios']['server']['url']      = 'http://prdownloads.sourceforge.net/sourceforge/nagios'
@@ -104,7 +117,12 @@ default['nagios']['server']['checksum'] = 'ca9dd68234fa090b3c35ecc8767b2c9eb7439
 default['nagios']['server']['src_dir'] = 'nagios'
 
 # for server from packages installation
-default['nagios']['server']['packages'] = %w(nagios3 nagios-nrpe-plugin nagios-images)
+case node['platform_family']
+when 'rhel', 'fedora'
+  default['nagios']['server']['packages'] = %w(nagios nagios-plugins-nrpe)
+else
+  default['nagios']['server']['packages'] = %w(nagios3 nagios-nrpe-plugin nagios-images)
+end
 
 default['nagios']['notifications_enabled']         = 0
 default['nagios']['execute_service_checks']        = 1
@@ -185,7 +203,6 @@ default['nagios']['conf']['service_check_timeout']    = 60
 default['nagios']['conf']['host_check_timeout']       = 30
 default['nagios']['conf']['process_performance_data'] = 0
 default['nagios']['conf']['date_format']              = 'iso8601'
-default['nagios']['conf']['p1_file']                  = "#{node['nagios']['home']}/p1.pl"
 default['nagios']['conf']['debug_level']              = 0
 default['nagios']['conf']['debug_verbosity']          = 1
 default['nagios']['conf']['debug_file']               = "#{node['nagios']['state_dir']}/#{node['nagios']['server']['name']}.debug"

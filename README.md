@@ -14,7 +14,9 @@ Because of the heavy use of search, this recipe will not work with Chef Solo, as
 
 This cookbook relies heavily on multiple data bags. See __Data Bag__ below.
 
-The system running the 'server' recipe should have a role named 'monitoring' so that NRPE clients can authorize monitoring from that system. This role name is configurable via an attribute. See __Attributes__ below.
+The system running this cookbooks should have a role named 'monitoring' so that NRPE clients can authorize monitoring from that system. This role name is configurable via an attribute. See __Attributes__ below.
+
+The functionality that was previously in the nagios::client recipe has been moved to its own NRPE cookbook at https://github.com/tas50/chef-nrpe
 
 ### Platform
 * Debian 6.X, 7.X
@@ -34,9 +36,8 @@ The system running the 'server' recipe should have a role named 'monitoring' so 
 
 Attributes
 ----------
-### default
-The following attributes are used by both client and server recipes.
 
+### default
 * `node['nagios']['user']` - Nagios user, default 'nagios'.
 * `node['nagios']['group']` - Nagios group, default 'nagios'.
 * `node['nagios']['plugin_dir']` - location where Nagios plugins go, default '/usr/lib/nagios/plugins'.
@@ -44,17 +45,11 @@ The following attributes are used by both client and server recipes.
 * `node['nagios']['monitoring_attribute']` - If set, will use the specified attribute of the node as the monitored IP. Defaults to `nil`
 * `node['nagios']['monitoring_interface']` - If set, will use the specified interface for all nagios monitoring network traffic. Defaults to `nil`
 
-### client
-The functionality that was previously in the nagios::client recipe has been moved to its own NRPE cookbook at https://github.com/tas50/chef-nrpe
-
-
-### server
-The following attributes are used for the Nagios server
-
 * `node['nagios']['server']['install_method']` - whether to install from package or source. Default chosen by platform based on known packages available for Nagios: debian/ubuntu 'package', redhat/centos/fedora/scientific: source
 * `node['nagios']['server']['service_name']` - name of the service used for Nagios, default chosen by platform, debian/ubuntu "nagios3", redhat family "nagios", all others, "nagios"
 * `node['nagios']['home']` - Nagios main home directory, default "/usr/lib/nagios3"
 * `node['nagios']['conf_dir']` - location where main Nagios config lives, default "/etc/nagios3"
+* `node['nagios']['resource_dir']` - location for recources, default "/etc/nagios3"
 * `node['nagios']['config_dir']` - location where included configuration files live, default "/etc/nagios3/conf.d"
 * `node['nagios']['log_dir']` - location of Nagios logs, default "/var/log/nagios3"
 * `node['nagios']['cache_dir']` - location of cached data, default "/var/cache/nagios3"
@@ -502,7 +497,7 @@ Create a role to use for the monitoring server. The role name should match the v
 name 'monitoring'
 description 'Monitoring server'
 run_list(
-  'recipe[nagios::server]'
+  'recipe[nagios::default]'
 )
 
 default_attributes(
@@ -516,28 +511,12 @@ default_attributes(
 $ knife role from file monitoring.rb
 ```
 
-
-Definitions
------------
-### nagios\_conf
-This definition is used to drop in a configuration file in the base Nagios configuration directory's conf.d. This can be used for customized configurations for various services.
-
-
-Libraries
----------
-### default
-The library included with the cookbook provides some helper methods used in templates.
-
-* `nagios_boolean`
-* `nagios_interval` - calculates interval based on interval length and a given number of seconds.
-* `nagios_attr` - retrieves a nagios attribute from the node.
-
 Usage
 -----
 ### server setup
 Create a role named '`monitoring`', and add the nagios server recipe to the `run_list`. See __Monitoring Role__ above for an example.
 
-Apply the Nagios client recipe to nodes in order to install the NRPE client
+Apply the nrpe cookbook to nodes in order to install the NRPE client
 
 By default the Nagios server will only monitor systems in its same environment. To change this set the `multi_environment_monitoring` attribute. See __Attributes__
 
@@ -546,7 +525,7 @@ Create data bag items in the `users` data bag for each administer you would like
 At this point you now have a minimally functional Nagios server, however the server will lack any service checks outside of the single Nagios Server health check.
 
 ### defining checks
-NRPE commands are defined in recipes using the nrpecheck LWRP provider. For base system monitoring such as load, ssh, memory, etc you may want to create a cookbook in your environment that defines each monitoring command via the LWRP. See the examples folder for an example of base monitoring.
+NRPE commands are defined in recipes using the nrpe_check LWRP provider in the nrpe cookbooks. For base system monitoring such as load, ssh, memory, etc you may want to create a cookbook in your environment that defines each monitoring command via the LWRP.
 
 With NRPE commands created using the LWRP you will need to define Nagios services to use those commands. These services are defined using the `nagios_services` data bag and applied to roles and/or environments. See __Services__
 
@@ -566,7 +545,7 @@ Add override_attributes to your `monitoring` role:
 name 'monitoring'
 description 'Monitoring Server'
 run_list(
-  'recipe[nagios::server]',
+  'recipe[nagios:default]',
   'recipe[postfix]'
 )
 
@@ -588,14 +567,14 @@ $ knife role from file monitoring.rb
 License & Authors
 -----------------
 - Author:: Joshua Sierles <joshua@37signals.com>
-- Author:: Nathan Haneysmith <nathan@opscode.com>
-- Author:: Joshua Timberman <joshua@opscode.com>
-- Author:: Seth Chisamore <schisamo@opscode.com>
-- Author:: Tim Smith <tsmith84@gmail.com>
+- Author:: Nathan Haneysmith <nathan@getchef.com>
+- Author:: Joshua Timberman <joshua@getchef.com>
+- Author:: Seth Chisamore <schisamo@getchef.com>
+- Author:: Tim Smith <tsmith@limelight.com>
 
 ```text
 Copyright 2009, 37signals
-Copyright 2009-2013, Chef, Inc
+Copyright 2009-2013, Chef Software, Inc
 Copyright 2012, Webtrends Inc.
 Copyright 2013-2014, Limelight Networks, Inc.
 

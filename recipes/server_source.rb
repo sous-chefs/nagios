@@ -1,10 +1,10 @@
 #
-# Author:: Seth Chisamore <schisamo@opscode.com>
+# Author:: Seth Chisamore <schisamo@getchef.com>
 # Author:: Tim Smith <tsmith@limelight.com>
 # Cookbook Name:: nagios
 # Recipe:: server_source
 #
-# Copyright 2011-2013, Opscode, Inc
+# Copyright 2011-2013, Chef Software, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -24,6 +24,10 @@
 include_recipe 'build-essential'
 include_recipe 'php::default'
 include_recipe 'php::module_gd'
+
+# the source install of nagios from this recipe does not include embedded perl support
+# so unless the user explicitly set the p1_file attribute, we want to clear it
+node.default['nagios']['conf']['p1_file'] = nil
 
 web_srv = node['nagios']['server']['web_server']
 
@@ -47,7 +51,7 @@ pkgs.each do |pkg|
 end
 
 user node['nagios']['user'] do
-  action :modify
+  action :create
 end
 
 group node['nagios']['group'] do
@@ -55,7 +59,7 @@ group node['nagios']['group'] do
     node['nagios']['user'],
     web_srv == 'nginx' ? node['nginx']['user'] : node['apache']['user']
   ]
-  action :modify
+  action :create
 end
 
 version = node['nagios']['server']['version']
@@ -114,6 +118,12 @@ end
     mode '0755'
   end
 
+end
+
+directory ::File.join(node['nagios']['log_dir'], 'archives') do
+  owner node['nagios']['user']
+  group node['nagios']['group']
+  mode '0755'
 end
 
 directory "/usr/lib/#{node['nagios']['server']['vname']}" do

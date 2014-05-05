@@ -1,14 +1,14 @@
 #
 # Author:: Joshua Sierles <joshua@37signals.com>
-# Author:: Joshua Timberman <joshua@opscode.com>
-# Author:: Nathan Haneysmith <nathan@opscode.com>
-# Author:: Seth Chisamore <schisamo@opscode.com>
+# Author:: Joshua Timberman <joshua@getchef.com>
+# Author:: Nathan Haneysmith <nathan@getchef.com>
+# Author:: Seth Chisamore <schisamo@getchef.com>
 # Author:: Tim Smith <tsmith@limelight.com>
 # Cookbook Name:: nagios
 # Recipe:: default
 #
 # Copyright 2009, 37signals
-# Copyright 2009-2013, Opscode, Inc
+# Copyright 2009-2013, Chef Software, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -42,7 +42,7 @@ when 'apache'
   web_user = node['apache']['user']
   web_group = node['apache']['group'] || web_user
 else
-  Chef::Log.fatal('Unknown web server option provided for Nagios server: ' <<
+  Chef::Log.fatal('Unknown web server option provided for Nagios server: ' \
                   "#{node['nagios']['server']['web_server']} provided. Allowed: 'nginx' or 'apache'")
   fail 'Unknown web server option provided for Nagios server'
 end
@@ -63,6 +63,11 @@ end
 Chef::Log.info("Could not find users in the \"#{node['nagios']['users_databag']}\" databag with the \"#{group}\" group.  If you are
 expecting contacts other than pagerduty contacts, make sure the databag exists and, if you have set the \"users_databag_group\", tha
 t users in that group exist.") if sysadmins.empty?
+
+# install nagios service either from source of package
+include_recipe "nagios::server_#{node['nagios']['server']['install_method']}"
+
+web_srv = node['nagios']['server']['web_server']
 
 case node['nagios']['server_auth_method']
 when 'openid'
@@ -100,9 +105,6 @@ else
   end
 end
 
-# install nagios service either from source of package
-include_recipe "nagios::server_#{node['nagios']['server']['install_method']}"
-
 # find nodes to monitor.  Search in all environments if multi_environment_monitoring is enabled
 Chef::Log.info('Beginning search for nodes.  This may take some time depending on your node count')
 nodes = []
@@ -134,7 +136,7 @@ end
 # if using multi environment monitoring add all environments to the array of hostgroups
 if node['nagios']['multi_environment_monitoring']
   search(:environment, '*:*') do |e|
-    hostgroups << e.name
+    hostgroups << e.name unless hostgroups.include?(e.name)
     nodes.select { |n| n.chef_environment == e.name }.each do |n|
       service_hosts[e.name] = n[node['nagios']['host_name_attribute']]
     end
@@ -145,6 +147,9 @@ end
 nodes.each do |n|
   hostgroups << n['os'] unless hostgroups.include?(n['os']) || n['os'].nil?
 end
+
+# Hack to deal with the nagios server being the first linux system
+hostgroups << node['os'] unless hostgroups.include?(node['os']) || node['os'].nil?
 
 nagios_bags         = NagiosDataBags.new
 services            = nagios_bags.get(node['nagios']['services_databag'])
@@ -210,6 +215,15 @@ directory "#{node['nagios']['conf_dir']}/dist" do
   mode '0755'
 end
 
+# resource.cfg differs on RPM and tarball based systems
+if node['platform_family'] == 'rhel' || node['platform_family'] == 'fedora'
+  directory node['nagios']['resource_dir'] do
+    owner 'root'
+    group node['nagios']['group']
+    mode '0750'
+  end
+end
+
 directory node['nagios']['state_dir'] do
   owner node['nagios']['user']
   group node['nagios']['group']
@@ -241,7 +255,7 @@ bash 'Create SSL Certificates' do
   openssl req -subj "#{node['nagios']['ssl_req']}" -new -x509 -nodes -sha1 -days 3650 -key nagios-server.key > nagios-server.crt
   cat nagios-server.key nagios-server.crt > nagios-server.pem
   EOH
-  not_if { ::File.exists?(node['nagios']['ssl_cert_file']) }
+  not_if { ::File.exist?(node['nagios']['ssl_cert_file']) }
 end
 
 nagios_conf node['nagios']['server']['name'] do

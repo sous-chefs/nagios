@@ -7,7 +7,7 @@ define host {
   use server
   address <%= (node['network']["ipaddress_#{node['nagios']['monitoring_interface']}"] || node['ipaddress']) %>
   host_name <%= node['nagios']['server']['normalize_hostname'] ? node[node['nagios']['host_name_attribute']].downcase : node[node['nagios']['host_name_attribute']] %>
-  hostgroups <% if node['nagios']['multi_environment_monitoring'] -%><%= node.chef_environment %>,<% end -%>all,<%= node['os'] %>,<%= node['roles'].sort.join(",") %><% if !node['roles'].include?(node['nagios']['server_role']) %>,<%= node['nagios']['server_role'] %><% end -%>
+  hostgroups <% if node['nagios']['multi_environment_monitoring'] -%><%= node.chef_environment %>,<% end -%>all,<%= node['os'] %><% unless node['roles'].empty? -%>,<%= node['roles'].sort.join(",") %><% end -%>
 }
 
 <% @nodes.each do |n| -%>
