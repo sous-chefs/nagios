@@ -111,7 +111,7 @@ nodes = []
 hostgroups = []
 
 if node['nagios']['multi_environment_monitoring']
-  nodes = search(:node, 'name:* AND NOT chef_environment:"#{node["nagios"]["exclude_environment_string"]}*"')
+  nodes = search(:node, 'name:* AND NOT chef_environment:local*')
 else
   nodes = search(:node, "name:* AND chef_environment:#{node.chef_environment}")
 end
