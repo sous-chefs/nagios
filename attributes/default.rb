@@ -29,6 +29,9 @@ default['nagios']['group'] = 'nagios'
 # Allow specifying an interface to use for monitoring traffic
 default['nagios']['monitoring_interface'] = nil
 
+# Allow specifying the monitoring attribute
+default['nagios']['monitoring_attribute'] = nil
+
 case node['platform_family']
 when 'debian'
   default['nagios']['plugin_dir'] = '/usr/lib/nagios/plugins'
@@ -47,6 +50,7 @@ case node['platform_family']
 when 'rhel', 'fedora'
   default['nagios']['home']          = '/var/spool/nagios'
   default['nagios']['conf_dir']      = '/etc/nagios'
+  default['nagios']['resource_dir']      = '/etc/nagios'
   default['nagios']['config_dir']    = '/etc/nagios/conf.d'
   default['nagios']['log_dir']       = '/var/log/nagios'
   default['nagios']['cache_dir']     = '/var/log/nagios'
@@ -56,6 +60,7 @@ when 'rhel', 'fedora'
 else
   default['nagios']['home']          = '/usr/lib/nagios3'
   default['nagios']['conf_dir']      = '/etc/nagios3'
+  default['nagios']['resource_dir']      = '/etc/nagios3'
   default['nagios']['config_dir']    = '/etc/nagios3/conf.d'
   default['nagios']['log_dir']       = '/var/log/nagios3'
   default['nagios']['cache_dir']     = '/var/cache/nagios3'
@@ -174,12 +179,13 @@ default['nagios']['interval_length'] = 1
 default['nagios']['default_host']['flap_detection']        = true
 default['nagios']['default_host']['check_period']          = '24x7'
 # Provide all interval values in seconds
-default['nagios']['default_host']['check_interval']        = 15
-default['nagios']['default_host']['retry_interval']        = 15
-default['nagios']['default_host']['max_check_attempts']    = 1
-default['nagios']['default_host']['check_command']         = 'check-host-alive'
-default['nagios']['default_host']['notification_interval'] = 300
-default['nagios']['default_host']['notification_options']  = 'd,u,r'
+default['nagios']['default_host']['check_interval']         = 15
+default['nagios']['default_host']['retry_interval']         = 15
+default['nagios']['default_host']['max_check_attempts']     = 1
+default['nagios']['default_host']['check_command']          = 'check-host-alive'
+default['nagios']['default_host']['notification_interval']  = 300
+default['nagios']['default_host']['notification_options']   = 'd,u,r'
+default['nagios']['default_host']['notifications_disabled'] = 0
 
 default['nagios']['default_service']['check_interval']        = 60
 default['nagios']['default_service']['retry_interval']        = 15

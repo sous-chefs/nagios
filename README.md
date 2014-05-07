@@ -41,7 +41,8 @@ Attributes
 * `node['nagios']['user']` - Nagios user, default 'nagios'.
 * `node['nagios']['group']` - Nagios group, default 'nagios'.
 * `node['nagios']['plugin_dir']` - location where Nagios plugins go, default '/usr/lib/nagios/plugins'.
-* `node['nagios']['multi_environment_monitoring']` - Chef server will monitor hosts in all environments, not just its own, default 'false'
+* `node['nagios']['multi_environment_monitoring']` - Nagios server will monitor hosts in all environments 'true', if set to an array of environments it will monitor all servers in those environments, if 'false' it will only monitor servers in its environment default 'false'
+* `node['nagios']['monitoring_attribute']` - If set, will use the specified attribute of the node as the monitored IP. Defaults to `nil`
 * `node['nagios']['monitoring_interface']` - If set, will use the specified interface for all nagios monitoring network traffic. Defaults to `nil`
 
 * `node['nagios']['server']['install_method']` - whether to install from package or source. Default chosen by platform based on known packages available for Nagios: debian/ubuntu 'package', redhat/centos/fedora/scientific: source
@@ -117,6 +118,7 @@ information about these directives, see the Nagios documentation for
 * `node['nagios']['default_host']['check_command']` - Defaults to the pre-defined command `'check-host-alive'`.
 * `node['nagios']['default_host']['notification_interval']` - In seconds. Must be divisible by `node['nagios']['interval_length']`. Defaults to `300`.
 * `node['nagios']['default_host']['notification_options']` - Defaults to `'d,u,r'`.
+* `node['nagios']['default_host']['host_notifications_enabled']` - Enable for this host (this is overridden by Nagios State information) Defaults to `1`.
 
 * `node['nagios']['server']['web_server']` - web server to use. supports Apache or Nginx, default "apache"
 * `node['nagios']['server']['nginx_dispatch']` - nginx dispatch method. supports cgi or php, default "cgi"

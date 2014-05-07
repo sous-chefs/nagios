@@ -105,15 +105,28 @@ else
   end
 end
 
-# find nodes to monitor.  Search in all environments if multi_environment_monitoring is enabled
-Chef::Log.info('Beginning search for nodes.  This may take some time depending on your node count')
-nodes = []
-hostgroups = []
 
-if node['nagios']['multi_environment_monitoring']
-  nodes = search(:node, 'name:*')
+# find nodes to monitor. Search in all or specific environments if multi_environment_monitoring is enabled
+Chef::Log.info('Beginning search for nodes. This may take some time depending on your node count')
+hostgroups = []
+nodes = []
+
+if Chef::Config[:solo]
+  nodes << node
 else
-  nodes = search(:node, "name:* AND chef_environment:#{node.chef_environment}")
+  if node['nagios']['multi_environment_monitoring']
+    if node['nagios']['multi_environment_monitoring'].kind_of?(Array)
+      node['nagios']['multi_environment_monitoring'].each do |searchenv|
+        search(:node, "name:* AND chef_environment:#{searchenv}").each do |n|
+          nodes << n
+        end
+      end
+    else
+      nodes = search(:node, 'name:*')
+    end
+  else
+    nodes = search(:node, "name:* AND chef_environment:#{node.chef_environment}")
+  end
 end
 
 if nodes.empty?
@@ -133,12 +146,23 @@ search(:role, '*:*') do |r|
   end
 end
 
-# if using multi environment monitoring add all environments to the array of hostgroups
+# add all environments to the array of hostgroups
 if node['nagios']['multi_environment_monitoring']
-  search(:environment, '*:*') do |e|
-    hostgroups << e.name unless hostgroups.include?(e.name)
-    nodes.select { |n| n.chef_environment == e.name }.each do |n|
-      service_hosts[e.name] = n[node['nagios']['host_name_attribute']]
+  if node['nagios']['multi_environment_monitoring'].kind_of?(Array)
+    node['nagios']['multi_environment_monitoring'].each do |searchenv|
+      search(:environment, "name:#{searchenv}").each do |e|
+        hostgroups << e.name unless hostgroups.include?(e.name)
+        nodes.select { |n| n.chef_environment == e.name }.each do |n|
+          service_hosts[e.name] = n[node['nagios']['host_name_attribute']]
+        end
+      end
+    end
+  else
+    search(:environment, '*:*') do |e|
+      hostgroups << e.name unless hostgroups.include?(e.name)
+      nodes.select { |n| n.chef_environment == e.name }.each do |n|
+        service_hosts[e.name] = n[node['nagios']['host_name_attribute']]
+      end
     end
   end
 end

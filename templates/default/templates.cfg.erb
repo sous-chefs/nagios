@@ -50,6 +50,7 @@ define host {
   check_command           <%= nagios_attr(:default_host)[:check_command] %>
   notification_interval   <%= nagios_interval(nagios_attr(:default_host)[:notification_interval]) %>
   notification_options    <%= nagios_attr(:default_host)[:notification_options] %>
+  notifications_enabled   <%= nagios_attr(:default_host)[:host_notifications_enabled] %>
   contact_groups          <%= nagios_attr(:default_contact_groups).join(",") %>
   register                0
 }
