@@ -41,7 +41,7 @@ Attributes
 * `node['nagios']['user']` - Nagios user, default 'nagios'.
 * `node['nagios']['group']` - Nagios group, default 'nagios'.
 * `node['nagios']['plugin_dir']` - location where Nagios plugins go, default '/usr/lib/nagios/plugins'.
-* `node['nagios']['multi_environment_monitoring']` - Chef server will monitor hosts in all environments, not just its own, default 'false'
+* `node['nagios']['multi_environment_monitoring']` - Nagios server will monitor hosts in all environments 'true', if set to an array of environments it will monitor all servers in those environments, if 'false' it will only monitor servers in its environment default 'false'
 * `node['nagios']['monitoring_attribute']` - If set, will use the specified attribute of the node as the monitored IP. Defaults to `nil`
 * `node['nagios']['monitoring_interface']` - If set, will use the specified interface for all nagios monitoring network traffic. Defaults to `nil`
 
