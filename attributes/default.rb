@@ -231,3 +231,5 @@ default['nagios']['pagerduty']['host_notification_options'] = 'd,r'
 
 # atrributes for setting broker lines
 default['nagios']['brokers'] = {}
+# defalult attribute to exclude local environments
+default['nagios']['exclude_environment_string'] = "local"
