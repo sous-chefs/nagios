@@ -111,7 +111,7 @@ nodes = []
 hostgroups = []
 
 if node['nagios']['multi_environment_monitoring']
-  nodes = search(:node, 'name:* AND NOT chef_environment:local*')
+  nodes = search(:node, "name:* AND NOT chef_environment:#{node['nagios']['exclude_string']}*")
 else
   nodes = search(:node, "name:* AND chef_environment:#{node.chef_environment}")
 end
@@ -136,7 +136,7 @@ end
 # if using multi environment monitoring add all environments to the array of hostgroups
 if node['nagios']['multi_environment_monitoring']
   search(:environment, '*:*') do |e|
-    unless e.name.include? "local"
+    unless e.name.include? node['nagios']['exclude_string']
       hostgroups << e.name unless hostgroups.include?(e.name)
       nodes.select { |n| n.chef_environment == e.name }.each do |n|
         service_hosts[e.name] = n[node['nagios']['host_name_attribute']]
