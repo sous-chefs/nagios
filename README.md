@@ -42,6 +42,7 @@ Attributes
 * `node['nagios']['group']` - Nagios group, default 'nagios'.
 * `node['nagios']['plugin_dir']` - location where Nagios plugins go, default '/usr/lib/nagios/plugins'.
 * `node['nagios']['multi_environment_monitoring']` - Chef server will monitor hosts in all environments, not just its own, default 'false'
+* `node['nagios']['monitored_environments']` - If multi_environment_monitoring is 'true' nagios will monitor nodes in all environments. If monitored_environments is defined then nagios will monitor only hosts in the list of environments defined. For ex: ['prod', 'beta'] will monitor only hosts in 'prod' and 'beta' chef_environments. Defaults to '[]' - and all chef environments will be monitored by default.
 * `node['nagios']['monitoring_interface']` - If set, will use the specified interface for all nagios monitoring network traffic. Defaults to `nil`
 
 * `node['nagios']['server']['install_method']` - whether to install from package or source. Default chosen by platform based on known packages available for Nagios: debian/ubuntu 'package', redhat/centos/fedora/scientific: source
