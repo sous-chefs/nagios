@@ -6,7 +6,7 @@ provisioner:
   name: chef_zero
 
 platforms:
-  - name: ubuntu-13.04
+  - name: ubuntu-14.04
     run_list:
     - recipe[apt::default]
   - name: ubuntu-12.04
