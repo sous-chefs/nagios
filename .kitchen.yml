@@ -55,6 +55,7 @@ suites:
  - name: server
    run_list:
    - recipe[nagios::default]
+   - recipe[nrpe::default]
    attributes:
      roles:
      - monitoring
