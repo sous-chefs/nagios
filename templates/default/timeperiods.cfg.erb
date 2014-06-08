@@ -19,8 +19,8 @@ define timeperiod {
 define timeperiod {
   timeperiod_name  <%= timeperiods['id'] %>
   alias            <%= timeperiods['alias'] %>
-  <% timeperiods['times'].each do |conf| %>
+<%   timeperiods['times'].each do |conf| -%>
   <%= conf %>
-  <% end %>
+<%   end -%>
 }
-<% end %>
+<% end -%>
