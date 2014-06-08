@@ -52,7 +52,7 @@ define command {
 <% end -%>
 <% end -%>
 
-<% if !@eventhandlers.empty? -%>
+<% unless @eventhandlers.empty? -%>
 # Event Handlers added through nagios_eventhandlers data bags
 <% @eventhandlers.each do |eventhandlers| -%>
 define command {
