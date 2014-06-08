@@ -161,7 +161,7 @@ Recipes
 ### default
 Includes the correct client installation recipe based on platform, either `nagios::server_package` or `nagios::server_source`.
 
-The server recipe sets up Apache as the web front end by default. The nagios::client recipe is also included. This recipe also does a number of searches to dynamically build the hostgroups to monitor, hosts that belong to them and admins to notify of events/alerts.
+The server recipe sets up Apache as the web front end by default. This recipe also does a number of searches to dynamically build the hostgroups to monitor, hosts that belong to them and admins to notify of events/alerts.
 
 Searches are confined to the node's `chef_environment` unless multi-environment monitoring is enabled.
 
