@@ -14,7 +14,7 @@ describe 'nagios::default' do
                                        },
                                        'bsmith' => {
                                          'group' => 'users'
-      }
+                                       }
     )
 
     stub_command('dpkg -l nagios3').and_return(true)
