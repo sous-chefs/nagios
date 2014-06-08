@@ -1,0 +1,7 @@
+{
+  "id": "devs",
+  "alias": "Developers",
+  "use": "default-contact",
+  "email": "devs@company.com",
+  "pager": "page_the_devs@company.com"
+}
