@@ -51,10 +51,10 @@ end
 user_databag = node['nagios']['users_databag'].to_sym
 group = node['nagios']['users_databag_group']
 
-sysadmins = []
+nagios_users = []
 
 begin
-  search(user_databag, "groups:#{group} NOT action:remove") { |d| sysadmins << d unless d['nagios'].nil? || d['nagios']['email'].nil? }
+  search(user_databag, "groups:#{group} NOT action:remove") { |d| nagios_users << d unless d['nagios'].nil? || d['nagios']['email'].nil? }
 rescue Net::HTTPServerException
   Chef::Log.fatal("\"#{node['nagios']['users_databag']}\" databag could not be found.")
   raise "\"#{node['nagios']['users_databag']}\" databag could not be found."
@@ -62,7 +62,7 @@ end
 
 Chef::Log.info("Could not find users in the \"#{node['nagios']['users_databag']}\" databag with the \"#{group}\" group.  If you are
 expecting contacts other than pagerduty contacts, make sure the databag exists and, if you have set the \"users_databag_group\", tha
-t users in that group exist.") if sysadmins.empty?
+t users in that group exist.") if nagios_users.empty?
 
 # install nagios service either from source of package
 include_recipe "nagios::server_#{node['nagios']['server']['install_method']}"
@@ -101,7 +101,7 @@ else
     owner node['nagios']['user']
     group web_group
     mode '0640'
-    variables(:sysadmins => sysadmins)
+    variables(:nagios_users => nagios_users)
   end
 end
 
@@ -195,7 +195,7 @@ end
 
 # pick up base contacts
 members = []
-sysadmins.each do |s|
+nagios_users.each do |s|
   members << s['id']
 end
 
@@ -296,7 +296,7 @@ nagios_conf 'servicegroups' do
 end
 
 nagios_conf 'contacts' do
-  variables(:admins => sysadmins,
+  variables(:admins => nagios_users,
             :members => members,
             :contacts => contacts,
             :contactgroups => contactgroups,
