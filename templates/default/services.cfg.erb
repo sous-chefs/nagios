@@ -12,7 +12,7 @@
       @hostgroups.include?(host_group_name) || @search_hostgroups.include?(host_group_name)
     end
 
-    valid_hostgroup = service['hostgroup_name'] && service['hostgroup_name'] != "all" && host_groups_exist
+    valid_hostgroup = (service['hostgroup_name'] || service['hostgroup_name'] == "all") && host_groups_exist
     valid_hostname  = !service['host_name'].nil?
 
     criteria << valid_hostgroup || valid_hostname
