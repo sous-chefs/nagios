@@ -3,6 +3,91 @@ nagios Cookbook CHANGELOG
 This file is used to list changes made in each version of the nagios cookbook.
 
 
+v5.3.4
+------
+### Bug
+- Fixed two bugs that prevented Apache/NGINX web server setups from configuring correctly 
+
+v5.3.2
+------
+### Bug
+- Remove a development file that was accidentally added to the community site release
+
+v5.3.0
+------
+### Breaking changes
+- Directories for RHEL installations have been updated to use correct RHEL directories vs. Debian directories. You may need to override these directories with the existing directories to not break existing installations on RHEL. Proceed with caution.
+
+### Bug
+- Cookbook no longer fails the run if a node has no roles
+- Cookbook no longer fails if there are no users defined in the data bag
+- Cookbook no longer fails if a node has no hostname
+- Cookbook no longer fails if the node does not have a defined OS
+- Fix incorrect Pagerduty key usage
+- Allowed NRPE hosts were not being properly determined due to bad logic and a typo
+
+### Improvement
+- Improve Test-Kitchen support with newer RHEL point releases, Ubuntu 13.04, and Debian 6/7
+- Simplified logic in web server detection for determining public domain and switches from symbols to strings throughout
+
+### New Feature
+- Support for Nagios host escalations via a new data bag.  See the readme for additional details
+- New attribute node['nagios']['monitoring_interface'] to allow specifying a specific network interface's IP to monitor
+- You can now define the values for execute_service_checks, accept_passive_service_checks, execute_host_checks, and accept_passive_host_checks via attributes
+- You can now define the values for obsess_over_services and obsess_over_hosts settings via attributes
+
+
+v5.2.0
+------
+### Breaking changes
+- This release requires yum-epel, which requires the yum v3.0 cookbook. This may break other cookbooks in your environment
+
+### Bug
+- Change yum cookbook dependency to yum-epel dependecy as yum cookbook v3.0 removed epel repo setup functionality
+- Several fixes to the Readme examples
+
+### Improvement
+- Use the new monitoring-plugins.org address for the Nagios Plugins during source installs
+- The version of apt defined in the Berksfile is no longer constrained
+- Find all nodes by searching by node not hostname to workaround failures in ohai determining the hostname
+
+### New Feature
+- Allow defining of time periods via new data bag nagios_timeperiods.  See the Readme for additional details
+
+
+v5.1.0
+------
+### Bug
+- **[COOK-3210](https://tickets.opscode.com/browse/COOK-3210)** Contacts are now only written out if the contact has Nagios keys defined, which prevents e-mail-less contacts from being written out
+- **[COOK-4098](https://tickets.opscode.com/browse/COOK-4098)** Fixed an incorrect example for using templates in the readme
+- Fixed a typo in the servicedependencies.cfg.erb template that resulted in hostgroup_name always being blank
+
+### Improvement
+- The Yum cookbook dependency has been pinned to < 3.0 to prevent breakage when the 3.0 cookbook is released
+- **[COOK-2389](https://tickets.opscode.com/browse/COOK-2389)** The logic used to determine what IP to identify the monitored host by has been moved into the default library to simplify the hosts.cfg.erb template
+- A Vagrantfile has been added to allow for testing on Ubuntu 10.04/12.04 and CentOS 5.9/6.4 in multi-node setups
+- Chef spec tests have been added for the server
+- Gemfile updated to use Rubocop 0.15 and TestKitchen 1.0
+- **[COOK-3913](https://tickets.opscode.com/browse/COOK-3913)** / **[COOK-3914](https://tickets.opscode.com/browse/COOK-3914)** Source based installations now use Nagios 3.5.1 and the Nagios Plugins 1.5.0
+
+### New Feature
+- The names of the various data bags used in the cookbook can now be controlled with new attributes found in the server.rb attribute file
+- All configuration options in the cgi.cfg and nrpe.cfg files can now be controlled via attributes
+- **[COOK-3690](https://tickets.opscode.com/browse/COOK-3690)** An intermediate SSL certificate can now be used on the web server as defined in the new attribute `node['nagios']['ssl_cert_chain_file']`
+- **[COOK-2732](https://tickets.opscode.com/browse/COOK-2732)** A service can now be applied to multiple hostgroups via the data bag definition
+- **[COOK-3781](https://tickets.opscode.com/browse/COOK-3781)** Service escalations can now be written using wildcards.  See the readme for an example of this feature.
+- **[COOK-3702](https://tickets.opscode.com/browse/COOK-3702)** Multiple PagerDuty keys for different contacts can be defined via a new nagios_pagerduty data bag.  See the readme for more information on the new data bag and attributes for this feature.
+- **[COOK-3774](https://tickets.opscode.com/browse/COOK-3774)**Services can be limited to run on nagios servers in specific chef environments by adding a new "activate_check_in_environment" key to the services data bag.  See the Services section of the readme for an example.
+- **[CHEF-4702](https://tickets.opscode.com/browse/CHEF-4702)** Chef solo users can now user solo-search for data bag searchd (https://github.com/edelight/chef-solo-search) 
+
+v5.0.2
+------
+### Improvement
+- **[COOK-3777](https://tickets.opscode.com/browse/COOK-3777)** - Update NRPE in nagios cookbook to 2.15
+- **[COOK-3021](https://tickets.opscode.com/browse/COOK-3021)** - NRPE LWRP updates files every run
+- Fixing up to pass rubocop
+
+
 v5.0.0
 ------
 ### Bug
@@ -48,6 +133,7 @@ v4.2.0
 - **[COOK-3140](https://tickets.opscode.com/browse/COOK-3140)** - No longer import databag users even if they don't have an `htpasswd` value set
 - **[COOK-3068](https://tickets.opscode.com/browse/COOK-3068)** - Use `nagios_conf` definition in `nagios::pagerduty`
 
+
 v4.1.4
 ------
 ### Bug
@@ -67,6 +153,7 @@ v4.1.2
 ### New Feature
 - [COOK-2460]: create attribute for `allowed_hosts`
 
+
 v4.1.0
 ------
 - [COOK-2257] - Nagios incorrectly tries to use cloud IPs due to a OHAI bug
@@ -82,6 +169,7 @@ v4.1.0
 - [COOK-2450] - Add ability to define service groups through data bags.
 - [COOK-2642] - With multiple nagios servers, they can't use NRPE to check each other
 - [COOK-2613] - Install Nagios 3.5.0 when installing from source
+
 
 v4.0.0
 ------
@@ -124,10 +212,12 @@ The main incompatibility and breaking change is that the default services that a
 - [COOK-2375] - Allows adding a service that utilizes a pre-existing command
 - [COOK-2433] - Nagios: ldap authentication needs to handle anonymous binding ldap servers
 
+
 v3.1.0
 ------
 - [COOK-2032] - Use public IP address for inter-cloud checks and private for intra-cloud checks
 - [COOK-2081] - add support for `notes_url` to `nagios_services` data bags
+
 
 v3.0.0
 ------
@@ -150,6 +240,7 @@ This is a major release due to some dramatic refactoring to the service check co
 - [COOK-2054] - Use service description in the nagios_services databag items
 - [COOK-2061] - template.erb refers to a service variable when it should reference template.
 
+
 v2.0.0
 ------
 - [COOK-1543] - Nagios cookbook needs to be able to monitor environments
@@ -163,6 +254,7 @@ v2.0.0
 - [COOK-1815] - Switch Nagios to use platform_family not platform
 - [COOK-1816] - Nagios: mod ssl shouldn't get installed if SSL isn't being used
 - [COOK-1887] - `value_for_platform_family` use in Nagios cookbook is broken
+
 
 v1.3.0
 ------
@@ -185,19 +277,23 @@ v1.3.0
 - [COOK-1557] - check-nagios command only works in environments with single nagios server
 - [COOK-1587] - use default attributes instead of normal in cookbook attributes files
 
+
 V1.2.6
 ------
 - [COOK-860] - set mail command with an attribute by platform
+
 
 v1.2.4
 ------
 - [COOK-1119] - attributes for command_timeout / dont_blame_nrpe options
 - [COOK-1120] - allow monitoring from servers in multiple chef_environments
 
+
 v1.2.2
 ------
 - [COOK-991] - NRPE LWRP No Longer Requires a Template
 - [COOK-955] - Nagios Service Checks Defined by Data Bags
+
 
 v1.2.0
 ------
@@ -207,14 +303,17 @@ v1.2.0
 - [COOK-907] - LWRP for defining NRPE checks
 - [COOK-917] - changes to `mod_auth_openid` module
 
+
 v1.0.4
 ------
 - [COOK-838] - Add HTTPS Option to Nagios Cookbook
+
 
 v1.0.2
 ------
 - [COOK-636] - Nagios server recipe attempts to start too soon
 - [COOK-815] - Nagios Config Changes Kill Nagios If Config Goes Bad
+
 
 v1.0.0
 ------

@@ -1,9 +1,10 @@
 #
-# Author:: Seth Chisamore <schisamo@opscode.com>
+# Author:: Seth Chisamore <schisamo@getchef.com>
+# Author:: Tim Smith <tsmith@limelight.com>
 # Cookbook Name:: nagios
 # Recipe:: server_source
 #
-# Copyright 2011-2013, Opscode, Inc
+# Copyright 2011-2013, Chef Software, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -21,22 +22,26 @@
 # Package pre-reqs
 
 include_recipe 'build-essential'
-include_recipe 'php'
+include_recipe 'php::default'
 include_recipe 'php::module_gd'
 
-web_srv = node['nagios']['server']['web_server'].to_sym
+# the source install of nagios from this recipe does not include embedded perl support
+# so unless the user explicitly set the p1_file attribute, we want to clear it
+node.default['nagios']['conf']['p1_file'] = nil
+
+web_srv = node['nagios']['server']['web_server']
 
 case web_srv
-when :apache
+when 'apache'
   include_recipe 'nagios::apache'
 else
   include_recipe 'nagios::nginx'
 end
 
 pkgs = value_for_platform_family(
-  %w{ rhel fedora } => %w{ openssl-devel gd-devel tar },
-  'debian' => %w{ libssl-dev libgd2-xpm-dev bsd-mailx tar },
-  'default' => %w{ libssl-dev libgd2-xpm-dev bsd-mailx tar }
+  %w( rhel fedora ) => %w( openssl-devel gd-devel tar ),
+  'debian' => %w( libssl-dev libgd2-xpm-dev bsd-mailx tar ),
+  'default' => %w( libssl-dev libgd2-xpm-dev bsd-mailx tar )
 )
 
 pkgs.each do |pkg|
@@ -45,12 +50,16 @@ pkgs.each do |pkg|
   end
 end
 
+user node['nagios']['user'] do
+  action :create
+end
+
 group node['nagios']['group'] do
   members [
     node['nagios']['user'],
-    web_srv == :nginx ? node['nginx']['user'] : node['apache']['user']
+    web_srv == 'nginx' ? node['nginx']['user'] : node['apache']['user']
   ]
-  action :modify
+  action :create
 end
 
 version = node['nagios']['server']['version']
@@ -98,37 +107,36 @@ end
 directory node['nagios']['config_dir'] do
   owner 'root'
   group 'root'
-  mode 00755
+  mode '0755'
 end
 
-%w{ cache_dir log_dir run_dir }.each do |dir|
+%w( cache_dir log_dir run_dir ).each do |dir|
 
   directory node['nagios'][dir] do
     owner node['nagios']['user']
     group node['nagios']['group']
-    mode 00755
+    mode '0755'
   end
 
+end
+
+directory ::File.join(node['nagios']['log_dir'], 'archives') do
+  owner node['nagios']['user']
+  group node['nagios']['group']
+  mode '0755'
 end
 
 directory "/usr/lib/#{node['nagios']['server']['vname']}" do
   owner node['nagios']['user']
   group node['nagios']['group']
-  mode 00755
+  mode '0755'
 end
 
 link "#{node['nagios']['conf_dir']}/stylesheets" do
   to "#{node['nagios']['docroot']}/stylesheets"
 end
 
-# if nrpe client is not being installed by source then we need the NRPE plugin
-if node['nagios']['client']['install_method'] == 'package'
-
-  include_recipe 'nagios::nrpe_source'
-
-end
-
-if web_srv == :apache
+if web_srv == 'apache'
   apache_module 'cgi' do
     enable :true
   end

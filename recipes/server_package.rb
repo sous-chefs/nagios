@@ -1,9 +1,10 @@
 #
-# Author:: Seth Chisamore <schisamo@opscode.com>
+# Author:: Seth Chisamore <schisamo@getchef.com>
+# Author:: Tim Smith <tsmith@limelight.com>
 # Cookbook Name:: nagios
 # Recipe:: server_package
 #
-# Copyright 2011-2013, Opscode, Inc
+# Copyright 2011-2013, Chef Software, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -18,19 +19,22 @@
 # limitations under the License.
 #
 
-if node['platform_family'] == 'debian'
-
+case node['platform_family']
+when 'rhel', 'fedora'
+  unless platform?('fedora') && node['platform_version'] < 17
+    include_recipe 'yum-epel' # setup epel on old rhel and pre Fedora 17
+  end
+when 'debian'
   # Nagios package requires to enter the admin password
   # We generate it randomly as it's overwritten later in the config templates
   random_initial_password = rand(36**16).to_s(36)
 
-  %w{adminpassword adminpassword-repeat}.each do |setting|
+  %w(adminpassword adminpassword-repeat).each do |setting|
     execute "debconf-set-selections::#{node['nagios']['server']['vname']}-cgi::#{node['nagios']['server']['vname']}/#{setting}" do
       command "echo #{node['nagios']['server']['vname']}-cgi #{node['nagios']['server']['vname']}/#{setting} password #{random_initial_password} | debconf-set-selections"
       not_if "dpkg -l #{node['nagios']['server']['vname']}"
     end
   end
-
 end
 
 node['nagios']['server']['packages'].each do |pkg|

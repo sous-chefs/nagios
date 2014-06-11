@@ -1,0 +1,5 @@
+    {
+      "id": "admin_not_nagios",
+      "groups": "sysadmin",
+      "htpasswd": "$apr1$fmMTdsBg$KLGrzHT.K3CNfPP05oRgW/"
+    }

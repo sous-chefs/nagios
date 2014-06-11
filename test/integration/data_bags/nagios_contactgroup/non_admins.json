@@ -1,0 +1,5 @@
+{
+  "id": "non_admins",
+  "alias": "Non-Administrator Contacts",
+  "members": "devs,helpdesk,managers"
+}

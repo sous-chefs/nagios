@@ -1,8 +1,10 @@
 AllCops:
-  Excludes:
+  Exclude:
     - vendor/**
 
 AlignParameters:
+  Enabled: false
+CyclomaticComplexity:
   Enabled: false
 Encoding:
   Enabled: false
@@ -12,4 +14,7 @@ LineLength:
   Enabled: false
 MethodLength:
   Max: 30
-
+NumericLiterals:
+  Enabled: false
+SingleSpaceBeforeFirstArg:
+  Enabled: false

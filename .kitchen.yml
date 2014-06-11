@@ -1,20 +1,67 @@
-driver_plugin: vagrant
-driver_config:
-  require_chef_omnibus: true
-  customize:
-    memory: 512
+---
+driver:
+  name: vagrant
+
+provisioner:
+  name: chef_zero
 
 platforms:
+  - name: ubuntu-14.04
+    driver_config:
+      network:
+        - ["forwarded_port", {guest: 80, host: 8080}]
+    run_list:
+    - recipe[apt::default]
   - name: ubuntu-12.04
+    driver_config:
+      network:
+        - ["forwarded_port", {guest: 80, host: 8081}]
     run_list:
     - recipe[apt::default]
   - name: ubuntu-10.04
+    driver_config:
+      network:
+        - ["forwarded_port", {guest: 80, host: 8082}]
     run_list:
     - recipe[apt::default]
-  - name: centos-6.4
-  - name: centos-5.9
+  - name: debian-7.2.0
+    driver_config:
+      network:
+        - ["forwarded_port", {guest: 80, host: 8083}]
+    run_list:
+    - recipe[apt::default]
+  - name: debian-6.0.8
+    driver_config:
+      network:
+        - ["forwarded_port", {guest: 80, host: 8084}]
+    run_list:
+    - recipe[apt::default]
+  - name: freebsd-9.2
+    driver_config:
+      network:
+        - ["forwarded_port", {guest: 80, host: 8085}]
+    run_list:
+    - recipe[freebsd::portsnap]
+  - name: centos-6.5
+    driver_config:
+      network:
+        - ["forwarded_port", {guest: 80, host: 8086}]
+  - name: centos-5.10
+    driver_config:
+      network:
+        - ["forwarded_port", {guest: 80, host: 8087}]
 
 suites:
-- name: default
-  run_list:
-  - recipe[nagios::client]
+ - name: server
+   run_list:
+   - recipe[nagios::default]
+   - recipe[nrpe::default]
+   attributes:
+     roles:
+     - monitoring
+     nagios:
+       additional_contacts:
+         root: true
+data_bags_path: test/data_bags
+roles_path: test/roles
+

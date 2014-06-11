@@ -1,5 +1,6 @@
 #
 # Author:: Jake Vanderdray <jvanderdray@customink.com>
+# Author:: Tim Smith <tsmith@limelight.com>
 # Cookbook Name:: nagios
 # Recipe:: pagerduty
 #
@@ -56,15 +57,20 @@ end
 remote_file "#{node['nagios']['plugin_dir']}/notify_pagerduty.pl" do
   owner 'root'
   group 'root'
-  mode 00755
+  mode '0755'
   source node['nagios']['pagerduty']['script_url']
   action :create_if_missing
 end
 
-nagios_conf 'pagerduty'
+nagios_bags = NagiosDataBags.new
+pagerduty_contacts = nagios_bags.get('nagios_pagerduty')
+
+nagios_conf 'pagerduty' do
+  variables(:contacts => pagerduty_contacts)
+end
 
 cron 'Flush Pagerduty' do
   user node['nagios']['user']
   mailto 'root@localhost'
-  command "#{node['nagios']['plugin_dir']}/notify_pagerduty.pl flush"
+  command "#{::File.join(node['nagios']['plugin_dir'], 'notify_pagerduty.pl')} flush"
 end

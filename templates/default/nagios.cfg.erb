@@ -10,7 +10,7 @@ cfg_dir=<%= node['nagios']['config_dir'] %>
 object_cache_file=<%= node['nagios']['cache_dir'] %>/objects.cache
 precached_object_file=<%= node['nagios']['cache_dir'] %>/objects.precache
 
-resource_file=<%= node['nagios']['conf_dir'] %>/resource.cfg
+resource_file=<%= node['nagios']['resource_dir'] %>/resource.cfg
 status_file=<%= node['nagios']['cache_dir'] %>/status.dat
 status_update_interval=10
 <%= node['nagios']['server']['name'] %>_user=<%= node['nagios']['user'] %>
@@ -26,6 +26,9 @@ lock_file=<%= node['nagios']['run_dir'] %>/<%= node['nagios']['server']['vname']
 temp_file=<%= node['nagios']['cache_dir'] %>/<%= node['nagios']['server']['name'] %>.tmp
 temp_path=/tmp
 event_broker_options=-1
+<% node['nagios']['brokers'].each do |brokerPath, brokerConfig| -%>
+broker_module=<%= brokerPath %> <%= brokerConfig %>
+<% end -%>
 
 log_rotation_method=d
 log_archive_path=<%= node['nagios']['log_dir'] %>/archives
@@ -39,10 +42,10 @@ log_external_commands=1
 log_passive_checks=1
 
 service_inter_check_delay_method=s
-max_service_check_spread=5
+max_service_check_spread=<%= node['nagios']['conf']['max_service_check_spread'] %>
 service_interleave_factor=s
 host_inter_check_delay_method=s
-max_host_check_spread=5
+max_host_check_spread=<%= node['nagios']['conf']['max_host_check_spread'] %>
 max_concurrent_checks=0
 check_result_reaper_frequency=10
 max_check_result_reaper_time=30
@@ -59,8 +62,8 @@ auto_rescheduling_interval=30
 auto_rescheduling_window=180
 
 sleep_time=0.25
-service_check_timeout=60
-host_check_timeout=30
+service_check_timeout=<%= node['nagios']['conf']['service_check_timeout'] %>
+host_check_timeout=<%= node['nagios']['conf']['host_check_timeout'] %>
 event_handler_timeout=30
 notification_timeout=30
 ocsp_timeout=5
@@ -82,20 +85,20 @@ interval_length=<%= node['nagios']['interval_length'] %>
 
 use_aggressive_host_checking=0
 
-execute_service_checks=1
-accept_passive_service_checks=1
-execute_host_checks=1
-accept_passive_host_checks=1
+execute_service_checks=<%= node['nagios']['execute_service_checks'] %>
+accept_passive_service_checks=<%= node['nagios']['accept_passive_service_checks'] %>
+execute_host_checks=<%= node['nagios']['execute_host_checks'] %>
+accept_passive_host_checks=<%= node['nagios']['accept_passive_host_checks'] %>
 
 enable_notifications=<%= node['nagios']['notifications_enabled'] %>
 enable_event_handlers=1
 
 #process_performance_data=1
-process_performance_data=0
+process_performance_data=<%= node['nagios']['conf']['process_performance_data'] %>
 
 #service_perfdata_command=ngraph-process-service-perfdata-pipe
-#host_perfdata_command=process-host-perfdata
-#service_perfdata_command=process-service-perfdata
+<%= "host_perfdata_command=#{node['nagios']['conf']['host_perfdata_command']}" unless node['nagios']['conf']['host_perfdata_command'].nil? %>
+<%= "host_perfdata_command=#{node['nagios']['conf']['service_perfdata_command']}" unless node['nagios']['conf']['service_perfdata_command'].nil? %>#service_perfdata_command=process-service-perfdata
 #host_perfdata_file=/tmp/host-perfdata
 #service_perfdata_file=/tmp/service-perfdata
 #host_perfdata_file_template=[HOSTPERFDATA]\t$TIMET$\t$HOSTNAME$\t$HOSTEXECUTIONTIME$\t$HOSTOUTPUT$\t$HOSTPERFDATA$
@@ -107,10 +110,18 @@ process_performance_data=0
 #host_perfdata_file_processing_command=process-host-perfdata-file
 #service_perfdata_file_processing_command=process-service-perfdata-file
 
-obsess_over_services=0
+obsess_over_services=<%= node['nagios']['obsess_over_services'] %>
+<% if node['nagios']['ocsp_command'] -%>
+oscp_command='<%= node['nagios']['ocsp_command'] %>'
+<% else -%>
 #ocsp_command=somecommand
-obsess_over_hosts=0
+<% end -%>
+obsess_over_hosts=<%= node['nagios']['obsess_over_hosts'] %>
+<% if node['nagios']['ochp_command'] -%>
+ochp_command='<%= node['nagios']['ochp_command'] %>'
+<% else -%>
 #ochp_command=somecommand
+<% end -%>
 translate_passive_host_checks=0
 passive_host_checks_are_soft=0
 check_for_orphaned_services=1
@@ -128,10 +139,12 @@ high_service_flap_threshold=20.0
 low_host_flap_threshold=5.0
 high_host_flap_threshold=20.0
 
-date_format=iso8601
+date_format=<%= node['nagios']['conf']['date_format'] %>
 
 use_timezone=<%= node['nagios']['timezone'] %>
-p1_file=<%= node['nagios']['home'] %>/p1.pl
+<% if node['nagios']['conf']['p1_file'] %>
+p1_file=<%= node['nagios']['conf']['p1_file'] %>
+<% end %>
 enable_embedded_perl=1
 use_embedded_perl_implicitly=1
 
@@ -150,7 +163,7 @@ enable_environment_macros=1
 #free_child_process_memory=1
 #child_processes_fork_twice=1
 
-debug_level=0
-debug_verbosity=1
-debug_file=<% node["nagios"]["state_dir"] %>/<%= node['nagios']['server']['name'] %>.debug
+debug_level=<%= node['nagios']['conf']['debug_level'] %>
+debug_verbosity=<%= node['nagios']['conf']['debug_verbosity']%>
+debug_file=<%= node['nagios']['conf']['debug_file'] %>
 max_debug_file_size=1000000

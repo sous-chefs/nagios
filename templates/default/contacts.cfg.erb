@@ -27,11 +27,14 @@ define contactgroup {
 }
 
 <% @admins.each do |a| -%>
+<% # don't template out contacts that don't have the nagios hash or a nagios e-mail defined %>
+<% unless a['nagios'].nil? || a['nagios']['email'].nil?  -%>
 define contact {
   use          default-contact
   contact_name <%= a['id'] %>
-  <%= "email  #{a['nagios']['email']}" unless a['nagios'].nil? || a['nagios']['email'].nil? %>
+  email        <%= a['nagios']['email'] %>
 }
+<% end -%>
 
 <% end -%>
 
@@ -46,9 +49,9 @@ define contact {
   <% end %>
   <% end %>
 }
-<% end %>
+<% end -%>
 
-# Contact Groupss from data bags
+# Contact Groups from data bags
 <% @contactgroups.each do |contactgroup| -%>
 define contactgroup {
   contactgroup_name <%= contactgroup['id'] %>
@@ -58,14 +61,16 @@ define contactgroup {
   <% end %>
   <% end %>
 }
-<% end %>
+<% end -%>
 
 # Service escalations defined by data bags
 <% @serviceescalations.each do |serviceescalation| -%>
 define serviceescalation {
   name <%= serviceescalation['id'] %>
+  <% unless serviceescalation['register'] %>
   register 0
-  <% %w{use contact_groups first_notification last_notification escalation_period notification_interval}.each do |conf| %>
+  <% end %>
+  <% %w{use contacts contact_groups first_notification last_notification escalation_period escalation_options notification_interval host_name hostgroup_name service_description}.each do |conf| %>
   <% unless serviceescalation[conf].nil? %>
   <%= conf %> <%= serviceescalation[conf] %>
   <% end %>
@@ -73,3 +78,17 @@ define serviceescalation {
 }
 <% end -%>
 
+# Host escalations defined by data bags
+<% @hostescalations.each do |hostescalation| -%>
+define hostescalation {
+  name <%= hostescalation['id'] %>
+  <% unless hostescalation['register'] %>
+  register 0
+  <% end %>
+  <% %w{use host_name hostgroup_name contacts contact_groups first_notification last_notification notification_interval escalation_period escalation_options}.each do |conf| %>
+  <% unless hostescalation[conf].nil? %>
+  <%= conf %> <%= hostescalation[conf] %>
+  <% end %>
+  <% end %>
+}
+<% end -%>

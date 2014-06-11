@@ -1,3 +1,5 @@
+#
+# Author:: Tim Smith <tsmith@limelight.com>
 # Cookbook Name:: nagios
 # Recipe:: nginx
 #
@@ -22,7 +24,7 @@ end
 
 # This doesn't use value_for_platform_family so that it can specify version ranges - COOK-2891
 if platform_family?('rhel') || platform_family?('fedora')
-  node.set['nagios']['server']['nginx_dispatch'] = :both
+  node.set['nagios']['server']['nginx_dispatch'] = 'both'
   if node['platform_version'].to_f < 6
     node.set['nginx']['install_method'] = 'source'
   end
@@ -37,20 +39,14 @@ include_recipe 'nginx'
   end
 end
 
-if node['public_domain']
-  public_domain = node['public_domain']
-else
-  public_domain = node['domain']
-end
-
-case dispatch_type = node['nagios']['server']['nginx_dispatch'].to_sym
-when :cgi
+case dispatch_type = node['nagios']['server']['nginx_dispatch']
+when 'cgi'
   node.set['nginx_simplecgi']['cgi'] = true
   include_recipe 'nginx_simplecgi::setup'
-when :php
+when 'php'
   node.set['nginx_simplecgi']['php'] = true
   include_recipe 'nginx_simplecgi::setup'
-when :both
+when 'both'
   node.set['nginx_simplecgi']['php'] = true
   node.set['nginx_simplecgi']['cgi'] = true
   include_recipe 'nginx_simplecgi::setup'
@@ -60,9 +56,9 @@ end
 
 template File.join(node['nginx']['dir'], 'sites-available', 'nagios3.conf') do
   source 'nginx.conf.erb'
-  mode 00644
+  mode '0644'
   variables(
-    :public_domain => public_domain,
+    :public_domain => node['public_domain'] || node['domain'],
     :listen_port   => node['nagios']['http_port'],
     :https         => node['nagios']['enable_ssl'],
     :ssl_cert_file => node['nagios']['ssl_cert_file'],
@@ -72,14 +68,11 @@ template File.join(node['nginx']['dir'], 'sites-available', 'nagios3.conf') do
     :fqdn          => node['fqdn'],
     :nagios_url    => node['nagios']['url'],
     :chef_env =>  node.chef_environment == '_default' ? 'default' : node.chef_environment,
-    :htpasswd_file => File.join(
-      node['nagios']['conf_dir'],
-      'htpasswd.users'
-    ),
-    :cgi => [:cgi, :both].include?(dispatch_type.to_sym),
-    :php => [:php, :both].include?(dispatch_type.to_sym)
+    :htpasswd_file => File.join(node['nagios']['conf_dir'], 'htpasswd.users'),
+    :cgi => %w(cgi both).include?(dispatch_type),
+    :php => %w(php both).include?(dispatch_type)
   )
-  if ::File.symlink?(File.join(node['nginx']['dir'], 'sites-enabled', 'nagios3.conf'))
+  if File.symlink?(File.join(node['nginx']['dir'], 'sites-enabled', 'nagios3.conf'))
     notifies :reload, 'service[nginx]', :immediately
   end
 end
