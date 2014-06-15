@@ -13,13 +13,12 @@ define timeperiod {
   saturday        00:00-24:00
 }
 
-# Time periods defined by data bags
-
-<% @timeperiods.each do |timeperiods| -%>
+<% @timeperiods.each do |timeperiod| -%>
+<% if timeperiods == @timeperiods.first -%># Time periods defined by data bags<% end -%>
 define timeperiod {
-  timeperiod_name  <%= timeperiods['id'] %>
-  alias            <%= timeperiods['alias'] %>
-<%   timeperiods['times'].each do |conf| -%>
+  timeperiod_name  <%= timeperiod['id'] %>
+  alias            <%= timeperiod['alias'] %>
+<%   timeperiod['times'].each do |conf| -%>
   <%= conf %>
 <%   end -%>
 }
