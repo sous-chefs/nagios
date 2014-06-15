@@ -56,9 +56,9 @@ web_srv = node['nagios']['server']['web_server']
 # discover all nagios users
 nagios_users = NagiosUsers.new(node)
 
-Chef::Log.fatal("Could not find users in the \"#{node['nagios']['users_databag']}\" databag with the \"#{group}\" group.
-   Users must be defined to allow for logins to the UI. Make sure the databag exists and, if you have set the \"users_databag_group\",
-   that users in that group exist.") if nagios_users.users.empty?
+Chef::Log.fatal("Could not find users in the \"#{node['nagios']['users_databag']}\" databag with the \"#{node['nagios']['users_databag_group']}\"" \
+                'group. Users must be defined to allow for logins to the UI. Make sure the databag exists and, if you have set the ' \
+                "\"users_databag_group\", that users in that group exist.") if nagios_users.users.empty?
 
 # configure the appropriate authentication method for the web server
 case node['nagios']['server_auth_method']
