@@ -48,28 +48,19 @@ else
   fail 'Unknown web server option provided for Nagios server'
 end
 
-# find nagios web interface users from the defined data bag
-user_databag = node['nagios']['users_databag'].to_sym
-group = node['nagios']['users_databag_group']
-
-nagios_users = []
-
-begin
-  search(user_databag, "groups:#{group} NOT action:remove") { |d| nagios_users << d unless d['nagios'].nil? || d['nagios']['email'].nil? }
-rescue Net::HTTPServerException
-  Chef::Log.fatal("\"#{node['nagios']['users_databag']}\" databag could not be found.")
-  raise "\"#{node['nagios']['users_databag']}\" databag could not be found."
-end
-
-Chef::Log.info("Could not find users in the \"#{node['nagios']['users_databag']}\" databag with the \"#{group}\" group.  If you are
-expecting contacts other than pagerduty contacts, make sure the databag exists and, if you have set the \"users_databag_group\", tha
-t users in that group exist.") if nagios_users.empty?
-
 # install nagios service either from source of package
 include_recipe "nagios::server_#{node['nagios']['server']['install_method']}"
 
 web_srv = node['nagios']['server']['web_server']
 
+# discover all nagios users
+nagios_users = NagiosUsers.new(node)
+
+Chef::Log.fatal("Could not find users in the \"#{node['nagios']['users_databag']}\" databag with the \"#{group}\" group.
+   Users must be defined to allow for logins to the UI. Make sure the databag exists and, if you have set the \"users_databag_group\",
+   that users in that group exist.") if nagios_users.users.empty?
+
+# configure the appropriate authentication method for the web server
 case node['nagios']['server_auth_method']
 when 'openid'
   if web_srv == 'apache'
@@ -96,13 +87,15 @@ when 'ldap'
     fail
   end
 else
+  # setup htpasswd auth
   directory node['nagios']['conf_dir']
+
   template "#{node['nagios']['conf_dir']}/htpasswd.users" do
     source 'htpasswd.users.erb'
     owner node['nagios']['user']
     group web_group
     mode '0640'
-    variables(:nagios_users => nagios_users)
+    variables(:nagios_users => nagios_users.users)
   end
 end
 
@@ -191,19 +184,6 @@ if nagios_bags.bag_list.include?('nagios_hostgroups')
       end
     end
     hostgroup_nodes[hg['hostgroup_name']] = temp_hostgroup_array.join(',')
-  end
-end
-
-# pick up base contacts
-members = []
-nagios_users.each do |s|
-  members << s['id']
-end
-
-# add additional contacts including pagerduty to the contacts
-if node['nagios']['additional_contacts']
-  node['nagios']['additional_contacts'].each do |s, enabled|
-    members << s if enabled
   end
 end
 
@@ -297,8 +277,8 @@ nagios_conf 'servicegroups' do
 end
 
 nagios_conf 'contacts' do
-  variables(:admins => nagios_users,
-            :members => members,
+  variables(:admins => nagios_users.users,
+            :members => nagios_users.return_user_contacts,
             :contacts => contacts,
             :contactgroups => contactgroups,
             :serviceescalations => serviceescalations,
