@@ -73,7 +73,6 @@ Attributes
 * `node['nagios']['notifications_enabled']` - set to 1 to enable notification.
 * `node['nagios']['check_external_commands']`
 * `node['nagios']['default_contact_groups']`
-* `node['nagios']['additional_contacts']` - additional contacts to be utilized for notifying of status changes. Example: `node['nagios']['additional_contacts']['pagerduty'] = true`.
 * `node['nagios']['sysadmin_email']` - default notification email.
 * `node['nagios']['sysadmin_sms_email']` - default notification sms.
 * `node['nagios']['server_auth_method']` - authentication with the server can be done with openid (using `apache2::mod_auth_openid`), cas (using `apache2::mod_auth_cas`),ldap (using `apache2::mod_authnz_ldap`), or htauth (basic). The default is htauth. "openid" will utilize openid authentication, "cas" will utilize cas authentication, "ldap" will utilize LDAP authentication, and any other value will use htauth (basic).
