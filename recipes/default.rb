@@ -264,8 +264,7 @@ nagios_conf 'commands' do
 end
 
 nagios_conf 'services' do
-  variables(:service_hosts => service_hosts,
-            :services => services,
+  variables(:services => services,
             :search_hostgroups => hostgroup_list,
             :hostgroups => hostgroups)
 end
