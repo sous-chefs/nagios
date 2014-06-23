@@ -1,4 +1,4 @@
-require 'rspec-expectations'
+require 'rspec/expectations'
 require 'chefspec'
 require 'chefspec/berkshelf'
 require 'chefspec/server'
