@@ -135,6 +135,12 @@ define service {
   hostgroup_name <%= service['hostgroup_name'] %>
   check_command check_<%= service['id'] %>
   use default-service
+  <% if service['check_interval'] -%>
+  check_interval <%= service['check_interval'] %>
+  <% end -%>
+  <% if service['retry_interval'] -%>
+  retry_interval <%= service['retry_interval'] %>
+  <% end -%>
 }
   <% end -%>
 <% end -%>
