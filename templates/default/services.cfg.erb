@@ -4,44 +4,55 @@
 
 # Services defined by data bags
 <% @services.each do |service| -%>
-  <%# Do not define a service that has no hostgroup or a hostgroup that doesn't exist (including the "all" hostgroup), or a service that is not applicable in this environment %>
-  <% unless service['hostgroup_name'].nil? || service['hostgroup_name'] == "all" || (service['activate_check_in_environment'] && service['activate_check_in_environment'] != node.chef_environment )
-       valid = false
+  <%
+    # Do not define a service that has no hostgroup or a hostgroup that doesn't exist (including the "all" hostgroup), or a service that is not applicable in this environment
+    if service['hostgroup_name']
+      all_host_groups_exist = service['hostgroup_name'].split(",").all? do |host_group_name|
+        @hostgroups.include?(host_group_name) || @search_hostgroups.include?(host_group_name)
+      end
+    else
+      all_host_groups_exist = false
+    end
 
-       service['hostgroup_name'].split(",").each do |s|
-         valid = @hostgroups.include?(s) || @search_hostgroups.include?(s)
-         valid || break
-       end
+    valid_hostgroup = all_host_groups_exist || (service['hostgroup_name'] == "all")
+    valid_hostname  = service['host_name']
 
-       if valid %>
+    # if activate_check_in_environment is present it must equal node.chef_environment
+    if service['activate_check_in_environment']
+      environment_match = (service['activate_check_in_environment'] == node.chef_environment)
+    else
+      environment_match = true
+    end
+
+    # Start defining the service
+    if (valid_hostgroup || valid_hostname) && environment_match
+      service_definition =     {service_description: service['description'] || service['id']}
+      service_definition.merge!(hostgroup_name:      service['hostgroup_name'].split(",").sort.join(",")) if valid_hostgroup
+      service_definition.merge!(host_name:           service['host_name']) if service['host_name'] && ! valid_hostgroup
+      service_definition.merge!(check_command:       service['use_existing_command'] || "check_#{service['id']}")
+      service_definition.merge!(use:                 service['service_template'] || 'default-service')
+      service_definition.merge!(event_handler:       service['event_handler']) if service['event_handler']
+
+      %w{check_interval retry_interval notification_interval}.each do |interval_conf|
+        service_definition.merge!(interval_conf => nagios_interval(service[interval_conf])) if service[interval_conf]
+      end
+
+      %w{passive_checks_enabled parallelize_check obsess_over_service check_freshness notifications_enabled event_handler_enabled flap_detection_enabled failure_prediction_enabled process_perf_data retain_status_information retain_nonstatus_information is_volatile check_period max_check_attempts contacts contact_groups notification_options notification_period notes_url action_url servicegroups}.each do |other_conf|
+        service_definition.merge!(other_conf => service[other_conf]) if service[other_conf]
+      end
+    %>
 define service {
-  service_description <%= service['description'] || service['id'] %>
-  hostgroup_name <%= service['hostgroup_name'].split(",").sort.join(",") %>
-  <% if service['use_existing_command'] -%>
-  check_command <%= service['use_existing_command'] %>
-  <% else -%>
-  check_command check_<%= service['id'] %>
+  <% service_definition.each do |key, value| -%>
+    <%= "#{key} #{value}" %>
   <% end -%>
-  use <% if service['service_template'].nil? -%>default-service<% else -%><%= service['service_template'] %> <% end -%>
-  <% unless service['event_handler'].nil? -%>event_handler <%= service['event_handler'] %><% end -%>
-  <% %w{check_interval retry_interval notification_interval}.each do |conf| %>
-    <% unless service[conf].nil? %>
-  <%= conf %> <%= nagios_interval(service[conf]) %>
-    <% end %>
-  <% end %>
-  <% %w{passive_checks_enabled parallelize_check obsess_over_service check_freshness notifications_enabled event_handler_enabled flap_detection_enabled failure_prediction_enabled process_perf_data retain_status_information retain_nonstatus_information is_volatile check_period max_check_attempts contacts contact_groups notification_options notification_period notes_url action_url servicegroups}.each do |conf| %>
-    <% unless service[conf].nil? %>
-  <%= conf %> <%= service[conf] %>
-    <% end %>
-   <% end %>
 }
-  <% end %>
-<% if service['use_escalation'] %>define serviceescalation {
+<% if service['use_escalation'] %>
+define serviceescalation {
   # this should be an escalation defined in the nagios_serviceescalation data bag
   use <%= service['use_escalation'] %>
   service_description <%= service['description'] || service['id'] %>
   hostgroup_name <%= service['hostgroup_name'] %>
 }
-<% end %>
-  <% end -%>
-<% end -%>
+<% end #use_escalation-%>
+<% end #valid service-%>
+<% end #service databag loop-%>
