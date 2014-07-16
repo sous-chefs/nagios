@@ -14,7 +14,7 @@ define timeperiod {
 }
 
 <% @timeperiods.each do |timeperiod| -%>
-<% if timeperiods == @timeperiods.first -%># Time periods defined by data bags<% end -%>
+<% if timeperiod == @timeperiods.first -%># Time periods defined by data bags<% end -%>
 define timeperiod {
   timeperiod_name  <%= timeperiod['id'] %>
   alias            <%= timeperiod['alias'] %>
