@@ -64,9 +64,8 @@ suites:
    - role[monitoring]
    attributes:
      nagios:
-       install_method:
-         server:
-           install_method: source
+       server:
+         install_method: "source"
 data_bags_path: test/data_bags
 roles_path: test/roles
 
