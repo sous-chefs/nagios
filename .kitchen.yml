@@ -56,16 +56,13 @@ suites:
    run_list:
    - recipe[nagios::default]
    - recipe[nrpe::default]
-   attributes:
-     roles:
-     - monitoring
+   - role[monitoring]
  - name: server_source
    run_list:
    - recipe[nagios::default]
    - recipe[nrpe::default]
+   - role[monitoring]
    attributes:
-     roles:
-     - monitoring
      nagios:
        install_method:
          server:
