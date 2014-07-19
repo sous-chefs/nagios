@@ -185,11 +185,6 @@ if nagios_bags.bag_list.include?('nagios_hostgroups')
   end
 end
 
-nagios_conf node['nagios']['server']['name'] do
-  source 'nagios.cfg.erb'
-  config_subdir false
-end
-
 directory "#{node['nagios']['conf_dir']}/dist" do
   owner node['nagios']['user']
   group node['nagios']['group']
