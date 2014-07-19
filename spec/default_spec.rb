@@ -24,24 +24,24 @@ describe 'nagios::default' do
   end
 
   it 'should create conf_dir' do
-    expect(chef_run).to create_directory chef_run.node['nagios']['conf_dir']
+    expect(chef_run).to create_directory '/etc/nagios3'
   end
 
   it 'should template apache2 htpassword file with only admins' do
-    expect(chef_run).to render_file "#{chef_run.node['nagios']['conf_dir']}/htpasswd.users"
+    expect(chef_run).to render_file '/etc/nagios3/htpasswd.users'
   end
 
   it 'should template nagios config files' do
-    expect(chef_run).to render_file "#{chef_run.node['nagios']['conf_dir']}/conf.d/hosts.cfg"
-    expect(chef_run).to render_file "#{chef_run.node['nagios']['conf_dir']}/conf.d/hostgroups.cfg"
-    expect(chef_run).to render_file "#{chef_run.node['nagios']['conf_dir']}/conf.d/contacts.cfg"
-    expect(chef_run).to render_file "#{chef_run.node['nagios']['conf_dir']}/conf.d/servicegroups.cfg"
-    expect(chef_run).to render_file "#{chef_run.node['nagios']['conf_dir']}/conf.d/services.cfg"
-    expect(chef_run).to render_file "#{chef_run.node['nagios']['conf_dir']}/cgi.cfg"
-    expect(chef_run).to render_file "#{chef_run.node['nagios']['conf_dir']}/conf.d/templates.cfg"
-    expect(chef_run).to render_file "#{chef_run.node['nagios']['conf_dir']}/nagios.cfg"
-    expect(chef_run).to render_file "#{chef_run.node['nagios']['conf_dir']}/conf.d/timeperiods.cfg"
-    expect(chef_run).to render_file "#{chef_run.node['nagios']['conf_dir']}/conf.d/servicedependencies.cfg"
+    expect(chef_run).to render_file '/etc/nagios3/conf.d/hosts.cfg'
+    expect(chef_run).to render_file '/etc/nagios3/conf.d/hostgroups.cfg'
+    expect(chef_run).to render_file '/etc/nagios3/conf.d/contacts.cfg'
+    expect(chef_run).to render_file '/etc/nagios3/conf.d/servicegroups.cfg'
+    expect(chef_run).to render_file '/etc/nagios3/conf.d/services.cfg'
+    expect(chef_run).to render_file '/etc/nagios3/cgi.cfg'
+    expect(chef_run).to render_file '/etc/nagios3/conf.d/templates.cfg'
+    expect(chef_run).to render_file '/etc/nagios3/nagios.cfg'
+    expect(chef_run).to render_file '/etc/nagios3/conf.d/timeperiods.cfg'
+    expect(chef_run).to render_file '/etc/nagios3/conf.d/servicedependencies.cfg'
   end
 
 end
