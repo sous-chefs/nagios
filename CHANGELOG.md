@@ -20,6 +20,7 @@ v6.0.0 - CURRENTLY UNRELEASED
 - Properly create the Nagios user/group on source installs
 - Properly set the path for the p1.pl file on RHEL platforms
 - Ensure that the hostgroups array doesn't include duplicates in the even that an environment and role have the same name
+- Only template nagios.cfg once
 
 ### Improvement
 - Readme cleanup
@@ -32,7 +33,8 @@ v6.0.0 - CURRENTLY UNRELEASED
 
 ### Development
 - Vagrantfile updated for Vagrant 1.5 format changes
-- Updated Rubocop / Foodcritic / Chefspec gems to the latest for Travis testing
+- Updated Rubocop / Foodcritic / Chefspec / Berkshelf gems to the latest for Travis testing
+- Updated Berkshelf file to the 3.0 format
 - Updated Test Kitchen / Kitchen Vagrant gems to the latest for local testing
 - Test Kitchen suite added for source installs
 - Ubuntu 13.04 swapped for 14.04 in Test Kitchen
