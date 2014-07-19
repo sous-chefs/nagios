@@ -30,7 +30,7 @@ define :nagios_conf, :variables => {}, :config_subdir => true, :source => nil do
     owner node['nagios']['user']
     group node['nagios']['group']
     source params[:source]
-    mode 00644
+    mode '0644'
     variables params[:variables]
     notifies :reload, 'service[nagios]'
     backup 0
