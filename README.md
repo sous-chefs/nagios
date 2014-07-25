@@ -42,6 +42,7 @@ Attributes
 * `node['nagios']['group']` - Nagios group, default 'nagios'.
 * `node['nagios']['plugin_dir']` - location where Nagios plugins go, default '/usr/lib/nagios/plugins'.
 * `node['nagios']['multi_environment_monitoring']` - Chef server will monitor hosts in all environments, not just its own, default 'false'
+* `node['nagios']['monitored_environments']` - If multi_environment_monitoring is 'true' nagios will monitor nodes in all environments. If monitored_environments is defined then nagios will monitor only hosts in the list of environments defined. For ex: ['prod', 'beta'] will monitor only hosts in 'prod' and 'beta' chef_environments. Defaults to '[]' - and all chef environments will be monitored by default.
 * `node['nagios']['monitoring_interface']` - If set, will use the specified interface for all nagios monitoring network traffic. Defaults to `nil`
 
 * `node['nagios']['server']['install_method']` - whether to install from package or source. Default chosen by platform based on known packages available for Nagios: debian/ubuntu 'package', redhat/centos/fedora/scientific: source
@@ -72,7 +73,6 @@ Attributes
 * `node['nagios']['notifications_enabled']` - set to 1 to enable notification.
 * `node['nagios']['check_external_commands']`
 * `node['nagios']['default_contact_groups']`
-* `node['nagios']['additional_contacts']` - additional contacts to be utilized for notifying of status changes. Example: `node['nagios']['additional_contacts']['pagerduty'] = true`.
 * `node['nagios']['sysadmin_email']` - default notification email.
 * `node['nagios']['sysadmin_sms_email']` - default notification sms.
 * `node['nagios']['server_auth_method']` - authentication with the server can be done with openid (using `apache2::mod_auth_openid`), cas (using `apache2::mod_auth_cas`),ldap (using `apache2::mod_authnz_ldap`), or htauth (basic). The default is htauth. "openid" will utilize openid authentication, "cas" will utilize cas authentication, "ldap" will utilize LDAP authentication, and any other value will use htauth (basic).
@@ -160,7 +160,7 @@ Recipes
 ### default
 Includes the correct client installation recipe based on platform, either `nagios::server_package` or `nagios::server_source`.
 
-The server recipe sets up Apache as the web front end by default. The nagios::client recipe is also included. This recipe also does a number of searches to dynamically build the hostgroups to monitor, hosts that belong to them and admins to notify of events/alerts.
+The server recipe sets up Apache as the web front end by default. This recipe also does a number of searches to dynamically build the hostgroups to monitor, hosts that belong to them and admins to notify of events/alerts.
 
 Searches are confined to the node's `chef_environment` unless multi-environment monitoring is enabled.
 
@@ -257,7 +257,13 @@ Here's an example of a service check for sshd that you could apply to all hostgr
 }
 ```
 
-You may optionally define the service template for your service by including `service_template` and a valid template name. Example:  "service_template": "special_service_template". You may also optionally add a service description that will be displayed in the Nagios UI using "description": "My Service Name". If this is not present the databag item ID will be used as the description. You use defined escalations for the service with 'use_escalation'. See ___Service_Escalations__ for more information.
+You may optionally define the service template for your service by including `service_template` and a valid template name. 
+
+Example:
+```javascript
+"service_template": "special_service_template".
+```
+You may also optionally add a service description that will be displayed in the Nagios UI using "description": "My Service Name". If this is not present the databag item ID will be used as the description. You use defined escalations for the service with 'use\_escalation'. See ___Service_Escalations__ for more information.
 
 You may also use an already defined command definition by omitting the command\_line parameter and using use\_existing\_command parameter instead:
 

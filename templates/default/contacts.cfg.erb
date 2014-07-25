@@ -38,8 +38,8 @@ define contact {
 
 <% end -%>
 
-# Contacts from data bags
 <% @contacts.each do |contact| -%>
+<% if contact == @contacts.first -%># Contacts from data bags<% end -%>
 define contact {
   name <%= contact['id'] %>
   contact_name <%= contact['id'] %>
@@ -51,8 +51,8 @@ define contact {
 }
 <% end -%>
 
-# Contact Groups from data bags
 <% @contactgroups.each do |contactgroup| -%>
+<% if contactgroup == @contactgroups.first -%># Contact Groups from data bags<% end -%>
 define contactgroup {
   contactgroup_name <%= contactgroup['id'] %>
   <% %w{alias members contactgroup_members}.each do |conf| %>
@@ -63,8 +63,8 @@ define contactgroup {
 }
 <% end -%>
 
-# Service escalations defined by data bags
 <% @serviceescalations.each do |serviceescalation| -%>
+<% if serviceescalation == @serviceescalations.first -%># Service escalations defined by data bags<% end -%>
 define serviceescalation {
   name <%= serviceescalation['id'] %>
   <% unless serviceescalation['register'] %>
@@ -78,8 +78,8 @@ define serviceescalation {
 }
 <% end -%>
 
-# Host escalations defined by data bags
 <% @hostescalations.each do |hostescalation| -%>
+<% if hostescalation == @hostescalations.first -%># Host escalations defined by data bags<% end -%>
 define hostescalation {
   name <%= hostescalation['id'] %>
   <% unless hostescalation['register'] %>

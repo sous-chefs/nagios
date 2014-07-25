@@ -1,0 +1,5 @@
+    {
+      "id": "not_admin",
+      "groups": "not_sysadmin",
+      "htpasswd": "$apr1$fmMTdsBg$KLGrzHT.K3CNfPP05oRgW/"
+    }

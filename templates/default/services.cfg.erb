@@ -9,6 +9,10 @@
        valid = false
 
        service['hostgroup_name'].split(",").each do |s|
+         if s[0] == '!'
+           s = s[1, s.length]
+         end
+
          valid = @hostgroups.include?(s) || @search_hostgroups.include?(s)
          valid || break
        end

@@ -14,7 +14,7 @@ describe 'nagios::default' do
                                        },
                                        'bsmith' => {
                                          'group' => 'users'
-      }
+                                       }
     )
 
     stub_command('dpkg -l nagios3').and_return(true)
@@ -40,15 +40,15 @@ describe 'nagios::default' do
   end
 
   it 'should create nagios user and group' do
-    expect(chef_run).to create_user chef_run.node['nagios']['user']
-    expect(chef_run).to create_group chef_run.node['nagios']['group']
+    expect(chef_run).to create_user 'nagios'
+    expect(chef_run).to create_group 'nagios'
   end
 
   it 'should create nagios directories' do
-    expect(chef_run).to create_directory chef_run.node['nagios']['config_dir']
+    expect(chef_run).to create_directory '/etc/nagios3'
     expect(chef_run).to create_directory chef_run.node['nagios']['cache_dir']
     expect(chef_run).to create_directory chef_run.node['nagios']['log_dir']
     expect(chef_run).to create_directory chef_run.node['nagios']['run_dir']
-    expect(chef_run).to create_directory "/usr/lib/#{chef_run.node['nagios']['server']['vname']}"
+    expect(chef_run).to create_directory '/usr/lib/nagios3'
   end
 end

@@ -96,8 +96,8 @@ define service{
   is_volatile                     1
   }
 
-# Templates defined by data bags
 <% @templates.each do |template| -%>
+<% if template == @templates.first -%># Templates defined by data bags<% end -%>
 define service {
   name <%= template['id'] %>
   use <% if template['use'].nil? -%>default-service<% else -%><%= template['use'] %><% end -%>

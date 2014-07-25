@@ -22,6 +22,7 @@
 
 # Allow a Nagios server to monitor hosts in multiple environments.
 default['nagios']['multi_environment_monitoring'] = false
+default['nagios']['monitored_environments'] = []
 
 default['nagios']['user']  = 'nagios'
 default['nagios']['group'] = 'nagios'
@@ -47,6 +48,7 @@ case node['platform_family']
 when 'rhel', 'fedora'
   default['nagios']['home']          = '/var/spool/nagios'
   default['nagios']['conf_dir']      = '/etc/nagios'
+  default['nagios']['resource_dir']  = '/etc/nagios'
   default['nagios']['config_dir']    = '/etc/nagios/conf.d'
   default['nagios']['log_dir']       = '/var/log/nagios'
   default['nagios']['cache_dir']     = '/var/log/nagios'
@@ -56,6 +58,7 @@ when 'rhel', 'fedora'
 else
   default['nagios']['home']          = '/usr/lib/nagios3'
   default['nagios']['conf_dir']      = '/etc/nagios3'
+  default['nagios']['resource_dir']  = '/etc/nagios3'
   default['nagios']['config_dir']    = '/etc/nagios3/conf.d'
   default['nagios']['log_dir']       = '/var/log/nagios3'
   default['nagios']['cache_dir']     = '/var/cache/nagios3'
@@ -222,14 +225,9 @@ default['nagios']['cgi']['lock_author_names']                        = 1
 node.set['nagios']['pagerduty']['key'] = node['nagios']['pagerduty_key']
 
 default['nagios']['pagerduty']['key'] = ''
-unless node['nagios']['pagerduty']['key'].empty?
-  default['nagios']['additional_contacts'] = { 'pagerduty' => true }
-end
 default['nagios']['pagerduty']['script_url'] = 'https://raw.github.com/PagerDuty/pagerduty-nagios-pl/master/pagerduty_nagios.pl'
 default['nagios']['pagerduty']['service_notification_options'] = 'w,u,c,r'
 default['nagios']['pagerduty']['host_notification_options'] = 'd,r'
 
 # atrributes for setting broker lines
 default['nagios']['brokers'] = {}
-# defalult attribute to exclude local environments
-default['nagios']['exclude_string'] = "local"

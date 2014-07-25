@@ -9,6 +9,7 @@
 #
 # Copyright 2009, 37signals
 # Copyright 2009-2013, Chef Software, Inc.
+# Copyright 2013-2014, Limelight Networks, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -47,31 +48,20 @@ else
   fail 'Unknown web server option provided for Nagios server'
 end
 
-# find nagios web interface users from the defined data bag
-user_databag = node['nagios']['users_databag'].to_sym
-group = node['nagios']['users_databag_group']
-
-sysadmins = []
-
-begin
-  search(user_databag, "groups:#{group} NOT action:remove") { |d| sysadmins << d unless d['nagios'].nil? || d['nagios']['email'].nil? }
-rescue Net::HTTPServerException
-  Chef::Log.fatal("\"#{node['nagios']['users_databag']}\" databag could not be found.")
-  raise "\"#{node['nagios']['users_databag']}\" databag could not be found."
-end
-
-Chef::Log.info("Could not find users in the \"#{node['nagios']['users_databag']}\" databag with the \"#{group}\" group.  If you are
-expecting contacts other than pagerduty contacts, make sure the databag exists and, if you have set the \"users_databag_group\", tha
-t users in that group exist.") if sysadmins.empty?
-
 # install nagios service either from source of package
 include_recipe "nagios::server_#{node['nagios']['server']['install_method']}"
 
-web_srv = node['nagios']['server']['web_server']
+# use the users_helper.rb library to build arrays of users and contacts
+nagios_users = NagiosUsers.new(node)
 
+Chef::Log.fatal("Could not find users in the \"#{node['nagios']['users_databag']}\" databag with the \"#{node['nagios']['users_databag_group']}\"" \
+                'group. Users must be defined to allow for logins to the UI. Make sure the databag exists and, if you have set the ' \
+                "\"users_databag_group\", that users in that group exist.") if nagios_users.users.empty?
+
+# configure the appropriate authentication method for the web server
 case node['nagios']['server_auth_method']
 when 'openid'
-  if web_srv == 'apache'
+  if node['nagios']['server']['web_server'] == 'apache'
     include_recipe 'apache2::mod_auth_openid'
   else
     Chef::Log.fatal('OpenID authentication for Nagios is not supported on NGINX')
@@ -79,7 +69,7 @@ when 'openid'
     fail
   end
 when 'cas'
-  if web_srv == 'apache'
+  if node['nagios']['server']['web_server'] == 'apache'
     include_recipe 'apache2::mod_auth_cas'
   else
     Chef::Log.fatal('CAS authentication for Nagios is not supported on NGINX')
@@ -87,7 +77,7 @@ when 'cas'
     fail
   end
 when 'ldap'
-  if web_srv == 'apache'
+  if node['nagios']['server']['web_server'] == 'apache'
     include_recipe 'apache2::mod_authnz_ldap'
   else
     Chef::Log.fatal('LDAP authentication for Nagios is not supported on NGINX')
@@ -95,13 +85,15 @@ when 'ldap'
     fail
   end
 else
+  # setup htpasswd auth
   directory node['nagios']['conf_dir']
+
   template "#{node['nagios']['conf_dir']}/htpasswd.users" do
     source 'htpasswd.users.erb'
     owner node['nagios']['user']
     group web_group
     mode '0640'
-    variables(:sysadmins => sysadmins)
+    variables(:nagios_users => nagios_users.users)
   end
 end
 
@@ -121,6 +113,8 @@ end
 Chef::Log.info('Beginning search for nodes.  This may take some time depending on your node count')
 nodes = []
 hostgroups = []
+multi_env = node['nagios']['monitored_environments']
+multi_env_search = multi_env.empty? ? '' : ' AND (chef_environment:' + multi_env.join(' OR chef_environment:') + ')'
 
 if node['nagios']['multi_environment_monitoring']
   unless mon_environs.nil? || mon_environs.empty?
@@ -130,7 +124,7 @@ if node['nagios']['multi_environment_monitoring']
       end
     end
   else
-    nodes = search(:node, "name:* AND chef_environment:*")
+    nodes = search(:node, "name:*#{multi_env_search}")
   end
 else
   nodes = search(:node, "name:* AND chef_environment:#{node.chef_environment}")
@@ -213,24 +207,6 @@ if nagios_bags.bag_list.include?('nagios_hostgroups')
   end
 end
 
-# pick up base contacts
-members = []
-sysadmins.each do |s|
-  members << s['id']
-end
-
-# add additional contacts including pagerduty to the contacts
-if node['nagios']['additional_contacts']
-  node['nagios']['additional_contacts'].each do |s, enabled|
-    members << s if enabled
-  end
-end
-
-nagios_conf node['nagios']['server']['name'] do
-  source 'nagios.cfg.erb'
-  config_subdir false
-end
-
 directory "#{node['nagios']['conf_dir']}/dist" do
   owner node['nagios']['user']
   group node['nagios']['group']
@@ -305,8 +281,7 @@ nagios_conf 'commands' do
 end
 
 nagios_conf 'services' do
-  variables(:service_hosts => service_hosts,
-            :services => services,
+  variables(:services => services,
             :search_hostgroups => hostgroup_list,
             :hostgroups => hostgroups)
 end
@@ -316,8 +291,8 @@ nagios_conf 'servicegroups' do
 end
 
 nagios_conf 'contacts' do
-  variables(:admins => sysadmins,
-            :members => members,
+  variables(:admins => nagios_users.users,
+            :members => nagios_users.return_user_contacts,
             :contacts => contacts,
             :contactgroups => contactgroups,
             :serviceescalations => serviceescalations,

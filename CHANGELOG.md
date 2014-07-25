@@ -2,6 +2,45 @@ nagios Cookbook CHANGELOG
 =========================
 This file is used to list changes made in each version of the nagios cookbook.
 
+v6.0.0 - CURRENTLY UNRELEASED
+-----------------------------
+### Breaking changes
+- NRPE is no longer installed by the nagios cookbook.  This is handled by the NRPE cookbook.  Moving this logic allows for more fined grained control of how the two services are installed and configured
+- Previously the Nagios server was monitored out of the box using a NRPE check.  This is no longer the case since the cookbooks are split.  You'll need to add a services data bag to return this functionality
+- RHEL now defaults to installing via packages.  If you would like to continue installing via source make sure to set the installation_method attribute
+- node['nagios']['additional_contacts'] attribute has been removed.  This was previously used for Pagerduty integration
+- Server setup is now handled in the nagios::default recipe vs. the nagios::server recipe.  You will need to update roles / nodes referencing the old recipe
+
+### Bug
+- htpasswd file should be setup after Nagios has been installed to ensure the user has been created
+- Ensure that the Linux hostgroup still gets created even if the Nagios server is the first to come up in the environment
+- Correctly set the vname on RHEL/Fedora platforms for source/package installs
+- Set resource_dir in nagios.cfg on RHEL platforms with a new attribute
+- Create the archives dir in the log on source installs
+- Properly create the Nagios user/group on source installs
+- Properly set the path for the p1.pl file on RHEL platforms
+- Ensure that the hostgroups array doesn't include duplicates in the even that an environment and role have the same name
+- Only template nagios.cfg once
+
+### Improvement
+- Readme cleanup
+- Created a new users_helper library to abstract much of the Ruby logic for building user lists out of the recipe
+- Avoid writing out empty comments in templates for data bag driven configs
+
+### New Feature
+- New attribute node['nagios']['monitored_environments'] for specifying multiple environments you'd like to monitor
+- Allow using the exclusion hostgroup format used by Nagios when defining the hostgroup for a check
+
+### Development
+- Vagrantfile updated for Vagrant 1.5 format changes
+- Updated Rubocop / Foodcritic / Chefspec / Berkshelf gems to the latest for Travis testing
+- Updated Berkshelf file to the 3.0 format
+- Updated Test Kitchen / Kitchen Vagrant gems to the latest for local testing
+- Test Kitchen suite added for source installs
+- Ubuntu 13.04 swapped for 14.04 in Test Kitchen
+- Added a large number of data bags to be used by Test Kitchen to handle several scenarios
+- Setup port forwarding in Test Kitchen so you can converge the nodes and load the Web UI
+- Added additional Test Kitchen and Chef Spec tests
 
 v5.3.4
 ------

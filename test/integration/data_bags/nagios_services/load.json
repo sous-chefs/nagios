@@ -1,0 +1,5 @@
+{
+  "id": "load",
+  "hostgroup_name": "linux",
+  "command_line": "$USER1$/check_nrpe -H $HOSTADDRESS$ -c check_load -t 20"
+}
