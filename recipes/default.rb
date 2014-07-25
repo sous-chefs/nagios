@@ -112,7 +112,7 @@ search(:environment, "name:*").each do |environment|
   unless noenvirons.any?{ |str| environment.name.include? str }
     mon_environs << environment.name
   end
-  mon_environs = mon.environs.sort.uniq
+  mon_environs = mon_environs.sort.uniq
 end 
 
 # find nodes to monitor.  Search in all environments if multi_environment_monitoring is enabled
