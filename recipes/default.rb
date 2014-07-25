@@ -114,6 +114,7 @@ mon_environs = []
 search(:node, "name:*").each do |node|
   unless node['nomonitoring'].any?{ |str| node.chef_environment.include? str }
     environs << node.chef_environment
+  end
 end 
 
 if node['nagios']['multi_environment_monitoring']
