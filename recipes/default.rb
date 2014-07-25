@@ -106,13 +106,15 @@ else
 end
 
 # Find environments to search if excluding environments
-noenvirons = node['nomonitoring']
-mon_environs = []
-search(:environment, "name:*").each do |environment|
-  unless noenvirons.any?{ |str| environment.name.include? str }
-    mon_environs << environment.name
+unless node['nomonitoring'].nil? || node['nomonitoring'].empty?
+  noenvirons = node['nomonitoring']
+  mon_environs = []
+  search(:environment, "name:*").each do |environment|
+    unless noenvirons.any?{ |str| environment.name.include? str }
+      mon_environs << environment.name
+    end
+    mon_environs = mon_environs.sort.uniq
   end
-  mon_environs = mon_environs.sort.uniq
 end 
 
 # find nodes to monitor.  Search in all environments if multi_environment_monitoring is enabled
@@ -121,10 +123,14 @@ nodes = []
 hostgroups = []
 
 if node['nagios']['multi_environment_monitoring']
-  mon_environs.each do |env|
-    search(:node, "name:* AND chef_environment:#{env}").each do |node|
-      nodes << node
+  unless mon_environs.nil? || mon_environs.empty?
+    mon_environs.each do |env|
+      search(:node, "name:* AND chef_environment:#{env}").each do |node|
+        nodes << node
+      end
     end
+  else
+    nodes = search(:node, "name:* AND chef_environment:*")
   end
 else
   nodes = search(:node, "name:* AND chef_environment:#{node.chef_environment}")
