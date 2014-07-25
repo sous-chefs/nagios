@@ -105,17 +105,20 @@ else
   end
 end
 
+# Find environments to search if excluding environments
+noenvirons = node['nomonitoring']
+mon_environs = []
+search(:environment, "name:*").each do |environment|
+  unless noenvirons.any?{ |str| environment.name.include? str }
+    mon_environs << environment.name
+  end
+  mon_environs = mon.environs.sort.uniq
+end 
+
 # find nodes to monitor.  Search in all environments if multi_environment_monitoring is enabled
 Chef::Log.info('Beginning search for nodes.  This may take some time depending on your node count')
 nodes = []
 hostgroups = []
-
-mon_environs = []
-search(:node, "name:*").each do |node|
-  unless node['nomonitoring'].any?{ |str| node.chef_environment.include? str }
-    mon_environs << node.chef_environment
-  end
-end 
 
 if node['nagios']['multi_environment_monitoring']
   mon_environs.each do |env|
