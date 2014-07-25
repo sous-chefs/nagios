@@ -110,8 +110,18 @@ Chef::Log.info('Beginning search for nodes.  This may take some time depending o
 nodes = []
 hostgroups = []
 
+mon_environs = []
+search(:node, "name:*").each do |node|
+  unless node['nomonitoring'].any?{ |str| node.chef_environment.include? str }
+    environs << node.chef_environment
+end 
+
 if node['nagios']['multi_environment_monitoring']
-  nodes = search(:node, "name:* AND NOT chef_environment:#{node['nagios']['exclude_string']}*")
+  mon_environs.each do |env|
+    search(:node, "name:* AND chef_environment:#{env}*").each do |node|
+      nodes << node
+    end
+  end
 else
   nodes = search(:node, "name:* AND chef_environment:#{node.chef_environment}")
 end
