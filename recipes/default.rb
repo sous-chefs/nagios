@@ -113,7 +113,7 @@ hostgroups = []
 mon_environs = []
 search(:node, "name:*").each do |node|
   unless node['nomonitoring'].any?{ |str| node.chef_environment.include? str }
-    environs << node.chef_environment
+    mon_environs << node.chef_environment
   end
 end 
 
