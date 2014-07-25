@@ -125,7 +125,6 @@ if node['nagios']['multi_environment_monitoring']
     search(:node, "name:* AND chef_environment:#{env}").each do |node|
       nodes << node
     end
-    nodes = nodes.sort.uniq
   end
 else
   nodes = search(:node, "name:* AND chef_environment:#{node.chef_environment}")
