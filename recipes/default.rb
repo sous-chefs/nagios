@@ -136,7 +136,7 @@ end
 # if using multi environment monitoring add all environments to the array of hostgroups
 if node['nagios']['multi_environment_monitoring']
   search(:environment, '*:*') do |e|
-    unless e.name.include? node['nagios']['exclude_string']
+    unless node['nomonitoring'].any?{ |str| e.name.include? str }
       hostgroups << e.name unless hostgroups.include?(e.name)
       nodes.select { |n| n.chef_environment == e.name }.each do |n|
         service_hosts[e.name] = n[node['nagios']['host_name_attribute']]
