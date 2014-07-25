@@ -122,7 +122,7 @@ hostgroups = []
 
 if node['nagios']['multi_environment_monitoring']
   mon_environs.each do |env|
-    search(:node, "name:* AND chef_environment:#{env}*").each do |node|
+    search(:node, "name:* AND chef_environment:#{env}").each do |node|
       nodes << node
     end
     nodes = nodes.sort.uniq
