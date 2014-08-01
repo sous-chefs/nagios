@@ -89,6 +89,7 @@ Attributes
 * `node['nagios']['services_databag']` - the databag containing services to search for. defaults to nagios_services
 * `node['nagios']['servicegroups_databag']` - the databag containing servicegroups to search for. defaults to nagios_servicegroups
 * `node['nagios']['templates_databag']` - the databag containing templates to search for. defaults to nagios_templates
+* `node['nagios']['hosttemplates_databag']` - the databag containing host templates to search for. defaults to nagios_hosttemplates
 * `node['nagios']['eventhandlers_databag']` - the databag containing eventhandlers to search for. defaults to nagios_eventhandlers
 * `node['nagios']['unmanaged_hosts_databag']` - the databag containing unmanagedhosts to search for. defaults to nagios_unmanagedhosts
 * `node['nagios']['serviceescalations_databag']` - the databag containing serviceescalations to search for. defaults to nagios_serviceescalations
@@ -99,15 +100,11 @@ Attributes
 * `node['nagios']['host_name_attribute']` - node attribute to use for naming the host. Must be unique across monitored nodes. Defaults to hostname
 * `node['nagios']['regexp_matching']` - Attribute to enable [regexp matching](http://nagios.sourceforge.net/docs/3_0/configmain.html#use_regexp_matching). Defaults to 0.
 * `node['nagios']['large_installation_tweaks']` - Attribute to enable [large installation tweaks](http://nagios.sourceforge.net/docs/3_0/largeinstalltweaks.html). Defaults to 0.
-* `node['nagios']['templates']`
+* `node['nagios']['templates']` - These set directives in the default host template. Unless explicitly overridden, they will be inherited by the host definitions for each discovered node and `nagios_unmanagedhosts` data bag. For more information about these directives, see the Nagios documentation for [host definitions](http://nagios.sourceforge.net/docs/3_0/objectdefinitions.html#host).
+* `node['nagios']['hosts_template']` - Host template you want to inherit properties/variables from, default 'server'. For more information, see the nagios doc on [Object Inheritance](http://nagios.sourceforge.net/docs/3_0/objectinheritance.html).
 * `node['nagios']['interval_length']` - minimum interval.
 * `node['nagios']['brokers']` - Hash of broker modules to include in the config. Hash key is the path to the broker module, the value is any parameters to pass to it.
 
-These set directives in the default host template. Unless explicitly
-overridden, they will be inherited by the host definitions for each
-discovered node and `nagios_unmanagedhosts` data bag. For more
-information about these directives, see the Nagios documentation for
-[host definitions](http://nagios.sourceforge.net/docs/3_0/objectdefinitions.html#host).
 
 * `node['nagios']['default_host']['flap_detection']` - Defaults to `true`.
 * `node['nagios']['default_host']['check_period']` - Defaults to `'24x7'`.
@@ -346,6 +343,32 @@ Here is an example timeperiod definition:
 ```
 
 Additional information on defining time periods can be found in the [Nagios Documentation](http://nagios.sourceforge.net/docs/3_0/objectdefinitions.html#timeperiod).
+
+### Host Templates
+Host templates are optional, but allow you to specify combinations of attributes to apply to a host. Create a nagios_hosttemplates\ data bag that will contain definitions for host templates to be used. Each host template need only specify id and whichever parameters you want to override.
+
+Here's an example of a template that reduces the check frequency to once per day and changes the retry interval to 1 hour.
+
+```javascript
+{
+  "id": "windows-host",
+  "check_command": "check-host-alive-windows"
+}
+```
+
+You then use the host template by setting the `node['nagios']['host_template']` attribute for a node. You could apply this with a role as follows:
+
+```ruby
+role 'windows'
+
+default_attributes(
+  nagios: {
+    host_template: 'windows-host'
+  }
+)
+```
+
+Additional directives can be defined as described in the Nagios documentation for [Host Definitions](http://nagios.sourceforge.net/docs/3_0/objectdefinitions.html#host).
 
 ### Templates
 Templates are optional, but allow you to specify combinations of attributes to apply to a service. Create a nagios_templates\ data bag that will contain definitions for templates to be used. Each template need only specify id and whichever parameters you want to override.
