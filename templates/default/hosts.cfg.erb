@@ -41,7 +41,7 @@ define host {
 <% @unmanaged_hosts.each do |n| -%>
   <% unless (n['environment'] && n['environment'] != node.chef_environment ) -%>
 define host {
-  use server
+  use <%= n['use'] || 'server' %>
   address <%= n['address'] %>
   host_name <%= node['nagios']['server']['normalize_hostname'] ? n['id'].downcase : n['id'] %>
   hostgroups all,<%= n['hostgroups'].join(",") %>
