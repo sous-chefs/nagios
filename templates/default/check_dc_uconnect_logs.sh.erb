@@ -1,0 +1,1 @@
+/usr/lib/nagios/plugins/check_log3_passive.pl -l <%= node['nagios']['logfiles']['dc_uconnect_heap']['log_file'] %> -S 'Check DC_Uconnect Heap' -s /tmp/dc_uconnect_heap -p "<%= node['nagios']['checks']['dc_uconnect_heap']['pattern'] %>" -c 1 > /dev/null

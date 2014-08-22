@@ -1,3 +1,3 @@
 #!/bin/sh
 
-/usr/lib/nagios/plugins/check_log3_passive.pl -l <%= node['nagios']['logfiles']['eventstream']['syslog'] %> -S 'Check EventStream Logs' -s /tmp/eventstream -p <%= node['nagios']['checks']['eventstream_logging']['pattern'] %> -c 1 > /dev/null
+/usr/lib/nagios/plugins/check_log3_passive.pl -l <%= node['nagios']['logfiles']['eventstream']['syslog'] %> -S 'Check EventStream Logs' -s /tmp/eventstream -p "<%= node['nagios']['checks']['eventstream_logging']['pattern'] %>" -c 1 > /dev/null

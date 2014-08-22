@@ -32,7 +32,7 @@ command[check_stunnel]=<%= node['nagios']['plugin_dir'] %>/check_procs -c 6:6 -C
 command[check_nullmailer]=<%= node['nagios']['plugin_dir'] %>/check_procs -c 1:1 -C nullmailer-send
 
 #check rsyslog processes
-command[check_rsyslog]=<%= node['nagios']['plugin_dir'] %>/check_procs -c 1:1 -C rsyslogd
+#command[check_rsyslog]=<%= node['nagios']['plugin_dir'] %>/check_procs -c 1:1 -C rsyslogd
 
 #check chef status
 command[check_chef_status]=<%= node['nagios']['plugin_dir'] %>/check_last_logs.pl /usr/bin/chef-client 270 /var/log/syslog
@@ -111,6 +111,11 @@ command[check_dir_files]=<%= node['nagios']['plugin_dir'] %>/dircount.pl /data/s
 <% if node.roles.include?("dc_visitor_processor") %>
 #check DC VP processes
 command[check_visitor_processor]=<%= node['nagios']['plugin_dir'] %>/check_procs -a "/var/lib/sources/data_cloud/visitor_profile_processor.one-jar.jar visitor_processor"
+<% end %>
+
+<% if node.roles.include?("dc_uconnect") %>
+#check DC Uconnect process
+command[check_uconnect]=<%= node['nagios']['plugin_dir'] %>/check_procs -a "/usr/share/tealium/datacloud/visitor_profile_processor.jar uconnect"
 <% end %>
 
 <% if node.roles.include?("dc_query_aggregator") %>

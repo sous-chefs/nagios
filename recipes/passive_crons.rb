@@ -28,6 +28,9 @@ end
 if node.recipes.include?("uconnect::s2s_logger_plenv") || node.roles.include?("uconnect_logger")
   nodesize = node[:ec2][:instance_type].split('.').last
   num_procs = node[:uconnect][:iron_processes][nodesize]
+  num_procs2 = node[:uconnect][:iron_processes][:micro]
+  
+   Chef::Log.warn( "Node is #{nodesize}, and so num of procs is #{num_procs2}" )
   Chef::Log.warn( "Node is #{nodesize}, and so num of procs is #{num_procs}" )
     for i in 1..num_procs
       template "/var/log/upstart/s2s-httpd-iron-processor-#{i}.log" do
@@ -150,3 +153,71 @@ if node.roles.include?("utui")
     )
   end
 end
+
+if node.roles.include?("sitescan_sitemap")
+
+  Chef::Log.warn( "Node roles are #{node.roles}.")
+
+  cron "Check SiteMap Logs" do
+    minute "*/15"
+    command "/bin/sleep `/usr/bin/expr $RANDOM \\% 90` &> /dev/null ; /usr/lib/nagios/plugins/Check_Sitemap_Logs.sh"
+  end
+
+  template "/usr/lib/nagios/plugins/Check_Sitemap_Logs.sh" do
+    source "check_sitemap_logs.sh.erb"
+    owner "root"
+    group "root"
+    mode 0755
+  end
+
+  region = node['ec2']['region']
+  nagios_server = "#{node["consul"]["server"][region]}"
+
+  template "/usr/lib/nagios/plugins/check_log3_passive.pl" do
+    source "check_log3_passive.pl.erb"
+    owner "root"
+    group "root"
+    mode 0755
+    variables(
+      :nagios_server => nagios_server
+    )
+  end
+end
+
+
+if node.roles.include?("dc_uconnect")
+
+  Chef::Log.warn( "Node roles are #{node.roles}.")
+
+  cron "Check DC Uconnect Logs" do
+    minute "*/15"
+    command "/bin/sleep `/usr/bin/expr $RANDOM \\% 90` &> /dev/null ; /usr/lib/nagios/plugins/Check_DC_Uconnect_Logs.sh"
+  end
+
+  template "/usr/lib/nagios/plugins/Check_DC_Uconnect_Logs.sh" do
+    source "check_dc_uconnect_logs.sh.erb"
+    owner "root"
+    group "root"
+    mode 0755
+  end
+
+  region = node['ec2']['region']
+  nagios_server = "#{node["consul"]["server"][region]}"
+
+  template "/usr/lib/nagios/plugins/check_log3_passive.pl" do
+    source "check_log3_passive.pl.erb"
+    owner "root"
+    group "root"
+    mode 0755
+    variables(
+      :nagios_server => nagios_server
+    )
+  end
+end
+
+
+
+
+
+
+

@@ -83,6 +83,7 @@ define service {
     hostgroup_name      uconnect_logger,hostname_uconnect
     check_command       check_dir_files
     use                 uconnect-service,srv-pnp
+    event_handler       s2s-resolve
 }
 
 <% unless @main_nagios.nil? -%>
@@ -145,52 +146,45 @@ define service {
     use                 default-service,srv-pnp
 }
 
-define service {
-    service_description Check Rabbit record_requests_que VPC US WEST CLUSTER
-    <%= @designation %> <%= @main_nagios %>
-    check_command       check_rabbit_queues!us-west-1.cluster.rabbitmq.tealiumiq.com!/server2server!record_requests_queue!admin!toor4cars9window14five.!500,-1,1000,-1!750,-1,1250,-1
-    use                 default-service,srv-pnp
-}
+#define service {
+#    service_description Check Rabbit record_requests_que VPC US WEST CLUSTER
+#    <%= @designation %> <%= @main_nagios %>
+#    check_command       check_rabbit_queues!us-west-1.cluster.rabbitmq.tealiumiq.com!/server2server!record_requests_queue!admin!toor4cars9window14five.!500,-1,1000,-1!750,-1,1250,-1
+#    use                 default-service,srv-pnp
+#}
 
 define service {
     service_description Check Rabbit vp_to_vs_visitor_result NON_VPC US EAST
     <%= @designation %> <%= @main_nagios %>
-    check_command       check_rabbit_queues!ec2-23-20-138-181.compute-1.amazonaws.com!/server2server!vp_to_vs_visitor_result!admin!toor4cars9window14five.!250,-1,200,-1!300,-1,250,-1
+    check_command       check_rabbit_queues!ec2-54-198-111-12.compute-1.amazonaws.com!/server2server!vp_to_vs_visitor_result!admin!toor4cars9window14five.!250,-1,200,-1!300,-1,250,-1
     use                 default-service,srv-pnp
 }
 
 define service {
     service_description Check Rabbit http_requests_queue NON_VPC US EAST
     <%= @designation %> <%= @main_nagios %>
-    check_command       check_rabbit_queues!ec2-23-20-138-181.compute-1.amazonaws.com!/server2server!http_requests_queue!admin!toor4cars9window14five.!4000,-1,2000,-1!4500,-1,2500,-1
+    check_command       check_rabbit_queues!ec2-54-198-111-12.compute-1.amazonaws.com!/server2server!http_requests_queue!admin!toor4cars9window14five.!4000,-1,2000,-1!4500,-1,2500,-1
     use                 default-service,srv-pnp
 }
 
 define service {
    service_description Check Rabbit tag_request_queue NON_VPC US EAST
     <%= @designation %> <%= @main_nagios %>
-    check_command       check_rabbit_queues!ec2-23-20-138-181.compute-1.amazonaws.com!/server2server!tag_request_queue!admin!toor4cars9window14five.!200,-1,200,-1!300,-1,300,-1
+    check_command       check_rabbit_queues!ec2-54-198-111-12.compute-1.amazonaws.com!/server2server!tag_request_queue!admin!toor4cars9window14five.!200,-1,200,-1!300,-1,300,-1
     use                 default-service,srv-pnp
 }
 
 define service {
     service_description Check Rabbit http_response_task NON_VPC US EAST
     <%= @designation %> <%= @main_nagios %>
-    check_command       check_rabbit_queues!ec2-23-20-138-181.compute-1.amazonaws.com!/server2server!http_response_task!admin!toor4cars9window14five.!200,-1,200,-1!300,-1,300,-1
-    use                 default-service,srv-pnp
-}
-
-define service {
-    service_description Check Rabbit record_requests_que NON_VPC US EAST
-    <%= @designation %> <%= @main_nagios %>
-    check_command       check_rabbit_queues!ec2-23-20-138-181.compute-1.amazonaws.com!/server2server!record_requests_queue!admin!toor4cars9window14five.!1500,-1,1500,-1!2000,-1,2000,-1
+    check_command       check_rabbit_queues!ec2-54-198-111-12.compute-1.amazonaws.com!/server2server!http_response_task!admin!toor4cars9window14five.!200,-1,200,-1!300,-1,300,-1
     use                 default-service,srv-pnp
 }
 
 define service {
     service_description Check Rabbit vp_to_vs_visitor_result NON_VPC EU WEST
     <%= @designation %> <%= @main_nagios %>
-    check_command       check_rabbit_queues!ec2-46-137-17-176.eu-west-1.compute.amazonaws.com!/server2server!vp_to_vs_visitor_result!admin!toor4cars9window14five.!250,-1,200,-1!300,-1,250,-1
+    check_command       check_rabbit_queues!ec2-46-137-17-176.eu-west-1.compute.amazonaws.com!/server2server!vp_to_vs_visitor_result!admin!toor4cars9window14five.!1000,-1,1000,-1!500,-1,500,-1
     use                 default-service,srv-pnp
 }
 
@@ -212,13 +206,6 @@ define service {
     service_description Check Rabbit http_response_task NON_VPC EU WEST
     <%= @designation %> <%= @main_nagios %>
     check_command       check_rabbit_queues!ec2-46-137-17-176.eu-west-1.compute.amazonaws.com!/server2server!http_response_task!admin!toor4cars9window14five.!200,-1,200,-1!300,-1,300,-1
-    use                 default-service,srv-pnp
-}
-
-define service {
-    service_description Check Rabbit record_requests_que NON_VPC EU WEST
-    <%= @designation %> <%= @main_nagios %>
-    check_command       check_rabbit_queues!ec2-46-137-17-176.eu-west-1.compute.amazonaws.com!/server2server!record_requests_queue!admin!toor4cars9window14five.!500,-1,1000,-1!750,-1,1250,-1
     use                 default-service,srv-pnp
 }
 
@@ -312,6 +299,21 @@ define service {
     use                 default-service,srv-pnp
 }
 
+
+define service {
+    service_description Check DC Uconnect Service HTTP 9000
+    hostgroup_name      dc_uconnect
+    check_command       check_tcp!9090
+    use                 default-service,srv-pnp
+}
+
+define service {
+    service_description Check DC_Uconnect Heap
+    hostgroup_name      dc_uconnect
+    use                 passive-service
+    event_handler       dc_uconnect_restart
+}
+
 define service {
     service_description Nagios HTTP Auth
     hostgroup_name      nagios
@@ -341,6 +343,13 @@ define service {
 }
 
 define service {
+    service_description Check Eventstream process
+    hostgroup_name      eventstream
+    check_command       check_nrpe!check_eventstream
+    use                 default-service,srv-pnp
+}
+
+define service {
     service_description Check rabbitmq unakd messages
     hostgroup_name      rabbitmq_server
     check_command       check_nrpe!check_rabbitmq_unackd
@@ -354,6 +363,14 @@ define service {
     check_command       check_jmx_heap!<%= @vp_heap %>500000000
     use                 jmx-service,srv-pnp
 }
+
+
+#define service {
+#    service_description Check JMX DataCloud Uconnect Java Heap
+#    hostgroup_name      dc_uconnect
+#    check_command       check_jmx_heap!<%= @u_heap %>500000000
+#    use                 jmx-service,srv-pnp
+#}
 
 define service {
     service_description Check JMX DataCloud Message Router Java Heap
@@ -657,6 +674,13 @@ define service {
 }
 
 define service {
+    service_description Check DC Uconnect process
+    hostgroup_name      dc_uconnect
+    check_command       check_nrpe!check_uconnect
+    use                 default-service,srv-pnp
+}
+
+define service {
     service_description Check DC Visitor Service
     hostgroup_name      dc_visitor_service
     check_command       check_nrpe!check_visitor_service
@@ -669,6 +693,8 @@ define service {
     check_command       check_nrpe!check_query_aggregator
     use                 default-service,srv-pnp
 }
+
+
 
 define service {
     service_description Check DC Message Router
@@ -691,12 +717,12 @@ define service {
     use                 default-service,srv-pnp
 }
 
-define service {
-    service_description Check rsyslog process
-    hostgroup_name      all
-    check_command       check_nrpe!check_rsyslog
-    use                 default-service,srv-pnp
-}
+#define service {
+#    service_description Check rsyslog process
+#    hostgroup_name      all
+#    check_command       check_nrpe!check_rsyslog
+#    use                 default-service,srv-pnp
+#}
 
 define service {
     service_description Check rabbitmq beam process
@@ -807,14 +833,22 @@ define service {
     service_description Load Average
     hostgroup_name      all
     check_command       check_load
-    use                 default-service,srv-pnp
+    use                 load-service,srv-pnp
 }
 
 define service {
     service_description Free Memory
-    hostgroup_name      all
+    hostgroup_name      all,!eventstream,!hostname_eventstream
     check_command       check_mem
-    use                 default-service,srv-pnp
+    use                 mem-service,srv-pnp
+}
+
+define service {
+    service_description Free Memory
+    hostgroup_name      eventstream,hostname_eventstream
+    check_command       check_mem
+    use                 ntp-service,srv-pnp
+    event_handler       eventstream_restart
 }
 
 define service {
@@ -862,17 +896,31 @@ define service {
 }
 
 define service {
-  service_description   Check Uconnect Rabbit Connection
-  hostgroup_name        uconnect_logger
-  use                    passive-service 
+  service_description   Check Sitemap Logs SitemapURL
+  hostgroup_name        sitescan_sitemap
+  use                   passive-service
+}
+
+#define service {
+#  service_description   Check Uconnect Rabbit Connection
+#  hostgroup_name        uconnect_logger
+#  use                    passive-service 
+#}
+
+define service {
+  service_description   Check EventStream Logs
+  hostgroup_name        eventstream
+  use                   passive-service-auto-healers
+  #use                   passive-service
 }
 
 define service {
   service_description   Check EventStream Logs
   hostgroup_name        hostname_eventstream
   use                   passive-service-auto-healers
+  #use                   passive-service
 }
-
+ 
 define service {
   service_description   Check Uconnect Iron Create
   hostgroup_name        hostname_uconnect
@@ -915,29 +963,31 @@ define service {
   service_description   Check Uconnect Rabbit Connection<%= i %> AUTO
   <%= @designation %>   <%= hn %> - <%= ip %>
   use                   passive-service
+  event_handler         s2s-resolve
 }
 
 define service {
   service_description   Check Uconnect Rabbit Authentication<%= i %> AUTO
   <%= @designation %>   <%= hn %> - <%= ip %>
   use                   passive-service
+  event_handler         s2s-resolve
 }
 
 <% end %>
 <% end %>
 <% end %>
 
-define service {
-  service_description   Check Uconnect Rabbit Authentication
-  hostgroup_name        uconnect_logger
-  use                   passive-service
-}
+#define service {
+#  service_description   Check Uconnect Rabbit Authentication
+#  hostgroup_name        uconnect_logger
+#  use                   passive-service
+#}
 
 define service {
   service_description   Check ntp sync
   hostgroup_name        all
   check_command         check_nrpe!check_ntp
-  use                   default-service,srv-pnp
+  use                   ntp-service,srv-pnp
 }
 
 define service {

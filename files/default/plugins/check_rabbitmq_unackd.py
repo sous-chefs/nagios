@@ -8,8 +8,8 @@ RABBITMQCTL = "/usr/sbin/rabbitmqctl"
 NAME = "name"
 
 parser = OptionParser()
-parser.add_option("-W", "--Warning", dest="warnack", metavar="INT", type="int", default=1000, help="Default: 1500")
-parser.add_option("-k", "--kritical", dest="critack", metavar="INT", type="int", default=2000, help="Default: 2000")
+parser.add_option("-W", "--Warning", dest="warnack", metavar="INT", type="int", default=3000, help="Default: 3000")
+parser.add_option("-k", "--kritical", dest="critack", metavar="INT", type="int", default=5000, help="Default: 5000")
 parser.add_option("-v", "--vhost", dest="vhost", metavar="VIRTUAL_HOST", type="string", default="/", help="Default \"/\"")
 parser.add_option("-i", "--info", dest="info", metavar="INFO", type="string", default="messages_unacknowledged", help="Default: messages_unacknowledged")
 (options, args) = parser.parse_args()

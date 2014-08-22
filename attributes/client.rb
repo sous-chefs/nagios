@@ -49,8 +49,8 @@ default['nagios']['nrpe']['url']      = 'http://prdownloads.sourceforge.net/sour
 default['nagios']['nrpe']['version']  = '2.12'
 default['nagios']['nrpe']['checksum'] = '7e8d093abef7d7ffc7219ad334823bdb612121df40de2dbaec9c6d0adeb04cfc'
 
-default['nagios']['checks']['memory']['critical'] = 150
-default['nagios']['checks']['memory']['warning']  = 250
+default['nagios']['checks']['memory']['critical'] = 10
+default['nagios']['checks']['memory']['warning']  = 20
 default['nagios']['checks']['load']['critical']   = "30,20,10"
 default['nagios']['checks']['load']['warning']    = "15,10,5"
 default['nagios']['checks']['smtp_host'] = String.new
@@ -58,6 +58,8 @@ default['nagios']['checks']['inode']['critical']  = 15
 default['nagios']['checks']['inode']['warning']  = 20
 
 default['nagios']['logfiles']['utui']['log_file'] = "/var/log/syslog"
+default['nagios']['logfiles']['sitemap']['log_file'] = "/var/log/syslog"
+default['nagios']['logfiles']['dc_uconnect_heap']['log_file'] = "/var/log/tealium/uconnect.log"
 default['nagios']['logfiles']['uconnect']['log_file_'] = "/var/log/upstart/s2s-httpd-iron-processor"
 default['nagios']['logfiles']['uconnect']['log_file'] = "/var/log/upstart/s2s-httpd-iron-processor.log"
 default['nagios']['logfiles']['uconnect']['log_file1'] = "/var/log/upstart/s2s-httpd-iron-processor-1.log"
@@ -70,6 +72,7 @@ default['nagios']['logfiles']['uconnect']['syslog'] = "/var/log/syslog"
 default['nagios']['logfiles']['eventstream']['syslog'] = "/var/log/syslog"
 default['nagios']['checks']['utui_login_error']['pattern'] = "ERROR: UNABLE TO LOGIN"
 default['nagios']['checks']['utui_publish_error']['pattern'] = "UPLOAD PUBLICATION FAILURE"
+default['nagios']['checks']['sitemap_url']['pattern'] = "No sitemap_url found in collection sitemap_urls"
 default['nagios']['checks']['utui_publish_insert']['pattern'] = "Could not upsert:"
 default['nagios']['checks']['utui_smartFTP_error']['pattern'] = "WARNING: Resetting smartFTP flag"
 default['nagios']['checks']['utui_ftp_upload_error']['pattern'] = "FTP UPLOAD FAILURE"
@@ -80,6 +83,7 @@ default['nagios']['checks']['iron_move']['pattern'] = "Could not move"
 default['nagios']['checks']['iron_write']['pattern'] = "Unable to write out content"
 default['nagios']['checks']['iron_processor_process']['pattern'] = "Unable to process"
 default['nagios']['checks']['iron_processor_quarantine']['pattern'] = "Unable to quarantine"
+default['nagios']['checks']['dc_uconnect_heap']['pattern'] = "java.lang.OutOfMemoryError: Java heap space"
 default['nagios']['checks']['eventstream_logging']['pattern'] = "Error logging request:"
 
 default['nagios']['server_role'] = "nagios"

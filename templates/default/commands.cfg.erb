@@ -816,7 +816,17 @@ define command {
 
 define command{
 	command_name	s2s-resolve
-	command_line	/home/ubuntu/s2s-resolve.sh SERVICESTATE$ $SERVICESTATETYPE$ $SERVICEATTEMPT$
+	command_line	/usr/share/tealium/server2server/bin/s2s-resolve.sh SERVICESTATE$ $SERVICESTATETYPE$ $SERVICEATTEMPT$
+}
+
+define command{
+        command_name    eventstream_restart
+        command_line    /usr/share/tealium/server2server/bin/eventstream_restart.sh SERVICESTATE$ $SERVICESTATETYPE$ $SERVICEATTEMPT$
+}
+
+define command{
+        command_name    dc_uconnect_restart
+        command_line    /usr/lib/nagios/plugins/dc_uconnect_restart.sh SERVICESTATE$ $SERVICESTATETYPE$ $SERVICEATTEMPT$
 }
 
 define command{

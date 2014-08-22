@@ -113,14 +113,14 @@ if node.run_list.roles.include?(node['nagios']['server_role'])
       end
 else 
     region = node[:ec2][:placement_availability_zone].match(/^(.*-\d+)[^-]+$/)[1]
-    search = "role:#{node['nagios']['server_role']} AND placement_availability_zone:#{region}* AND app_environment:#{node[:app_environment]}"
+    #search = "role:#{node['nagios']['server_role']} AND placement_availability_zone:#{region}* AND app_environment:#{node[:app_environment]}"
 
-    search(:node, search) do |nagios_node|
-      Chef::Log.warn( "Found Nagios server for NTP at #{nagios_node['ipaddress']}" )
-      ntp_server =  nagios_node['ipaddress']
-    end   
+    #search(:node, search) do |nagios_node|
+    #  Chef::Log.warn( "Found Nagios server for NTP at #{nagios_node['ipaddress']}" )
+    #  ntp_server =  nagios_node['ipaddress']
+    #end   
 
-    if ntp_server.nil? || ntp_server.empty?
+    #if ntp_server.nil? || ntp_server.empty?
     #get country code for aws instances
     AZ = node[:ec2][:placement_availability_zone]
 
@@ -142,12 +142,14 @@ else
       else
         Chef::Log.warn("Cannot get country code for server")
       end
-   end
+   #end
 end
 
 if mon_host.nil? || mon_host.empty?
   mon_host = '127.0.0.1'
 end
+
+Chef::Log.warn("HERE I AM IN THE RECIPE")
 
 template "#{node['nagios']['nrpe']['conf_dir']}/nrpe.cfg" do
   source "nrpe.cfg.erb"

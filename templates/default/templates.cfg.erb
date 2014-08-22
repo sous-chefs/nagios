@@ -81,6 +81,18 @@ define service {
 }
 
 define service {
+  name				  load-service
+  use                             default-service
+  max_check_attempts              10
+}
+
+define service {
+  name                            mem-service
+  use                             default-service
+  max_check_attempts              10
+}
+
+define service {
   name                            log-service
   use                             default-service
   max_check_attempts              1
@@ -93,7 +105,7 @@ define service {
   use                             default-service
   check_interval                  600
   retry_interval                  180
-  contact_groups                  dataclouders
+#  contact_groups                  dataclouders
 }
 
 define service {
@@ -106,7 +118,7 @@ define service {
 define service {
   name                            datacloud-service
   use                             default-service
-  contact_groups                  dataclouders
+#  contact_groups                  dataclouders
 }
 
 define service {
@@ -149,6 +161,12 @@ define service{
   use                             passive-service
   name                            passive-service-auto-healers
   contact_groups                  auto-healers
+}
+
+define service{
+  use                             default-service
+  name                            ntp-service
+  contact_groups                  ntp-admins
 }
 
 define host {

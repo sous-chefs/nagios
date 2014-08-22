@@ -21,7 +21,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-  include_recipe "java"
+include_recipe "java"
 
 include_recipe "perl"
 include_recipe "zookeeper_tealium::client_python"
@@ -100,17 +100,21 @@ end
     mode 0644
   end
  
-region = node[:ec2][:placement_availability_zone].match(/^(.*-\d+)[^-]+$/)[1]
+#region = node[:ec2][:placement_availability_zone].match(/^(.*-\d+)[^-]+$/)[1]
+region = node[:ec2][:region]
 
 if node[:monitored_region].nil? 
   #nodes = search(:node, "hostname:[* TO *] AND app_environment:#{node[:app_environment]} AND placement_availability_zone:#{region}* AND tealium_use_nagios:true")
-  nodes = search(:node, "app_environment:#{node[:app_environment]} AND placement_availability_zone:#{region}* AND tealium_use_nagios:true NOT domain:prod*")
+  #nodes = search(:node, "app_environment:#{node[:app_environment]} AND placement_availability_zone:#{region}* AND tealium_use_nagios:true NOT domain:prod*")
+  nodes = search(:node, "app_environment:#{node[:app_environment]} AND placement_availability_zone:#{region}* NOT domain:prod*")
 else
 
   #nodes1 = search(:node, "domain:prod* AND app_environment:production* AND placement_availability_zone:#{region}*")
-  nodes1 = search(:node, "domain:prod* AND app_environment:production* AND placement_availability_zone:#{region}* AND tealium_use_nagios:true")
+  #nodes1 = search(:node, "domain:prod* AND app_environment:production* AND placement_availability_zone:#{region}* AND tealium_use_nagios:true")
+  nodes1 = search(:node, "(domain:prod* OR domain:v*) AND app_environment:production* AND ec2_region:#{region} AND tealium_use_nagios:true")
 
 Chef::Log.warn("***********Nodes are #{nodes1}*************")
+Chef::Log.warn("***********Nodes count is #{nodes1.count}*************")
  
   nodes = []
   nodes1.each do |n|
@@ -270,12 +274,19 @@ dcvp = search(:node, "role:dc_visitor_processor AND app_environment:production*"
 dcmr = search(:node, "role:dc_message_router AND app_environment:production*")
 dcqa = search(:node, "role:dc_query_aggregator AND app_environment:production*")
 dcdd = search(:node, "role:dc_data_distributor AND app_environment:production*")
+dcu = search(:node, "role:dc_uconnect AND app_environment:production*")
 
 if dcvp.empty?
 vp_heap = 10
 else
 vp_heap = dcvp.last[:datacloud][:visitor_processor][:java_options].match(/^\DX{1}[a-z]{2}\d[g]\s\DX{1}[a-z]{2}(\d)[g]/)[1]
 end
+
+#if dcu.empty?
+#u_heap = 10
+#else
+#u_heap = dcu.last[:datacloud][:uconnect][:java_options].match(/^\DX{1}[a-z]{2}\d[g]\s\DX{1}[a-z]{2}(\d)[g]/)[1]
+#end
 
 if dcmr.empty?
 mr_heap = 10
@@ -286,7 +297,7 @@ end
 if dcqa.empty? 
 qa_heap = 10
 else
-qa_heap = dcqa.last[:datacloud][:query_aggregator][:java_options].match(/^\DX{1}[a-z]{2}\d[g]\s\DX{1}[a-z]{2}(\d)[g]/)[1]
+qa_heap = dcqa.first[:datacloud][:query_aggregator][:java_options].match(/^\DX{1}[a-z]{2}\d[g]\s\DX{1}[a-z]{2}(\d)[g]/)[1]
 end
 
 if dcdd.empty?
@@ -335,6 +346,7 @@ main_nagios = "#{node['hostname']} - #{node[:ipaddress]}"
       :mr_heap => mr_heap,
       :qa_heap => qa_heap,
       :dd_heap => dd_heap,
+      :u_heap => u_heap,
       :uconnects => uconnects
     )
   end
@@ -347,6 +359,7 @@ else
       :mr_heap => mr_heap,
       :qa_heap => qa_heap,
       :dd_heap => dd_heap,
+      :u_heap => u_heap,
       :uconnects => uconnects,
       :designation => designation
     )
@@ -386,5 +399,3 @@ nagios_nrpecheck "check_nagios" do
   parameters "-F #{node["nagios"]["cache_dir"]}/status.dat -e 4 -C /usr/sbin/#{node['nagios']['server']['service_name']}"
   action :add
 end
-
-#include_recipe "nagios::pagerduty"
