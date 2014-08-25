@@ -1,3 +1,7 @@
+# Put files/directories that should be ignored in this file when uploading
+# or sharing to the community site.
+# Lines that start with '# ' are comments.
+
 # OS generated files #
 ######################
 .DS_Store
@@ -47,6 +51,7 @@ spec/*
 spec/fixtures/*
 test/*
 features/*
+examples/*
 Guardfile
 Procfile
 
@@ -90,7 +95,6 @@ Vagrantfile
 # Travis #
 ##########
 .travis.yml
-=======
 test/
 spec/
 examples/
