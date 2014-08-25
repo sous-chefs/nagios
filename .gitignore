@@ -38,5 +38,3 @@ vendor/
 #vagrant stuff
 .vagrant/
 .vagrant.d/
-
-test/

@@ -90,3 +90,7 @@ Vagrantfile
 # Travis #
 ##########
 .travis.yml
+=======
+test/
+spec/
+examples/
