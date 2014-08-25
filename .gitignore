@@ -39,3 +39,4 @@ vendor/
 .vagrant/
 .vagrant.d/
 
+test/
