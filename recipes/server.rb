@@ -36,7 +36,7 @@ end
 case node['nagios']['server']['web_server']
 when 'nginx'
   Chef::Log.info 'Setting up Nagios server via NGINX'
-  include_recipe 'nagios::nginx'
+#  include_recipe 'nagios::nginx'
   web_user = node['nginx']['user']
   web_group = node['nginx']['group'] || web_user
 when 'apache'
