@@ -25,7 +25,7 @@ apache_site '000-default' do
   enable false
 end
 
-template "#{node['apache']['dir']}/sites-available/#{node['nagios']['server']['vname']}.conf" do
+template "#{node['apache']['dir']}/sites-available/#{node['nagios']['server']['vname']}" do
   source 'apache2.conf.erb'
   mode '0644'
   variables(
@@ -35,13 +35,13 @@ template "#{node['apache']['dir']}/sites-available/#{node['nagios']['server']['v
     :ssl_cert_file => node['nagios']['ssl_cert_file'],
     :ssl_cert_key  => node['nagios']['ssl_cert_key']
   )
-  if File.symlink?("#{node['apache']['dir']}/sites-enabled/#{node['nagios']['server']['vname']}.conf")
+  if File.symlink?("#{node['apache']['dir']}/sites-enabled/#{node['nagios']['server']['vname']}")
     notifies :reload, 'service[apache2]'
   end
 end
 
-file "#{node['apache']['dir']}/conf.d/#{node['nagios']['server']['vname']}.conf" do
+file "#{node['apache']['dir']}/conf.d/#{node['nagios']['server']['vname']}" do
   action :delete
 end
 
-apache_site "#{node['nagios']['server']['vname']}.conf"
+apache_site "#{node['nagios']['server']['vname']}"
