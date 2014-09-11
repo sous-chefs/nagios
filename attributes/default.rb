@@ -105,9 +105,9 @@ default['nagios']['ssl_req']       = '/C=US/ST=Several/L=Locality/O=Example/OU=O
 default['nagios']['server']['name']  = 'nagios'
 case node['platform_family']
 when 'rhel', 'fedora'
-  default['nagios']['server']['vname'] = 'nagios'
+  default['nagios']['server']['vname'] = 'nagios.conf'
 else
-  default['nagios']['server']['vname'] = 'nagios3'
+  default['nagios']['server']['vname'] = 'nagios3.conf'
 end
 
 # for server from source installation
