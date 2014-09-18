@@ -64,7 +64,15 @@ end
 # Install nagios either from source of package
 include_recipe "nagios::server_#{node['nagios']['server']['install_method']}"
 
-sysadmins = search(:users, 'groups:sysadmin')
+
+unless node['instance_role'] == 'vagrant'
+  sysadmins = search(:users, 'groups:sysadmin')
+  nagiosadmins = search(:users, 'group:devops', 'htpasswd:*')
+else
+  sysadmins = ["nagiosadmin"]
+end
+
+Chef::Log.warn("Nagiosadmins are #{nagiosadmins}")
 
 case node['nagios']['server_auth_method']
 when "openid"
@@ -82,7 +90,7 @@ else
     group web_group
     mode 0640
     variables(
-      :sysadmins => sysadmins
+      :sysadmins => nagiosadmins
     )
   end
 end
@@ -171,8 +179,13 @@ rescue Net::HTTPServerException
 end
 
 members = Array.new
-sysadmins.each do |s|
-  members << s['id']
+
+unless node['instance_role'] == 'vagrant'
+  sysadmins.each do |s|
+    members << s['id']
+  end
+else
+  members << "nagiosadmin"
 end
 
 # maps nodes into nagios hostgroups
@@ -270,17 +283,17 @@ nagios_conf "commands" do
   )
 end
 
-dcvp = search(:node, "role:dc_visitor_processor AND app_environment:production*")
-dcmr = search(:node, "role:dc_message_router AND app_environment:production*")
-dcqa = search(:node, "role:dc_query_aggregator AND app_environment:production*")
-dcdd = search(:node, "role:dc_data_distributor AND app_environment:production*")
-dcu = search(:node, "role:dc_uconnect AND app_environment:production*")
+#dcvp = search(:node, "role:dc_visitor_processor AND app_environment:production*")
+#dcmr = search(:node, "role:dc_message_router AND app_environment:production*")
+#dcqa = search(:node, "role:dc_query_aggregator AND app_environment:production*")
+#dcdd = search(:node, "role:dc_data_distributor AND app_environment:production*")
+#dcu = search(:node, "role:dc_uconnect AND app_environment:production*")
 
-if dcvp.empty?
-vp_heap = 10
-else
-vp_heap = dcvp.last[:datacloud][:visitor_processor][:java_options].match(/^\DX{1}[a-z]{2}\d[g]\s\DX{1}[a-z]{2}(\d)[g]/)[1]
-end
+#if dcvp.empty?
+#vp_heap = 10
+#else
+#vp_heap = dcvp.last[:datacloud][:visitor_processor][:java_options].match(/^\DX{1}[a-z]{2}\d[g]\s\DX{1}[a-z]{2}(\d)[g]/)[1]
+#end
 
 #if dcu.empty?
 #u_heap = 10
@@ -288,23 +301,23 @@ end
 #u_heap = dcu.last[:datacloud][:uconnect][:java_options].match(/^\DX{1}[a-z]{2}\d[g]\s\DX{1}[a-z]{2}(\d)[g]/)[1]
 #end
 
-if dcmr.empty?
-mr_heap = 10
-else
-mr_heap = dcmr.last[:datacloud][:message_router][:java_options].match(/^\DX{1}[a-z]{2}\d{1,3}(m|g)\s\DX{1}[a-z]{2}(\d{1,3})(m|g)/)[2]
-end
+#if dcmr.empty?
+#mr_heap = 10
+#else
+#mr_heap = dcmr.last[:datacloud][:message_router][:java_options].match(/^\DX{1}[a-z]{2}\d{1,3}(m|g)\s\DX{1}[a-z]{2}(\d{1,3})(m|g)/)[2]
+#end
 
-if dcqa.empty? 
-qa_heap = 10
-else
-qa_heap = dcqa.first[:datacloud][:query_aggregator][:java_options].match(/^\DX{1}[a-z]{2}\d[g]\s\DX{1}[a-z]{2}(\d)[g]/)[1]
-end
+#if dcqa.empty? 
+#qa_heap = 10
+#else
+#qa_heap = dcqa.first[:datacloud][:query_aggregator][:java_options].match(/^\DX{1}[a-z]{2}\d[g]\s\DX{1}[a-z]{2}(\d)[g]/)[1]
+#end
 
-if dcdd.empty?
-dd_heap = 10
-else
-dd_heap = dcdd.last[:datacloud][:data_distributor][:java_options].match(/^\DX{1}[a-z]{2}\d[g]\s\DX{1}[a-z]{2}(\d)[g]/)[1]
-end
+#if dcdd.empty?
+#dd_heap = 10
+#else
+#dd_heap = dcdd.last[:datacloud][:data_distributor][:java_options].match(/^\DX{1}[a-z]{2}\d[g]\s\DX{1}[a-z]{2}(\d)[g]/)[1]
+#end
 
 if node[:monitored_region].nil?
 uconnects = []
@@ -342,11 +355,11 @@ main_nagios = "#{node['hostname']} - #{node[:ipaddress]}"
       :services => services,
       :main_nagios => main_nagios,
       :designation => designation,
-      :vp_heap => vp_heap,
-      :mr_heap => mr_heap,
-      :qa_heap => qa_heap,
-      :dd_heap => dd_heap,
-      :u_heap => u_heap,
+#      :vp_heap => vp_heap,
+#      :mr_heap => mr_heap,
+#      :qa_heap => qa_heap,
+#      :dd_heap => dd_heap,
+#      :u_heap => u_heap,
       :uconnects => uconnects
     )
   end
@@ -355,11 +368,11 @@ else
     variables(
       :service_hosts => service_hosts,
       :services => services,
-      :vp_heap => vp_heap,
-      :mr_heap => mr_heap,
-      :qa_heap => qa_heap,
-      :dd_heap => dd_heap,
-      :u_heap => u_heap,
+#      :vp_heap => vp_heap,
+#      :mr_heap => mr_heap,
+#      :qa_heap => qa_heap,
+#      :dd_heap => dd_heap,
+#      :u_heap => u_heap,
       :uconnects => uconnects,
       :designation => designation
     )
@@ -367,7 +380,7 @@ else
 end
 
 nagios_conf "contacts" do
-  variables :admins => sysadmins, :members => members
+ variables :admins => sysadmins, :members => members
 end
 
 nagios_conf "hostgroups" do
@@ -385,7 +398,9 @@ nagios_conf "hosts" do
   )
 end
 
-include_recipe "nagios::pagerduty"
+#unless node['instance_role'] == 'vagrant' 
+ include_recipe "nagios::pagerduty"
+#end
 
 service "nagios" do
   service_name node['nagios']['server']['service_name']

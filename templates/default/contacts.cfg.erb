@@ -65,8 +65,11 @@ define contactgroup {
 <% @admins.each do |a| -%>
 define contact {
   use          default-contact
-  contact_name <%= a['id'] %>
+  <% unless node['instance_role'] == 'vagrant' %>
+  contact_name <%= a['id'] %> 
+  <% else -%>
+  contact_name nagiosadmin
+  <% end -%>
   <%= "email  #{a['nagios']['email']}" unless a['nagios'].nil? || a['nagios']['email'].nil? %>
 }
-
 <% end -%>

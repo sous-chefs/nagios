@@ -71,12 +71,12 @@ define service {
     use                 default-service,srv-pnp
 }
 
-define service {
-    service_description Check NodeJS 3030
-    hostgroup_name      urest
-    check_command       check_tcp!3030
-    use                 default-service,srv-pnp
-}
+#define service {
+#    service_description Check NodeJS 3030
+#    hostgroup_name      urest
+#    check_command       check_tcp!3030
+#    use                 default-service,srv-pnp
+#}
 
 define service {
     service_description Check Uconnect Files to Process
@@ -91,7 +91,7 @@ define service {
 #define service {
 #    service_description Check Rabbit http_requests_queue VPC US WEST CLUSTER
 #    <%= @designation %> <%= @main_nagios %>
-#    check_command       check_rabbit_queues!10.1.2.203!/server2server!http_requests_queue!admin!toor4cars9window14five.!1,-1,1,-1!1,-1,1,-1
+#    check_command       check_rabbit_queues!10.1.2.203!/server2server!http_requests_queue!monitor!ifyouaremonitoringtheworld!1,-1,1,-1!1,-1,1,-1
 #    use                 passive-service-auto-healers
 #    event_handler       queue-purge
 #}
@@ -120,14 +120,14 @@ define service {
 define service {
    service_description Check Rabbit vp_to_vs_visitor_result NON_VPC US WEST
     <%= @designation %> <%= @main_nagios %>
-    check_command       check_rabbit_queues!ec2-50-18-37-177.us-west-1.compute.amazonaws.com!/server2server!vp_to_vs_visitor_result!admin!toor4cars9window14five.!250,-1,200,-1!300,-1,250,-1
+    check_command       check_rabbit_queues!ec2-50-18-37-177.us-west-1.compute.amazonaws.com!/server2server!vp_to_vs_visitor_result!monitor!ifyouaremonitoringtheworld!250,-1,200,-1!300,-1,250,-1
     use                 default-service,srv-pnp
 }
 
 define service {
     service_description Check Rabbit http_requests_queue VPC US WEST CLUSTER
     <%= @designation %> <%= @main_nagios %>
-    check_command       check_rabbit_queues!us-west-1.cluster.rabbitmq.tealiumiq.com!/server2server!http_requests_queue!admin!toor4cars9window14five.!2500,-1,500,-1!3000,-1,600,-1
+    check_command       check_rabbit_queues!us-west-1.cluster.rabbitmq.tealiumiq.com!/server2server!http_requests_queue!monitor!ifyouaremonitoringtheworld!2500,-1,500,-1!3000,-1,600,-1
     use                 default-service,srv-pnp
 }
 
@@ -135,77 +135,77 @@ define service {
 define service {
     service_description Check Rabbit tag_request_queue VPC US WEST CLUSTER
    <%= @designation %> <%= @main_nagios %>
-    check_command       check_rabbit_queues!us-west-1.cluster.rabbitmq.tealiumiq.com!/server2server!tag_request_queue!admin!toor4cars9window14five.!200,-1,200,-1!300,-1,300,-1
+    check_command       check_rabbit_queues!us-west-1.cluster.rabbitmq.tealiumiq.com!/server2server!tag_request_queue!monitor!ifyouaremonitoringtheworld!200,-1,200,-1!300,-1,300,-1
     use                 default-service,srv-pnp
 }
 
 define service {
     service_description Check Rabbit http_response_task VPC US WEST CLUSTER
     <%= @designation %> <%= @main_nagios %>
-    check_command       check_rabbit_queues!us-west-1.cluster.rabbitmq.tealiumiq.com!/server2server!http_response_task!admin!toor4cars9window14five.!200,-1,200,-1!300,-1,300,-1
+    check_command       check_rabbit_queues!us-west-1.cluster.rabbitmq.tealiumiq.com!/server2server!http_response_task!monitor!ifyouaremonitoringtheworld!200,-1,200,-1!300,-1,300,-1
     use                 default-service,srv-pnp
 }
 
 #define service {
 #    service_description Check Rabbit record_requests_que VPC US WEST CLUSTER
 #    <%= @designation %> <%= @main_nagios %>
-#    check_command       check_rabbit_queues!us-west-1.cluster.rabbitmq.tealiumiq.com!/server2server!record_requests_queue!admin!toor4cars9window14five.!500,-1,1000,-1!750,-1,1250,-1
+#    check_command       check_rabbit_queues!us-west-1.cluster.rabbitmq.tealiumiq.com!/server2server!record_requests_queue!monitor!ifyouaremonitoringtheworld!500,-1,1000,-1!750,-1,1250,-1
 #    use                 default-service,srv-pnp
 #}
 
 define service {
     service_description Check Rabbit vp_to_vs_visitor_result NON_VPC US EAST
     <%= @designation %> <%= @main_nagios %>
-    check_command       check_rabbit_queues!ec2-54-198-111-12.compute-1.amazonaws.com!/server2server!vp_to_vs_visitor_result!admin!toor4cars9window14five.!250,-1,200,-1!300,-1,250,-1
+    check_command       check_rabbit_queues!ec2-54-198-111-12.compute-1.amazonaws.com!/server2server!vp_to_vs_visitor_result!monitor!ifyouaremonitoringtheworld!250,-1,200,-1!300,-1,250,-1
     use                 default-service,srv-pnp
 }
 
 define service {
     service_description Check Rabbit http_requests_queue NON_VPC US EAST
     <%= @designation %> <%= @main_nagios %>
-    check_command       check_rabbit_queues!ec2-54-198-111-12.compute-1.amazonaws.com!/server2server!http_requests_queue!admin!toor4cars9window14five.!4000,-1,2000,-1!4500,-1,2500,-1
+    check_command       check_rabbit_queues!ec2-54-198-111-12.compute-1.amazonaws.com!/server2server!http_requests_queue!monitor!ifyouaremonitoringtheworld!4000,-1,2000,-1!4500,-1,2500,-1
     use                 default-service,srv-pnp
 }
 
 define service {
    service_description Check Rabbit tag_request_queue NON_VPC US EAST
     <%= @designation %> <%= @main_nagios %>
-    check_command       check_rabbit_queues!ec2-54-198-111-12.compute-1.amazonaws.com!/server2server!tag_request_queue!admin!toor4cars9window14five.!200,-1,200,-1!300,-1,300,-1
+    check_command       check_rabbit_queues!ec2-54-198-111-12.compute-1.amazonaws.com!/server2server!tag_request_queue!monitor!ifyouaremonitoringtheworld!200,-1,200,-1!300,-1,300,-1
     use                 default-service,srv-pnp
 }
 
 define service {
     service_description Check Rabbit http_response_task NON_VPC US EAST
     <%= @designation %> <%= @main_nagios %>
-    check_command       check_rabbit_queues!ec2-54-198-111-12.compute-1.amazonaws.com!/server2server!http_response_task!admin!toor4cars9window14five.!200,-1,200,-1!300,-1,300,-1
+    check_command       check_rabbit_queues!ec2-54-198-111-12.compute-1.amazonaws.com!/server2server!http_response_task!monitor!ifyouaremonitoringtheworld!200,-1,200,-1!300,-1,300,-1
     use                 default-service,srv-pnp
 }
 
 define service {
     service_description Check Rabbit vp_to_vs_visitor_result NON_VPC EU WEST
     <%= @designation %> <%= @main_nagios %>
-    check_command       check_rabbit_queues!ec2-46-137-17-176.eu-west-1.compute.amazonaws.com!/server2server!vp_to_vs_visitor_result!admin!toor4cars9window14five.!1000,-1,1000,-1!500,-1,500,-1
+    check_command       check_rabbit_queues!ec2-46-137-17-176.eu-west-1.compute.amazonaws.com!/server2server!vp_to_vs_visitor_result!monitor!ifyouaremonitoringtheworld!1000,-1,1000,-1!500,-1,500,-1
     use                 default-service,srv-pnp
 }
 
 define service {
     service_description Check Rabbit http_requests_queue NON_VPC EU WEST
     <%= @designation %> <%= @main_nagios %>
-    check_command       check_rabbit_queues!ec2-46-137-17-176.eu-west-1.compute.amazonaws.com!/server2server!http_requests_queue!admin!toor4cars9window14five.!4000,-1,2000,-1!4500,-1,2500,-1
+    check_command       check_rabbit_queues!ec2-46-137-17-176.eu-west-1.compute.amazonaws.com!/server2server!http_requests_queue!monitor!ifyouaremonitoringtheworld!4000,-1,2000,-1!4500,-1,2500,-1
     use                 default-service,srv-pnp
 }
 
 define service {
     service_description Check Rabbit tag_request_queue NON_VPC EU WEST
     <%= @designation %> <%= @main_nagios %>
-    check_command       check_rabbit_queues!ec2-46-137-17-176.eu-west-1.compute.amazonaws.com!/server2server!tag_request_queue!admin!toor4cars9window14five.!200,-1,200,-1!300,-1,300,-1
+    check_command       check_rabbit_queues!ec2-46-137-17-176.eu-west-1.compute.amazonaws.com!/server2server!tag_request_queue!monitor!ifyouaremonitoringtheworld!200,-1,200,-1!300,-1,300,-1
     use                 default-service,srv-pnp
 }
 
 define service {
     service_description Check Rabbit http_response_task NON_VPC EU WEST
     <%= @designation %> <%= @main_nagios %>
-    check_command       check_rabbit_queues!ec2-46-137-17-176.eu-west-1.compute.amazonaws.com!/server2server!http_response_task!admin!toor4cars9window14five.!200,-1,200,-1!300,-1,300,-1
+    check_command       check_rabbit_queues!ec2-46-137-17-176.eu-west-1.compute.amazonaws.com!/server2server!http_response_task!monitor!ifyouaremonitoringtheworld!200,-1,200,-1!300,-1,300,-1
     use                 default-service,srv-pnp
 }
 
@@ -328,12 +328,12 @@ define service {
     use                 default-service,srv-pnp
 }
 
-define service {
-    service_description Check nodejs process
-    hostgroup_name      urest
-    check_command       check_nrpe!check_nodejs
-    use                 default-service,srv-pnp
-}
+#define service {
+#    service_description Check nodejs process
+#    hostgroup_name      urest
+#    check_command       check_nrpe!check_nodejs
+#    use                 default-service,srv-pnp
+#}
 
 define service {
     service_description Check Eventstream process
@@ -357,12 +357,12 @@ define service {
 }
 
 ## JMX Generic ##
-define service {
-    service_description Check JMX DataCloud Visitor Processor Java Heap
-    hostgroup_name      dc_visitor_processor
-    check_command       check_jmx_heap!<%= @vp_heap %>500000000
-    use                 jmx-service,srv-pnp
-}
+#define service {
+#    service_description Check JMX DataCloud Visitor Processor Java Heap
+#    hostgroup_name      dc_visitor_processor
+#    check_command       check_jmx_heap!<%= @vp_heap %>500000000
+#    use                 jmx-service,srv-pnp
+#}
 
 
 #define service {
@@ -372,26 +372,26 @@ define service {
 #    use                 jmx-service,srv-pnp
 #}
 
-define service {
-    service_description Check JMX DataCloud Message Router Java Heap
-    hostgroup_name      dc_message_router
-    check_command       check_jmx_heap!<%= @mr_heap %>500000000
-    use                 jmx-service,srv-pnp
-}
+#define service {
+#    service_description Check JMX DataCloud Message Router Java Heap
+#    hostgroup_name      dc_message_router
+#    check_command       check_jmx_heap!<%= @mr_heap %>500000000
+#    use                 jmx-service,srv-pnp
+#}
 
-define service {
-    service_description Check JMX DataCloud Query Aggregator Java Heap
-    hostgroup_name      dc_query_aggregator
-    check_command       check_jmx_heap!<%= @qa_heap %>500000000
-    use                 jmx-service,srv-pnp
-}
+#define service {
+#    service_description Check JMX DataCloud Query Aggregator Java Heap
+#    hostgroup_name      dc_query_aggregator
+#    check_command       check_jmx_heap!<%= @qa_heap %>500000000
+#    use                 jmx-service,srv-pnp
+#}
 
-define service {
-    service_description Check JMX DataCloud Data Distributor Java Heap
-    hostgroup_name      dc_data_distributor
-    check_command       check_jmx_heap!<%= @dd_heap %>500000000
-    use                 jmx-service,srv-pnp
-}
+#define service {
+#    service_description Check JMX DataCloud Data Distributor Java Heap
+#    hostgroup_name      dc_data_distributor
+#    check_command       check_jmx_heap!<%= @dd_heap %>500000000
+#    use                 jmx-service,srv-pnp
+#}
 
 #define service {
 #    service_description Check JMX DataCloud Threading

@@ -65,8 +65,14 @@ end
 
 Chef::Log.warn("THE REGION IS #{region}***********************************")
 
+
+unless node['instance_role'] == 'vagrant'
 key_bag = data_bag_item('pager_duty', "#{region}")
 api_key = key_bag['api_key']
+else
+api_key = "test"
+end
+
 
 template "/etc/nagios3/conf.d/pagerduty_nagios.cfg" do
   owner "nagios"
