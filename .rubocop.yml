@@ -18,3 +18,5 @@ NumericLiterals:
   Enabled: false
 SingleSpaceBeforeFirstArg:
   Enabled: false
+PerceivedComplexity:
+  Enabled: false
