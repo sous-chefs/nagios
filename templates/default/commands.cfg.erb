@@ -206,7 +206,8 @@ define command {
 
 define command {
   command_name    check_jmx_heap
-  command_line    $USER1$/check_jmx -U service:jmx:rmi:///jndi/rmi://$HOSTADDRESS$:9001/jmxrmi -O java.lang:type=Memory -A HeapMemoryUsage -K used -I HeapMemoryUsage -J used -vvvv -c $ARG1$
+  #command_line    $USER1$/check_jmx -U service:jmx:rmi:///jndi/rmi://$HOSTADDRESS$:9001/jmxrmi -O java.lang:type=Memory -A HeapMemoryUsage -K used -I HeapMemoryUsage -J used -vvvv -c $ARG1$
+  command_line    $USER1$/check_jmx -U service:jmx:rmi:///jndi/rmi://$HOSTADDRESS$:9001/jmxrmi -O java.lang:type=Memory -A HeapMemoryUsage -K used -I HeapMemoryUsage -J used -vvvv
 }
 
 define command {

@@ -156,28 +156,28 @@ define service {
 define service {
     service_description Check Rabbit vp_to_vs_visitor_result NON_VPC US EAST
     <%= @designation %> <%= @main_nagios %>
-    check_command       check_rabbit_queues!ec2-54-198-111-12.compute-1.amazonaws.com!/server2server!vp_to_vs_visitor_result!monitor!ifyouaremonitoringtheworld!250,-1,200,-1!300,-1,250,-1
+    check_command       check_rabbit_queues!us-east-1.rabbitmq.tealiumiq.com!/server2server!vp_to_vs_visitor_result!monitor!ifyouaremonitoringtheworld!250,-1,200,-1!300,-1,250,-1
     use                 default-service,srv-pnp
 }
 
 define service {
     service_description Check Rabbit http_requests_queue NON_VPC US EAST
     <%= @designation %> <%= @main_nagios %>
-    check_command       check_rabbit_queues!ec2-54-198-111-12.compute-1.amazonaws.com!/server2server!http_requests_queue!monitor!ifyouaremonitoringtheworld!4000,-1,2000,-1!4500,-1,2500,-1
+    check_command       check_rabbit_queues!us-east-1.rabbitmq.tealiumiq.com!/server2server!http_requests_queue!monitor!ifyouaremonitoringtheworld!4000,-1,2000,-1!4500,-1,2500,-1
     use                 default-service,srv-pnp
 }
 
 define service {
    service_description Check Rabbit tag_request_queue NON_VPC US EAST
     <%= @designation %> <%= @main_nagios %>
-    check_command       check_rabbit_queues!ec2-54-198-111-12.compute-1.amazonaws.com!/server2server!tag_request_queue!monitor!ifyouaremonitoringtheworld!200,-1,200,-1!300,-1,300,-1
+    check_command       check_rabbit_queues!us-east-1.rabbitmq.tealiumiq.com!/server2server!tag_request_queue!monitor!ifyouaremonitoringtheworld!200,-1,200,-1!300,-1,300,-1
     use                 default-service,srv-pnp
 }
 
 define service {
     service_description Check Rabbit http_response_task NON_VPC US EAST
     <%= @designation %> <%= @main_nagios %>
-    check_command       check_rabbit_queues!ec2-54-198-111-12.compute-1.amazonaws.com!/server2server!http_response_task!monitor!ifyouaremonitoringtheworld!200,-1,200,-1!300,-1,300,-1
+    check_command       check_rabbit_queues!us-east-1.rabbitmq.tealiumiq.com!/server2server!http_response_task!monitor!ifyouaremonitoringtheworld!200,-1,200,-1!300,-1,300,-1
     use                 default-service,srv-pnp
 }
 
@@ -357,41 +357,54 @@ define service {
 }
 
 ## JMX Generic ##
-#define service {
-#    service_description Check JMX DataCloud Visitor Processor Java Heap
-#    hostgroup_name      dc_visitor_processor
-#    check_command       check_jmx_heap!<%= @vp_heap %>500000000
-#    use                 jmx-service,srv-pnp
-#}
+define service {
+    service_description Check JMX DataCloud Visitor Processor Java Heap
+    hostgroup_name      dc_visitor_processor
+    #check_command       check_jmx_heap!<%= @vp_heap %>500000000
+    check_command       check_jmx_heap
+    use                 jmx-service,srv-pnp
+}
 
 
-#define service {
-#    service_description Check JMX DataCloud Uconnect Java Heap
-#    hostgroup_name      dc_uconnect
-#    check_command       check_jmx_heap!<%= @u_heap %>500000000
-#    use                 jmx-service,srv-pnp
-#}
+define service {
+    service_description Check JMX DataCloud Uconnect Java Heap
+    hostgroup_name      dc_uconnect
+    #check_command       check_jmx_heap!<%= @u_heap %>500000000
+    check_command       check_jmx_heap
+    use                 jmx-service,srv-pnp
+}
 
-#define service {
-#    service_description Check JMX DataCloud Message Router Java Heap
-#    hostgroup_name      dc_message_router
-#    check_command       check_jmx_heap!<%= @mr_heap %>500000000
-#    use                 jmx-service,srv-pnp
-#}
+define service {
+    service_description Check JMX DataCloud Message Router Java Heap
+    hostgroup_name      dc_message_router
+    #check_command       check_jmx_heap!<%= @mr_heap %>500000000
+    check_command       check_jmx_heap
+    use                 jmx-service,srv-pnp
+}
 
-#define service {
-#    service_description Check JMX DataCloud Query Aggregator Java Heap
-#    hostgroup_name      dc_query_aggregator
-#    check_command       check_jmx_heap!<%= @qa_heap %>500000000
-#    use                 jmx-service,srv-pnp
-#}
+define service {
+    service_description Check JMX DataCloud Query Aggregator Java Heap
+    hostgroup_name      dc_query_aggregator
+    #check_command       check_jmx_heap!<%= @qa_heap %>500000000
+    check_command       check_jmx_heap
+    use                 jmx-service,srv-pnp
+}
 
-#define service {
-#    service_description Check JMX DataCloud Data Distributor Java Heap
-#    hostgroup_name      dc_data_distributor
-#    check_command       check_jmx_heap!<%= @dd_heap %>500000000
-#    use                 jmx-service,srv-pnp
-#}
+define service {
+    service_description Check JMX DataCloud Data Distributor Java Heap
+    hostgroup_name      dc_data_distributor
+    #check_command       check_jmx_heap!<%= @dd_heap %>500000000
+    check_command       check_jmx_heap
+    use                 jmx-service,srv-pnp
+}
+
+define service {
+    service_description Check JMX DataCloud Visitor Service Java Heap
+    hostgroup_name      dc_visitor_service
+    #check_command       check_jmx_heap!<%= @dd_heap %>500000000
+    check_command       check_jmx_heap
+    use                 jmx-service,srv-pnp
+}
 
 #define service {
 #    service_description Check JMX DataCloud Threading
@@ -724,12 +737,12 @@ define service {
 #    use                 default-service,srv-pnp
 #}
 
-define service {
-    service_description Check rabbitmq beam process
-    hostgroup_name      rabbitmq_server
-    check_command       check_nrpe!check_rabbitmq_beam
-    use                 default-service,srv-pnp
-}
+#define service {
+#    service_description Check rabbitmq beam process
+#    hostgroup_name      rabbitmq_server
+#    check_command       check_nrpe!check_rabbitmq_beam
+#    use                 default-service,srv-pnp
+#}
 
 define service {
     service_description Check rabbitmq-server
