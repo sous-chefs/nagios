@@ -107,6 +107,7 @@ Attributes
 
 
 * `node['nagios']['default_host']['flap_detection']` - Defaults to `true`.
+* `node['nagios']['default_host']['process_perf_data']` - Defaults to `false`.
 * `node['nagios']['default_host']['check_period']` - Defaults to `'24x7'`.
 * `node['nagios']['default_host']['check_interval']` - In seconds. Must be divisible by `node['nagios']['interval_length']`. Defaults to `15`.
 * `node['nagios']['default_host']['retry_interval']` - In seconds. Must be divisible by `node['nagios']['interval_length']`. Defaults to `15`.
@@ -114,6 +115,10 @@ Attributes
 * `node['nagios']['default_host']['check_command']` - Defaults to the pre-defined command `'check-host-alive'`.
 * `node['nagios']['default_host']['notification_interval']` - In seconds. Must be divisible by `node['nagios']['interval_length']`. Defaults to `300`.
 * `node['nagios']['default_host']['notification_options']` - Defaults to `'d,u,r'`.
+* `node['nagios']['default_host']['action_url']` - Defines a action url.  Defaults to `nil`.
+
+* `node['nagios']['default_service']['process_perf_data']` - Defaults to `false`.
+* `node['nagios']['default_service']['action_url']` - Defines a action url. Defaults to `nil`.
 
 * `node['nagios']['server']['web_server']` - web server to use. supports Apache or Nginx, default "apache"
 * `node['nagios']['server']['nginx_dispatch']` - nginx dispatch method. supports cgi or php, default "cgi"
@@ -128,6 +133,8 @@ These are additional nagios.cfg options.
  * `node['nagios']['conf']['service_check_timeout']`     - Defaults to 60
  * `node['nagios']['conf']['host_check_timeout']`        - Defaults to 30
  * `node['nagios']['conf']['process_performance_data']`  - Defaults to 0
+ * `node['nagios']['conf']['host_perfdata_command']`	 - Defaults to nil
+ * `node['nagios']['conf']['service_perfdata_command']`	 - Defaults to nil
  * `node['nagios']['conf']['date_format']`               - Defaults to 'iso8601'
  * `node['nagios']['conf']['p1_file']`                   - Defaults to `#{node['nagios']['home']}/p1.pl`
  * `node['nagios']['conf']['debug_level']`               - Defaults to 0
