@@ -415,7 +415,7 @@ Here's an example to find all HP hardware systems for an "hp_systems" hostgroup:
 ```
 
 ### Monitoring Systems Not In Chef
-Create a nagios\_unmanagedhosts data bag that will contain definitions for hosts not in Chef that you would like to manage. "hostgroups" can be an existing Chef role (every Chef role gets a Nagios hostgroup) or a new hostgroup. Note that "hostgroups" must be an array of hostgroups even if it contains just a single hostgroup.
+Create a nagios\_unmanagedhosts data bag that will contain definitions for hosts not in Chef that you would like to manage. "hostgroups" can be an existing Chef role (every Chef role gets a Nagios hostgroup) or a new hostgroup. Note that "hostgroups" must be an array of hostgroups even if it contains just a single hostgroup. `host_template` defaults to 'server', but you can override it to use a custom template.
 
 Here's an example host definition:
 
@@ -424,7 +424,8 @@ Here's an example host definition:
   "address": "webserver1.mydmz.dmz",
   "hostgroups": ["web_servers","production_servers"],
   "id": "webserver1",
-  "notifications": 1
+  "notifications": 1,
+  "host_template": "unpingable-host"
 }
 ```
 

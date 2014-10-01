@@ -100,6 +100,14 @@ define service{
   is_volatile                     1
   }
 
+define service{
+  name                            service-template
+  max_check_attempts              <%= nagios_attr(:default_service)[:max_check_attempts] %>
+  check_interval                  <%= nagios_interval(nagios_attr(:default_service)[:check_interval]) %>
+  retry_interval                  <%= nagios_interval(nagios_attr(:default_service)[:retry_interval]) %>
+  notification_interval           <%= nagios_interval(nagios_attr(:default_service)[:notification_interval]) %>
+}
+
 <% @templates.each do |template| -%>
 <% if template == @templates.first -%># Templates defined by data bags<% end -%>
 define service {
@@ -111,7 +119,7 @@ define service {
   <%= conf %> <%= nagios_interval(template[conf]) %>
     <% end %>
   <% end %>
-  <% %w{passive_checks_enabled parallelize_check obsess_over_service check_freshness notifications_enabled event_handler_enabled flap_detection_enabled failure_prediction_enabled process_perf_data retain_status_information retain_nonstatus_information is_volatile check_period max_check_attempts contact_groups notification_options notification_period notes_url action_url}.each do |conf| %>
+  <% %w{active_checks_enabled passive_checks_enabled parallelize_check obsess_over_service check_freshness freshness_threshold notifications_enabled event_handler_enabled flap_detection_enabled failure_prediction_enabled process_perf_data retain_status_information retain_nonstatus_information is_volatile check_period max_check_attempts contact_groups notification_options notification_period notes_url action_url}.each do |conf| %>
     <% unless template[conf].nil? %>
   <%= conf %> <%= template[conf] %>
     <% end %>
