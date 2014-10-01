@@ -32,12 +32,14 @@ define host {
   event_handler_enabled           1
   flap_detection_enabled          <%= nagios_boolean(nagios_attr(:default_host)[:flap_detection]) %>
   failure_prediction_enabled      1
-#  process_perf_data               1
-  process_perf_data               0
+  process_perf_data               <%= nagios_boolean(nagios_attr(:default_host)[:process_perf_data]) %>
   retain_status_information       1
   retain_nonstatus_information    1
   notification_period             24x7
   register                        0
+<% unless nagios_attr(:default_host)[:action_url].nil? %>
+  action_url                      <%= nagios_attr(:default_host)[:action_url] %>
+<% end %>
 }
 
 define host {
@@ -65,8 +67,7 @@ define service {
   event_handler_enabled           1
   flap_detection_enabled          <%= nagios_boolean(nagios_attr(:default_service)[:flap_detection]) %>
   failure_prediction_enabled      1
-#  process_perf_data               1
-  process_perf_data               0
+  process_perf_data               <%= nagios_boolean(nagios_attr(:default_service)[:process_perf_data]) %>
   retain_status_information       1
   retain_nonstatus_information    1
   is_volatile                     0
@@ -79,6 +80,9 @@ define service {
   notification_interval           <%= nagios_interval(nagios_attr(:default_service)[:notification_interval]) %>
   notification_period             24x7
   register                        0
+<% unless nagios_attr(:default_service)[:action_url].nil? %>
+  action_url                      <%= nagios_attr(:default_service)[:action_url] %>
+<% end %>
 }
 
 # Define the log monitoring template (monitoring logs is very different)

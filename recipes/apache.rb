@@ -44,4 +44,4 @@ file "#{node['apache']['dir']}/conf.d/#{node['nagios']['server']['vname']}.conf"
   action :delete
 end
 
-apache_site "#{node['nagios']['server']['vname']}.conf"
+apache_site "#{node['nagios']['server']['vname']}"

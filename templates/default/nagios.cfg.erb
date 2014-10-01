@@ -93,12 +93,10 @@ accept_passive_host_checks=<%= node['nagios']['accept_passive_host_checks'] %>
 enable_notifications=<%= node['nagios']['notifications_enabled'] %>
 enable_event_handlers=1
 
-#process_performance_data=1
 process_performance_data=<%= node['nagios']['conf']['process_performance_data'] %>
 
-#service_perfdata_command=ngraph-process-service-perfdata-pipe
 <%= "host_perfdata_command=#{node['nagios']['conf']['host_perfdata_command']}" unless node['nagios']['conf']['host_perfdata_command'].nil? %>
-<%= "host_perfdata_command=#{node['nagios']['conf']['service_perfdata_command']}" unless node['nagios']['conf']['service_perfdata_command'].nil? %>#service_perfdata_command=process-service-perfdata
+<%= "service_perfdata_command=#{node['nagios']['conf']['service_perfdata_command']}" unless node['nagios']['conf']['service_perfdata_command'].nil? %>
 
 obsess_over_services=<%= node['nagios']['obsess_over_services'] %>
 <% if node['nagios']['ocsp_command'] -%>
