@@ -67,12 +67,14 @@ include_recipe "nagios::server_#{node['nagios']['server']['install_method']}"
 
 unless node['instance_role'] == 'vagrant'
   sysadmins = search(:users, 'groups:sysadmin')
-  nagiosadmins = search(:users, 'group:devops', 'htpasswd:*')
+  nagiosadmins = search(:users, 'group:devops')
+  admins = sysadmins.concat(nagiosadmins)
 else
   sysadmins = ["nagiosadmin"]
 end
 
-Chef::Log.warn("Nagiosadmins are #{nagiosadmins}")
+#Chef::Log.warn("Nagiosadmins are #{nagiosadmins}")
+#Chef::Log.warn("SYSadmins are #{sysadmins}")
 
 case node['nagios']['server_auth_method']
 when "openid"
@@ -90,7 +92,7 @@ else
     group web_group
     mode 0640
     variables(
-      :sysadmins => nagiosadmins
+      :sysadmins => admins
     )
   end
 end
