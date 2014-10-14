@@ -17,16 +17,15 @@ Vagrant.configure('2') do |config|
 
 end
 
-
 Vagrant::Config.run do |config|
   config.vm.provision :chef_client do |chef|
     chef.add_role('monitoring')
     chef.add_recipe('apt')
-    chef.add_recipe('nagios::server')
+    chef.add_recipe('nagios::default')
   end
 
-  config.vm.define :nagios_1404 do |nagios|
-    nagios.vm.box = 'chef/ubuntu-14.04'
+  config.vm.define :nrpe_1004 do |nagios|
+    nagios.vm.box = 'chef/ubuntu-10.04'
     nagios.vm.forward_port 80, 8080
     nagios.vm.host_name = 'nagios-1004'
   end
