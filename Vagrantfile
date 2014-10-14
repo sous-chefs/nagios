@@ -2,7 +2,21 @@ Vagrant.configure('2') do |config|
   config.omnibus.chef_version = :latest
   config.berkshelf.enabled = true
   config.chef_zero.chef_repo_path = 'test/integration'
+
+  unless Vagrant.has_plugin?('vagrant-berkshelf')
+    fail 'Vagrant Berkshelf plugin not installed.  Run: vagrant plugin install vagrant-berkshelf'
+  end
+
+  unless Vagrant.has_plugin?('vagrant-omnibus')
+    fail 'Vagrant Omnibus plugin not installed.  Run: vagrant plugin install vagrant-omnibus'
+  end
+
+  unless Vagrant.has_plugin?('vagrant-chef-zero')
+    fail 'Vagrant Chef Zero plugin not installed.  Run: vagrant plugin install vagrant-chef-zero'
+  end
+
 end
+
 
 Vagrant::Config.run do |config|
   config.vm.provision :chef_client do |chef|
@@ -11,8 +25,8 @@ Vagrant::Config.run do |config|
     chef.add_recipe('nagios::server')
   end
 
-  config.vm.define :nagios_1004 do |nagios|
-    nagios.vm.box = 'chef/ubuntu-10.04'
+  config.vm.define :nagios_1404 do |nagios|
+    nagios.vm.box = 'chef/ubuntu-14.04'
     nagios.vm.forward_port 80, 8080
     nagios.vm.host_name = 'nagios-1004'
   end
