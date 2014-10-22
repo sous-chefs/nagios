@@ -2,8 +2,8 @@ nagios Cookbook CHANGELOG
 =========================
 This file is used to list changes made in each version of the nagios cookbook.
 
-v6.0.0 - CURRENTLY UNRELEASED
------------------------------
+v6.0.0
+------
 ### Breaking changes
 - NRPE is no longer installed by the nagios cookbook.  This is handled by the NRPE cookbook.  Moving this logic allows for more fined grained control of how the two services are installed and configured
 - Previously the Nagios server was monitored out of the box using a NRPE check.  This is no longer the case since the cookbooks are split.  You'll need to add a services data bag to return this functionality
@@ -45,7 +45,7 @@ v6.0.0 - CURRENTLY UNRELEASED
 v5.3.4
 ------
 ### Bug
-- Fixed two bugs that prevented Apache/NGINX web server setups from configuring correctly 
+- Fixed two bugs that prevented Apache/NGINX web server setups from configuring correctly
 
 v5.3.2
 ------
@@ -117,7 +117,7 @@ v5.1.0
 - **[COOK-3781](https://tickets.opscode.com/browse/COOK-3781)** Service escalations can now be written using wildcards.  See the readme for an example of this feature.
 - **[COOK-3702](https://tickets.opscode.com/browse/COOK-3702)** Multiple PagerDuty keys for different contacts can be defined via a new nagios_pagerduty data bag.  See the readme for more information on the new data bag and attributes for this feature.
 - **[COOK-3774](https://tickets.opscode.com/browse/COOK-3774)**Services can be limited to run on nagios servers in specific chef environments by adding a new "activate_check_in_environment" key to the services data bag.  See the Services section of the readme for an example.
-- **[CHEF-4702](https://tickets.opscode.com/browse/CHEF-4702)** Chef solo users can now user solo-search for data bag searchd (https://github.com/edelight/chef-solo-search) 
+- **[CHEF-4702](https://tickets.opscode.com/browse/CHEF-4702)** Chef solo users can now user solo-search for data bag searchd (https://github.com/edelight/chef-solo-search)
 
 v5.0.2
 ------
