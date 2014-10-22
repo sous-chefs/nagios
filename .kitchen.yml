@@ -65,7 +65,7 @@ suites:
    attributes:
      nagios:
        server:
-         install_method: "source"
+         install_method: 'source'
 data_bags_path: test/data_bags
 roles_path: test/roles
 
