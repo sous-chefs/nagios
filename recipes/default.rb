@@ -97,6 +97,18 @@ else
   end
 end
 
+# Find environments to search if excluding environments
+unless node['nomonitoring'].nil? || node['nomonitoring'].empty?
+  noenvirons = node['nomonitoring']
+  mon_environs = []
+  search(:environment, "name:*").each do |environment|
+    unless noenvirons.any?{ |str| environment.name.include? str }
+      mon_environs << environment.name
+    end
+    mon_environs = mon_environs.sort.uniq
+  end
+end 
+
 # find nodes to monitor.  Search in all environments if multi_environment_monitoring is enabled
 Chef::Log.info('Beginning search for nodes.  This may take some time depending on your node count')
 nodes = []
@@ -105,7 +117,15 @@ multi_env = node['nagios']['monitored_environments']
 multi_env_search = multi_env.empty? ? '' : ' AND (chef_environment:' + multi_env.join(' OR chef_environment:') + ')'
 
 if node['nagios']['multi_environment_monitoring']
-  nodes = search(:node, "name:*#{multi_env_search}")
+  unless mon_environs.nil? || mon_environs.empty?
+    mon_environs.each do |env|
+      search(:node, "name:* AND chef_environment:#{env}").each do |node|
+        nodes << node
+      end
+    end
+  else
+    nodes = search(:node, "name:*#{multi_env_search}")
+  end
 else
   nodes = search(:node, "name:* AND chef_environment:#{node.chef_environment}")
 end
@@ -130,9 +150,11 @@ end
 # if using multi environment monitoring add all environments to the array of hostgroups
 if node['nagios']['multi_environment_monitoring']
   search(:environment, '*:*') do |e|
-    hostgroups << e.name unless hostgroups.include?(e.name)
-    nodes.select { |n| n.chef_environment == e.name }.each do |n|
-      service_hosts[e.name] = n[node['nagios']['host_name_attribute']]
+    unless node['nomonitoring'].any?{ |str| e.name.include? str }
+      hostgroups << e.name unless hostgroups.include?(e.name)
+      nodes.select { |n| n.chef_environment == e.name }.each do |n|
+        service_hosts[e.name] = n[node['nagios']['host_name_attribute']]
+      end
     end
   end
 end
