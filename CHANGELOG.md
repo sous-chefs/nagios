@@ -21,15 +21,25 @@ v6.0.0
 - Properly set the path for the p1.pl file on RHEL platforms
 - Ensure that the hostgroups array doesn't include duplicates in the even that an environment and role have the same name
 - Only template nagios.cfg once
+- Fix ocsp-command typo in nagios.cfg
+- Fix bug that prevented Apache2 recipe from completing
 
 ### Improvement
 - Readme cleanup
 - Created a new users_helper library to abstract much of the Ruby logic for building user lists out of the recipe
 - Avoid writing out empty comments in templates for data bag driven configs
+- Add a full chefignore file to help with Berkshelf
+- Better documented host_perfdata_command and service_perfdata_command in the README
+- Add possibility to configure default_service with options process_perf_data & action_url
+- Add possibility to configure default_host with options process_perf_data & action_url
+- Allow freshness_threshold and active_checks_enabled to be specified in templates
+- Added a generic service-template w/min req. params
 
 ### New Feature
 - New attribute node['nagios']['monitored_environments'] for specifying multiple environments you'd like to monitor
 - Allow using the exclusion hostgroup format used by Nagios when defining the hostgroup for a check
+- Host templates can now be defined via a new host_templates data bag.
+
 
 ### Development
 - Vagrantfile updated for Vagrant 1.5 format changes
