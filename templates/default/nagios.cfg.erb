@@ -102,13 +102,13 @@ process_performance_data=<%= node['nagios']['conf']['process_performance_data'] 
 
 obsess_over_services=<%= node['nagios']['obsess_over_services'] %>
 <% if node['nagios']['ocsp_command'] -%>
-ocsp_command='<%= node['nagios']['ocsp_command'] %>'
+ocsp_command=<%= node['nagios']['ocsp_command'] %>
 <% else -%>
 #ocsp_command=somecommand
 <% end -%>
 obsess_over_hosts=<%= node['nagios']['obsess_over_hosts'] %>
 <% if node['nagios']['ochp_command'] -%>
-ochp_command='<%= node['nagios']['ochp_command'] %>'
+ochp_command=<%= node['nagios']['ochp_command'] %>
 <% else -%>
 #ochp_command=somecommand
 <% end -%>
