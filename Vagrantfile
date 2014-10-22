@@ -24,7 +24,7 @@ Vagrant::Config.run do |config|
     chef.add_recipe('nagios::default')
   end
 
-  config.vm.define :nrpe_1004 do |nagios|
+  config.vm.define :nagios_1004 do |nagios|
     nagios.vm.box = 'chef/ubuntu-10.04'
     nagios.vm.forward_port 80, 8080
     nagios.vm.host_name = 'nagios-1004'
@@ -36,15 +36,27 @@ Vagrant::Config.run do |config|
     nagios.vm.host_name = 'nagios-1204'
   end
 
+  config.vm.define :nagios_1404 do |nagios|
+    nagios.vm.box = 'chef/ubuntu-14.04'
+    nagios.vm.forward_port 80, 8082
+    nagios.vm.host_name = 'nagios-1404'
+  end
+
+  config.vm.define :nagios_7 do |nagios|
+    nagios.vm.box = 'chef/centos-7'
+    nagios.vm.forward_port 80, 8083
+    nagios.vm.host_name = 'nagios-7'
+  end
+
   config.vm.define :nagios_65 do |nagios|
     nagios.vm.box = 'chef/centos-6.5'
-    nagios.vm.forward_port 80, 8082
+    nagios.vm.forward_port 80, 8084
     nagios.vm.host_name = 'nagios-65'
   end
 
   config.vm.define :nagios_510 do |nagios|
     nagios.vm.box = 'chef/centos-5.10'
-    nagios.vm.forward_port 80, 8083
+    nagios.vm.forward_port 80, 8085
     nagios.vm.host_name = 'nagios-510'
   end
 
