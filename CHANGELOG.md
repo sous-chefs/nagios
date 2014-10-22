@@ -2,6 +2,11 @@ nagios Cookbook CHANGELOG
 =========================
 This file is used to list changes made in each version of the nagios cookbook.
 
+v6.0.2
+------
+### Bug
+- Remove .DS_Store files in the supermarket file that caused failures on older versions of Berkshelf
+
 v6.0.0
 ------
 ### Breaking changes
