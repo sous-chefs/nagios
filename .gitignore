@@ -1,4 +1,5 @@
 *.gem
+.zero-knife.rb
 *.rbc
 .bundle
 .config
