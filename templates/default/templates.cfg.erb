@@ -106,6 +106,7 @@ define service{
   check_interval                  <%= nagios_interval(nagios_attr(:default_service)[:check_interval]) %>
   retry_interval                  <%= nagios_interval(nagios_attr(:default_service)[:retry_interval]) %>
   notification_interval           <%= nagios_interval(nagios_attr(:default_service)[:notification_interval]) %>
+  register                        0
 }
 
 <% @templates.each do |template| -%>
