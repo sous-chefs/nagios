@@ -128,18 +128,28 @@ Attributes
 
 These are additional nagios.cfg options.
 
- * `node['nagios']['conf']['max_service_check_spread']`  - Defaults to 5
- * `node['nagios']['conf']['max_host_check_spread']`     - Defaults to 5
- * `node['nagios']['conf']['service_check_timeout']`     - Defaults to 60
- * `node['nagios']['conf']['host_check_timeout']`        - Defaults to 30
- * `node['nagios']['conf']['process_performance_data']`  - Defaults to 0
- * `node['nagios']['conf']['host_perfdata_command']`	 - Defaults to nil
- * `node['nagios']['conf']['service_perfdata_command']`	 - Defaults to nil
- * `node['nagios']['conf']['date_format']`               - Defaults to 'iso8601'
- * `node['nagios']['conf']['p1_file']`                   - Defaults to `#{node['nagios']['home']}/p1.pl`
- * `node['nagios']['conf']['debug_level']`               - Defaults to 0
- * `node['nagios']['conf']['debug_verbosity']`           - Defaults to 1
- * `node['nagios']['conf']['debug_file']`                - Defaults to `#{node['nagios']['state_dir']}/#{node['nagios']['server']['name']}.debug`
+ * `node['nagios']['conf']['max_service_check_spread']`                   - Defaults to 5
+ * `node['nagios']['conf']['max_host_check_spread']`                      - Defaults to 5
+ * `node['nagios']['conf']['service_check_timeout']`                      - Defaults to 60
+ * `node['nagios']['conf']['host_check_timeout']`                         - Defaults to 30
+ * `node['nagios']['conf']['process_performance_data']`                   - Defaults to 0
+ * `node['nagios']['conf']['host_perfdata_command']`                      - Defaults to nil
+ * `node['nagios']['conf']['host_perfdata_file']`                         - Defaults to nil
+ * `node['nagios']['conf']['host_perfdata_file_template']`                - Defaults to nil
+ * `node['nagios']['conf']['host_perfdata_file_mode']`                    - Defaults to nil
+ * `node['nagios']['conf']['host_perfdata_file_processing_interval']`     - Defaults to nil
+ * `node['nagios']['conf']['host_perfdata_file_processing_command']`      - Defaults to nil
+ * `node['nagios']['conf']['service_perfdata_command']`                   - Defaults to nil
+ * `node['nagios']['conf']['service_perfdata_file']`                      - Defaults to nil
+ * `node['nagios']['conf']['service_perfdata_file_template']`             - Defaults to nil
+ * `node['nagios']['conf']['service_perfdata_file_mode']`                 - Defaults to nil
+ * `node['nagios']['conf']['service_perfdata_file_processing_interval']`  - Defaults to nil
+ * `node['nagios']['conf']['service_perfdata_file_processing_command']`   - Defaults to nil
+ * `node['nagios']['conf']['date_format']`                                - Defaults to 'iso8601'
+ * `node['nagios']['conf']['p1_file']`                                    - Defaults to `#{node['nagios']['home']}/p1.pl`
+ * `node['nagios']['conf']['debug_level']`                                - Defaults to 0
+ * `node['nagios']['conf']['debug_verbosity']`                            - Defaults to 1
+ * `node['nagios']['conf']['debug_file']`                                 - Defaults to `#{node['nagios']['state_dir']}/#{node['nagios']['server']['name']}.debug`
 
  These are nagios cgi.config options.
 
