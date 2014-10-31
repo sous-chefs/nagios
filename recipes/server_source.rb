@@ -70,10 +70,38 @@ remote_file "#{Chef::Config[:file_cache_path]}/#{node['nagios']['server']['name'
   action :create_if_missing
 end
 
-bash 'compile-nagios' do
+bash 'extract-nagios' do
   cwd Chef::Config[:file_cache_path]
   code <<-EOH
     tar zxvf #{node['nagios']['server']['name']}-#{version}.tar.gz
+  EOH
+  not_if { ::File.exists?("/usr/sbin/#{node['nagios']['server']['name']}") }
+end
+
+node['nagios']['server']['patches'].each do |patch|
+  remote_file "#{Chef::Config[:file_cache_path]}/#{patch}" do
+    source "#{node['nagios']['server']['patch_url']}/#{patch}"
+  end
+
+  bash "patch-#{patch}" do
+    cwd Chef::Config[:file_cache_path]
+    code <<-EOF
+      cd #{node['nagios']['server']['src_dir']}
+      patch -p1 --forward --silent --dry-run < '#{Chef::Config[:file_cache_path]}/#{patch}' >/dev/null
+      if [ $? -eq 0 ]; then
+        patch -p1 --forward < '#{Chef::Config[:file_cache_path]}/#{patch}'
+      else
+        exit 0
+      fi
+    EOF
+    action :nothing
+    subscribes :run, 'bash[extract-nagios]', :immediately
+  end
+end
+
+bash 'compile-nagios' do
+  cwd Chef::Config[:file_cache_path]
+  code <<-EOH
     cd #{node['nagios']['server']['src_dir']}
     ./configure --prefix=/usr \
         --mandir=/usr/share/man \
@@ -101,7 +129,8 @@ bash 'compile-nagios' do
     make install-config
     make install-commandmode
   EOH
-  creates "/usr/sbin/#{node['nagios']['server']['name']}"
+  action :nothing
+  subscribes :run, 'bash[extract-nagios]', :immediately
 end
 
 directory node['nagios']['config_dir'] do
