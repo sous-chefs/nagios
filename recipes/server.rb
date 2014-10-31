@@ -121,7 +121,7 @@ else
 
   #nodes1 = search(:node, "domain:prod* AND app_environment:production* AND placement_availability_zone:#{region}*")
   #nodes1 = search(:node, "domain:prod* AND app_environment:production* AND placement_availability_zone:#{region}* AND tealium_use_nagios:true")
-  nodes1 = search(:node, "(domain:prod* OR domain:v*) AND app_environment:production* AND ec2_region:#{region} AND tealium_use_nagios:true")
+  nodes1 = search(:node, "(domain:prod* OR domain:v* OR domain:ops*) AND app_environment:production* AND ec2_region:#{region} AND tealium_use_nagios:true")
 
 Chef::Log.warn("***********Nodes are #{nodes1}*************")
 Chef::Log.warn("***********Nodes count is #{nodes1.count}*************")

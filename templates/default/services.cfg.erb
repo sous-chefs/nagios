@@ -154,30 +154,30 @@ define service {
 #}
 
 define service {
-    service_description Check Rabbit vp_to_vs_visitor_result NON_VPC US EAST
+    service_description Check Rabbit vp_to_vs_visitor_result VPC US EAST CLUSTER
     <%= @designation %> <%= @main_nagios %>
-    check_command       check_rabbit_queues!us-east-1.rabbitmq.tealiumiq.com!/server2server!vp_to_vs_visitor_result!monitor!ifyouaremonitoringtheworld!250,-1,200,-1!300,-1,250,-1
+    check_command       check_rabbit_queues!us-east-1.cluster.rabbitmq.tealiumiq.com!/server2server!vp_to_vs_visitor_result!monitor!ifyouaremonitoringtheworld!250,-1,200,-1!300,-1,250,-1
     use                 default-service,srv-pnp
 }
 
 define service {
-    service_description Check Rabbit http_requests_queue NON_VPC US EAST
+    service_description Check Rabbit http_requests_queue VPC US EAST CLUSTER
     <%= @designation %> <%= @main_nagios %>
-    check_command       check_rabbit_queues!us-east-1.rabbitmq.tealiumiq.com!/server2server!http_requests_queue!monitor!ifyouaremonitoringtheworld!4000,-1,2000,-1!4500,-1,2500,-1
+    check_command       check_rabbit_queues!us-east-1.cluster.rabbitmq.tealiumiq.com!/server2server!http_requests_queue!monitor!ifyouaremonitoringtheworld!4000,-1,2000,-1!4500,-1,2500,-1
     use                 default-service,srv-pnp
 }
 
 define service {
-   service_description Check Rabbit tag_request_queue NON_VPC US EAST
+   service_description Check Rabbit tag_request_queue VPC US EAST CLUSTER
     <%= @designation %> <%= @main_nagios %>
-    check_command       check_rabbit_queues!us-east-1.rabbitmq.tealiumiq.com!/server2server!tag_request_queue!monitor!ifyouaremonitoringtheworld!200,-1,200,-1!300,-1,300,-1
+    check_command       check_rabbit_queues!us-east-1.cluster.rabbitmq.tealiumiq.com!/server2server!tag_request_queue!monitor!ifyouaremonitoringtheworld!200,-1,200,-1!300,-1,300,-1
     use                 default-service,srv-pnp
 }
 
 define service {
-    service_description Check Rabbit http_response_task NON_VPC US EAST
+    service_description Check Rabbit http_response_task VPC US EAST CLUSTER
     <%= @designation %> <%= @main_nagios %>
-    check_command       check_rabbit_queues!us-east-1.rabbitmq.tealiumiq.com!/server2server!http_response_task!monitor!ifyouaremonitoringtheworld!200,-1,200,-1!300,-1,300,-1
+    check_command       check_rabbit_queues!us-east-1.cluster.rabbitmq.tealiumiq.com!/server2server!http_response_task!monitor!ifyouaremonitoringtheworld!200,-1,200,-1!300,-1,300,-1
     use                 default-service,srv-pnp
 }
 

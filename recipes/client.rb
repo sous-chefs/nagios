@@ -59,6 +59,19 @@ else
      mon_host << nagios_node['ipaddress']
  end
 
+ search_vpns = "role:openvpn* AND placement_availability_zone:#{node['placement_availability_zone']}*"
+ Chef::Log.warn( "Searching for VPN servers -- Search is: #{search_vpns}" );
+
+ search(:node, search_vpns) do |vpn_node|
+     Chef::Log.warn( "Found VPN node #{vpn_node['ipaddress']}" )
+     mon_host << vpn_node['ipaddress']
+ end
+
+ #hack for vpn ips (internal, vpn assigned)
+ mon_host << "10.8.0.1"
+ mon_host << "10.8.0.18"
+ mon_host << "10.8.0.22"
+
  if mon_host.empty?
     search = "role:#{node['nagios']['server_role']} AND app_environment:#{node[:app_environment]} AND placement_availability_zone:#{region}*"
     Chef::Log.warn( "Searching for Nagios Servers -- Search is: #{search}" );
