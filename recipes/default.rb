@@ -183,6 +183,7 @@ if nagios_bags.bag_list.include?('nagios_hostgroups')
       end
     end
     hostgroup_nodes[hg['hostgroup_name']] = temp_hostgroup_array.join(',')
+    hostgroup_nodes[hg['hostgroup_name']].downcase! if node['nagios']['server']['normalize_hostname']
   end
 end
 
