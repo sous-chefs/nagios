@@ -70,6 +70,12 @@ remote_file "#{Chef::Config[:file_cache_path]}/#{node['nagios']['server']['name'
   action :create_if_missing
 end
 
+node['nagios']['server']['patches'].each do |patch|
+  remote_file "#{Chef::Config[:file_cache_path]}/#{patch}" do
+    source "#{node['nagios']['server']['patch_url']}/#{patch}"
+  end
+end
+
 bash 'extract-nagios' do
   cwd Chef::Config[:file_cache_path]
   code <<-EOH
@@ -79,10 +85,6 @@ bash 'extract-nagios' do
 end
 
 node['nagios']['server']['patches'].each do |patch|
-  remote_file "#{Chef::Config[:file_cache_path]}/#{patch}" do
-    source "#{node['nagios']['server']['patch_url']}/#{patch}"
-  end
-
   bash "patch-#{patch}" do
     cwd Chef::Config[:file_cache_path]
     code <<-EOF
