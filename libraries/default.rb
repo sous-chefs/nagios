@@ -47,13 +47,13 @@ end
 def ip_to_monitor(monitored_host, server_host = node)
   # if monitoring_address is specified implicitly use that
   attrib_value = nil
-  if !node['nagios']['monitoring_attribute'].nil?
-    attrib_value=monitored_host
+  unless node['nagios']['monitoring_attribute'].nil?
+    attrib_value = monitored_host
     path_ary = node['nagios']['monitoring_attribute'].split('.')
     path_ary.each do |k|
-      if attrib_value and attrib_value.has_key?(k)
+      if attrib_value && attrib_value.key?(k)
         attrib_value = attrib_value[k]
-      elsif attrib_value and attrib_value.respond_to? k
+      elsif attrib_value && attrib_value.respond_to? k
         attrib_value = attrib_value.send(k)
       else
         attrib_value = nil
