@@ -2,6 +2,20 @@ nagios Cookbook CHANGELOG
 =========================
 This file is used to list changes made in each version of the nagios cookbook.
 
+v6.0.4
+------
+### Bug
+- Fix normalized hostnames not normalizing the hostgroups
+- Don't register the service templates so that Nagios will start properly
+- Require Apache2 cookbook version 2.0 or greater due to breaking changes with how site.conf files are handled
+
+### Improvement
+- Added additional options for perfdata
+
+### New Feature
+- Added the ability to specify a URL to download patches that will be applied to the source install prior to compliation
+
+
 v6.0.2
 ------
 ### Bug
