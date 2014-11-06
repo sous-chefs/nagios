@@ -25,7 +25,7 @@ apache_site '000-default' do
   enable false
 end
 
-template "#{node['apache']['dir']}/sites-available/#{node['nagios']['server']['vname']}.conf" do
+template "#{node['apache']['dir']}/sites-available/#{node['nagios']['server']['vname']}" do
   source 'apache2.conf.erb'
   mode '0644'
   variables(
