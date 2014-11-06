@@ -26,7 +26,7 @@ The functionality that was previously in the nagios::client recipe has been move
 **Notes**: This cookbook has been tested on the listed platforms. It may work on other platforms with or without modification.
 
 ### Cookbooks
-* apache2
+* apache2 2.0 or greater
 * build-essential
 * nginx
 * nginx_simplecgi
@@ -273,7 +273,7 @@ Here's an example of a service check for sshd that you could apply to all hostgr
 }
 ```
 
-You may optionally define the service template for your service by including `service_template` and a valid template name. 
+You may optionally define the service template for your service by including `service_template` and a valid template name.
 
 Example:
 ```javascript

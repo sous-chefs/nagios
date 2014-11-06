@@ -9,7 +9,9 @@ version           '6.0.3'
 recipe 'default', 'Installs Nagios server.'
 recipe 'nagios::pagerduty', 'Integrates contacts w/ PagerDuty API'
 
-%w( apache2 build-essential php nginx nginx_simplecgi yum-epel nrpe ).each do |cb|
+depends 'apache2', '>= 2.0'
+
+%w( build-essential php nginx nginx_simplecgi yum-epel nrpe ).each do |cb|
   depends cb
 end
 
