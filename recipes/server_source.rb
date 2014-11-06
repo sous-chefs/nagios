@@ -141,7 +141,13 @@ directory node['nagios']['config_dir'] do
   mode '0755'
 end
 
-%w( cache_dir log_dir run_dir ).each do |dir|
+directory node['nagios'][log_dir] do
+  owner node['nagios']['user']
+  group node['nagios']['group']
+  mode '0751'
+end
+
+%w( cache_dir run_dir ).each do |dir|
 
   directory node['nagios'][dir] do
     owner node['nagios']['user']
