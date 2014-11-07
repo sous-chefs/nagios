@@ -81,7 +81,7 @@ bash 'extract-nagios' do
   code <<-EOH
     tar zxvf #{node['nagios']['server']['name']}-#{version}.tar.gz
   EOH
-  not_if { ::File.exists?("/usr/sbin/#{node['nagios']['server']['name']}") }
+  not_if { ::File.exist?("/usr/sbin/#{node['nagios']['server']['name']}") }
 end
 
 node['nagios']['server']['patches'].each do |patch|
