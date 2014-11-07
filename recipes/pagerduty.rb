@@ -21,7 +21,7 @@
 # TODO: remove when backward compatibility is dropped.
 def using_old_pagerduty_key_attribute?
   node['nagios']['pagerduty_key'] &&
-  node['nagios']['pagerduty_key'] != node['nagios']['pagerduty']['key']
+    node['nagios']['pagerduty_key'] != node['nagios']['pagerduty']['key']
 end
 
 if using_old_pagerduty_key_attribute?
