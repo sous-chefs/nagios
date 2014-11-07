@@ -67,7 +67,6 @@ version = node['nagios']['server']['version']
 remote_file "#{Chef::Config[:file_cache_path]}/#{node['nagios']['server']['name']}-#{version}.tar.gz" do
   source "#{node['nagios']['server']['url']}/#{node['nagios']['server']['name']}-#{version}.tar.gz"
   checksum node['nagios']['server']['checksum']
-  action :create_if_missing
 end
 
 node['nagios']['server']['patches'].each do |patch|
