@@ -27,6 +27,7 @@ include_recipe 'php::module_gd'
 
 # the source install of nagios from this recipe does not include embedded perl support
 # so unless the user explicitly set the p1_file attribute, we want to clear it
+# Note: the cookbook now defaults to Nagios 4.X which doesn't support embedded perl anyways
 node.default['nagios']['conf']['p1_file'] = nil
 
 web_srv = node['nagios']['server']['web_server']
@@ -62,10 +63,8 @@ group node['nagios']['group'] do
   action :create
 end
 
-version = node['nagios']['server']['version']
-
-remote_file "#{Chef::Config[:file_cache_path]}/#{node['nagios']['server']['name']}-#{version}.tar.gz" do
-  source "#{node['nagios']['server']['url']}/#{node['nagios']['server']['name']}-#{version}.tar.gz"
+remote_file "#{Chef::Config[:file_cache_path]}/nagios_core.tar.gz" do
+  source node['nagios']['server']['url']
   checksum node['nagios']['server']['checksum']
 end
 
@@ -75,11 +74,9 @@ node['nagios']['server']['patches'].each do |patch|
   end
 end
 
-bash 'extract-nagios' do
+execute 'extract-nagios' do
   cwd Chef::Config[:file_cache_path]
-  code <<-EOH
-    tar zxvf #{node['nagios']['server']['name']}-#{version}.tar.gz
-  EOH
+  command 'tar zxvf nagios_core.tar.gz'
   not_if { ::File.exist?("/usr/sbin/#{node['nagios']['server']['name']}") }
 end
 
@@ -96,7 +93,7 @@ node['nagios']['server']['patches'].each do |patch|
       fi
     EOF
     action :nothing
-    subscribes :run, 'bash[extract-nagios]', :immediately
+    subscribes :run, 'execute[extract-nagios]', :immediately
   end
 end
 
@@ -131,7 +128,7 @@ bash 'compile-nagios' do
     make install-commandmode
   EOH
   action :nothing
-  subscribes :run, 'bash[extract-nagios]', :immediately
+  subscribes :run, 'execute[extract-nagios]', :immediately
 end
 
 directory node['nagios']['config_dir'] do
