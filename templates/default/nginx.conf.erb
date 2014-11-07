@@ -48,11 +48,6 @@ nginx_dispatch(:php,
   location /<%= node['nagios']['server']['vname'] %>/stylesheets {
     alias /etc/<%= node['nagios']['server']['vname'] %>/stylesheets;
   }
-
-  location /<%= node['nagios']['server']['vname'] %> {
-    alias <%= @docroot %>;
-  }
-
   location / {
     root <%= @docroot %>;
   }
