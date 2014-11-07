@@ -1,6 +1,6 @@
 #
 # Author:: Jake Vanderdray <jvanderdray@customink.com>
-# Author:: Tim Smith <tsmith@limelight.com>
+# Author:: Tim Smith <tim@cozy.co>
 # Cookbook Name:: nagios
 # Recipe:: pagerduty
 #
