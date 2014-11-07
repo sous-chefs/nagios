@@ -119,7 +119,7 @@ bash 'compile-nagios' do
         --with-lockfile=#{node['nagios']['run_dir']}/#{node['nagios']['server']['vname']}.pid \
         --with-mail=/usr/bin/mail \
         --with-perlcache \
-        --with-htmurl=/#{node['nagios']['server']['vname']} \
+        --with-htmurl=/ \
         --with-cgiurl=/cgi-bin/#{node['nagios']['server']['vname']}
     make all
     make install
