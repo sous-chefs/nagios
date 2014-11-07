@@ -2,12 +2,12 @@
 
 <VirtualHost *:<%= node['nagios']['http_port'] %>>
   ServerAdmin     <%= node['nagios']['sysadmin_email'] %>
-  <% if @nagios_url %>
+<% if @nagios_url %>
   ServerName <%= @nagios_url %>
-  <% else %>
+<% else %>
   ServerName      <%= node['fqdn'] %>
   ServerAlias     <%= node['nagios']['server']['name'] %> <%= node['nagios']['server']['name'] %>.<%= node.chef_environment =~ /^_default$/ ? "default" : node.chef_environment%>.<%= @public_domain %>
-  <% end %>
+<% end %>
   DocumentRoot    <%= node['nagios']['docroot'] %>
   CustomLog       <%= node['nagios']['log_dir'] %>/apache_access.log combined
   ErrorLog        <%= node['nagios']['log_dir'] %>/apache_error.log
@@ -17,16 +17,16 @@
 <% end -%>
   ScriptAlias /cgi-bin/<%= node['nagios']['server']['vname'] %> /usr/lib/cgi-bin/<%= node['nagios']['server']['vname'] %>
 
-  <% if @https -%>
+<% if @https -%>
   SSLEngine On
   SSLProtocol all -SSLv3 -SSLv2
   SSLCertificateFile <%= @ssl_cert_file %>
-  <% if node['nagios']['ssl_cert_chain_file'] %>
+<% if node['nagios']['ssl_cert_chain_file'] %>
   SSLCertificateChainFile <%= node['nagios']['ssl_cert_chain_file'] %>
-  <% end -%>
+<% end -%>
   SSLCertificateKeyFile <%= @ssl_cert_key %>
-  <% end -%>
 
+<% end -%>
 <% case node['nagios']['server_auth_method'] -%>
 <% when "openid" -%>
   <Location />
@@ -70,9 +70,9 @@
   SetEnv TZ "<%= node['nagios']['timezone'] %>"
 
   RewriteEngine On
-  <% if node['nagios']['server']['redirect_root'] -%>
+<% if node['nagios']['server']['redirect_root'] -%>
   RewriteRule ^/$ /<%= node['nagios']['server']['vname'] %> [R=301,L]
-  <% end -%>
+<% end -%>
   RewriteCond %{THE_REQUEST} ^[A-Z]{3,9}\ /.*index\.html\ HTTP/
   RewriteRule ^(.*)index\.html$ $1 [R=301,L]
 </VirtualHost>
