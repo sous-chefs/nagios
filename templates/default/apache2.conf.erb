@@ -21,13 +21,13 @@
 
   <% if @https -%>
   SSLEngine On
+  SSLProtocol all -SSLv3 -SSLv2
   SSLCertificateFile <%= @ssl_cert_file %>
   <% if node['nagios']['ssl_cert_chain_file'] %>
   SSLCertificateChainFile <%= node['nagios']['ssl_cert_chain_file'] %>
   <% end -%>
   SSLCertificateKeyFile <%= @ssl_cert_key %>
   <% end -%>
-
 
 <% case node['nagios']['server_auth_method'] -%>
 <% when "openid" -%>
