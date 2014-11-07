@@ -163,10 +163,6 @@ directory "/usr/lib/#{node['nagios']['server']['vname']}" do
   mode '0755'
 end
 
-link "#{node['nagios']['conf_dir']}/stylesheets" do
-  to "#{node['nagios']['docroot']}/stylesheets"
-end
-
 if web_srv == 'apache'
   apache_module 'cgi' do
     enable :true

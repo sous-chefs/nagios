@@ -45,9 +45,11 @@ nginx_dispatch(:php,
 %>
 <% end %>
 
-  location /<%= node['nagios']['server']['vname'] %>/stylesheets {
+<% if node.platform_family == 'debian' && node['nagios']['server']['install_method'] == 'package'-%>
+  location /stylesheets {
     alias /etc/<%= node['nagios']['server']['vname'] %>/stylesheets;
   }
+<% end -%>
   location / {
     root <%= @docroot %>;
   }

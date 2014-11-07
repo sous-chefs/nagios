@@ -12,8 +12,10 @@
   CustomLog       <%= node['nagios']['log_dir'] %>/apache_access.log combined
   ErrorLog        <%= node['nagios']['log_dir'] %>/apache_error.log
 
-  ScriptAlias /cgi-bin/<%= node['nagios']['server']['vname'] %> /usr/lib/cgi-bin/<%= node['nagios']['server']['vname'] %>
+<% if node.platform_family == 'debian' && node['nagios']['server']['install_method'] == 'package'-%>
   Alias /stylesheets /etc/<%= node['nagios']['server']['vname'] %>/stylesheets
+<% end -%>
+  ScriptAlias /cgi-bin/<%= node['nagios']['server']['vname'] %> /usr/lib/cgi-bin/<%= node['nagios']['server']['vname'] %>
 
   <% if @https -%>
   SSLEngine On
