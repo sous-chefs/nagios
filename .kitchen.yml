@@ -23,13 +23,13 @@ platforms:
         - ["forwarded_port", {guest: 80, host: 8082}]
     run_list:
     - recipe[apt::default]
-  - name: debian-7.2.0
+  - name: debian-7.7
     driver_config:
       network:
         - ["forwarded_port", {guest: 80, host: 8083}]
     run_list:
     - recipe[apt::default]
-  - name: debian-6.0.8
+  - name: debian-6.0.10
     driver_config:
       network:
         - ["forwarded_port", {guest: 80, host: 8084}]
@@ -41,14 +41,26 @@ platforms:
         - ["forwarded_port", {guest: 80, host: 8085}]
     run_list:
     - recipe[freebsd::portsnap]
-  - name: centos-6.5
+  - name: centos-7.0
     driver_config:
       network:
         - ["forwarded_port", {guest: 80, host: 8086}]
-  - name: centos-5.10
+  - name: centos-6.5
     driver_config:
       network:
         - ["forwarded_port", {guest: 80, host: 8087}]
+  - name: centos-5.10
+    driver_config:
+      network:
+        - ["forwarded_port", {guest: 80, host: 8088}]
+  - name: fedora-19
+    driver_config:
+      network:
+        - ["forwarded_port", {guest: 80, host: 8089}]
+  - name: fedora-20
+    driver_config:
+      network:
+        - ["forwarded_port", {guest: 80, host: 8090}]
 
 suites:
  - name: server_package
