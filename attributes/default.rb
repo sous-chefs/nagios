@@ -55,6 +55,7 @@ when 'rhel', 'fedora'
   default['nagios']['state_dir']     = '/var/log/nagios'
   default['nagios']['run_dir']       = '/var/run'
   default['nagios']['docroot']       = '/usr/share/nagios/html'
+  default['nagios']['cgi-bin']       = '/usr/lib64/nagios/cgi-bin/'
 else
   default['nagios']['home']          = '/usr/lib/nagios3'
   default['nagios']['conf_dir']      = '/etc/nagios3'
@@ -65,6 +66,7 @@ else
   default['nagios']['state_dir']     = '/var/lib/nagios3'
   default['nagios']['run_dir']       = '/var/run/nagios3'
   default['nagios']['docroot']       = '/usr/share/nagios3/htdocs'
+  default['nagios']['cgi-bin']       = '/usr/lib/cgi-bin/nagios3'
 end
 
 # platform specific atttributes

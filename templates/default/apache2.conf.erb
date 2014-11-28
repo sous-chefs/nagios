@@ -15,7 +15,7 @@
 <% if node.platform_family == 'debian' && node['nagios']['server']['install_method'] == 'package'-%>
   Alias /stylesheets /etc/<%= node['nagios']['server']['vname'] %>/stylesheets
 <% end -%>
-  ScriptAlias /cgi-bin/<%= node['nagios']['server']['vname'] %> /usr/lib/cgi-bin/<%= node['nagios']['server']['vname'] %>
+  ScriptAlias /cgi-bin/<%= node['nagios']['server']['vname'] %> <%= node['nagios']['cgi-bin'] %>
 
 <% if @https -%>
   SSLEngine On
