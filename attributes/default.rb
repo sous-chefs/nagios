@@ -203,7 +203,6 @@ default['nagios']['default_service']['action_url']            = nil
 default['nagios']['server']['web_server']     = 'apache'
 default['nagios']['server']['nginx_dispatch'] = 'cgi'
 default['nagios']['server']['stop_apache']    = false
-default['nagios']['server']['redirect_root']  = false
 default['nagios']['server']['normalize_hostname'] = false
 
 default['nagios']['conf']['max_service_check_spread'] = 5
