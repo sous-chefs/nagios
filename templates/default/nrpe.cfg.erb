@@ -7,7 +7,7 @@ nrpe_group=<%= node['nagios']['group'] %>
 dont_blame_nrpe=<%= node['nagios']['nrpe']['dont_blame_nrpe'] %>
 debug=0
 command_timeout=<%= node['nagios']['nrpe']['command_timeout'] %>
-allowed_hosts=<%= @mon_host.join(',') %>
+#allowed_hosts=<%= @mon_host.join(',') %>
 include_dir=<%= @nrpe_directory %>
 
 command[check_zombie_procs]=<%= node['nagios']['plugin_dir'] %>/check_procs -w 5 -c 10 -s Z
@@ -42,7 +42,12 @@ command[check_ntp]=<%= node['nagios']['plugin_dir'] %>/check_ntp_time -H <%= @nt
 
 <% if node.roles.include?("hostname_eventstream") %>
 #check eventstream process
-command[check_eventstream]=<%= node['nagios']['plugin_dir'] %>/check_procs -a "./eventstream.pl"
+command[check_eventstream]=<%= node['nagios']['plugin_dir'] %>/check_procs -a "./eventstream.pl" -c 1:10 -u root
+<% end %>
+
+<% if node.roles.include?("eventstream_processor") %>
+#check eventstream_processor process
+command[check_eventstream_processor]=<%= node['nagios']['plugin_dir'] %>/check_procs -a "/var/lib/sources/data_cloud/visitor_profile_processor.one-jar.jar eventstream_processor" -c 1:10
 <% end %>
 
 <% if node.roles.include?("urest") %>
@@ -77,18 +82,46 @@ command[check_rabbitmq_server]=<%= node['nagios']['plugin_dir'] %>/check_procs -
 command[check_rabbitmq_unackd]=sudo <%= node['nagios']['plugin_dir'] %>/check_rabbitmq_unackd.py 
 <% end %>
 
-<% if node.recipes.include?("server2server") %>
-#check s2s processes
-command[check_s2s_tag_processor_perl]=<%= node['nagios']['plugin_dir'] %>/check_procs -a "./s2s_tag_processor.pl"
-command[check_s2s_http_perl]=<%= node['nagios']['plugin_dir'] %>/check_procs -a "./s2s_http.pl"
-command[check_s2s_tagger_perl]=<%= node['nagios']['plugin_dir'] %>/check_procs -a "./s2s_tagger.pl"
+<% if node.roles.include?("rabbitmq_server_cluster") %>
+#check rabbitmq processes
+command[check_rabbitmq_epmd]=<%= node['nagios']['plugin_dir'] %>/check_procs -c 1:1 -C epmd
+command[check_rabbitmq_beam]=<%= node['nagios']['plugin_dir'] %>/check_procs -c 1:2 -C beam.smp
+#NOTE: The paramaters set below <2:10> is set that way because of a bug in this version of check_procs that sees itself when checking processes, thus we need to find at least 2
+command[check_rabbitmq_server]=<%= node['nagios']['plugin_dir'] %>/check_procs -a "/usr/sbin/rabbitmq-server" -c 2:2 
+command[check_rabbitmq_unackd]=sudo <%= node['nagios']['plugin_dir'] %>/check_rabbitmq_unackd.py
 <% end %>
 
-<% if node.recipes.include?("sitemap_audit") %>
-#check sitemap audit processes
-command[check_sitemap_audit_sitemap_perl]=<%= node['nagios']['plugin_dir'] %>/check_procs -a "./audit-sitemap.pl"
-command[check_sitemap_audit_urls_perl]=<%= node['nagios']['plugin_dir'] %>/check_procs -a "./audit-urls.pl"
-command[check_sitemap_audit_complete_perl]=<%= node['nagios']['plugin_dir'] %>/check_procs -a "./audit-complete.pl"
+<% if node.recipes.include?("server2server") %>
+#check s2s processes
+command[check_s2s_tag_processor_perl]=<%= node['nagios']['plugin_dir'] %>/check_procs -c 1:10 -a "./s2s_tag_processor.pl" -u root
+command[check_s2s_http_perl]=<%= node['nagios']['plugin_dir'] %>/check_procs -c 1:10 -a "./s2s_http.pl" -u root
+command[check_s2s_tagger_perl]=<%= node['nagios']['plugin_dir'] %>/check_procs -c 1:10 -a "./s2s_tagger.pl" -u root
+<% end %>
+
+#<% if node.recipes.include?("sitemap_audit") %>
+##check sitemap audit processes
+#command[check_sitemap_audit_sitemap_perl]=<%= node['nagios']['plugin_dir'] %>/check_procs -a "./audit-sitemap.pl" -c 1:10 -u root
+#command[check_sitemap_audit_urls_perl]=<%= node['nagios']['plugin_dir'] %>/check_procs -a "./audit-urls.pl" -c 1:10 -u root
+#command[check_sitemap_audit_complete_perl]=<%= node['nagios']['plugin_dir'] %>/check_procs -a "./audit-complete.pl" -c 1:10 -u root
+#<% end %>
+
+<% if node.roles.include?("sitescan_analyzer") %>
+#check sitescan analyzer processes
+command[check_sitemap_audit_urls_perl]=<%= node['nagios']['plugin_dir'] %>/check_procs -a "./audit-urls.pl" -c 1:20 -u root
+command[check_sitemap_audit_analyzer_perl]=<%= node['nagios']['plugin_dir'] %>/check_procs -a "./audit-analyzer.pl" -c 1:10 -u root
+command[check_sitemap_audit_complete_perl]=<%= node['nagios']['plugin_dir'] %>/check_procs -a "./audit-complete.pl" -c 1:10 -u root
+<% end %>
+
+<% if node.roles.include?("sitescan_complete") %>
+#check sitescan complete processes
+command[check_sitemap_audit_sitemap_perl]=<%= node['nagios']['plugin_dir'] %>/check_procs -a "./audit-sitemap.pl" -c 1:10 -u root
+command[check_sitemap_audit_complete_perl]=<%= node['nagios']['plugin_dir'] %>/check_procs -a "./audit-complete.pl" -c 1:10 -u root
+<% end %>
+
+<% if node.roles.include?("sitescan_urls") %>
+#check sitescan urls processes
+command[check_sitemap_audit_urls_perl]=<%= node['nagios']['plugin_dir'] %>/check_procs -a "./audit-urls.pl" -c 1:100 -u root
+command[check_sitemap_audit_complete_perl]=<%= node['nagios']['plugin_dir'] %>/check_procs -a "./audit-complete.pl" -c 1:10 -u root
 <% end %>
 
 <% if node.recipes.include?("uconnect") %>
@@ -110,12 +143,18 @@ command[check_dir_files]=<%= node['nagios']['plugin_dir'] %>/dircount.pl /data/s
 
 <% if node.roles.include?("dc_visitor_processor") %>
 #check DC VP processes
-command[check_visitor_processor]=<%= node['nagios']['plugin_dir'] %>/check_procs -a "/var/lib/sources/data_cloud/visitor_profile_processor.one-jar.jar visitor_processor"
+#NOTE: The paramaters set below <2:10> is set that way because of a bug in this version of check_procs that sees itself when checking processes, thus we need to find at least 2
+command[check_visitor_processor]=<%= node['nagios']['plugin_dir'] %>/check_procs -a "/var/lib/sources/data_cloud/visitor_profile_processor.one-jar.jar visitor_processor" -c 2:10
 <% end %>
 
 <% if node.roles.include?("dc_uconnect") %>
 #check DC Uconnect process
-command[check_uconnect]=<%= node['nagios']['plugin_dir'] %>/check_procs -a "/usr/share/tealium/datacloud/visitor_profile_processor.jar uconnect"
+command[check_uconnect]=<%= node['nagios']['plugin_dir'] %>/check_procs -a "/usr/share/tealium/datacloud/visitor_profile_processor.jar uconnect" -c 1:10
+<% end %>
+
+<% if node.roles.include?("dc_bulk_downloader") %>
+#check DC Bulk Downloader process
+command[check_bulk_downloader]=<%= node['nagios']['plugin_dir'] %>/check_procs -a "/usr/share/tealium/datacloud/visitor_profile_processor.jar bulk_downloader" -c 1:10
 <% end %>
 
 <% if node.roles.include?("dc_query_aggregator") %>

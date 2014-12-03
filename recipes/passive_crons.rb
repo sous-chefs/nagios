@@ -149,12 +149,12 @@ if node.roles.include?("utui")
     group "root"
     mode 0755
     variables(
-      :nagios_server => "10.168.13.173"
+      :nagios_server => "10.250.168.137"
     )
   end
 end
 
-if node.roles.include?("sitescan_sitemap")
+if node.roles.include?("sitescan_sitemap") || node.roles.include?("sitescan_urls")
 
   Chef::Log.warn( "Node roles are #{node.roles}.")
 

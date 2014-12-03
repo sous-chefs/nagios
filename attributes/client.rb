@@ -73,6 +73,9 @@ default['nagios']['logfiles']['eventstream']['syslog'] = "/var/log/syslog"
 default['nagios']['checks']['utui_login_error']['pattern'] = "ERROR: UNABLE TO LOGIN"
 default['nagios']['checks']['utui_publish_error']['pattern'] = "UPLOAD PUBLICATION FAILURE"
 default['nagios']['checks']['sitemap_url']['pattern'] = "No sitemap_url found in collection sitemap_urls"
+
+default['nagios']['checks']['sitemap_non_compiled']['pattern'] = "Nothing compiled, yet no errors"
+
 default['nagios']['checks']['utui_publish_insert']['pattern'] = "Could not upsert:"
 default['nagios']['checks']['utui_smartFTP_error']['pattern'] = "WARNING: Resetting smartFTP flag"
 default['nagios']['checks']['utui_ftp_upload_error']['pattern'] = "FTP UPLOAD FAILURE"

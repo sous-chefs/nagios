@@ -1,3 +1,5 @@
 #!/bin/sh
 
-/usr/lib/nagios/plugins/check_log3_passive.pl -l <%= node['nagios']['logfiles']['sitemap']['log_file'] %> -S 'Check Sitemap Logs SitemapURL' -s /tmp/sitemap -p "<%= node['nagios']['checks']['sitemap_url']['pattern'] %>" -c 1 > /dev/null
+/usr/lib/nagios/plugins/check_log3_passive.pl -l <%= node['nagios']['logfiles']['sitemap']['log_file'] %> -S 'Check Sitemap Logs SitemapURL' -s /tmp/sitemap_url -p "<%= node['nagios']['checks']['sitemap_url']['pattern'] %>" -c 1 > /dev/null
+
+/usr/lib/nagios/plugins/check_log3_passive.pl -l <%= node['nagios']['logfiles']['sitemap']['log_file'] %> -S 'Check Sitemap Logs Non_Compiled' -s /tmp/sitemap_non_compiled -p "<%= node['nagios']['checks']['sitemap_non_compiled']['pattern'] %>" -c 1 > /dev/null
