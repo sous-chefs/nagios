@@ -7,7 +7,6 @@ nrpe_group=<%= node['nagios']['group'] %>
 dont_blame_nrpe=<%= node['nagios']['nrpe']['dont_blame_nrpe'] %>
 debug=0
 command_timeout=<%= node['nagios']['nrpe']['command_timeout'] %>
-#allowed_hosts=<%= @mon_host.join(',') %>
 include_dir=<%= @nrpe_directory %>
 
 command[check_zombie_procs]=<%= node['nagios']['plugin_dir'] %>/check_procs -w 5 -c 10 -s Z
@@ -60,6 +59,11 @@ command[check_nodejs]=<%= node['nagios']['plugin_dir'] %>/check_procs -c 1:1 -C 
 command[check_mongod]=<%= node['nagios']['plugin_dir'] %>/check_procs -c 1:1 -C mongod
 <% end %>
 
+<% if node.recipes.include?("mongodb::mongos") %>
+#check mongod processes
+command[check_mongos]=<%= node['nagios']['plugin_dir'] %>/check_procs -c 1:1 -C mongos
+<% end %>
+
 <% if node.roles.include?("utui") %>
 #check UTUI log for errors 
 <% end %>
@@ -98,12 +102,10 @@ command[check_s2s_http_perl]=<%= node['nagios']['plugin_dir'] %>/check_procs -c 
 command[check_s2s_tagger_perl]=<%= node['nagios']['plugin_dir'] %>/check_procs -c 1:10 -a "./s2s_tagger.pl" -u root
 <% end %>
 
-#<% if node.recipes.include?("sitemap_audit") %>
-##check sitemap audit processes
-#command[check_sitemap_audit_sitemap_perl]=<%= node['nagios']['plugin_dir'] %>/check_procs -a "./audit-sitemap.pl" -c 1:10 -u root
-#command[check_sitemap_audit_urls_perl]=<%= node['nagios']['plugin_dir'] %>/check_procs -a "./audit-urls.pl" -c 1:10 -u root
-#command[check_sitemap_audit_complete_perl]=<%= node['nagios']['plugin_dir'] %>/check_procs -a "./audit-complete.pl" -c 1:10 -u root
-#<% end %>
+<% if node.roles.include?("reporting") %>
+#check reporting process
+command[check_s2s_recorder_perl]=<%= node['nagios']['plugin_dir'] %>/check_procs -c 1:10 -a "./s2s_recorder.pl" -u root
+<% end %>
 
 <% if node.roles.include?("sitescan_analyzer") %>
 #check sitescan analyzer processes
@@ -124,68 +126,43 @@ command[check_sitemap_audit_urls_perl]=<%= node['nagios']['plugin_dir'] %>/check
 command[check_sitemap_audit_complete_perl]=<%= node['nagios']['plugin_dir'] %>/check_procs -a "./audit-complete.pl" -c 1:10 -u root
 <% end %>
 
-<% if node.recipes.include?("uconnect") %>
-#check iron processes
-command[check_iron]=<%= node['nagios']['plugin_dir'] %>/check_procs -a "./s2s_httpd_iron.pl"
-command[check_iron_processor]=<%= node['nagios']['plugin_dir'] %>/check_procs -a "./s2s_httpd_iron_processor.pl"
-#check number of files waiting to be processed in /data/store/logger/queue/process
-command[check_dir_files]=<%= node['nagios']['plugin_dir'] %>/dircount.pl /data/store/logger/queue/process 100000 150000
-<% end %>
-
-
-<% if node.recipes.include?("uconnect::s2s_logger_plenv") || node.roles.include?("uconnect_logger") %>
-#check iron processes
-command[check_iron]=<%= node['nagios']['plugin_dir'] %>/check_procs -a "./s2s_httpd_iron.pl"
-command[check_iron_processor]=<%= node['nagios']['plugin_dir'] %>/check_procs -a "./s2s_httpd_iron_processor.pl"
-#check number of files waiting to be processed in /data/store/logger/queue/process
-command[check_dir_files]=<%= node['nagios']['plugin_dir'] %>/dircount.pl /data/store/logger/queue/process 100000 150000
-<% end %>
-
 <% if node.roles.include?("dc_visitor_processor") %>
 #check DC VP processes
 #NOTE: The paramaters set below <2:10> is set that way because of a bug in this version of check_procs that sees itself when checking processes, thus we need to find at least 2
-command[check_visitor_processor]=<%= node['nagios']['plugin_dir'] %>/check_procs -a "/var/lib/sources/data_cloud/visitor_profile_processor.one-jar.jar visitor_processor" -c 2:10
+command[check_visitor_processor]=<%= node['nagios']['plugin_dir'] %>/check_procs -a "/var/lib/sources/data_cloud/visitor_profile_processor.one-jar.jar visitor_processor" -c 2:2
 <% end %>
 
 <% if node.roles.include?("dc_uconnect") %>
 #check DC Uconnect process
-command[check_uconnect]=<%= node['nagios']['plugin_dir'] %>/check_procs -a "/usr/share/tealium/datacloud/visitor_profile_processor.jar uconnect" -c 1:10
+command[check_uconnect]=<%= node['nagios']['plugin_dir'] %>/check_procs -a "/usr/share/tealium/datacloud/uconnect.jar uconnect" -c 2:2
 <% end %>
 
 <% if node.roles.include?("dc_bulk_downloader") %>
 #check DC Bulk Downloader process
-command[check_bulk_downloader]=<%= node['nagios']['plugin_dir'] %>/check_procs -a "/usr/share/tealium/datacloud/visitor_profile_processor.jar bulk_downloader" -c 1:10
+command[check_bulk_downloader]=<%= node['nagios']['plugin_dir'] %>/check_procs -a "visitor_profile_processor.one-jar.jar bulk_downloader" -c 2:2
 <% end %>
 
 <% if node.roles.include?("dc_query_aggregator") %>
 #check DC QA processes
-command[check_query_aggregator]=<%= node['nagios']['plugin_dir'] %>/check_procs -a "/var/lib/sources/data_cloud/visitor_profile_processor.one-jar.jar query_aggregator"
+command[check_query_aggregator]=<%= node['nagios']['plugin_dir'] %>/check_procs -a "visitor_profile_processor.one-jar.jar query_aggregator" -c 2:2
 <% end %>
 
 <% if node.roles.include?("dc_message_router") %>
 #check DC MR processes
-command[check_message_router]=<%= node['nagios']['plugin_dir'] %>/check_procs -a "/var/lib/sources/data_cloud/visitor_profile_processor.one-jar.jar message_router"
+command[check_message_router]=<%= node['nagios']['plugin_dir'] %>/check_procs -a "visitor_profile_processor.one-jar.jar message_router" -c 2:2
 <% end %>
 
 <% if node.roles.include?("dc_data_distributor") %>
 #check DC DD process
-command[check_message_router]=<%= node['nagios']['plugin_dir'] %>/check_procs -a "/var/lib/sources/data_cloud/visitor_profile_processor.one-jar.jar data_distributor"
+command[check_data_distributor]=<%= node['nagios']['plugin_dir'] %>/check_procs -a "visitor_profile_processor.one-jar.jar data_distributor" -c 2:2
 <% end %>
 
 <% if node.roles.include?("dc_visitor_service") %>
 #check DC VS process
-command[check_visitor_service]=<%= node['nagios']['plugin_dir'] %>/check_procs -a "/var/lib/sources/data_cloud/visitor_profile_processor.one-jar.jar visitor_service"
+command[check_visitor_service]=<%= node['nagios']['plugin_dir'] %>/check_procs -a "visitor_profile_processor.one-jar.jar visitor_service" -c 2:2
 <% end %>
 
 <% if node.roles.include?("permission_cache") %>
 #check permission cache process
-command[check_permission_cache]=<%= node['nagios']['plugin_dir'] %>/check_procs -a "/var/lib/sources/permission_cache/permission_cache.one-jar.jar"
+command[check_permission_cache]=<%= node['nagios']['plugin_dir'] %>/check_procs -a "permission_cache.one-jar.jar com.tealium.permissioncache.app.Main" -c 2:2
 <% end %>
-
-#UNUSED
-#command[check_unicorn]=<%= node['nagios']['plugin_dir'] %>/check_procs -c 4:8 -C unicorn_rails
-#
-# memcached checks require cpan modules, "Cache::Memcached" and "Nagios::Plugins::Memcached"
-#command[check_memcached_response]=/usr/local/bin/check_memcached -H <%= node["ipaddress"] %> -w 3 -c 5
-#command[check_memcached_size]=/usr/local/bin/check_memcached -H <%= node["ipaddress"] %> --size-warning 60 --size-critical 80
-#command[check_memcached_hit]=/usr/local/bin/check_memcached -H <%= node["ipaddress"] %> --hit-warning 40 --hit-critical 20

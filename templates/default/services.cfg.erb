@@ -6,7 +6,7 @@ define service {
     use                 default-service,srv-pnp
     host_name           *
     service_description ping
-    check_command       check_ping!200.0,20%!500.0,60%
+    check_command       check_ping!500.0,40%!1000.0,50%
 }
 
 # monitoring service checks
@@ -17,37 +17,6 @@ define service {
     contact_groups      admins
     use                 default-service,srv-pnp
 }
-
-# Uncomment if you're using Munin
-#define service {
-#    service_description Munin Client
-#    hostgroup_name      all
-#    check_command       check_tcp!4949
-#    use                 default-service,srv-pnp
-#}
-
-# default checks for all hosts
-# Uncomment if you're running chef-client as a daemon
-#define service {
-#    service_description Chef Client
-#    hostgroup_name     base
-#    check_command      check_chef_client
-#    use                default-service,srv-pnp
-#}
-
-#define service {
-#    service_description WebInject UTUI
-#    hostgroup_name      nagios
-#    check_command       check_webinject!UTUIconfig.xml
-#    use                 default-service,srv-pnp
-#}
-
-#define service {
-#    service_description WebInject RabbitMQ
-#    hostgroup_name      rabbitmq
-#    check_command       webinject!rabbitMQconfig.xml!rabbitMQ.xml
-#    use                 default-service,srv-pnp
-#}
 
 define service {
     service_description Free Space All Disks
@@ -71,13 +40,6 @@ define service {
     use                 default-service,srv-pnp
 }
 
-#define service {
-#    service_description Check NodeJS 3030
-#    hostgroup_name      urest
-#    check_command       check_tcp!3030
-#    use                 default-service,srv-pnp
-#}
-
 define service {
     service_description Check Uconnect Files to Process
     hostgroup_name      uconnect_logger,hostname_uconnect
@@ -88,49 +50,12 @@ define service {
 
 <% unless @main_nagios.nil? -%>
 
-#define service {
-#    service_description Check Rabbit http_requests_queue VPC US WEST CLUSTER
-#    <%= @designation %> <%= @main_nagios %>
-#    check_command       check_rabbit_queues!10.1.2.203!/server2server!http_requests_queue!monitor!ifyouaremonitoringtheworld!1,-1,1,-1!1,-1,1,-1
-#    use                 passive-service-auto-healers
-#    event_handler       queue-purge
-#}
-
-#define service {
-#    service_description Check Rabbit tag_request_queue VPC US WEST
-#    <%= @designation %> <%= @main_nagios %>
-#    check_command       check_rabbit_queues!10.1.3.201!/server2server!tag_request_queue!admin!admin!100,-1,100,-1!150,-1,150,-1
-#    use                 default-service,srv-pnp
-#}
-
-#define service {
-#    service_description Check Rabbit http_response_task VPC US WEST
-#    <%= @designation %> <%= @main_nagios %>
-#    check_command       check_rabbit_queues!10.1.3.201!/server2server!http_response_task!admin!admin!100,-1,100,-1!150,-1,150,-1
-#    use                 default-service,srv-pnp
-#}
-
-#define service {
-#    service_description Check Rabbit record_requests_que VPC US WEST
-#    <%= @designation %> <%= @main_nagios %>
-#    check_command       check_rabbit_queues!10.1.3.201!/server2server!record_requests_queue!admin!admin!500,-1,1000,-1!750,-1,1250,-1
-#    use                 default-service,srv-pnp
-#}
-
-#define service {
-#   service_description Check Rabbit vp_to_vs_visitor_result VPC US WEST CLUSTER
-#    <%= @designation %> <%= @main_nagios %>
-#    check_command       check_rabbit_queues!us-west-1.cluster.rabbitmq.tealiumiq.com!/server2server!vp_to_vs_visitor_result!monitor!ifyouaremonitoringtheworld!250,-1,200,-1!300,-1,250,-1
-#    use                 default-service,srv-pnp
-#}
-
 define service {
     service_description Check Rabbit http_requests_queue VPC US WEST CLUSTER
     <%= @designation %> <%= @main_nagios %>
     check_command       check_rabbit_queues!us-west-1.cluster.rabbitmq.tealiumiq.com!/server2server!http_requests_queue!monitor!ifyouaremonitoringtheworld!2500,-1,500,-1!3000,-1,600,-1
     use                 default-service,srv-pnp
 }
-
 
 define service {
     service_description Check Rabbit tag_request_queue VPC US WEST CLUSTER
@@ -145,20 +70,6 @@ define service {
     check_command       check_rabbit_queues!us-west-1.cluster.rabbitmq.tealiumiq.com!/server2server!http_response_task!monitor!ifyouaremonitoringtheworld!200,-1,200,-1!300,-1,300,-1
     use                 default-service,srv-pnp
 }
-
-#define service {
-#    service_description Check Rabbit record_requests_que VPC US WEST CLUSTER
-#    <%= @designation %> <%= @main_nagios %>
-#    check_command       check_rabbit_queues!us-west-1.cluster.rabbitmq.tealiumiq.com!/server2server!record_requests_queue!monitor!ifyouaremonitoringtheworld!500,-1,1000,-1!750,-1,1250,-1
-#    use                 default-service,srv-pnp
-#}
-
-#define service {
-#    service_description Check Rabbit vp_to_vs_visitor_result VPC US EAST CLUSTER
-#    <%= @designation %> <%= @main_nagios %>
-#    check_command       check_rabbit_queues!us-east-1.cluster.rabbitmq.tealiumiq.com!/server2server!vp_to_vs_visitor_result!monitor!ifyouaremonitoringtheworld!250,-1,200,-1!300,-1,250,-1
-#    use                 default-service,srv-pnp
-#}
 
 define service {
     service_description Check Rabbit http_requests_queue VPC US EAST CLUSTER
@@ -175,18 +86,9 @@ define service {
 }
 
 define service {
-    service_description Check Rabbit http_response_task VPC US EAST CLUSTER
-    <%= @designation %> <%= @main_nagios %>
     check_command       check_rabbit_queues!us-east-1.cluster.rabbitmq.tealiumiq.com!/server2server!http_response_task!monitor!ifyouaremonitoringtheworld!200,-1,200,-1!300,-1,300,-1
     use                 default-service,srv-pnp
 }
-
-#define service {
-#    service_description Check Rabbit vp_to_vs_visitor_result VPC EU WEST CLUSTER
-#    <%= @designation %> <%= @main_nagios %>
-#    check_command       check_rabbit_queues!eu-west-1.cluster.rabbitmq.tealiumiq.com!/server2server!vp_to_vs_visitor_result!monitor!ifyouaremonitoringtheworld!1000,-1,1000,-1!500,-1,500,-1
-#    use                 default-service,srv-pnp
-#}
 
 define service {
     service_description Check Rabbit http_requests_queue VPC EU WEST CLUSTER
@@ -254,13 +156,6 @@ define service {
     check_command       check_smtp
     use                 default-service,srv-pnp
 }
-
-#define service {
-#    service_description Check Uconnect TIQ Response Time
-#    <%= @designation %> <%= @main_nagios %>
-#    check_command       check_website_response!"http://datacloud.tealiumiq.com/tealium/main/10/i.gif"!500!1000
-#    use                 default-service,srv-pnp
-#}
 <% end %>
 
 #define service {
@@ -286,13 +181,6 @@ define service {
 }
 
 define service {
-    service_description Check Tealium Website 80
-    hostgroup_name      tealium_website
-    check_command       check_http
-    use                 default-service,srv-pnp
-}
-
-define service {
     service_description Check Visitor Service HTTP 8085
     hostgroup_name      dc_visitor_service
     check_command       check_tcp!8085
@@ -301,7 +189,7 @@ define service {
 
 
 define service {
-    service_description Check DC Uconnect Service HTTP 9000
+    service_description Check DC Uconnect Service HTTP 9090
     hostgroup_name      dc_uconnect
     check_command       check_tcp!9090
     use                 default-service,srv-pnp
@@ -322,25 +210,11 @@ define service {
 }
 
 define service {
-    service_description Nagios HTTP Auth
-    hostgroup_name      nagios
-    check_command       check_nagios_auth
-    use                 default-service,srv-pnp
-}
-
-define service {
     service_description UTUI HTTP Auth
     hostgroup_name      utui
     check_command       check_utui_auth
     use                 default-service,srv-pnp
 }
-
-#define service {
-#    service_description Check nodejs process
-#    hostgroup_name      urest
-#    check_command       check_nrpe!check_nodejs
-#    use                 default-service,srv-pnp
-#}
 
 define service {
     service_description Check Eventstream process
@@ -363,23 +237,9 @@ define service {
     use                 default-service,srv-pnp
 }
 
-#define service {
-#    service_description Check RabbitMQ unakd messages
-#    hostgroup_name      rabbitmq_server_cluster_disc
-#    check_command       check_nrpe!check_rabbitmq_unackd
-#    use                 default-service,srv-pnp
-#}
-
-#define service {
-#    service_description Check RabbitMQ unakd messages
-#    hostgroup_name      rabbitmq_server_cluster_ram
-#    check_command       check_nrpe!check_rabbitmq_unackd
-#    use                 default-service,srv-pnp
-#}
-
 ## JMX Generic ##
 define service {
-    service_description Check JMX DataCloud Visitor Processor Java Heap
+    service_description Check if VISITOR PROCESSOR IS DOWN
     hostgroup_name      dc_visitor_processor
     #check_command       check_jmx_heap!<%= @vp_heap %>500000000
     check_command       check_jmx_heap
@@ -388,7 +248,7 @@ define service {
 
 
 define service {
-    service_description Check JMX DataCloud Uconnect Java Heap
+    service_description Check if UCONNECT IS DOWN
     hostgroup_name      dc_uconnect
     #check_command       check_jmx_heap!<%= @u_heap %>500000000
     check_command       check_jmx_heap
@@ -396,7 +256,7 @@ define service {
 }
 
 define service {
-    service_description Check JMX DataCloud Message Router Java Heap
+    service_description Check if MESSAGE ROUTER IS DOWN
     hostgroup_name      dc_message_router
     #check_command       check_jmx_heap!<%= @mr_heap %>500000000
     check_command       check_jmx_heap
@@ -404,7 +264,7 @@ define service {
 }
 
 define service {
-    service_description Check JMX DataCloud Query Aggregator Java Heap
+    service_description Check if QUERY AGGREGATOR IS DOWN
     hostgroup_name      dc_query_aggregator
     #check_command       check_jmx_heap!<%= @qa_heap %>500000000
     check_command       check_jmx_heap
@@ -412,7 +272,7 @@ define service {
 }
 
 define service {
-    service_description Check JMX DataCloud Data Distributor Java Heap
+    service_description Check if DATA DISTRIBUTOR IS DOWN
     hostgroup_name      dc_data_distributor
     #check_command       check_jmx_heap!<%= @dd_heap %>500000000
     check_command       check_jmx_heap
@@ -420,8 +280,16 @@ define service {
 }
 
 define service {
-    service_description Check JMX DataCloud Visitor Service Java Heap
+    service_description Check if VISITOR SERVICE IS DOWN
     hostgroup_name      dc_visitor_service
+    #check_command       check_jmx_heap!<%= @dd_heap %>500000000
+    check_command       check_jmx_heap
+    use                 jmx-service,srv-pnp
+}
+
+define service {
+    service_description Check if BULK DOWNLOADER IS DOWN
+    hostgroup_name      dc_bulk_downloader
     #check_command       check_jmx_heap!<%= @dd_heap %>500000000
     check_command       check_jmx_heap
     use                 jmx-service,srv-pnp
@@ -461,237 +329,6 @@ define service {
 #    check_command       check_jmx_threads!60!70
 #    use                 jmx-service,srv-pnp
 #}
-
-## JMX VP ##
-#define service {
-#    service_description Check JMX DataCloud VP ActiveVisitorEventCount
-#    hostgroup_name      dc_visitor_processor
-#    check_command       check_jmx_dc_vp_active_visitor
-#    use                 jmx-service,srv-pnp
-#}
-#
-#define service {
-#    service_description Check JMX DataCloud VP VisitorsToAggregator
-#    hostgroup_name      dc_visitor_processor
-#    check_command       check_jmx_dc_vp_visitors_to_aggregator
-#    use                 jmx-service,srv-pnp
-#}
-#
-#define service {
-#    service_description Check JMX DataCloud VP VisitorsStreamed
-#    hostgroup_name      dc_visitor_processor
-#    check_command       check_jmx_dc_vp_visitors_streamed
-#    use                 jmx-service,srv-pnp
-#}
-#
-#define service {
-#    service_description Check JMX DataCloud VP QueriesReceived
-#    hostgroup_name      dc_visitor_processor
-#    check_command       check_jmx_dc_vp_queries_received
-#    use                 jmx-service,srv-pnp
-#}
-#
-#define service {
-#    service_description Check JMX DataCloud VP VisitorCount
-#    hostgroup_name      dc_visitor_processor
-#    check_command       check_jmx_dc_vp_active_visitor_count
-#    use                 jmx-service,srv-pnp
-#}
-#
-#define service {
-#    service_description Check JMX DataCloud VP VisitorsPersisted
-#    hostgroup_name      dc_visitor_processor
-#    check_command       check_jmx_dc_vp_visitors_persisted
-#    use                 jmx-service,srv-pnp
-#}
-#
-#define service {
-#    service_description Check JMX DataCloud VP EventsReceived
-#    hostgroup_name      dc_visitor_processor
-#    check_command       check_jmx_dc_vp_total_events_received
-#    use                 jmx-service,srv-pnp
-#}
-#
-#define service {
-#    service_description Check JMX DataCloud VP ActiveQueryCount
-#    hostgroup_name      dc_visitor_processor
-#    check_command       check_jmx_dc_vp_active_query_count
-#    use                 jmx-service,srv-pnp
-#}
-#
-#define service {
-#    service_description Check JMX DataCloud VP RebalancedObjectsReceived
-#    hostgroup_name      dc_visitor_processor
-#    check_command       check_jmx_dc_vp_rebalanced_objects_received
-#    use                 jmx-service,srv-pnp
-#}
-#
-#define service {
-#    service_description Check JMX DataCloud VP RebalancedObjectsSent
-#    hostgroup_name      dc_visitor_processor
-#    check_command       check_jmx_dc_vp_rebalanced_objects_sent
-#    use                 jmx-service,srv-pnp
-#}
-
-## JMX QA ##
-#define service {
-#    service_description Check JMX DataCloud QA TotalMessagesReceived
-#    hostgroup_name      dc_query_aggregator
-#    check_command       check_jmx_dc_qa_total_messages_received
-#    use                 jmx-service,srv-pnp
-#}
-#
-#define service {
-#    service_description Check JMX DataCloud QA TotalQueriesReceived
-#    hostgroup_name      dc_query_aggregator
-#    check_command       check_jmx_dc_qa_total_queries_received
-#    use                 jmx-service,srv-pnp
-#}
-#
-#define service {
-#    service_description Check JMX DataCloud QA TotalQueryResultsReceived
-#    hostgroup_name      dc_query_aggregator
-#    check_command       check_jmx_dc_qa_total_query_results_received
-#    use                 jmx-service,srv-pnp
-#}
-#
-#define service {
-#    service_description Check JMX DataCloud QA Query Aggregator ActiveQueryCount
-#    hostgroup_name      dc_query_aggregator
-#    check_command       check_jmx_dc_qa_active_query_count
-#    use                 jmx-service,srv-pnp
-#}
-#
-#define service {
-#    service_description Check JMX DataCloud QA TotalUnknownQueryResults
-#    hostgroup_name      dc_query_aggregator
-#    check_command       check_jmx_dc_qa_total_unknown_query_results
-#    use                 jmx-service,srv-pnp
-#}
-#
-#define service {
-#    service_description Check JMX DataCloud QA UnknownQueriesWithQueuedVisitors
-#    hostgroup_name      dc_query_aggregator
-#    check_command       check_jmx_dc_qa_unknown_queries_with_queued_visitors
-#    use                 jmx-service,srv-pnp
-#}
-#
-#define service {
-#    service_description Check JMX DataCloud QA UnknownQueriesQueuedVisitorCount
-#    hostgroup_name      dc_query_aggregator
-#    check_command       check_jmx_dc_qa_unknown_queries_queued_visitor_count
-#    use                 jmx-service,srv-pnp
-#}
-#
-#define service {
-#    service_description Check JMX DataCloud QA RebalancedObjectsReceived
-#    hostgroup_name      dc_query_aggregator
-#    check_command       check_jmx_dc_qa_rebalanced_objects_received
-#    use                 jmx-service,srv-pnp
-#}
-#
-#define service {
-#    service_description Check JMX DataCloud QA RebalancedObjectsSent
-#    hostgroup_name      dc_query_aggregator
-#    check_command       check_jmx_dc_qa_rebalanced_objects_sent
-#    use                 jmx-service,srv-pnp
-#}
-#
-#define service {
-#    service_description Check JMX DataCloud QA Query Manager ActiveQueryCount
-#    hostgroup_name      dc_query_aggregator
-#    check_command       check_jmx_dc_qa_qm_active_query_count
-#    use                 jmx-service,srv-pnp
-#}
-
-#define service {
-#    service_description Check JMX DataCloud QA Query Monitor QueriesRecieved
-#    hostgroup_name      dc_query_aggregator
-#    check_command       check_jmx_dc_qa_qm_queries_recieved
-#    use                 jmx-service,srv-pnp
-#}
-
-## JMX MR ##
-#define service {
-#    service_description Check JMX DataCloud MR TotalMessagesRouted
-#    hostgroup_name      dc_message_router
-#    check_command       check_jmx_dc_mr_total_messages_routed
-#    use                 jmx-service,srv-pnp
-#}
-#
-#define service {
-#    service_description Check JMX DataCloud MR TotalEventsRouted
-#    hostgroup_name      dc_message_router
-#    check_command       check_jmx_dc_mr_total_events_routed
-#    use                 jmx-service,srv-pnp
-#}
-#
-#define service {
-#    service_description Check JMX DataCloud MR TotalMessagesReceived
-#    hostgroup_name      dc_message_router
-#    check_command       check_jmx_dc_mr_total_messages_received
-#    use                 jmx-service,srv-pnp
-#}
-#
-#define service {
-#    service_description Check JMX DataCloud MR TotalEventsReceived
-#    hostgroup_name      dc_message_router
-#    check_command       check_jmx_dc_mr_total_events_received
-#    use                 jmx-service,srv-pnp
-#}
-#
-## JMX DD ##
-#define service {
-#    service_description Check JMX DataCloud DD TotalMessagesReceived
-#    hostgroup_name      dc_data_distributor
-#    check_command       check_jmx_dc_dd_total_messages_received
-#    use                 jmx-service,srv-pnp
-#}
-#
-## JMX VS ##
-#define service {
-#    service_description Check JMX DataCloud VS TotalVisitorsRequestReceivedCount
-#    hostgroup_name      dc_visitor_service
-#    check_command       check_jmx_dc_vs_total_visitors_request_received_count
-#    use                 jmx-service,srv-pnp
-#}
-#
-#define service {
-#    service_description Check JMX DataCloud VS TotalVisitorsFoundInCacheCount
-#    hostgroup_name      dc_visitor_service
-#    check_command       check_jmx_dc_vs_total_visitors_found_in_cache_count
-#    use                 jmx-service,srv-pnp
-#}
-#
-#define service {
-#    service_description Check JMX DataCloud VS TotalVisitorsIsStaleInCacheCount
-#    hostgroup_name      dc_visitor_service
-#    check_command       check_jmx_dc_vs_total_visitors_is_stale_in_cache_count
-#    use                 jmx-service,srv-pnp
-#}
-#
-#define service {
-#    service_description Check JMX DataCloud VS TotalVisitorsRequestSendToVPCount
-#    hostgroup_name      dc_visitor_service
-#    check_command       check_jmx_dc_vs_total_visitors_request_send_to_vp_count
-#    use                 jmx-service,srv-pnp
-#}
-#
-#define service {
-#    service_description Check JMX DataCloud VS TotalVisitorsRequestRecievedFromVPCount
-#    hostgroup_name      dc_visitor_service
-#    check_command       check_jmx_dc_vs_total_visitors_request_recieved_from_vp_count
-#    use                 jmx-service,srv-pnp
-#}
-
-#define service {
-#    service_description Check JMX DataCloud VS CurrentVisitorCacheSize
-#    hostgroup_name      dc_visitor_service
-#    check_command       check_jmx_dc_vs_current_visitor_cache_size
-#    use                 jmx-service,srv-pnp
-#}
-## END JMX ##
-
 
 define service {
     service_description Check Permission Cache Process
@@ -742,8 +379,6 @@ define service {
     use                 default-service,srv-pnp
 }
 
-
-
 define service {
     service_description Check DC Message Router
     hostgroup_name      dc_message_router
@@ -752,9 +387,16 @@ define service {
 }
 
 define service {
-    service_description rabbitmq HTTP Auth
-    hostgroup_name      rabbitmq_server
-    check_command       check_rabbitmq_auth
+    service_description Check DC Data Distributor
+    hostgroup_name      dc_data_distributor
+    check_command       check_nrpe!check_data_distributor
+    use                 default-service,srv-pnp
+}
+
+define service {
+    service_description Check Reporting
+    hostgroup_name      reporting
+    check_command       check_nrpe!check_s2s_recorder_perl
     use                 default-service,srv-pnp
 }
 
@@ -783,13 +425,6 @@ define service {
 #    service_description Check rsyslog process
 #    hostgroup_name      all
 #    check_command       check_nrpe!check_rsyslog
-#    use                 default-service,srv-pnp
-#}
-
-#define service {
-#    service_description Check rabbitmq beam process
-#    hostgroup_name      rabbitmq_server
-#    check_command       check_nrpe!check_rabbitmq_beam
 #    use                 default-service,srv-pnp
 #}
 
@@ -863,20 +498,6 @@ define service {
     use                 default-service,srv-pnp
 }
 
-#define service {
-#    service_description Check Sitescan Audit-URLs Process
-#    hostgroup_name      sitemap_audit
-#    check_command       check_nrpe!check_sitemap_audit_urls_perl
-#    use                 default-service,srv-pnp
-#}
-
-#define service {
-#    service_description Check Sitescan Audit-Complete Process
-#    hostgroup_name      sitemap_audit
-#    check_command       check_nrpe!check_sitemap_audit_complete_perl
-#    use                 default-service,srv-pnp
-#}
-
 define service {
     service_description Check Sitescan Audit-Analyzer Process
     hostgroup_name      sitescan_analyzer
@@ -912,22 +533,6 @@ define service {
     use                 default-service,srv-pnp
 }
 
-
-
-define service {
-    service_description Check HTTPD Iron
-    hostgroup_name      uconnect_logger,hostname_uconnect
-    check_command       check_nrpe!check_iron
-    use                 uconnect-service,srv-pnp
-}
-
-define service {
-    service_description Check HTTPD Iron Processor
-    hostgroup_name      uconnect_logger,hostname_uconnect
-    check_command       check_nrpe!check_iron_processor
-    use                 uconnect-service,srv-pnp
-}
-
 define service {
     service_description Check VPN Process
     hostgroup_name      openvpn_access_server, openvpn_client, openvpn_server
@@ -955,13 +560,6 @@ define service {
     check_command       check_nrpe!check_dnsmasq
     use                 default-service,srv-pnp
 }
-
-#define service {
-#    service_description Check mongod Process
-#    hostgroup_name      mongodb_config, mongodb_replicaset_1
-#    check_command       check_nrpe!check_mongod
-#    use                 default-service,srv-pnp
-#}
 
 define service {
     service_description Load Average
@@ -1029,11 +627,11 @@ define service {
   use                   passive-service
 }
 
-#define service {
-#  service_description   Check Sitemap Logs SitemapURL
-#  hostgroup_name        sitescan_sitemap
-#  use                   passive-service
-#}
+define service {
+  service_description   Check Sitemap Logs SitemapURL
+  hostgroup_name        sitescan_sitemap
+  use                   passive-service
+}
 
 #define service {
 #  service_description   Check Sitemap Logs Non_Compiled
@@ -1041,22 +639,16 @@ define service {
 #  use                   passive-service
 #}
 
-#define service {
-#  service_description   Check Sitemap Logs SitemapURL
-#  hostgroup_name        sitescan_urls
-#  use                   passive-service
-#}
+define service {
+  service_description   Check Sitemap Logs SitemapURL
+  hostgroup_name        sitescan_urls
+  use                   passive-service
+}
 
 #define service {
 #  service_description   Check Sitemap Logs Non_Compiled
 #  hostgroup_name        sitescan_sitemap
 #  use                   passive-service
-#}
-
-#define service {
-#  service_description   Check Uconnect Rabbit Connection
-#  hostgroup_name        uconnect_logger
-#  use                    passive-service 
 #}
 
 #define service {
@@ -1073,67 +665,30 @@ define service {
 #  #use                   passive-service
 #}
  
-define service {
-  service_description   Check Uconnect Iron Create
-  hostgroup_name        hostname_uconnect
-  use                   passive-service
-}
-
-define service {
-  service_description   Check Uconnect Iron Move
-  hostgroup_name        hostname_uconnect
-  use                   passive-service
-}
-
-define service {
-  service_description   Check Uconnect Iron Write
-  hostgroup_name        hostname_uconnect
-  use                   passive-service-auto-healers
-}
-
-define service {
-  service_description   Check Uconnect Iron Processor Process
-  hostgroup_name        hostname_uconnect
-  use                   passive-service-auto-healers
-  event_handler		s2s-resolve
-}
-
-define service {
-  service_description   Check Uconnect Iron Processor Quarantine
-  hostgroup_name        hostname_uconnect
-  use                   passive-service-auto-healers
-}
-
-<% unless node[:monitored_region].nil? %>
-<% @uconnects.each do |n| -%>
-<% nodesize = n[:ec2][:instance_type].split('.').last %>
-<% num_procs = n[:uconnect][:iron_processes][nodesize] %>
-<% ip = n[:ec2][:local_ipv4] %>
-<% hn = n[:hostname] %>
-<% for i in 1..num_procs %>
-define service {
-  service_description   Check Uconnect Rabbit Connection<%= i %> AUTO
-  <%= @designation %>   <%= hn %> - <%= ip %>
-  use                   passive-service
-  event_handler         s2s-resolve
-}
-
-define service {
-  service_description   Check Uconnect Rabbit Authentication<%= i %> AUTO
-  <%= @designation %>   <%= hn %> - <%= ip %>
-  use                   passive-service
-  event_handler         s2s-resolve
-}
-
-<% end %>
-<% end %>
-<% end %>
-
+#<% unless node[:monitored_region].nil? %>
+#<% @uconnects.each do |n| -%>
+#<% nodesize = n[:ec2][:instance_type].split('.').last %>
+#<% num_procs = n[:uconnect][:iron_processes][nodesize] %>
+#<% ip = n[:ec2][:local_ipv4] %>
+#<% hn = n[:hostname] %>
+#<% for i in 1..num_procs %>
 #define service {
-#  service_description   Check Uconnect Rabbit Authentication
-#  hostgroup_name        uconnect_logger
+#  service_description   Check Uconnect Rabbit Connection<%= i %> AUTO
+#  <%= @designation %>   <%= hn %> - <%= ip %>
 #  use                   passive-service
+#  event_handler         s2s-resolve
 #}
+#
+#define service {
+#  service_description   Check Uconnect Rabbit Authentication<%= i %> AUTO
+#  <%= @designation %>   <%= hn %> - <%= ip %>
+#  use                   passive-service
+#  event_handler         s2s-resolve
+#}
+#
+#<% end %>
+#<% end %>
+#<% end %>
 
 define service {
   service_description   Check ntp sync
@@ -1143,23 +698,23 @@ define service {
 }
 
 define service {
-  service_description   Check DigitalVelocity Website 8080
-  hostgroup_name        tealium_website
-  check_command         check_HTTP_8080
-  use                   default-service,srv-pnp
-}
-
-define service {
-  service_description   Check mongos 27017
-  hostgroup_name        mongos
+  service_description   Check mongodb_cluster 27017
+  hostgroup_name        mongodb_cluster
   check_command         check_tcp!27017
   use                   default-service,srv-pnp
 }
 
 define service {
-  service_description   Check mongodb_config 27017
-  hostgroup_name        mongodb_config
-  check_command         check_tcp!27017
+  service_description   Check mongodb Process
+  hostgroup_name        mongodb_cluster,!mongos,!hostname_mongos
+  check_command         check_nrpe!check_mongod
+  use                   default-service,srv-pnp
+}
+
+define service {
+  service_description   Check mongos Process
+  hostgroup_name        mongos,hostname_mongos
+  check_command         check_nrpe!check_mongos
   use                   default-service,srv-pnp
 }
 
@@ -1168,20 +723,6 @@ define service {
   hostgroup_name        mongodb_replicaset_1
   check_command         check_tcp!27017
   use                   default-service,srv-pnp
-}
-
-define service {
-  service_description   Check Nagios_auth
-  hostgroup_name        nagios
-  check_command         check_nagios_auth
-  use                   default-service,srv-pnp
-}
-
-define service {
-  service_description   Check uconnect_service 9090
-  hostgroup_name        uconnect_logger,hostname_uconnect
-  check_command         check_uconnect_service
-  use                   uconnect-service,srv-pnp
 }
 
 define service {

@@ -30,61 +30,6 @@ require 'fileutils'
   end
 end
 
-mon_host = []
-
-if node.run_list.roles.include?(node['nagios']['server_role'])
-  mon_host << node['ipaddress']
-
-  search = "role:openvpn* AND app_environment:#{node['app_environment']} AND placement_availability_zone:#{node['placement_availability_zone']}*"
-
-  search(:node, search) do |vpn_node|
-     Chef::Log.warn( "Found node #{vpn_node['ipaddress']}" )
-     mon_host << vpn_node['ipaddress']
-  end
-
-elsif node['nagios']['multi_environment_monitoring']
-  search(:node, "role:#{node['nagios']['server_role']}") do |n|
-   mon_host << n['ipaddress']
-  end
-else
-  # Need to add availability zone to the search paramater.
-  region = node[:ec2][:placement_availability_zone].match(/^(.*-\d+)[^-]+$/)[1]
-
-  #search = "role:nagios AND app_environment:#{node['app_environment']} AND placement_availability_zone:#{node['placement_availability_zone']}*"
-  search = "role:nagios AND placement_availability_zone:#{node['placement_availability_zone']}*"
-    Chef::Log.warn( "Searching for Nagios servers -- Search is: #{search}" );
-    
- search(:node, search) do |nagios_node|
-     Chef::Log.warn( "Found Nagios node #{nagios_node['ipaddress']}" )
-     mon_host << nagios_node['ipaddress']
- end
-
- search_vpns = "role:openvpn* AND placement_availability_zone:#{node['placement_availability_zone']}*"
- Chef::Log.warn( "Searching for VPN servers -- Search is: #{search_vpns}" );
-
- search(:node, search_vpns) do |vpn_node|
-     Chef::Log.warn( "Found VPN node #{vpn_node['ipaddress']}" )
-     mon_host << vpn_node['ipaddress']
- end
-
- #hack for vpn ips (internal, vpn assigned)
- mon_host << "10.8.0.1"
- mon_host << "10.8.0.18"
- mon_host << "10.8.0.22"
-
- if mon_host.empty?
-    search = "role:#{node['nagios']['server_role']} AND app_environment:#{node[:app_environment]} AND placement_availability_zone:#{region}*"
-    Chef::Log.warn( "Searching for Nagios Servers -- Search is: #{search}" );
-    
-   search(:node, search ) do |n|
-    Chef::Log.info( "Found node #{n['ipaddress']}" )
-    mon_host << n['ipaddress']
-   end
- end
- mon_host << node['ipaddress'] if mon_host.empty?
-
-end
-
 include_recipe "nagios::client_#{node['nagios']['client']['install_method']}"
 
 remote_directory node['nagios']['plugin_dir'] do
@@ -101,68 +46,20 @@ directory "#{node['nagios']['nrpe']['conf_dir']}/nrpe.d" do
   mode 00755
 end
 
-if node.run_list.roles.include?(node['nagios']['server_role'])
-    Chef::Log.warn("Node is a Nagios server")
-   
-    AZ = node[:ec2][:placement_availability_zone]
+region = node[:ec2][:placement_availability_zone].match(/^(\w{2}).+$/)[1]
 
-    Chef::Log.warn("Availability zone is #{AZ}")
-  
-    region = node[:ec2][:placement_availability_zone].match(/^(\w{2}).+$/)[1]
-
-    Chef::Log.warn("Country code is #{region}")
-
-      case region
-      when "us"
-        ntp_server = 'us.pool.ntp.org'
-      when "eu"
-        ntp_server = 'europe.pool.ntp.org'
-      when "ap"
-        ntp_server = 'asia.pool.ntp.org'
-      when "sa"
-        ntp_server = 'south-america.pool.ntp.org'
-      else
-        Chef::Log.warn("Cannot get country code for server")
-      end
-else 
-    region = node[:ec2][:placement_availability_zone].match(/^(.*-\d+)[^-]+$/)[1]
-    #search = "role:#{node['nagios']['server_role']} AND placement_availability_zone:#{region}* AND app_environment:#{node[:app_environment]}"
-
-    #search(:node, search) do |nagios_node|
-    #  Chef::Log.warn( "Found Nagios server for NTP at #{nagios_node['ipaddress']}" )
-    #  ntp_server =  nagios_node['ipaddress']
-    #end   
-
-    #if ntp_server.nil? || ntp_server.empty?
-    #get country code for aws instances
-    AZ = node[:ec2][:placement_availability_zone]
-
-    Chef::Log.warn("Availability zone is #{AZ}")
-
-    region = node[:ec2][:placement_availability_zone].match(/^(\w{2}).+$/)[1]
-
-    Chef::Log.warn("Country code is #{region}")
-
-      case region
-      when "us"
-        ntp_server = 'us.pool.ntp.org'
-      when "eu"
-        ntp_server = 'europe.pool.ntp.org'
-      when "ap"
-        ntp_server = 'asia.pool.ntp.org'
-      when "sa"
-        ntp_server = 'south-america.pool.ntp.org'
-      else
-        Chef::Log.warn("Cannot get country code for server")
-      end
-   #end
+case region
+  when "us"
+    ntp_server = 'us.pool.ntp.org'
+  when "eu"
+    ntp_server = 'europe.pool.ntp.org'
+  when "ap"
+    ntp_server = 'asia.pool.ntp.org'
+  when "sa"
+    ntp_server = 'south-america.pool.ntp.org'
+else
+    Chef::Log.warn("Cannot get country code for server")
 end
-
-if mon_host.nil? || mon_host.empty?
-  mon_host = '127.0.0.1'
-end
-
-Chef::Log.warn("HERE I AM IN THE RECIPE")
 
 template "#{node['nagios']['nrpe']['conf_dir']}/nrpe.cfg" do
   source "nrpe.cfg.erb"
@@ -170,7 +67,6 @@ template "#{node['nagios']['nrpe']['conf_dir']}/nrpe.cfg" do
   group "root"
   mode 00644
   variables(
-    :mon_host => mon_host,
     :nrpe_directory => "#{node['nagios']['nrpe']['conf_dir']}/nrpe.d",
     :ntp_server => ntp_server
   )
@@ -215,7 +111,6 @@ else
     action :add
   end
 end
-
 
 nagios_nrpecheck "check_users" do
   command "#{node['nagios']['plugin_dir']}/check_users"

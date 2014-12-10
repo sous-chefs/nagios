@@ -23,20 +23,3 @@ template "#{node['nagios']['nrpe']['conf_dir']}/send_nsca.cfg" do
     group node['nagios']['group']
     mode 0644
 end
-
-# Upstart 
-#template "/etc/init/nsca.conf" do
-#  action :create
-#  source "upstart.erb"
-#  group "root"
-#  owner "root"
-#  mode 0644
-#  notifies :start, "service[nsca]"
-#end
-#
-# service
-#service "nsca" do
-#  provider Chef::Provider::Service::Upstart
-#  supports :status => true, :start => true
-#  action :start
-#end

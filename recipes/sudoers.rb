@@ -27,16 +27,6 @@ if node.roles.include?("hostname_eventstream")
   end
 end
 
-if node.roles.include?("uconnect_logger") || node.roles.include?("hostname_uconnect")
-  sudo "nagios" do
-    user "nagios"
-    runas "ALL"
-    commands ["/usr/lib/nagios/plugins/check_log3_passive.pl"]
-    host "ALL"
-    nopasswd true
-  end
-end
-
 if node.roles.include?("rabbitmq_server")
   sudo "nagios" do
     user "nagios"

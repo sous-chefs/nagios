@@ -24,11 +24,6 @@ template "#{node['nagios']['conf_dir']}/nsca.cfg" do
     mode 0644
 end
 
-#execute "start nsca daemon" do
-#  command "/usr/lib/nagios/plugins/nsca -c /etc/nagios3/nsca.cfg"
-#  action :nothing
-#iend
-
 # Upstart 
 template "/etc/init/nsca.conf" do
   action :create

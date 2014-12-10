@@ -17,8 +17,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-Chef::Log.warn("This si the PAGERDUTY recipe!***********************************")
-
 package "libwww-perl" do
   case node["platform"]
   when "redhat", "centos", "scientific", "fedora", "suse", "amazon"
@@ -43,10 +41,7 @@ package "libcrypt-ssleay-perl" do
   action :install
 end
 
-#domain = node[:domain]
 domain = DNSHelpers.get_domain(node)
-
-Chef::Log.warn("THE DOMAIN IS #{domain}***********************************")
 
 case domain
 when "prod1.us-w1.int.ops.tlium.com"
@@ -63,16 +58,12 @@ when "ec2.internal"
   region = "us_east_1"
 end
 
-Chef::Log.warn("THE REGION IS #{region}***********************************")
-
-
 unless node['instance_role'] == 'vagrant'
-key_bag = data_bag_item('pager_duty', "#{region}")
-api_key = key_bag['api_key']
+  key_bag = data_bag_item('pager_duty', "#{region}")
+  api_key = key_bag['api_key']
 else
-api_key = "test"
+  api_key = "test"
 end
-
 
 template "/etc/nagios3/conf.d/pagerduty_nagios.cfg" do
   owner "nagios"
@@ -80,7 +71,6 @@ template "/etc/nagios3/conf.d/pagerduty_nagios.cfg" do
   mode 0644
   source "pagerduty_nagios.cfg.erb"
   variables :api_key => api_key
-  #notifies :reload, "service[nagios]"
 end
 
 remote_file "#{node['nagios']['plugin_dir']}/pagerduty_nagios.pl" do
