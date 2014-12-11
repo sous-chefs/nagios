@@ -30,6 +30,9 @@ default['nagios']['group'] = 'nagios'
 # Allow specifying an interface to use for monitoring traffic
 default['nagios']['monitoring_interface'] = nil
 
+# Allow specifying an attribute that holds the ip to use for monitoring
+default['nagios']['monitoring_attribute'] = nil
+
 case node['platform_family']
 when 'debian'
   default['nagios']['plugin_dir'] = '/usr/lib/nagios/plugins'
