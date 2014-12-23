@@ -100,14 +100,28 @@ end
 # find nodes to monitor.  Search in all environments if multi_environment_monitoring is enabled
 Chef::Log.info('Beginning search for nodes.  This may take some time depending on your node count')
 nodes = []
+excluded_nodes = []
 hostgroups = []
 multi_env = node['nagios']['monitored_environments']
 multi_env_search = multi_env.empty? ? '' : ' AND (chef_environment:' + multi_env.join(' OR chef_environment:') + ')'
+exclusion_tag = node['nagios']['exclude_tag_host']
 
 if node['nagios']['multi_environment_monitoring']
-  nodes = search(:node, "name:*#{multi_env_search}")
+  search(:node, "name:*#{multi_env_search}").each do |all_nodes|
+    if all_nodes['tags'].include?(exclusion_tag)
+      excluded_nodes << all_nodes[node['nagios']['host_name_attribute']]
+    else
+      nodes << all_nodes
+    end
+  end
 else
-  nodes = search(:node, "name:* AND chef_environment:#{node.chef_environment}")
+  search(:node, "name:* AND chef_environment:#{node.chef_environment}").each do |all_nodes|
+    if all_nodes['tags'].include?(exclusion_tag)
+      excluded_nodes << all_nodes[node[n'nagios']['host_name_attribute']]
+    else
+      nodes << all_nodes
+    end
+  end
 end
 
 if nodes.empty?
@@ -175,11 +189,15 @@ if nagios_bags.bag_list.include?('nagios_hostgroups')
     temp_hostgroup_array = Array.new
     if node['nagios']['multi_environment_monitoring']
       search(:node, hg['search_query']) do |n|
-        temp_hostgroup_array << n[node['nagios']['host_name_attribute']]
+        unless excluded_nodes.include?(n[node['nagios']['host_name_attribute']])
+          temp_hostgroup_array << n[node['nagios']['host_name_attribute']]
+        end
       end
     else
       search(:node, "#{hg['search_query']} AND chef_environment:#{node.chef_environment}") do |n|
-        temp_hostgroup_array << n[node['nagios']['host_name_attribute']]
+        unless excluded_nodes.include?(n[node['nagios']['host_name_attribute']])
+          temp_hostgroup_array << n[node['nagios']['host_name_attribute']]
+        end
       end
     end
     hostgroup_nodes[hg['hostgroup_name']] = temp_hostgroup_array.join(',')
