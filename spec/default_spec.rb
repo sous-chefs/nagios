@@ -36,10 +36,14 @@ describe 'nagios::default' do
     expect(chef_run).to render_file('/etc/nagios3/htpasswd.users')
   end
 
+  it 'should template contacts config with valid users' do
+    expect(chef_run).to render_file('/etc/nagios3/conf.d/contacts.cfg').with_content('tsmith')
+    expect(chef_run).not_to render_file('/etc/nagios3/conf.d/contacts.cfg').with_content('bsmith')
+  end
+
   it 'should template nagios config files' do
     expect(chef_run).to render_file('/etc/nagios3/conf.d/hosts.cfg')
     expect(chef_run).to render_file('/etc/nagios3/conf.d/hostgroups.cfg')
-    expect(chef_run).to render_file('/etc/nagios3/conf.d/contacts.cfg')
     expect(chef_run).to render_file('/etc/nagios3/conf.d/servicegroups.cfg')
     expect(chef_run).to render_file('/etc/nagios3/conf.d/services.cfg')
     expect(chef_run).to render_file('/etc/nagios3/cgi.cfg')
