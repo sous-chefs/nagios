@@ -6,7 +6,9 @@
   ServerName <%= @nagios_url %>
 <% else %>
   ServerName      <%= node['fqdn'] %>
-  ServerAlias     <%= node['nagios']['server']['name'] %> <%= node['nagios']['server']['name'] %>.<%= node.chef_environment =~ /^_default$/ ? "default" : node.chef_environment%>.<%= @public_domain %>
+<% if node['nagios']['server']['server_alias'] %>
+  ServerAlias     <%= node['nagios']['server']['server_alias'] %>
+<% end %>
 <% end %>
   DocumentRoot    <%= node['nagios']['docroot'] %>
   CustomLog       <%= node['nagios']['log_dir'] %>/apache_access.log combined
