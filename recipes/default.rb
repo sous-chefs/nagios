@@ -117,7 +117,7 @@ if node['nagios']['multi_environment_monitoring']
 else
   search(:node, "name:* AND chef_environment:#{node.chef_environment}").each do |all_nodes|
     if all_nodes['tags'].include?(exclusion_tag)
-      excluded_nodes << all_nodes[node[n'nagios']['host_name_attribute']]
+      excluded_nodes << all_nodes[node['nagios']['host_name_attribute']]
     else
       nodes << all_nodes
     end
