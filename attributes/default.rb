@@ -27,7 +27,7 @@ default['nagios']['monitored_environments'] = []
 default['nagios']['user']  = 'nagios'
 default['nagios']['group'] = 'nagios'
 
-# Allow specifying an interface to use for monitoring traffic
+# Allow specifying which interface on clients to monitor (which IP address to monitor)
 default['nagios']['monitoring_interface'] = nil
 
 case node['platform_family']
@@ -43,7 +43,7 @@ else
   default['nagios']['plugin_dir'] = '/usr/lib/nagios/plugins'
 end
 
-# directories
+# platform specific directories
 case node['platform_family']
 when 'rhel', 'fedora'
   default['nagios']['home']          = '/var/spool/nagios'
@@ -80,7 +80,7 @@ when 'debian'
 when 'rhel', 'fedora'
   default['nagios']['conf']['p1_file']          = '/usr/sbin/p1.pl'
   default['nagios']['cgi-path']       = '/nagios/cgi-bin/'
-  # install via package on RHEL releases less than 6, otherwise use packages
+  # install via source on RHEL releases less than 6, otherwise use packages
   if node['platform_family'] == 'rhel' && node['platform_version'].to_i < 6
     default['nagios']['server']['install_method'] = 'source'
   else
