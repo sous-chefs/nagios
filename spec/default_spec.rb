@@ -2,20 +2,20 @@ require 'spec_helper'
 
 describe 'nagios::default' do
   let(:chef_run) do
-    ChefSpec::ServerRunner.new do |node, server|
-      server.create_data_bag('users', {
+    ChefSpec::ServerRunner.new do |_node, server|
+      server.create_data_bag('users',
                                         'user1' => {
-                                         'id' => 'tsmith',
-                                         'groups' => ['sysadmin'],
-                                         "nagios" => {
-                                            "pager" => "nagiosadmin_pager@example.com",
-                                            "email" => "nagiosadmin@example.com"
+                                          'id' => 'tsmith',
+                                          'groups' => ['sysadmin'],
+                                          'nagios' => {
+                                            'pager' => 'nagiosadmin_pager@example.com',
+                                            'email' => 'nagiosadmin@example.com'
                                           }
                                         },
                                         'user2' => {
-                                         'id' => 'bsmith',
-                                         'groups' => ['users']
-                                        }})
+                                          'id' => 'bsmith',
+                                          'groups' => ['users']
+                                        })
     end.converge(described_recipe)
   end
 

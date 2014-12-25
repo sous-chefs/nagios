@@ -4,19 +4,19 @@ describe 'nagios::default' do
   let(:chef_run) do
     ChefSpec::ServerRunner.new(platform: 'ubuntu', version: '12.04') do | node, server |
       node.set['nagios']['server']['install_method'] = 'source'
-      server.create_data_bag('users', {
+      server.create_data_bag('users',
                                         'user1' => {
-                                         'id' => 'tsmith',
-                                         'groups' => ['sysadmin'],
-                                         "nagios" => {
-                                            "pager" => "nagiosadmin_pager@example.com",
-                                            "email" => "nagiosadmin@example.com"
+                                          'id' => 'tsmith',
+                                          'groups' => ['sysadmin'],
+                                          'nagios' => {
+                                            'pager' => 'nagiosadmin_pager@example.com',
+                                            'email' => 'nagiosadmin@example.com'
                                           }
                                         },
                                         'user2' => {
-                                         'id' => 'bsmith',
-                                         'groups' => ['users']
-                                        }})
+                                          'id' => 'bsmith',
+                                          'groups' => ['users']
+                                        })
     end.converge(described_recipe)
   end
 
