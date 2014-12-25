@@ -51,5 +51,6 @@ describe 'nagios::default' do
     expect(chef_run).to render_file('/etc/nagios3/nagios.cfg')
     expect(chef_run).to render_file('/etc/nagios3/conf.d/timeperiods.cfg')
     expect(chef_run).to render_file('/etc/nagios3/conf.d/servicedependencies.cfg')
+    expect(chef_run).to render_file('/etc/nagios3/conf.d/commands.cfg')
   end
 end
