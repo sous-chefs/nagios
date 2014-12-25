@@ -55,7 +55,7 @@ include_recipe "nagios::server_#{node['nagios']['server']['install_method']}"
 nagios_users = NagiosUsers.new(node)
 
 Chef::Log.fatal("Could not find users in the \"#{node['nagios']['users_databag']}\" databag with the \"#{node['nagios']['users_databag_group']}\"" \
-                'group. Users must be defined to allow for logins to the UI. Make sure the databag exists and, if you have set the ' \
+                ' group. Users must be defined to allow for logins to the UI. Make sure the databag exists and, if you have set the ' \
                 "\"users_databag_group\", that users in that group exist.") if nagios_users.users.empty?
 
 # configure the appropriate authentication method for the web server
