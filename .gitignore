@@ -23,6 +23,8 @@ _Store
 *.tmp
 *.bk
 *.bkup
+.ruby-version
+.idea
 
 # YARD artifacts
 .yardoc
