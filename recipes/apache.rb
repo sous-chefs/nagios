@@ -29,7 +29,6 @@ template "#{node['apache']['dir']}/sites-available/#{node['nagios']['server']['v
   source 'apache2.conf.erb'
   mode '0644'
   variables(
-    :public_domain => node['public_domain'] || node['domain'],
     :nagios_url    => node['nagios']['url'],
     :https         => node['nagios']['enable_ssl'],
     :ssl_cert_file => node['nagios']['ssl_cert_file'],

@@ -20,7 +20,6 @@
 #
 
 # Package pre-reqs
-
 include_recipe 'build-essential'
 include_recipe 'php::default'
 include_recipe 'php::module_gd'
