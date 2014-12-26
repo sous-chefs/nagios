@@ -50,9 +50,10 @@ describe 'nagios::default' do
 
   it 'should create nagios directories' do
     expect(chef_run).to create_directory('/etc/nagios3')
-    expect(chef_run).to create_directory(chef_run.node['nagios']['cache_dir'])
-    expect(chef_run).to create_directory(chef_run.node['nagios']['log_dir'])
-    expect(chef_run).to create_directory(chef_run.node['nagios']['run_dir'])
-    expect(chef_run).to create_directory('/usr/lib/nagios3')
+    expect(chef_run).to create_directory('/etc/nagios3/conf.d')
+    expect(chef_run).to create_directory('/var/cache/nagios3')
+    expect(chef_run).to create_directory('/var/log/nagios3')
+    expect(chef_run).to create_directory('/var/lib/nagios3')
+    expect(chef_run).to create_directory('/var/run/nagios3')
   end
 end
