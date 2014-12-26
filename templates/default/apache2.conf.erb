@@ -15,9 +15,14 @@
   ErrorLog        <%= node['nagios']['log_dir'] %>/apache_error.log
 
 <% if node.platform_family == 'debian' && node['nagios']['server']['install_method'] == 'package'-%>
-  Alias /stylesheets /etc/<%= node['nagios']['server']['vname'] %>/stylesheets
+  Alias /<%= node['nagios']['server']['vname'] %>/stylesheets /etc/<%= node['nagios']['server']['vname'] %>/stylesheets
 <% end -%>
+  Alias /<%= node['nagios']['server']['vname'] %> <%= node['nagios']['docroot'] %>
   ScriptAlias <%= node['nagios']['cgi-path'] %> <%= node['nagios']['cgi-bin'] %>
+
+  <Directory "<%= node['nagios']['cgi-bin'] %>">
+     Options ExecCGI
+  </Directory>
 
 <% if @https -%>
   SSLEngine On
