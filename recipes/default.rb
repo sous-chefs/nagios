@@ -97,112 +97,21 @@ else
   end
 end
 
-# find nodes to monitor.  Search in all environments if multi_environment_monitoring is enabled
-Chef::Log.info('Beginning search for nodes.  This may take some time depending on your node count')
-nodes = []
-excluded_nodes = []
-hostgroups = []
-multi_env = node['nagios']['monitored_environments']
-multi_env_search = multi_env.empty? ? '' : ' AND (chef_environment:' + multi_env.join(' OR chef_environment:') + ')'
-exclusion_tag = node['nagios']['exclude_tag_host']
-
-if node['nagios']['multi_environment_monitoring']
-  search(:node, "name:*#{multi_env_search}").each do |all_nodes|
-    if all_nodes.key?('tags') && all_nodes['tags'].include?(exclusion_tag)
-      excluded_nodes << all_nodes[node['nagios']['host_name_attribute']]
-    else
-      nodes << all_nodes
-    end
-  end
-else
-  search(:node, "name:* AND chef_environment:#{node.chef_environment}").each do |all_nodes|
-    if all_nodes.key?('tags') && all_nodes['tags'].include?(exclusion_tag)
-      excluded_nodes << all_nodes[node['nagios']['host_name_attribute']]
-    else
-      nodes << all_nodes
-    end
+# Setting all general options
+unless node['nagios'].nil?
+  unless node['nagios']['server'].nil?
+    Nagios.instance.normalize_hostname = node['nagios']['server']['normalize_hostname']
   end
 end
 
-if nodes.empty?
-  Chef::Log.info('No nodes returned from search, using this node so hosts.cfg has data')
-  nodes << node
+# loading all databag configurations
+if default['nagios']['server']['load_databag_config']
+  include_recipe 'nagios::_load_databag_config'
 end
 
-# Sort by name to provide stable ordering
-nodes.sort! { |a, b| a.name <=> b.name }
-
-# maps nodes into nagios hostgroups
-service_hosts = {}
-search(:role, '*:*') do |r|
-  hostgroups << r.name
-  nodes.select { |n| n['roles'].include?(r.name) if n['roles'] }.each do |n|
-    service_hosts[r.name] = n[node['nagios']['host_name_attribute']]
-  end
-end
-
-# if using multi environment monitoring add all environments to the array of hostgroups
-if node['nagios']['multi_environment_monitoring']
-  search(:environment, '*:*') do |e|
-    hostgroups << e.name unless hostgroups.include?(e.name)
-    nodes.select { |n| n.chef_environment == e.name }.each do |n|
-      service_hosts[e.name] = n[node['nagios']['host_name_attribute']]
-    end
-  end
-end
-
-# Add all unique platforms to the array of hostgroups
-nodes.each do |n|
-  hostgroups << n['os'] unless hostgroups.include?(n['os']) || n['os'].nil?
-end
-
-# Hack to deal with the nagios server being the first linux system
-hostgroups << node['os'] unless hostgroups.include?(node['os']) || node['os'].nil?
-
-nagios_bags         = NagiosDataBags.new
-services            = nagios_bags.get(node['nagios']['services_databag'])
-servicegroups       = nagios_bags.get(node['nagios']['servicegroups_databag'])
-templates           = nagios_bags.get(node['nagios']['templates_databag'])
-hosttemplates           = nagios_bags.get(node['nagios']['hosttemplates_databag'])
-eventhandlers       = nagios_bags.get(node['nagios']['eventhandlers_databag'])
-unmanaged_hosts     = nagios_bags.get(node['nagios']['unmanagedhosts_databag'])
-serviceescalations  = nagios_bags.get(node['nagios']['serviceescalations_databag'])
-hostescalations     = nagios_bags.get(node['nagios']['hostescalations_databag'])
-contacts            = nagios_bags.get(node['nagios']['contacts_databag'])
-contactgroups       = nagios_bags.get(node['nagios']['contactgroups_databag'])
-servicedependencies = nagios_bags.get(node['nagios']['servicedependencies_databag'])
-timeperiods         = nagios_bags.get(node['nagios']['timeperiods_databag'])
-
-# Add unmanaged host hostgroups to the hostgroups array if they don't already exist
-unmanaged_hosts.each do |host|
-  host['hostgroups'].each do |hg|
-    hostgroups << hg unless hostgroups.include?(hg)
-  end
-end
-
-# Load search defined Nagios hostgroups from the nagios_hostgroups data bag and find nodes
-hostgroup_nodes = {}
-hostgroup_list = []
-if nagios_bags.bag_list.include?('nagios_hostgroups')
-  search(:nagios_hostgroups, '*:*') do |hg|
-    hostgroup_list << hg['hostgroup_name']
-    temp_hostgroup_array = Array.new
-    if node['nagios']['multi_environment_monitoring']
-      search(:node, hg['search_query']) do |n|
-        unless excluded_nodes.include?(n[node['nagios']['host_name_attribute']])
-          temp_hostgroup_array << n[node['nagios']['host_name_attribute']]
-        end
-      end
-    else
-      search(:node, "#{hg['search_query']} AND chef_environment:#{node.chef_environment}") do |n|
-        unless excluded_nodes.include?(n[node['nagios']['host_name_attribute']])
-          temp_hostgroup_array << n[node['nagios']['host_name_attribute']]
-        end
-      end
-    end
-    hostgroup_nodes[hg['hostgroup_name']] = temp_hostgroup_array.join(',')
-    hostgroup_nodes[hg['hostgroup_name']].downcase! if node['nagios']['server']['normalize_hostname']
-  end
+# loading default configuration data
+if node['nagios']['server']['load_default_config']
+  include_recipe 'nagios::_load_default_config'
 end
 
 directory "#{node['nagios']['conf_dir']}/dist" do
@@ -272,54 +181,15 @@ nagios_conf 'cgi' do
   variables(:nagios_service_name => nagios_service_name)
 end
 
-nagios_conf 'timeperiods' do
-  variables(:timeperiods => timeperiods)
-end
-
-nagios_conf 'templates' do
-  variables(:templates => templates,
-            :hosttemplates => hosttemplates)
-end
-
-nagios_conf 'commands' do
-  variables(:services => services,
-            :eventhandlers => eventhandlers)
-end
-
-nagios_conf 'services' do
-  variables(:services => services,
-            :search_hostgroups => hostgroup_list,
-            :hostgroups => hostgroups)
-end
-
-nagios_conf 'servicegroups' do
-  variables(:servicegroups => servicegroups)
-end
-
-nagios_conf 'contacts' do
-  variables(:admins => nagios_users.users,
-            :members => nagios_users.return_user_contacts,
-            :contacts => contacts,
-            :contactgroups => contactgroups,
-            :serviceescalations => serviceescalations,
-            :hostescalations => hostescalations)
-end
-
-nagios_conf 'hostgroups' do
-  variables(:hostgroups => hostgroups,
-            :search_hostgroups => hostgroup_list,
-            :search_nodes => hostgroup_nodes)
-end
-
-nagios_conf 'hosts' do
-  variables(:nodes => nodes,
-            :unmanaged_hosts => unmanaged_hosts,
-            :hostgroups => hostgroups)
-end
-
-nagios_conf 'servicedependencies' do
-  variables(:servicedependencies => servicedependencies)
-end
+nagios_conf 'timeperiods'
+nagios_conf 'contacts' 
+nagios_conf 'commands'
+nagios_conf 'hosts' 
+nagios_conf 'hostgroups' 
+nagios_conf 'templates'
+nagios_conf 'services'
+nagios_conf 'servicegroups'
+nagios_conf 'servicedependencies'
 
 service 'nagios' do
   service_name nagios_service_name

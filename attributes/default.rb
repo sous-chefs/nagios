@@ -155,6 +155,7 @@ default['nagios']['hosttemplates_databag']       = 'nagios_hosttemplates'
 default['nagios']['eventhandlers_databag']       = 'nagios_eventhandlers'
 default['nagios']['unmanagedhosts_databag']      = 'nagios_unmanagedhosts'
 default['nagios']['serviceescalations_databag']  = 'nagios_serviceescalations'
+default['nagios']['hostgroups_databag']          = 'nagios_hostgroups'
 default['nagios']['hostescalations_databag']     = 'nagios_hostescalations'
 default['nagios']['contacts_databag']            = 'nagios_contacts'
 default['nagios']['contactgroups_databag']       = 'nagios_contactgroups'
@@ -203,10 +204,12 @@ default['nagios']['default_service']['notification_interval'] = 1200
 default['nagios']['default_service']['flap_detection']        = true
 default['nagios']['default_service']['action_url']            = nil
 
-default['nagios']['server']['web_server']     = 'apache'
-default['nagios']['server']['nginx_dispatch'] = 'cgi'
-default['nagios']['server']['stop_apache']    = false
-default['nagios']['server']['normalize_hostname'] = false
+default['nagios']['server']['web_server']          = 'apache'
+default['nagios']['server']['nginx_dispatch']      = 'cgi'
+default['nagios']['server']['stop_apache']         = false
+default['nagios']['server']['normalize_hostname']  = false
+default['nagios']['server']['load_default_config'] = true
+default['nagios']['server']['load_databag_config'] = true
 
 default['nagios']['conf']['max_service_check_spread'] = 5
 default['nagios']['conf']['max_host_check_spread']    = 5
