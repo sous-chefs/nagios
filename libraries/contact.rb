@@ -48,6 +48,10 @@ class Nagios
       @service_notification_commands = []
     end
 
+    def contactgroups
+      (@contactgroups.map {|k,v| v.id}).join(',')
+    end
+
     def definition
       configured = get_configured_options
       if self.email.nil? && self.name.nil?
