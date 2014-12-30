@@ -105,7 +105,7 @@ unless node['nagios'].nil?
 end
 
 # loading all databag configurations
-if default['nagios']['server']['load_databag_config']
+if node['nagios']['server']['load_databag_config']
   include_recipe 'nagios::_load_databag_config'
 end
 
