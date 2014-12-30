@@ -1,7 +1,7 @@
 #
 # Author:: Sander Botman <sbotman@schubergphilis.com>
 # Cookbook Name:: nagios
-# Library:: nagios_timeperiod
+# Library:: timeperiod
 #
 # Copyright 2014, Sander Botman
 #
@@ -17,7 +17,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require_relative 'nagios_base'
+require_relative 'base'
 
 
 class Nagios
@@ -88,7 +88,7 @@ class Nagios
       self.timeperiod_name
     end
 
-    def import_hash(hash)
+    def import(hash)
       if hash['times'] === Hash 
         hash['times'].each { |k,v| self.push(Nagios::Timeperiodentry.new(k,v)) }
       end    

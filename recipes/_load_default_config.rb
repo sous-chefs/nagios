@@ -93,7 +93,7 @@ options = {
   'host_notification_commands'    => host_notify_by_email,
   'email'                         => 'root@localhost'
 }
-c.import_hash(options)
+c.import(options)
 
 # admin contact
 c = Nagios::Contact.create('admin')

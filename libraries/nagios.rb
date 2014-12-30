@@ -177,7 +177,7 @@ class Nagios
     groups += [ obj.chef_environment ]
 
     host = self.find(Nagios::Host.new(get_hostname(obj)))
-    host.import_hash(obj['nagios']) unless obj['nagios'].nil?
+    host.import(obj['nagios']) unless obj['nagios'].nil?
     
     # TODO (merge the ip_to_monitor funtion into this logic here)
     host.address = obj['ipaddress']

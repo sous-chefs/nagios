@@ -1,7 +1,7 @@
 #
 # Author:: Sander Botman <sbotman@schubergphilis.com>
 # Cookbook Name:: nagios
-# Library:: nagios_contact
+# Library:: contact
 #
 # Copyright 2014, Sander Botman
 #
@@ -17,7 +17,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require_relative 'nagios_base'
+require_relative 'base'
 
 class Nagios
   class Contact < Nagios::Base
@@ -77,7 +77,7 @@ class Nagios
       self.contact_name
     end
 
-    def import_hash(hash)
+    def import(hash)
       update_options(hash)
       update_members(hash, 'contactgroups', Nagios::Contactgroup, true)
     end

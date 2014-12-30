@@ -39,51 +39,51 @@ end
 contactgroups = nagios_bags.get(node['nagios']['contactgroups_databag'])
 contactgroups.each do |item|
   o = Nagios::Contactgroup.create(item['id'])
-  o.import_hash(item)
+  o.import(item)
 end
 
 contacts = nagios_bags.get(node['nagios']['contacts_databag'])
 contacts.each do |item|
   o = Nagios::Contact.create(item['id'])
-  o.import_hash(item)
+  o.import(item)
 end
 
 eventhandlers = nagios_bags.get(node['nagios']['eventhandlers_databag'])
 eventhandlers.each do |item|
   name = eventhandler['id']
   o = Nagios::Command.create(item['id'])
-  o.import_hash(item)
+  o.import(item)
 end
 
 hostescalations = nagios_bags.get(node['nagios']['hostescalations_databag'])
 hostescalations.each do |item|
   o = Nagios::Hostescalation.create(item['id'])
-  o.import_hash(item)
+  o.import(item)
 end
 
 hosttemplates = nagios_bags.get(node['nagios']['hosttemplates_databag'])
 hosttemplates.each do |item|
   o = Nagios::Host.create(item['id'])
   o.name = item['id']
-  o.import_hash(item)
+  o.import(item)
 end
 
 servicedependencies = nagios_bags.get(node['nagios']['servicedependencies_databag'])
 servicedependencies.each do |item|
   o = Nagios::Servicedependency.create(item['id'])
-  o.import_hash(item)
+  o.import(item)
 end
 
 serviceescalations = nagios_bags.get(node['nagios']['serviceescalations_databag'])
 serviceescalations.each do |item|
   o = Nagios::Serviceescalation.create(item['id'])
-  o.import_hash(item)
+  o.import(item)
 end
 
 servicegroups = nagios_bags.get(node['nagios']['servicegroups_databag'])
 servicegroups.each do |item|
   o = Nagios::Servicegroup.create(item['id'])
-  o.import_hash(item)
+  o.import(item)
 end
 
 services = nagios_bags.get(node['nagios']['services_databag'])
@@ -95,7 +95,7 @@ services.each do |item|
   command.command_line = item['command_line']
 
   service = Nagios::Service.create(service_name)
-  service.import_hash(item)
+  service.import(item)
   service.push(command)
 end
 
@@ -103,17 +103,17 @@ templates = nagios_bags.get(node['nagios']['templates_databag'])
 templates.each do |item|
   o = Nagios::Service.create(item['id'])
   o.name = item['id']
-  o.import_hash(item)  
+  o.import(item)  
 end
 
 timeperiods = nagios_bags.get(node['nagios']['timeperiods_databag'])
 timeperiods.each do |item|
   o = Nagios::Timeperiod.create(item['id'])
-  o.import_hash(item)
+  o.import(item)
 end
 
 unmanaged_hosts = nagios_bags.get(node['nagios']['unmanagedhosts_databag'])
 unmanaged_hosts.each do |item|
   o = Nagios::Host.create(item['id'])
-  o.import_hash(item)
+  o.import(item)
 end

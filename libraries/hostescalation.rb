@@ -1,7 +1,7 @@
 #
 # Author:: Sander Botman <sbotman@schubergphilis.com>
 # Cookbook Name:: nagios
-# Library:: nagios_serviceescalation
+# Library:: hostescalation
 #
 # Copyright 2014, Sander Botman
 #
@@ -17,12 +17,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require_relative 'nagios_base'
+require_relative 'base'
 
 class Nagios
-  class Serviceescalation < Nagios::Base
+  class Hostescalation < Nagios::Base
 
-    attr_reader   :service_description,
+    attr_reader   :host_description,
                   :host_name,
                   :hostgroup_name,
                   :contacts,
@@ -35,18 +35,18 @@ class Nagios
                   :escalation_options
 
     def initialize(name)
-      @service_description = name
-      @name                = name
-      @contacts            = {}
-      @contact_groups      = {}
-      @host_name           = {}
-      @hostgroup_name      = {}
-      @register            = 0
+      @host_description = name
+      @name             = name
+      @contacts         = {}
+      @contact_groups   = {}
+      @host_name        = {}
+      @hostgroup_name   = {}
+      @register         = 0
     end
 
     def definition
       configured = get_configured_options
-      (['define serviceescalation{'] + get_definition_options(configured) + ['}']).join("\n")
+      (['define hostescalation{'] + get_definition_options(configured) + ['}']).join("\n")
     end
 
     def contacts
@@ -66,10 +66,10 @@ class Nagios
     end
 
     def id
-      self.service_description
+      self.host_description
     end
 
-    def import_hash(hash)
+    def import(hash)
       update_options(hash)
       update_members(hash, 'contacts', Nagios::Contact)
       update_members(hash, 'contact_groups', Nagios::Contactgroup)
@@ -93,11 +93,11 @@ class Nagios
     end
 
     def self.create(name)
-      Nagios.instance.find(Nagios::Serviceescalation.new(name))
+      Nagios.instance.find(Nagios::Hostescalation.new(name))
     end
 
     def to_s
-      self.service_description
+      self.host_description
     end
 
     # check the integer options
@@ -118,7 +118,7 @@ class Nagios
     # check other options
 
     def escalation_options=(arg)
-      @escalation_options = check_state_options(arg, ['w','u','c','r'], 'escalation_options')
+      @escalation_options = check_state_options(arg, ['d','u','r'], 'escalation_options')
     end
 
     private
@@ -127,7 +127,7 @@ class Nagios
       {
         'name'                  => 'name',
         'use'                   => 'use',
-        'service_description'   => 'service_description',
+        'host_description'      => nil,
         'contacts'              => 'contacts',
         'contact_groups'        => 'contact_groups',
         'escalation_period'     => 'escalation_period',

@@ -1,9 +1,28 @@
-require_relative 'nagios_base'
+#
+# Author:: Sander Botman <sbotman@schubergphilis.com>
+# Cookbook Name:: nagios
+# Library:: serviceescalation
+#
+# Copyright 2014, Sander Botman
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+require_relative 'base'
 
 class Nagios
-  class Hostescalation < Nagios::Base
+  class Serviceescalation < Nagios::Base
 
-    attr_reader   :host_description,
+    attr_reader   :service_description,
                   :host_name,
                   :hostgroup_name,
                   :contacts,
@@ -16,18 +35,18 @@ class Nagios
                   :escalation_options
 
     def initialize(name)
-      @host_description = name
-      @name             = name
-      @contacts         = {}
-      @contact_groups   = {}
-      @host_name        = {}
-      @hostgroup_name   = {}
-      @register         = 0
+      @service_description = name
+      @name                = name
+      @contacts            = {}
+      @contact_groups      = {}
+      @host_name           = {}
+      @hostgroup_name      = {}
+      @register            = 0
     end
 
     def definition
       configured = get_configured_options
-      (['define hostescalation{'] + get_definition_options(configured) + ['}']).join("\n")
+      (['define serviceescalation{'] + get_definition_options(configured) + ['}']).join("\n")
     end
 
     def contacts
@@ -47,10 +66,10 @@ class Nagios
     end
 
     def id
-      self.host_description
+      self.service_description
     end
 
-    def import_hash(hash)
+    def import(hash)
       update_options(hash)
       update_members(hash, 'contacts', Nagios::Contact)
       update_members(hash, 'contact_groups', Nagios::Contactgroup)
@@ -74,11 +93,11 @@ class Nagios
     end
 
     def self.create(name)
-      Nagios.instance.find(Nagios::Hostescalation.new(name))
+      Nagios.instance.find(Nagios::Serviceescalation.new(name))
     end
 
     def to_s
-      self.host_description
+      self.service_description
     end
 
     # check the integer options
@@ -99,7 +118,7 @@ class Nagios
     # check other options
 
     def escalation_options=(arg)
-      @escalation_options = check_state_options(arg, ['d','u','r'], 'escalation_options')
+      @escalation_options = check_state_options(arg, ['w','u','c','r'], 'escalation_options')
     end
 
     private
@@ -108,7 +127,7 @@ class Nagios
       {
         'name'                  => 'name',
         'use'                   => 'use',
-        'host_description'      => nil,
+        'service_description'   => 'service_description',
         'contacts'              => 'contacts',
         'contact_groups'        => 'contact_groups',
         'escalation_period'     => 'escalation_period',
