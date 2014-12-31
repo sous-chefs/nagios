@@ -129,6 +129,7 @@ class Nagios
       update_members(hash, 'host_name', Nagios::Host)
       update_members(hash, 'hostgroup_name', Nagios::Hostgroup)
       update_members(hash, 'servicegroups', Nagios::Servicegroup, true)
+      update_members(hash, 'check_command', Nagios::Command)
     end
 
     def notification_period

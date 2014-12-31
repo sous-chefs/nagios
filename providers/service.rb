@@ -23,20 +23,12 @@ def whyrun_supported?
 end
 
 action :create do
-  name = @new_resource.service_name.downcase
-  command_name = name.start_with?('check_') ? name : 'check_' + name
-  service_name = name.start_with?('check_') ? name.gsub('check_','') : name
- 
-  command = Nagios::Command.create(command_name)
-  command.import(@new_resource.options)
-
-  service = Nagios::Service.create(service_name)
-  service.import(@new_resource.options)
-  service.push(command)
+  o = Nagios::Service.create(@new_resource.service_description)
+  o.import(@new_resource.options)
 end
 
 action :delete do
-  Nagios.instance.services.delete(@new_resource.service_name)
+  Nagios.instance.services.delete(@new_resource.service_description)
 end
 
 alias_method :action_add, :action_create
