@@ -160,7 +160,7 @@ class Nagios
     # dashes, and colons (semicolons, apostrophes, and quotation marks should be avoided). 
     # No two services associated with the same host can have the same description. 
     # Services are uniquely identified with their host_name and service_description directives.
-    def servicergroups
+    def servicegroups
       (@servicegroups.map {|k,v| v.id}).join(',')
     end
 
