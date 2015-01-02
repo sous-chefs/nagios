@@ -18,17 +18,15 @@
 # limitations under the License.
 #
 
-def whyrun_supported?
-  true
-end
-
 action :create do
   o = Nagios::Hostgroup.create(@new_resource.host_groupname)
   o.import(@new_resource.options)
+  new_resource.updated_by_last_action(false)
 end
 
 action :delete do
   Nagios.instance.hostgroups.delete(@new_resource.hostgroup_name)
+  new_resource.updated_by_last_action(false)
 end
 
 alias_method :action_add, :action_create

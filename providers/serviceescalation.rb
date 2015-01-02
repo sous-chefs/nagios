@@ -18,17 +18,15 @@
 # limitations under the License.
 #
 
-def whyrun_supported?
-  true
-end
-
 action :create do
   o = Nagios::Serviceescalation.create(@new_resource.service_description)
   o.import(@new_resource.options)
+  new_resource.updated_by_last_action(false)
 end
 
 action :delete do
   Nagios.instance.serviceescalations.delete(@new_resource.service_description)
+  new_resource.updated_by_last_action(false)
 end
 
 alias_method :action_add, :action_create

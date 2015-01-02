@@ -18,17 +18,15 @@
 # limitations under the License.
 #
 
-def whyrun_supported?
-  true
-end
-
 action :create do
   o = Nagios::Hostescalation.create(@new_resource.host_description)
   o.import(@new_resource.options)
+  new_resource.updated_by_last_action(false)
 end
 
 action :delete do
   Nagios.instance.hostsescalations.delete(@new_resource.host_description)
+  new_resource.updated_by_last_action(false)
 end
 
 alias_method :action_add, :action_create
