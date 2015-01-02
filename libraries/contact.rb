@@ -73,7 +73,7 @@ class Nagios
     end
 
     def host_notification_commands=(obj)
-      @host_notification_commands = set_commands(obj)
+      @host_notification_commands = notification_commands(obj)
     end
 
     def host_notification_period
@@ -104,7 +104,7 @@ class Nagios
     end
 
     def service_notification_commands=(obj)
-      @service_notification_commands = set_commands(obj)
+      @service_notification_commands = notification_commands(obj)
     end
 
     def service_notification_period

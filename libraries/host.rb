@@ -73,7 +73,7 @@ class Nagios
                   :_3d_coords
 
     def initialize(host_name)
-      @host_name = set_hostname(host_name)
+      @host_name = hostname(host_name)
       @hostgroups = {}
       @parents = {}
       @contacts = {}
@@ -135,9 +135,11 @@ class Nagios
       get_timeperiod(@notification_period)
     end
 
+    # rubocop:disable Style/TrivialAccessors
     def notifications
       @notifications_enabled
     end
+    # rubocop:enable Style/TrivialAccessors
 
     def notifications=(arg)
       @notifications_enabled = check_bool(arg)

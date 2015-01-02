@@ -82,7 +82,9 @@ class Nagios
     end
 
     def check_state_option(arg, options, entry)
-      unless options.include?(arg)
+      if options.include?(arg)
+        Chef::Log.debug("#{self.class} #{id} adding option #{arg} for entry #{entry}")
+      else
         Chef::Log.fail("#{self.class} #{id} object error: Unknown option #{arg} for entry #{entry}")
         fail
       end
@@ -90,11 +92,11 @@ class Nagios
 
     def check_state_options(arg, options, entry)
       if arg.class == String
-        return check_state_options(arg.split(','), options, entry)
-      end
-      if arg.class == Array
-        arg.each { |a| check_state_option(a.strip, options, entry) }
-        return arg.join(',')
+        check_state_options(arg.split(','), options, entry)
+      elsif arg.class == Array
+        arg.each { |a| check_state_option(a.strip, options, entry) }.join(',')
+      else
+        arg
       end
     end
 
@@ -227,13 +229,13 @@ class Nagios
     end
 
     # rubocop:disable MethodLength
-    def set_commands(obj)
+    def notification_commands(obj)
       commands = []
       case obj
       when Nagios::Command
         commands.push(obj)
       when Array
-        obj.each { |o| commands += set_commands(o) }
+        obj.each { |o| commands += notification_commands(o) }
       when String
         obj.split(',').each do |o|
           c = Nagios::Command.new(o.strip)
@@ -250,7 +252,7 @@ class Nagios
     end
     # rubocop:enable MethodLength
 
-    def set_hostname(name)
+    def hostname(name)
       if Nagios.instance.normalize_hostname
         name.downcase
       else

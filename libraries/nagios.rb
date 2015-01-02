@@ -67,9 +67,11 @@ class Nagios
 
   @instance = Nagios.new
 
+  # rubocop:disable Style/TrivialAccessors
   def self.instance
     @instance
   end
+  # rubocop:enable Style/TrivialAccessors
 
   # rubocop:disable MethodLength
   def find(obj)
