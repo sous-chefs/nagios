@@ -163,6 +163,26 @@ end
 # Defaut host template
 Nagios.instance.default_host = 'server'
 
+# Users
+# use the users_helper.rb library to build arrays of users and contacts
+nagios_users = NagiosUsers.new(node)
+nagios_users.users.each do |item|
+  o = Nagios::Contact.create(item['id'])
+  o.import(item)
+  o.import(item['nagios'])
+  o.use = 'default-contact'
+end
+
+nagios_contactgroup 'admins' do
+  options 'alias'   => 'Nagios Administrators',
+          'members' => nagios_users.return_user_contacts
+end
+
+nagios_contactgroup 'admins-sms' do
+  options 'alias'   => 'Sysadmin SMS',
+          'members' => nagios_users.return_user_contacts
+end
+
 # Services
 nagios_service 'default-service' do
   options 'name'                         => 'default-service',

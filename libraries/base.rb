@@ -259,6 +259,7 @@ class Nagios
     end
 
     def update_options(hash)
+      return nil if blank?(hash)
       hash.each do |k, v|
         m = k + '='
         send(m, v) if self.respond_to?(m)
@@ -266,7 +267,7 @@ class Nagios
     end
 
     def update_members(hash, option, object, remote = false)
-      return if hash[option].nil?
+      return if blank?(hash) || hash[option].nil?
       get_members(hash[option]).each do |member|
         n = Nagios.instance.find(object.new(member))
         push(n)
