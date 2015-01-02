@@ -16,12 +16,17 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+#
+# rubocop:disable ClassLength
 
 require_relative 'base'
 
 class Nagios
+  #
+  #  This class holds all methods with regard to servicedependency options,
+  #  that are used within nagios configurations.
+  #
   class Servicedependency < Nagios::Base
-
     attr_reader   :service_description,
                   :dependency_period,
                   :dependent_host_name,
@@ -32,7 +37,7 @@ class Nagios
                   :servicegroup_name
 
     attr_accessor :dependent_service_description,
-                  :inherits_parent, 
+                  :inherits_parent,
                   :execution_failure_criteria,
                   :notification_failure_criteria
 
@@ -47,36 +52,35 @@ class Nagios
     end
 
     def definition
-      configured = get_configured_options
-      (['define servicedependency{'] + get_definition_options(configured) + ['}']).join("\n")
+      get_definition(configured_options, 'servicedependency')
     end
 
     def dependent_host_name
-      (@dependent_host_name.map {|k,v| v.id}).join(',')
+      @dependent_host_name.values.map(&:id).join(',')
     end
 
     def dependent_hostgroup_name
-      (@dependent_hostgroup_name.map {|k,v| v.id}).join(',')
+      @dependent_hostgroup_name.values.map(&:id).join(',')
     end
 
     def dependent_servicegroup_name
-      (@dependent_servicegroup_name.map {|k,v| v.id}).join(',')
+      @dependent_servicegroup_name.values.map(&:id).join(',')
     end
 
     def host_name
-      (@host_name.map {|k,v| v.id}).join(',')
+      @host_name.values.map(&:id).join(',')
     end
 
     def hostgroup_name
-      (@hostgroup_name.map {|k,v| v.id}).join(',')
+      @hostgroup_name.values.map(&:id).join(',')
     end
 
     def servicegroup_name
-      (@servicegroup_name.map {|k,v| v.id}).join(',')
+      @servicegroup_name.values.map(&:id).join(',')
     end
 
     def id
-      self.service_description
+      service_description
     end
 
     def import(hash)
@@ -98,7 +102,7 @@ class Nagios
       when Nagios::Servicegroup
         push_object(obj, @servicegroup_name)
       when Nagios::Timeperiod
-        @dependency_period = obj    
+        @dependency_period = obj
       end
     end
 
@@ -118,7 +122,7 @@ class Nagios
     end
 
     def to_s
-      self.service_description
+      service_description
     end
 
     # check the True/False options
@@ -131,19 +135,18 @@ class Nagios
     # check other options
 
     def execution_failure_criteria=(arg)
-      @execution_failure_criteria = check_state_options(arg, ['o','w','u','c','p','n'], 'execution_failure_criteria')
+      @execution_failure_criteria = check_state_options(arg, %w(o w u c p n), 'execution_failure_criteria')
     end
 
     def notification_failure_criteria=(arg)
-      @notification_failure_criteria = check_state_options(arg, ['o','w','u','c','p','n'], 'notification_failure_criteria')
+      @notification_failure_criteria = check_state_options(arg, %w(o w u c p n), 'notification_failure_criteria')
     end
 
     private
 
+    # rubocop:disable MethodLength
     def config_options
       {
-        #'name'                          => 'name',
-        #'use'                           => 'use',
         'dependency_period'             => 'dependency_period',
         'dependent_host_name'           => 'dependent_host_name',
         'dependent_hostgroup_name'      => 'dependent_hostgroup_name',
@@ -153,20 +156,19 @@ class Nagios
         'host_name'                     => 'host_name',
         'hostgroup_name'                => 'hostgroup_name',
         'inherits_parent'               => 'inherits_parent',
-        'execution_failure_criteria'    => 'execution_failure_criteria', 
+        'execution_failure_criteria'    => 'execution_failure_criteria',
         'notification_failure_criteria' => 'notification_failure_criteria'
-        #'register'                      => 'register' 
       }
     end
+    # rubocop:enable MethodLength
 
     def merge_members(obj)
-      obj.host_name.each { |m| self.push(m) }
-      obj.hostgroup_name.each { |m| self.push(m) }
-      obj.servicegroup_name.each { |m| self.push(m) }
-      obj.dependent_host_name.each { |m| self.push_dependency(m) }
-      obj.dependent_hostgroup_name.each { |m| self.push_dependency(m) }
-      obj.dependent_servicegroup_name.each { |m| self.dependent_servicegroup_name(m) }
+      obj.host_name.each { |m| push(m) }
+      obj.hostgroup_name.each { |m| push(m) }
+      obj.servicegroup_name.each { |m| push(m) }
+      obj.dependent_host_name.each { |m| push_dependency(m) }
+      obj.dependent_hostgroup_name.each { |m| push_dependency(m) }
+      obj.dependent_servicegroup_name.each { |m| dependent_servicegroup_name(m) }
     end
-
   end
 end

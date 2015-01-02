@@ -16,12 +16,17 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+#
+# rubocop:disable ClassLength
 
 require_relative 'base'
 
 class Nagios
+  #
+  #  This class holds all methods with regard to servicedependency options,
+  #  that are used within nagios configurations.
+  #
   class Service < Nagios::Base
-
     attr_reader   :service_description,
                   :host_name,
                   :hostgroup_name,
@@ -66,11 +71,11 @@ class Nagios
 
     def initialize(service_description)
       @service_description = service_description
-      @servicegroups = {}
-      @contacts = {}
-      @contact_groups = {}
-      @hostgroups = {}
-      @hosts = {}
+      @servicegroups       = {}
+      @contacts            = {}
+      @contact_groups      = {}
+      @hostgroups          = {}
+      @hosts               = {}
     end
 
     def check_period
@@ -85,7 +90,7 @@ class Nagios
     # to configure contact groups.
     # You must specify at least one contact or contact group in each host definition.
     def contacts
-      (@contacts.map {|k,v| v.id}).join(',')
+      @contacts.values.map(&:id).join(',')
     end
 
     # contact_groups
@@ -94,32 +99,30 @@ class Nagios
     # Multiple contact groups should be separated by commas.
     # You must specify at least one contact or contact group in each host definition.
     def contact_groups
-      (@contact_groups.map {|k,v| v.id}).join(',')
+      @contact_groups.values.map(&:id).join(',')
     end
 
-
     def definition
-      configured = get_configured_options
-      (['define service{'] + get_definition_options(configured) + ['}']).join("\n")
+      get_definition(configured_options, 'service')
     end
 
     # host_name
-    # This directive is used to specify the short name(s) of the host(s) that the service 
-    # "runs" on or is associated with. Multiple hosts should be separated by commas. 
+    # This directive is used to specify the short name(s) of the host(s) that the service
+    # "runs" on or is associated with. Multiple hosts should be separated by commas.
     def host_name
-      (@hosts.map {|k,v| v.id}).join(',')
+      @hosts.values.map(&:id).join(',')
     end
 
     # hostgroup_name
-    # This directive is used to specify the short name(s) of the hostgroup(s) that the 
-    # service "runs" on or is associated with. Multiple hostgroups should be separated by commas. 
+    # This directive is used to specify the short name(s) of the hostgroup(s) that the
+    # service "runs" on or is associated with. Multiple hostgroups should be separated by commas.
     # The hostgroup_name may be used instead of, or in addition to, the host_name directive.
     def hostgroup_name
-      (@hostgroups.map {|k,v| v.id}).join(',')
+      @hostgroups.values.map(&:id).join(',')
     end
 
     def id
-      self.service_description
+      service_description
     end
 
     def import(hash)
@@ -136,6 +139,7 @@ class Nagios
       get_timeperiod(@notification_period)
     end
 
+    # rubocop:disable MethodLength
     def push(obj)
       case obj
       when Nagios::Servicegroup
@@ -152,17 +156,18 @@ class Nagios
         @check_command = obj
       when Nagios::Timeperiod
         @check_period = obj
-        @notification_period = obj 
+        @notification_period = obj
       end
     end
+    # rubocop:enable MethodLength
 
     # servicegroups
-    # This directive is used to define the description of the service, which may contain spaces, 
-    # dashes, and colons (semicolons, apostrophes, and quotation marks should be avoided). 
-    # No two services associated with the same host can have the same description. 
+    # This directive is used to define the description of the service, which may contain spaces,
+    # dashes, and colons (semicolons, apostrophes, and quotation marks should be avoided).
+    # No two services associated with the same host can have the same description.
     # Services are uniquely identified with their host_name and service_description directives.
     def servicegroups
-      (@servicegroups.map {|k,v| v.id}).join(',')
+      @servicegroups.values.map(&:id).join(',')
     end
 
     def self.create(name)
@@ -170,7 +175,7 @@ class Nagios
     end
 
     def to_s
-      self.service_description
+      service_description
     end
 
     # check the integer options
@@ -211,9 +216,11 @@ class Nagios
     # check the True/False options
     # default = nil
 
+    # rubocop:disable Style/PredicateName
     def is_volatile=(arg)
       @is_volatile = check_bool(arg)
     end
+    # rubocop:enable Style/PredicateName
 
     def active_checks_enabled=(arg)
       @active_checks_enabled = check_bool(arg)
@@ -262,54 +269,55 @@ class Nagios
     # check other options
 
     # flap_detection_options
-    # This directive is used to determine what service states the flap detection logic will use for this service. 
-    # Valid options are a combination of one or more of the following: 
-    #   o = OK states, 
-    #   w = WARNING states, 
-    #   c = CRITICAL states, 
-    #   u = UNKNOWN states. 
+    # This directive is used to determine what service states the flap detection logic will use for this service.
+    # Valid options are a combination of one or more of the following:
+    #   o = OK states,
+    #   w = WARNING states,
+    #   c = CRITICAL states,
+    #   u = UNKNOWN states.
 
     def flap_detection_options=(arg)
-      @flap_detection_options = check_state_options(arg, ['o','w','u','c'], 'flap_detection_options')
+      @flap_detection_options = check_state_options(arg, %w(o w u c), 'flap_detection_options')
     end
 
     # notification_options
-    # This directive is used to determine when notifications for the service should be sent out. 
-    # Valid options are a combination of one or more of the following: 
-    #   w = send notifications on a WARNING state, 
-    #   u = send notifications on an UNKNOWN state, 
-    #   c = send notifications on a CRITICAL state, 
-    #   r = send notifications on recoveries (OK state), 
+    # This directive is used to determine when notifications for the service should be sent out.
+    # Valid options are a combination of one or more of the following:
+    #   w = send notifications on a WARNING state,
+    #   u = send notifications on an UNKNOWN state,
+    #   c = send notifications on a CRITICAL state,
+    #   r = send notifications on recoveries (OK state),
     #   f = send notifications when the service starts and stops flapping,
-    #   s = send notifications when scheduled downtime starts and ends. 
+    #   s = send notifications when scheduled downtime starts and ends.
     #
-    # If you specify n (none) as an option, no service notifications will be sent out. 
-    # If you do not specify any notification options, Nagios will assume that you want 
-    # notifications to be sent out for all possible states. 
+    # If you specify n (none) as an option, no service notifications will be sent out.
+    # If you do not specify any notification options, Nagios will assume that you want
+    # notifications to be sent out for all possible states.
     #
-    # Example: If you specify w,r in this field, notifications will only be sent out when 
+    # Example: If you specify w,r in this field, notifications will only be sent out when
     # the service goes into a WARNING state and when it recovers from a WARNING state.
 
     def notification_options=(arg)
-      @notification_options = check_state_options(arg, ['w','u','c','r','f','s','n'], 'notification_options')
+      @notification_options = check_state_options(arg, %w(w u c r f s n), 'notification_options')
     end
 
     # stalking_options
-    # This directive determines which service states "stalking" is enabled for. 
-    # Valid options are a combination of one or more of the following: 
-    #   o = stalk on OK states, 
-    #   w = stalk on WARNING states, 
+    # This directive determines which service states "stalking" is enabled for.
+    # Valid options are a combination of one or more of the following:
+    #   o = stalk on OK states,
+    #   w = stalk on WARNING states,
     #   u = stalk on UNKNOWN states,
-    #   c = stalk on CRITICAL states. 
+    #   c = stalk on CRITICAL states.
     #
     # More information on state stalking can be found here.
 
     def stalking_options=(arg)
-      @stalking_options = check_state_options(arg, ['o','w','u','c'], 'stalking_options')
+      @stalking_options = check_state_options(arg, %w(o w u c), 'stalking_options')
     end
 
     private
 
+    # rubocop:disable MethodLength
     def config_options
       {
         'name'                         => 'name',
@@ -357,14 +365,14 @@ class Nagios
         'register'                     => 'register'
       }
     end
- 
-    def merge_members(obj)
-      obj.contacts.each { |m| self.push(m) }
-      obj.host_name.each { |m| self.push(m) }
-      obj.servicegroups.each { |m| self.push(m) }
-      obj.hostgroup_name.each { |m| self.push(m) }
-      obj.contact_groups.each { |m| self.push(m) }
-    end
+    # rubocop:enable MethodLength
 
+    def merge_members(obj)
+      obj.contacts.each { |m| push(m) }
+      obj.host_name.each { |m| push(m) }
+      obj.servicegroups.each { |m| push(m) }
+      obj.hostgroup_name.each { |m| push(m) }
+      obj.contact_groups.each { |m| push(m) }
+    end
   end
 end

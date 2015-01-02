@@ -20,8 +20,11 @@
 require_relative 'base'
 
 class Nagios
+  #
+  # This class holds all methods with regard to hostdependency options,
+  # that are used within nagios configurations.
+  #
   class Hostdependency < Nagios::Base
-
     attr_reader   :dependent_name,
                   :dependency_period,
                   :dependent_host_name,
@@ -29,7 +32,7 @@ class Nagios
                   :host_name,
                   :hostgroup_name
 
-    attr_accessor :inherits_parent, 
+    attr_accessor :inherits_parent,
                   :execution_failure_criteria,
                   :notification_failure_criteria
 
@@ -42,28 +45,27 @@ class Nagios
     end
 
     def definition
-      configured = get_configured_options
-      (['define hostdependency{'] + get_definition_options(configured) + ['}']).join("\n")
+      get_definition(configured_options, 'hostdependency')
     end
 
     def dependent_host_name
-      (@dependent_host_name.map {|k,v| v.id}).join(',')
+      @dependent_host_name.values.map(&:id).join(',')
     end
 
     def dependent_hostgroup_name
-      (@dependent_hostgroup_name.map {|k,v| v.id}).join(',')
+      @dependent_hostgroup_name.values.map(&:id).join(',')
     end
 
     def host_name
-      (@host_name.map {|k,v| v.id}).join(',')
+      @host_name.values.map(&:id).join(',')
     end
 
     def hostgroup_name
-      (@hostgroup_name.map {|k,v| v.id}).join(',')
+      @hostgroup_name.values.map(&:id).join(',')
     end
 
     def id
-      self.dependent_name
+      dependent_name
     end
 
     def import(hash)
@@ -81,7 +83,7 @@ class Nagios
       when Nagios::Hostgroup
         push_object(obj, @hostgroup_name)
       when Nagios::Timeperiod
-        @dependency_period = obj    
+        @dependency_period = obj
       end
     end
 
@@ -99,7 +101,7 @@ class Nagios
     end
 
     def to_s
-      self.dependent_name
+      dependent_name
     end
 
     # check the True/False options
@@ -112,19 +114,20 @@ class Nagios
     # check other options
 
     def execution_failure_criteria=(arg)
-      @execution_failure_criteria = check_state_options(arg, ['o','d','u','p','n'], 'execution_failure_criteria')
+      @execution_failure_criteria = check_state_options(arg, %w(o d u p n), 'execution_failure_criteria')
     end
 
     def notification_failure_criteria=(arg)
-      @notification_failure_criteria = check_state_options(arg, ['o','d','u','p','n'], 'notification_failure_criteria')
+      @notification_failure_criteria = check_state_options(arg, %w(o d u p n), 'notification_failure_criteria')
     end
 
     private
 
+    # rubocop:disable MethodLength
     def config_options
       {
-        #'name'                          => 'name',
-        #'use'                           => 'use',
+        # 'name'                          => 'name',
+        # 'use'                           => 'use',
         'dependent_name'                => nil,
         'dependency_period'             => 'dependency_period',
         'dependent_host_name'           => 'dependent_host_name',
@@ -132,18 +135,18 @@ class Nagios
         'host_name'                     => 'host_name',
         'hostgroup_name'                => 'hostgroup_name',
         'inherits_parent'               => 'inherits_parent',
-        'execution_failure_criteria'    => 'execution_failure_criteria', 
+        'execution_failure_criteria'    => 'execution_failure_criteria',
         'notification_failure_criteria' => 'notification_failure_criteria',
-        #'register'                      => 'register' 
+        # 'register'                      => 'register'
       }
     end
+    # rubocop:enable MethodLength
 
     def merge_members(obj)
-      obj.host_name.each { |m| self.push(m) }
-      obj.hostgroup_name.each { |m| self.push(m) }
-      obj.dependent_host_name.each { |m| self.push_dependency(m) }
-      obj.dependent_hostgroup_name.each { |m| self.push_dependency(m) }
+      obj.host_name.each { |m| push(m) }
+      obj.hostgroup_name.each { |m| push(m) }
+      obj.dependent_host_name.each { |m| push_dependency(m) }
+      obj.dependent_hostgroup_name.each { |m| push_dependency(m) }
     end
-
   end
 end

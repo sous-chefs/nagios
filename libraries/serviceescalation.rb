@@ -20,8 +20,11 @@
 require_relative 'base'
 
 class Nagios
+  #
+  #  This class holds all methods with regard to serviceescalation options,
+  #  that are used within nagios configurations.
+  #
   class Serviceescalation < Nagios::Base
-
     attr_reader   :service_description,
                   :host_name,
                   :hostgroup_name,
@@ -45,28 +48,27 @@ class Nagios
     end
 
     def definition
-      configured = get_configured_options
-      (['define serviceescalation{'] + get_definition_options(configured) + ['}']).join("\n")
+      get_definition(configured_options, 'serviceescalation')
     end
 
     def contacts
-      (@contacts.map {|k,v| v.id}).join(',')
+      @contacts.values.map(&:id).join(',')
     end
 
     def contact_groups
-      (@contact_groups.map {|k,v| v.id}).join(',')
+      @contact_groups.values.map(&:id).join(',')
     end
 
     def host_name
-      (@host_name.map {|k,v| v.id}).join(',')
+      @host_name.values.map(&:id).join(',')
     end
 
     def hostgroup_name
-      (@hostgroup_name.map {|k,v| v.id}).join(',')
+      @hostgroup_name.values.map(&:id).join(',')
     end
 
     def id
-      self.service_description
+      service_description
     end
 
     def import(hash)
@@ -77,6 +79,7 @@ class Nagios
       update_members(hash, 'hostgroup_name', Nagios::Hostgroup)
     end
 
+    # rubocop:disable MethodLength
     def push(obj)
       case obj
       when Nagios::Host
@@ -88,16 +91,17 @@ class Nagios
       when Nagios::Contactgroup
         push_object(obj, @contact_groups)
       when Nagios::Timeperiod
-        @escalation_period = obj    
+        @escalation_period = obj
       end
     end
+    # rubocop:enable MethodLength
 
     def self.create(name)
       Nagios.instance.find(Nagios::Serviceescalation.new(name))
     end
 
     def to_s
-      self.service_description
+      service_description
     end
 
     # check the integer options
@@ -118,11 +122,12 @@ class Nagios
     # check other options
 
     def escalation_options=(arg)
-      @escalation_options = check_state_options(arg, ['w','u','c','r'], 'escalation_options')
+      @escalation_options = check_state_options(arg, %w(w u c r), 'escalation_options')
     end
 
     private
 
+    # rubocop:disable MethodLength
     def config_options
       {
         'name'                  => 'name',
@@ -134,19 +139,19 @@ class Nagios
         'host_name'             => 'host_name',
         'hostgroup_name'        => 'hostgroup_name',
         'escalation_options'    => 'escalation_options',
-        'first_notification'    => 'first_notification', 
+        'first_notification'    => 'first_notification',
         'last_notification'     => 'last_notification',
         'notification_interval' => 'notification_interval',
-        'register'              => 'register' 
+        'register'              => 'register'
       }
     end
+    # rubocop:enable MethodLength
 
     def merge_members(obj)
-      obj.contacts.each { |m| self.push(m) }
-      obj.host_name.each { |m| self.push(m) }
-      obj.contact_groups.each { |m| self.push(m) }
-      obj.hostgroup_name.each { |m| self.push(m) }
+      obj.contacts.each { |m| push(m) }
+      obj.host_name.each { |m| push(m) }
+      obj.contact_groups.each { |m| push(m) }
+      obj.hostgroup_name.each { |m| push(m) }
     end
-
   end
 end

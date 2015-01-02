@@ -20,8 +20,11 @@
 require_relative 'base'
 
 class Nagios
+  #
+  # This class holds all methods with regard to hostgroup options,
+  # that are used within nagios configurations.
+  #
   class Hostgroup < Nagios::Base
-
     attr_reader   :hostgroup_name,
                   :members,
                   :hostgroup_members
@@ -30,7 +33,7 @@ class Nagios
                   :notes,
                   :notes_url,
                   :action_url
- 
+
     def initialize(hostgroup_name)
       @hostgroup_name = hostgroup_name
       @members = {}
@@ -38,16 +41,15 @@ class Nagios
     end
 
     def definition
-      configured = get_configured_options
-      (['define hostgroup{'] + get_definition_options(configured) + ['}']).join("\n")
+      get_definition(configured_options, 'hostgroup')
     end
 
     def hostgroup_members
-      (@hostgroup_members.map {|k,v| v.id}).join(',')
+      @hostgroup_members.values.map(&:id).join(',')
     end
 
     def id
-      self.hostgroup_name
+      hostgroup_name
     end
 
     def import(hash)
@@ -57,9 +59,9 @@ class Nagios
     end
 
     def members
-      (@members.map {|k,v| v.id}).join(',')
+      @members.values.map(&:id).join(',')
     end
- 
+
     def push(obj)
       case obj
       when Nagios::Host
@@ -74,13 +76,14 @@ class Nagios
     end
 
     def to_s
-      self.hostgroup_name
+      hostgroup_name
     end
 
     private
 
+    # rubocop:disable MethodLength
     def config_options
-      { 
+      {
         'name'              => 'name',
         'use'               => 'use',
         'hostgroup_name'    => 'hostgroup_name',
@@ -89,15 +92,15 @@ class Nagios
         'alias'             => 'alias',
         'notes'             => 'notes',
         'notes_url'         => 'notes_url',
-        'action_url'        => 'action_url', 
-        'register'          => 'register' 
-      }      
+        'action_url'        => 'action_url',
+        'register'          => 'register'
+      }
     end
+    # rubocop:enable MethodLength
 
     def merge_members(obj)
-      obj.members.each { |m| self.push(m) }
-      obj.hostgroup_members.each { |m| self.push(m) }
+      obj.members.each { |m| push(m) }
+      obj.hostgroup_members.each { |m| push(m) }
     end
-
   end
 end

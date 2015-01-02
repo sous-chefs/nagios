@@ -20,14 +20,17 @@
 require_relative 'nagios'
 
 class Nagios
+  #
+  # This class holds all methods with regard to contactgroup options,
+  # that are used within nagios configurations.
+  #
   class Contactgroup < Nagios::Base
-
     attr_reader   :contactgroup_name,
                   :members,
                   :contactgroup_members
 
     attr_accessor :alias
- 
+
     def initialize(contactgroup_name)
       @contactgroup_name = contactgroup_name
       @members = {}
@@ -35,7 +38,7 @@ class Nagios
     end
 
     def contactgroup_members
-      (@contactgroup_members.map {|k,v| v.id}).join(',')
+      @contactgroup_members.values.map(&:id).join(',')
     end
 
     def self.create(name)
@@ -43,12 +46,11 @@ class Nagios
     end
 
     def definition
-      configured = get_configured_options
-      (['define contactgroup{'] + get_definition_options(configured) + ['}']).join("\n")
+      get_definition(configured_options, 'contactgroup')
     end
 
     def id
-      self.contactgroup_name
+      contactgroup_name
     end
 
     def import(hash)
@@ -58,7 +60,7 @@ class Nagios
     end
 
     def members
-      (@members.map {|k,v| v.id}).join(',')
+      @members.values.map(&:id).join(',')
     end
 
     def push(obj)
@@ -71,9 +73,9 @@ class Nagios
     end
 
     def to_s
-      self.contactgroup_name
+      contactgroup_name
     end
- 
+
     private
 
     def config_options
@@ -89,9 +91,8 @@ class Nagios
     end
 
     def merge_members(obj)
-      obj.members.each { |m| self.push(m) }
-      obj.contactgroup_members.each { |m| self.push(m) }
+      obj.members.each { |m| push(m) }
+      obj.contactgroup_members.each { |m| push(m) }
     end
-
   end
 end

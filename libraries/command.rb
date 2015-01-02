@@ -20,16 +20,20 @@
 require_relative 'base'
 
 class Nagios
+  #
+  # This class holds all methods with regard to command options,
+  # that are used within nagios configurations.
+  #
   class Command < Nagios::Base
     attr_reader   :command_name
     attr_accessor :command_line
- 
+
     def initialize(command_name)
       @command_name = command_name
     end
 
     def definition
-      configured = get_configured_options
+      configured = configured_options
       (['define command{'] + get_definition_options(configured) + ['}']).join("\n")
     end
 
@@ -38,25 +42,24 @@ class Nagios
     end
 
     def id
-      self.command_name
+      command_name
     end
 
     def import(hash)
       update_options(hash)
-    end 
+    end
 
     def to_s
-      self.command_name
+      command_name
     end
-  
+
     private
 
     def config_options
-    { 
-      'command_name' => 'command_name',
-      'command_line' => 'command_line'
-    }
+      {
+        'command_name' => 'command_name',
+        'command_line' => 'command_line'
+      }
     end
- 
   end
 end

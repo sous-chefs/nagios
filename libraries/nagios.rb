@@ -16,7 +16,11 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
+#
+# rubocop:disable ClassLength
+#
+# This class holds all methods with regard to the nagios model.
+#
 class Nagios
   attr_reader :commands,
               :contactgroups,
@@ -42,6 +46,7 @@ class Nagios
                 :default_service,
                 :default_timeperiod
 
+  # rubocop:disable MethodLength
   def initialize
     @commands            = {}
     @contactgroups       = {}
@@ -58,6 +63,7 @@ class Nagios
     @host_name_attribute = 'hostname'
     @normalize_hostname  = false
   end
+  # rubocop:enable MethodLength
 
   @instance = Nagios.new
 
@@ -65,6 +71,7 @@ class Nagios
     @instance
   end
 
+  # rubocop:disable MethodLength
   def find(obj)
     case obj
     when Nagios::Command
@@ -93,10 +100,11 @@ class Nagios
       find_object(obj, @serviceescalations)
     end
   end
+  # rubocop:enable MethodLength
 
-  def normalize_hostname=(expr)  
+  def normalize_hostname=(expr)
     if expr == true
-      @normalize_hostname = true 
+      @normalize_hostname = true
     elsif expr =~ /y|yes|true|1/i
       @normalize_hostname = true
     else
@@ -104,6 +112,7 @@ class Nagios
     end
   end
 
+  # rubocop:disable MethodLength
   def push(obj)
     case obj
     when Chef::Node
@@ -114,7 +123,7 @@ class Nagios
       push_object(obj)
     when Nagios::Contactgroup
       push_object(obj)
-    when Nagios::Host 
+    when Nagios::Host
       push_object(obj)
     when Nagios::Hostgroup
       push_object(obj)
@@ -137,20 +146,21 @@ class Nagios
       fail
     end
   end
-  
+  # rubocop:enable MethodLength
+
   private
 
   def blank?(expr)
     return true if expr.nil?
     case expr
     when 'String', String
-      return true if expr == ""
+      return true if expr == ''
     when 'Array', 'Hash', Array, Hash
       return true if expr.empty?
     else
       return false
     end
-    return false
+    false
   end
 
   def find_object(obj, hash)
@@ -173,26 +183,23 @@ class Nagios
 
   def push_node(obj)
     groups = obj['roles'].dup
-    groups += [ obj['os'] ]
-    groups += [ obj.chef_environment ]
+    groups += [obj['os']] + [obj.chef_environment]
 
-    host = self.find(Nagios::Host.new(get_hostname(obj)))
+    host = find(Nagios::Host.new(get_hostname(obj)))
     host.import(obj['nagios']) unless obj['nagios'].nil?
-    
-    # TODO (merge the ip_to_monitor funtion into this logic here)
+
+    # TODO: merge the ip_to_monitor funtion into this logic here
     host.address = obj['ipaddress']
 
     groups.each do |r|
-      hg = self.find(Nagios::Hostgroup.new(r))
+      hg = find(Nagios::Hostgroup.new(r))
       hg.push(host)
       host.push(hg)
     end
   end
-  
+
   def push_object(obj)
-    object = self.find(obj.class.new(obj.id))
+    object = find(obj.class.new(obj.id))
     object.merge!(obj)
   end
-
 end
-

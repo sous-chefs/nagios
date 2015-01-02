@@ -16,10 +16,12 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
+#
+# rubocop:disable ClassLength
 class Nagios
+  # This class it the base for all other Nagios classes.
+  # It provides common methods to prevent code duplication.
   class Base
-
     attr_accessor :register,
                   :name,
                   :use
@@ -46,7 +48,7 @@ class Nagios
     end
 
     def use
-      get_default_template
+      default_template
     end
 
     private
@@ -55,13 +57,13 @@ class Nagios
       return true if expr.nil?
       case expr
       when 'String', String
-        return true if expr == ""
+        return true if expr == ''
       when 'Array', 'Hash', Array, Hash
         return true if expr.empty?
       else
-        return false
+        false
       end
-      return false
+      false
     end
 
     def check_bool(arg)
@@ -81,7 +83,7 @@ class Nagios
 
     def check_state_option(arg, options, entry)
       unless options.include?(arg)
-        Chef::Log.fail("#{self.class} #{self.id} object error: Unknown option #{arg} for entry #{entry}")
+        Chef::Log.fail("#{self.class} #{id} object error: Unknown option #{arg} for entry #{entry}")
         fail
       end
     end
@@ -89,27 +91,24 @@ class Nagios
     def check_state_options(arg, options, entry)
       if arg.class == String
         return check_state_options(arg.split(','), options, entry)
-      end 
+      end
       if arg.class == Array
         arg.each { |a| check_state_option(a.strip, options, entry) }
         return arg.join(',')
       end
     end
-  
+
     def check_use_and_name(default)
       return nil if default.nil?
-      if self.name.to_s == default.to_s
+      if to_s == default.to_s
         return nil
       else
         return default
       end
     end
- 
-    def get_commands(obj)
-      obj.map {|k| k.id}.join(',')
-    end 
- 
-    def get_default_template
+
+    # rubocop:disable MethodLength
+    def default_template
       return @use unless @use.nil?
       case self
       when Nagios::Command
@@ -129,28 +128,45 @@ class Nagios
       when Nagios::Timeperiod
         check_use_and_name(Nagios.instance.default_timeperiod)
       end
-    end 
+    end
+    # rubocop:enable MethodLength
 
-    def get_configured_options
+    def get_commands(obj)
+      obj.map(&:id).join(',')
+    end
+
+    def configured_option(method)
+      value = send(method)
+      return nil if blank?(value)
+      if value.class == Array
+        value.join(',')
+      else
+        value
+      end
+    end
+
+    def configured_options
       configured = {}
-      config_options.each do |m,o|
+      config_options.each do |m, o|
         next if o.nil?
-        option = self.send(m)
-        next if blank?(option)
-        case option
-        when Array
-          configured[o] = self.send(m).join(',')
-        else
-          configured[o] = self.send(m)
-        end
+        value = configured_option(m)
+        next if value.nil?
+        configured[o] = value
       end
       configured
+    end
+
+    def get_definition(options, group)
+      d = ["define #{group}{"]
+      d += get_definition_options(options)
+      d += ['}']
+      d.join("\n")
     end
 
     def get_definition_options(options)
       r = []
       longest = get_longest_option(options)
-      options.each do |k,v|
+      options.each do |k, v|
         k = k.to_s
         v = v.to_s
         diff = longest - k.length
@@ -161,12 +177,13 @@ class Nagios
 
     def get_longest_option(options)
       longest = 0
-      options.each do |k,v|
+      options.each do |k, _|
         longest = k.length if longest < k.length
       end
       longest
     end
 
+    # rubocop:disable MethodLength
     def get_members(option)
       members = []
       case option
@@ -178,26 +195,27 @@ class Nagios
         Chef::Log.fail("Nagios fail: Use an Array or comma seperated String for option: #{option} within #{self.class}")
         fail
       end
-      members 
+      members
     end
+    # rubocop:enable MethodLength
 
     def get_timeperiod(obj)
       return nil if obj.nil?
-      return obj.id if obj === Nagios::Timeperiod
+      return obj.id if obj.class == Nagios::Timeperiod
       obj
     end
 
     def merge_attributes(obj)
-      config_options.each do |m,o|
+      config_options.each do |m, _|
         n = obj.send(m)
         next if n.nil?
-        m += "="
-        self.send(m,n) if self.respond_to?(m)
+        m += '='
+        send(m, n) if self.respond_to?(m)
       end
     end
 
     def merge_members(obj)
-      Chef::Log.debug("Nagios debug: The method merge_members is not supported by #{self.class}") 
+      Chef::Log.debug("Nagios debug: The method merge_members is not supported by #{obj.class}")
     end
 
     def push_object(obj, hash)
@@ -208,6 +226,7 @@ class Nagios
       end
     end
 
+    # rubocop:disable MethodLength
     def set_commands(obj)
       commands = []
       case obj
@@ -229,6 +248,7 @@ class Nagios
       end
       commands
     end
+    # rubocop:enable MethodLength
 
     def set_hostname(name)
       if Nagios.instance.normalize_hostname
@@ -239,20 +259,19 @@ class Nagios
     end
 
     def update_options(hash)
-      hash.each do |k,v|
-        m = k + "="
-        self.send(m,v) if self.respond_to?(m)
+      hash.each do |k, v|
+        m = k + '='
+        send(m, v) if self.respond_to?(m)
       end
     end
 
-    def update_members(hash, option, object, remote=false)
+    def update_members(hash, option, object, remote = false)
       return if hash[option].nil?
       get_members(hash[option]).each do |member|
         n = Nagios.instance.find(object.new(member))
-        self.push(n)
+        push(n)
         n.push(self) if remote
       end
-    end  
-
+    end
   end
 end

@@ -20,8 +20,11 @@
 require_relative 'base'
 
 class Nagios
+  #
+  #  This class holds all methods with regard to servicegroup options,
+  #  that are used within nagios configurations.
+  #
   class Servicegroup < Nagios::Base
-
     attr_reader   :servicegroup_name,
                   :members,
                   :servicegroup_members
@@ -30,7 +33,7 @@ class Nagios
                   :notes,
                   :notes_url,
                   :action_url
- 
+
     def initialize(servicegroup_name)
       @servicegroup_name = servicegroup_name
       @members = {}
@@ -38,12 +41,11 @@ class Nagios
     end
 
     def definition
-      configured = get_configured_options
-      (['define servicegroup{'] + get_definition_options(configured) + ['}']).join("\n")
+      get_definition(configured_options, 'servicegroup')
     end
 
     def id
-      self.servicegroup_name
+      servicegroup_name
     end
 
     def import(hash)
@@ -52,7 +54,7 @@ class Nagios
     end
 
     def members
-      (@members.map {|k,v| v.id}).join(',')
+      @members.values.map(&:id).join(',')
     end
 
     def push(obj)
@@ -61,16 +63,16 @@ class Nagios
         push_object(obj, @members)
       when Nagios::Servicegroup
         push_object(obj, @servicegroup_members)
-      end 
+      end
     end
 
     def servicegroup_members
-      (@servicegroup_members.map {|k,v| v.id}).join(',')
-    end 
+      @servicegroup_members.values.map(&:id).join(',')
+    end
 
     private
 
-    def config_options 
+    def config_options
       {
         'servicegroup_name'    => 'servicegroup_name',
         'members'              => 'members',
@@ -83,9 +85,8 @@ class Nagios
     end
 
     def merge_members(obj)
-      obj.members.each { |m| self.push(m) }
-      obj.servicegroup_members.each { |m| self.push(m) }
+      obj.members.each { |m| push(m) }
+      obj.servicegroup_members.each { |m| push(m) }
     end
-
   end
 end

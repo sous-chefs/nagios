@@ -19,10 +19,12 @@
 
 require_relative 'base'
 
-
 class Nagios
+  #
+  #  This class holds all methods with regard to timeperiodentries,
+  #  that are used within the timeperiod nagios configurations.
+  #
   class Timeperiodentry
-
     attr_reader :moment,
                 :period
 
@@ -32,27 +34,27 @@ class Nagios
     end
 
     def id
-      self.moment
+      moment
     end
 
     def to_s
-      self.moment
+      moment
     end
 
     private
-    
+
     def check_period(period)
       # should be HH:MM-HH:MM ([01]?[0-9]|2[0-3])\:[0-5][0-9]
       return period if period =~ /^([01]?[0-9]|2[0-3])\:[0-5][0-9]-([01]?[0-9]|2[0-4])\:[0-5][0-9]$/
       nil
     end
- 
   end
-end
 
-class Nagios
+  #
+  # This class holds all methods with regard to timeperiod options,
+  # that are used within nagios configurations.
+  #
   class Timeperiod < Nagios::Base
-
     attr_reader   :timeperiod_name
 
     attr_accessor :alias,
@@ -64,15 +66,15 @@ class Nagios
       @periods = {}
       @exclude = {}
     end
- 
+
     def self.create(name)
       Nagios.instance.find(Nagios::Timeperiod.new(name))
     end
 
     def definition
-      configured = get_configured_options
-      self.periods.each { |k,v| configured[v.moment] = v.period }
-      (['define timeperiod{'] + get_definition_options(configured) + ['}']).join("\n")
+      configured = configured_options
+      periods.values.each { |v| configured[v.moment] = v.period }
+      get_definition(configured, 'timeperiod')
     end
 
     # exclude
@@ -81,18 +83,18 @@ class Nagios
     # Multiple timeperiod names should be separated with a comma.
 
     def exclude
-      (@exclude.map { |e| e.id }).join(',')
+      @exclude.values.map(&:id).join(',')
     end
 
     def id
-      self.timeperiod_name
+      timeperiod_name
     end
 
     def import(hash)
       update_options(hash)
-      if hash['times'].class == Hash 
-        hash['times'].each { |k,v| self.push(Nagios::Timeperiodentry.new(k,v)) }
-      end    
+      if hash['times'].class == Hash
+        hash['times'].each { |k, v| push(Nagios::Timeperiodentry.new(k, v)) }
+      end
       update_members(hash, 'exclude', Nagios::Timeperiod)
     end
 
@@ -106,38 +108,38 @@ class Nagios
     end
 
     def to_s
-      self.timeperiod_name
+      timeperiod_name
     end
 
     # [weekday]
-    # The weekday directives ("sunday" through "saturday")are comma-delimited 
-    # lists of time ranges that are "valid" times for a particular day of the week. 
-    # Notice that there are seven different days for which you can define time 
-    # ranges (Sunday through Saturday). Each time range is in the form of 
-    # HH:MM-HH:MM, where hours are specified on a 24 hour clock. 
-    # For example, 00:15-24:00 means 12:15am in the morning for this day until 
-    # 12:00am midnight (a 23 hour, 45 minute total time range). 
-    # If you wish to exclude an entire day from the timeperiod, simply do not include 
+    # The weekday directives ("sunday" through "saturday")are comma-delimited
+    # lists of time ranges that are "valid" times for a particular day of the week.
+    # Notice that there are seven different days for which you can define time
+    # ranges (Sunday through Saturday). Each time range is in the form of
+    # HH:MM-HH:MM, where hours are specified on a 24 hour clock.
+    # For example, 00:15-24:00 means 12:15am in the morning for this day until
+    # 12:00am midnight (a 23 hour, 45 minute total time range).
+    # If you wish to exclude an entire day from the timeperiod, simply do not include
     # it in the timeperiod definition.
 
-    # [exception] 	
-    # You can specify several different types of exceptions to the standard rotating 
-    # weekday schedule. Exceptions can take a number of different forms including single 
-    # days of a specific or generic month, single weekdays in a month, or single calendar 
-    # dates. You can also specify a range of days/dates and even specify skip intervals 
-    # to obtain functionality described by "every 3 days between these dates". 
-    # Rather than list all the possible formats for exception strings, I'll let you look 
-    # at the example timeperiod definitions above to see what's possible. 
-    # Weekdays and different types of exceptions all have different levels of precedence, 
-    # so its important to understand how they can affect each other. 
+    # [exception]
+    # You can specify several different types of exceptions to the standard rotating
+    # weekday schedule. Exceptions can take a number of different forms including single
+    # days of a specific or generic month, single weekdays in a month, or single calendar
+    # dates. You can also specify a range of days/dates and even specify skip intervals
+    # to obtain functionality described by "every 3 days between these dates".
+    # Rather than list all the possible formats for exception strings, I'll let you look
+    # at the example timeperiod definitions above to see what's possible.
+    # Weekdays and different types of exceptions all have different levels of precedence,
+    # so its important to understand how they can affect each other.
 
     private
 
     def check_timeperiod(obj)
-      if obj === Nagios::Timeperiodentry
+      if obj.class == Nagios::Timeperiodentry
         obj
       else
-       Chef::Log.debug("Nagios debug: Use Nagios::Timeperiodentry when setting time and not #{obj.class}")
+        Chef::Log.debug("Nagios debug: Use Nagios::Timeperiodentry when setting time and not #{obj.class}")
       end
     end
 
@@ -150,9 +152,8 @@ class Nagios
     end
 
     def merge_members(obj)
-      obj.periods.each { |m| self.push(m) }
-      obj.exclude.each { |m| self.push(m) }
+      obj.periods.each { |m| push(m) }
+      obj.exclude.each { |m| push(m) }
     end
-
   end
 end

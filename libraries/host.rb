@@ -16,12 +16,17 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+#
+# rubocop:disable ClassLength
 
 require_relative 'base'
 
 class Nagios
+  #
+  #  This class holds all methods with regard to host options,
+  #  that are used within nagios configurations.
+  #
   class Host < Nagios::Base
-
     attr_reader   :host_name,
                   :parents,
                   :hostgroups,
@@ -66,7 +71,7 @@ class Nagios
                   :statusmap_image,
                   :_2d_coords,
                   :_3d_coords
- 
+
     def initialize(host_name)
       @host_name = set_hostname(host_name)
       @hostgroups = {}
@@ -82,41 +87,40 @@ class Nagios
     end
 
     # contacts
-    # This is a list of the short names of the contacts that should be notified 
-    # whenever there are problems (or recoveries) with this host. 
-    # Multiple contacts should be separated by commas. 
-    # Useful if you want notifications to go to just a few people and don't want 
-    # to configure contact groups. 
+    # This is a list of the short names of the contacts that should be notified
+    # whenever there are problems (or recoveries) with this host.
+    # Multiple contacts should be separated by commas.
+    # Useful if you want notifications to go to just a few people and don't want
+    # to configure contact groups.
     # You must specify at least one contact or contact group in each host definition.
     def contacts
-      (@contacts.map {|k,v| v.id}).join(',')
+      @contacts.values.map(&:id).join(',')
     end
 
     # contact_groups
-    # This is a list of the short names of the contact groups that should be notified 
-    # whenever there are problems (or recoveries) with this host. 
-    # Multiple contact groups should be separated by commas. 
+    # This is a list of the short names of the contact groups that should be notified
+    # whenever there are problems (or recoveries) with this host.
+    # Multiple contact groups should be separated by commas.
     # You must specify at least one contact or contact group in each host definition.
     def contact_groups
-      (@contact_groups.map {|k,v| v.id}).join(',')
+      @contact_groups.values.map(&:id).join(',')
     end
 
     def definition
-      configured = get_configured_options
-      (['define host{'] + get_definition_options(configured) + ['}']).join("\n")
+      get_definition(configured_options, 'host')
     end
 
     # hostgroups
-    # This directive is used to identify the short name(s) of the hostgroup(s) 
-    # that the host belongs to. Multiple hostgroups should be separated by commas. 
-    # This directive may be used as an alternative to (or in addition to) 
+    # This directive is used to identify the short name(s) of the hostgroup(s)
+    # that the host belongs to. Multiple hostgroups should be separated by commas.
+    # This directive may be used as an alternative to (or in addition to)
     # using the members directive in hostgroup definitions.
     def hostgroups
-      (@hostgroups.map {|k,v| v.id}).join(',')
+      @hostgroups.values.map(&:id).join(',')
     end
 
     def id
-      self.host_name
+      host_name
     end
 
     def import(hash)
@@ -140,18 +144,19 @@ class Nagios
     end
 
     # parents
-    # This directive is used to define a comma-delimited list of short names of 
-    # the "parent" hosts for this particular host. Parent hosts are typically routers, 
-    # switches, firewalls, etc. that lie between the monitoring host and a remote hosts. 
-    # A router, switch, etc. which is closest to the remote host is considered 
-    # to be that host's "parent". 
-    # If this host is on the same network segment as the host doing the monitoring 
-    # (without any intermediate routers, etc.) the host is considered to be on the local 
-    # network and will not have a parent host. 
+    # This directive is used to define a comma-delimited list of short names of
+    # the "parent" hosts for this particular host. Parent hosts are typically routers,
+    # switches, firewalls, etc. that lie between the monitoring host and a remote hosts.
+    # A router, switch, etc. which is closest to the remote host is considered
+    # to be that host's "parent".
+    # If this host is on the same network segment as the host doing the monitoring
+    # (without any intermediate routers, etc.) the host is considered to be on the local
+    # network and will not have a parent host.
     def parents
-      (@parents.map {|k,v| v.id}).join(',')
+      @parents.values.map(&:id).join(',')
     end
 
+    # rubocop:disable MethodLength
     def push(obj)
       case obj
       when Nagios::Hostgroup
@@ -167,13 +172,14 @@ class Nagios
         @notification_period = obj
       end
     end
+    # rubocop:enable MethodLength
 
     def self.create(name)
       Nagios.instance.find(Nagios::Host.new(name))
     end
 
     def to_s
-      self.host_name
+      host_name
     end
     # check the integer options
     # default = nil
@@ -256,58 +262,59 @@ class Nagios
     # check other options
 
     # initial_state
-    # By default Nagios will assume that all hosts are in UP states when it starts. 
-    # You can override the initial state for a host by using this directive. 
-    # Valid options are: 
-    # o = UP, 
+    # By default Nagios will assume that all hosts are in UP states when it starts.
+    # You can override the initial state for a host by using this directive.
+    # Valid options are:
+    # o = UP,
     # d = DOWN,
     # u = UNREACHABLE.
     def initial_state=(arg)
-      @initial_state = check_state_options(arg, ['o','d','u'], 'initail_state')
+      @initial_state = check_state_options(arg, %w(o d u), 'initail_state')
     end
 
     # flap_detection_options
-    # This directive is used to determine what host states the flap detection logic will use for this host. 
-    # Valid options are a combination of one or more of the following: 
-    # o = UP states, 
-    # d = DOWN states, 
+    # This directive is used to determine what host states the flap detection logic will use for this host.
+    # Valid options are a combination of one or more of the following:
+    # o = UP states,
+    # d = DOWN states,
     # u = UNREACHABLE states.
     def flap_detection_options=(arg)
-      @flap_detection_options = check_state_options(arg, ['o','d','u'], 'flap_detection_options')
+      @flap_detection_options = check_state_options(arg, %w(o d u), 'flap_detection_options')
     end
-  
+
     # stalking_options
-    # This directive determines which host states "stalking" is enabled for. 
-    # Valid options are a combination of one or more of the following: 
-    # o = stalk on UP states, 
-    # d = stalk on DOWN states, 
-    # u = stalk on UNREACHABLE states. 
+    # This directive determines which host states "stalking" is enabled for.
+    # Valid options are a combination of one or more of the following:
+    # o = stalk on UP states,
+    # d = stalk on DOWN states,
+    # u = stalk on UNREACHABLE states.
     def stalking_options=(arg)
-      @stalking_options = check_state_options(arg, ['o','d','u'], 'stalking_options')
+      @stalking_options = check_state_options(arg, %w(o d u), 'stalking_options')
     end
 
     # notification_options
-    # This directive is used to determine when notifications for the host should be sent out. 
-    # Valid options are a combination of one or more of the following: 
-    #   d = send notifications on a DOWN state, 
-    #   u = send notifications on an UNREACHABLE state, 
-    #   r = send notifications on recoveries (OK state), 
+    # This directive is used to determine when notifications for the host should be sent out.
+    # Valid options are a combination of one or more of the following:
+    #   d = send notifications on a DOWN state,
+    #   u = send notifications on an UNREACHABLE state,
+    #   r = send notifications on recoveries (OK state),
     #   f = send notifications when the host starts and stops flapping
-    #   s = send notifications when scheduled downtime starts and ends. 
-    #   If you specify n (none) as an option, no host notifications will be sent out. 
-    #   If you do not specify any notification options, Nagios will assume that you want notifications 
-    #   to be sent out for all possible states. 
-    #   Example: If you specify d,r in this field, notifications will only be sent out when the host 
+    #   s = send notifications when scheduled downtime starts and ends.
+    #   If you specify n (none) as an option, no host notifications will be sent out.
+    #   If you do not specify any notification options, Nagios will assume that you want notifications
+    #   to be sent out for all possible states.
+    #   Example: If you specify d,r in this field, notifications will only be sent out when the host
     #   goes DOWN and when it recovers from a DOWN state.
 
     def notification_options=(arg)
-      @notification_options = check_state_options(arg, ['d','u','r','f','s','n'], 'notification_options')
+      @notification_options = check_state_options(arg, %w(d u r f s n), 'notification_options')
     end
 
     private
-    
+
+    # rubocop:disable MethodLength
     def config_options
-      { 
+      {
         'name'                         => 'name',
         'use'                          => 'use',
         'host_name'                    => 'host_name',
@@ -357,13 +364,13 @@ class Nagios
         'register'                     => 'register'
       }
     end
+    # rubocop:enable MethodLength
 
     def merge_members(obj)
-      obj.parents.each { |m| self.push(m) }
-      obj.contacts.each { |m| self.push(m) }
-      obj.contact_groups.each { |m| self.push(m) }
-      obj.hostgroups.each { |m| self.push(m) }
+      obj.parents.each { |m| push(m) }
+      obj.contacts.each { |m| push(m) }
+      obj.contact_groups.each { |m| push(m) }
+      obj.hostgroups.each { |m| push(m) }
     end
-
   end
 end

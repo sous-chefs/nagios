@@ -19,9 +19,13 @@
 
 require_relative 'base'
 
+# rubocop:disable ClassLength
 class Nagios
+  #
+  # This class holds all methods with regard to contact options,
+  # that are used within nagios configurations.
+  #
   class Contact < Nagios::Base
-
     attr_reader   :contact_name,
                   :contactgroups
 
@@ -29,7 +33,7 @@ class Nagios
                   :host_notifications_enabled,
                   :service_notifications_enabled,
                   :host_notification_period,
-                  :service_notification_period,	
+                  :service_notification_period,
                   :host_notification_options,
                   :service_notification_options,
                   :host_notification_commands,
@@ -49,22 +53,21 @@ class Nagios
     end
 
     def contactgroups
-      (@contactgroups.map {|k,v| v.id}).join(',')
+      @contactgroups.values.map(&:id).join(',')
     end
 
     def definition
-      configured = get_configured_options
-      if self.email.nil? && self.name.nil?
-        "# Skipping #{self.contact_name} because missing email."
+      if email.nil? && name.nil?
+        "# Skipping #{contact_name} because missing email."
       else
-      (['define contact{'] + get_definition_options(configured) + ['}']).join("\n")
+        get_definition(configured_options, 'contact')
       end
     end
- 
+
     def self.create(name)
       Nagios.instance.find(Nagios::Contact.new(name))
     end
- 
+
     def host_notification_commands
       get_commands(@host_notification_commands)
     end
@@ -76,9 +79,9 @@ class Nagios
     def host_notification_period
       get_timeperiod(@host_notification_period)
     end
- 
+
     def id
-      self.contact_name
+      contact_name
     end
 
     def import(hash)
@@ -109,12 +112,11 @@ class Nagios
     end
 
     def to_s
-      self.contact_name
+      contact_name
     end
 
     # check the True/False options
     # default = nil
-
     def host_notifications_enabled=(arg)
       @host_notifications_enabled = check_bool(arg)
     end
@@ -136,45 +138,44 @@ class Nagios
     end
 
     # check other options
-
-    # host_notification_options
-    # This directive is used to define the host states for which notifications 
-    # can be sent out to this contact. 
-    # Valid options are a combination of one or more of the following: 
-    #   d = notify on DOWN host states, 
-    #   u = notify on UNREACHABLE host states, 
-    #   r = notify on host recoveries (UP states), 
-    #   f = notify when the host starts and stops flapping, 
-    #   s = send notifications when host or service scheduled downtime starts and ends. 
     #
-    # If you specify n (none) as an option, the contact will not receive any type of 
+    # host_notification_options
+    # This directive is used to define the host states for which notifications
+    # can be sent out to this contact.
+    # Valid options are a combination of one or more of the following:
+    #   d = notify on DOWN host states,
+    #   u = notify on UNREACHABLE host states,
+    #   r = notify on host recoveries (UP states),
+    #   f = notify when the host starts and stops flapping,
+    #   s = send notifications when host or service scheduled downtime starts and ends.
+    #
+    # If you specify n (none) as an option, the contact will not receive any type of
     # host notifications.
- 
     def host_notification_options=(arg)
       @host_notification_options = check_state_options(
-        arg, ['d','u','r','f','s','n'], 'host_notification_options')
+        arg, %w(d u r f s n), 'host_notification_options')
     end
 
     # service_notification_options
-    # This directive is used to define the service states for which notifications 
-    # can be sent out to this contact. 
-    # Valid options are a combination of one or more of the following: 
-    #   w = notify on WARNING service states, 
-    #   u = notify on UNKNOWN service states, 
-    #   c = notify on CRITICAL service states, 
-    #   r = notify on service recoveries (OK states), 
-    #   f = notify when the service starts and stops flapping. 
+    # This directive is used to define the service states for which notifications
+    # can be sent out to this contact.
+    # Valid options are a combination of one or more of the following:
+    #   w = notify on WARNING service states,
+    #   u = notify on UNKNOWN service states,
+    #   c = notify on CRITICAL service states,
+    #   r = notify on service recoveries (OK states),
+    #   f = notify when the service starts and stops flapping.
     #
-    # If you specify n (none) as an option, the contact will not receive any type of 
+    # If you specify n (none) as an option, the contact will not receive any type of
     # service notifications.
-
     def service_notification_options=(arg)
       @service_notification_options = check_state_options(
-        arg, ['w','u','c','r','f','n'], 'service_notification_options')
+        arg, %w(w u c r f n), 'service_notification_options')
     end
 
     private
- 
+
+    # rubocop:disable MethodLength
     def config_options
       {
         'name'                          => 'name',
@@ -201,8 +202,7 @@ class Nagios
     end
 
     def merge_members(obj)
-      obj.contactgroups.each { |m| self.push(m) }
+      obj.contactgroups.each { |m| push(m) }
     end
-  
   end
 end
