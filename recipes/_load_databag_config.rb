@@ -31,7 +31,7 @@ hostgroups.each do |group|
   end
 
   result.each do |n|
-    n.automatic_attrs['roles'] = [ group['hostgroup_name'] ]
+    n.automatic_attrs['roles'] = [group['hostgroup_name']]
     Nagios.instance.push(n)
   end
 end
@@ -50,7 +50,6 @@ end
 
 eventhandlers = nagios_bags.get(node['nagios']['eventhandlers_databag'])
 eventhandlers.each do |item|
-  name = eventhandler['id']
   o = Nagios::Command.create(item['id'])
   o.import(item)
 end
@@ -89,7 +88,7 @@ end
 services = nagios_bags.get(node['nagios']['services_databag'])
 services.each do |item|
   command_name = item['id'].downcase.start_with?('check_') ? item['id'].downcase : 'check_' + item['id'].downcase
-  service_name = item['id'].downcase.start_with?('check_') ? item['id'].gsub('check_','') : item['id'].downcase
+  service_name = item['id'].downcase.start_with?('check_') ? item['id'].gsub('check_', '') : item['id'].downcase
 
   command = Nagios::Command.create(command_name)
   command.command_line = item['command_line']
@@ -103,7 +102,7 @@ templates = nagios_bags.get(node['nagios']['templates_databag'])
 templates.each do |item|
   o = Nagios::Service.create(item['id'])
   o.name = item['id']
-  o.import(item)  
+  o.import(item)
 end
 
 timeperiods = nagios_bags.get(node['nagios']['timeperiods_databag'])

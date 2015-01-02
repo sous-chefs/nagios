@@ -182,10 +182,10 @@ nagios_conf 'cgi' do
 end
 
 nagios_conf 'timeperiods'
-nagios_conf 'contacts' 
+nagios_conf 'contacts'
 nagios_conf 'commands'
-nagios_conf 'hosts' 
-nagios_conf 'hostgroups' 
+nagios_conf 'hosts'
+nagios_conf 'hostgroups'
 nagios_conf 'templates'
 nagios_conf 'services'
 nagios_conf 'servicegroups'

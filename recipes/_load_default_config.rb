@@ -17,12 +17,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# Find nodes to monitor.  
+# Find nodes to monitor.
 # Search in all environments if multi_environment_monitoring is enabled.
 Chef::Log.info('Beginning search for nodes.  This may take some time depending on your node count')
 
 nodes = []
-hostgroups = []
 multi_env = node['nagios']['monitored_environments']
 multi_env_search = multi_env.empty? ? '' : ' AND (chef_environment:' + multi_env.join(' OR chef_environment:') + ')'
 
@@ -108,7 +107,7 @@ nagios_contact 'admin' do
           'host_notification_options'     => 'd,r',
           'service_notification_commands' => 'service_notify_by_email',
           'host_notification_commands'    => 'host_notify_by_email'
-end 
+end
 
 nagios_contact 'default-contact' do
   options 'name'                            => 'default-contact',
@@ -164,7 +163,7 @@ end
 # Defaut host template
 Nagios.instance.default_host = 'server'
 
-#Services
+# Services
 nagios_service 'default-service' do
   options 'name'                         => 'default-service',
           'active_checks_enabled'        => 1,
