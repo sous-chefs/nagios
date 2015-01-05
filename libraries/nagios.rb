@@ -177,17 +177,25 @@ class Nagios
     end
   end
 
+  def get_groups(obj)
+    groups = obj['roles'].nil? ? [] : obj['roles'].dup
+    groups += [obj['os']]
+    groups += [obj.chef_environment]
+  end
+
   def get_hostname(obj)
     return obj[@host_name_attribute] unless blank?(obj[@host_name_attribute])
     return obj['hostname'] unless blank?(obj['hostname'])
-    obj['name']
+    return obj['name'] unless blank?(obj['name'])
+    nil
   end
 
   def push_node(obj)
-    groups = obj['roles'].dup
-    groups += [obj['os']] + [obj.chef_environment]
+    groups = get_groups(obj)
+    hostname = get_hostname(obj)
+    return nil if hostname.nil?
 
-    host = find(Nagios::Host.new(get_hostname(obj)))
+    host = find(Nagios::Host.new(hostname))
     host.import(obj['nagios']) unless obj['nagios'].nil?
 
     # TODO: merge the ip_to_monitor funtion into this logic here

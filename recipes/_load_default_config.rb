@@ -36,6 +36,9 @@ if nodes.empty?
   nodes << node
 end
 
+# Pushing current node to prevent empty hosts.cfg
+Nagios.instance.push(node)
+
 # Pushing all nodes into the Nagios.instance model
 nodes.each { |n| Nagios.instance.push(n) }
 
