@@ -19,7 +19,7 @@ define hostgroup {
 
 <% Nagios.instance.hostgroups.each do |key,hostgroup| -%>
 <% if hostgroup.name.nil? # Skipping all the template hosts %>
-<%= hostgroup.definition %>
+<%= hostgroup.definition unless hostgroup.hostgroup_name == 'all' %>
 
 <% end %>
 <% end -%>
