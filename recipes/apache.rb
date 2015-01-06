@@ -25,6 +25,8 @@ apache_site '000-default' do
   enable false
 end
 
+apache_module 'cgi'
+
 template "#{node['apache']['dir']}/sites-available/#{node['nagios']['server']['vname']}.conf" do
   source 'apache2.conf.erb'
   mode '0644'
