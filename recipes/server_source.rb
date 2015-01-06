@@ -29,15 +29,6 @@ include_recipe 'php::module_gd'
 # Note: the cookbook now defaults to Nagios 4.X which doesn't support embedded perl anyways
 node.default['nagios']['conf']['p1_file'] = nil
 
-web_srv = node['nagios']['server']['web_server']
-
-case web_srv
-when 'apache'
-  include_recipe 'nagios::apache'
-else
-  include_recipe 'nagios::nginx'
-end
-
 pkgs = value_for_platform_family(
   %w( rhel fedora ) => %w( openssl-devel gd-devel tar ),
   'debian' => %w( libssl-dev libgd2-xpm-dev bsd-mailx tar ),
@@ -53,6 +44,8 @@ end
 user node['nagios']['user'] do
   action :create
 end
+
+web_srv = node['nagios']['server']['web_server']
 
 group node['nagios']['group'] do
   members [
