@@ -155,9 +155,3 @@ directory "/usr/lib/#{node['nagios']['server']['vname']}" do
   group node['nagios']['group']
   mode '0755'
 end
-
-if web_srv == 'apache'
-  apache_module 'cgi' do
-    enable :true
-  end
-end
