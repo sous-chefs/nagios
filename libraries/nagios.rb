@@ -197,10 +197,9 @@ class Nagios
     return nil if hostname.nil?
 
     host = find(Nagios::Host.new(hostname))
-    host.import(obj['nagios']) unless obj['nagios'].nil?
-
     # TODO: merge the ip_to_monitor funtion into this logic here
     host.address = obj['ipaddress']
+    host.import(obj['nagios']) unless obj['nagios'].nil?
 
     groups.each do |r|
       hg = find(Nagios::Hostgroup.new(r))
