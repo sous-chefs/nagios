@@ -180,7 +180,7 @@ class Nagios
   def get_groups(obj)
     groups = obj['roles'].nil? ? [] : obj['roles'].dup
     groups += [obj['os']] unless blank?(obj['os'])
-    groups += [obj.chef_environment]
+    groups + [obj.chef_environment]
   end
 
   def get_hostname(obj)
@@ -190,6 +190,7 @@ class Nagios
     nil
   end
 
+  # rubocop:disable MethodLength
   def push_node(obj)
     groups = get_groups(obj)
     hostname = get_hostname(obj)
@@ -207,6 +208,7 @@ class Nagios
       host.push(hg)
     end
   end
+  # rubocop:enable MethodLength
 
   def push_object(obj)
     object = find(obj.class.new(obj.id))
