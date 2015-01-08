@@ -112,6 +112,7 @@ class Nagios
     # rubocop:disable MethodLength
     def default_template
       return @use unless @use.nil?
+      return nil if @name
       case self
       when Nagios::Command
         check_use_and_name(Nagios.instance.default_command)
