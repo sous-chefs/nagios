@@ -103,7 +103,11 @@ class Nagios
     end
 
     def definition
-      get_definition(configured_options, 'service')
+      if blank?(hostgroup_name) && blank?(host_name) && name.nil?
+        "# Skipping #{service_description} because host_name and hostgroup_name are missing."
+      else
+        get_definition(configured_options, 'service')
+      end
     end
 
     # host_name

@@ -33,8 +33,11 @@ class Nagios
     end
 
     def definition
-      configured = configured_options
-      (['define command{'] + get_definition_options(configured) + ['}']).join("\n")
+      if blank?(command_line)
+        "# Skipping #{command_name} because command_line is missing."
+      else
+        get_definition(configured_options, 'command')
+      end
     end
 
     def self.create(name)

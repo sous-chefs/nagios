@@ -179,7 +179,7 @@ class Nagios
 
   def get_groups(obj)
     groups = obj['roles'].nil? ? [] : obj['roles'].dup
-    groups += [obj['os']]
+    groups += [obj['os']] unless blank?(obj['os'])
     groups += [obj.chef_environment]
   end
 
