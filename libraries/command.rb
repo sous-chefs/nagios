@@ -25,11 +25,13 @@ class Nagios
   # that are used within nagios configurations.
   #
   class Command < Nagios::Base
-    attr_reader   :command_name
+    attr_reader   :command_name,
+                  :timeout
     attr_accessor :command_line
 
     def initialize(command_name)
       @command_name = command_name
+      @timeout = nil
     end
 
     def definition
@@ -42,6 +44,18 @@ class Nagios
 
     def self.create(name)
       Nagios.instance.find(Nagios::Command.new(name))
+    end
+
+    def command_line=(command_line)
+      timeout, param = command_timeout(command_line)
+      if timeout.nil?
+        @command_line = command_line
+      elsif param.nil?
+        @command_line = command_line + " -t #{timeout}"
+      else
+        @command_line = command_line.gsub(param, "-t #{timeout}")
+      end
+      @command_line
     end
 
     def id
@@ -57,6 +71,16 @@ class Nagios
     end
 
     private
+
+    def command_timeout(command_line)
+      if command_line =~ /(-t *?(\d+))/
+        timeout = Regexp.last_match[2].to_i + 5
+        @timeout = timeout if @timeout.nil? || timeout > @timeout
+        return @timeout, Regexp.last_match[1]
+      else
+        return @timeout, nil
+      end
+    end
 
     def config_options
       {
