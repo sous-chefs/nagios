@@ -8,12 +8,18 @@ Unreleased
 ### Bug
 - Fix missing CSS files on RHEL/Fedora package installs
 - Ensure the source file for Nagios is always downloaded to work around corrupt partial downloads
+- Fixed permissions being changed on the resource directory during each run on RHEL systems
 
 ### Improvement
 - Remove support for SSL V2 / V3 (Apache2/NGINX) and add TLS 1.1 and 1.2 (NGINX)
+- Cleaned up and removed duplicate code from the web server configuration
 
 ### Breaking Changes
 - The /nagios or /nagios3 URLs are no longer valid.  Nagios should be installed on the root of the webserver and this never entirely worked
+
+### Development
+- Updated Rubocop rules
+- Fixed specs to run with Chefspec 4.X
 
 v6.0.4
 ------
