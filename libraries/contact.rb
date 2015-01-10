@@ -53,7 +53,7 @@ class Nagios
     end
 
     def contactgroups
-      @contactgroups.values.map(&:id).join(',')
+      @contactgroups.values.map(&:id).sort.join(',')
     end
 
     def definition

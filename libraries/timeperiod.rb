@@ -83,7 +83,7 @@ class Nagios
     # Multiple timeperiod names should be separated with a comma.
 
     def exclude
-      @exclude.values.map(&:id).join(',')
+      @exclude.values.map(&:id).sort.join(',')
     end
 
     def id

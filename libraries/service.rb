@@ -90,7 +90,7 @@ class Nagios
     # to configure contact groups.
     # You must specify at least one contact or contact group in each host definition.
     def contacts
-      @contacts.values.map(&:id).join(',')
+      @contacts.values.map(&:id).sort.join(',')
     end
 
     # contact_groups
@@ -99,7 +99,7 @@ class Nagios
     # Multiple contact groups should be separated by commas.
     # You must specify at least one contact or contact group in each host definition.
     def contact_groups
-      @contact_groups.values.map(&:id).join(',')
+      @contact_groups.values.map(&:id).sort.join(',')
     end
 
     def definition
@@ -114,7 +114,7 @@ class Nagios
     # This directive is used to specify the short name(s) of the host(s) that the service
     # "runs" on or is associated with. Multiple hosts should be separated by commas.
     def host_name
-      @hosts.values.map(&:id).join(',')
+      @hosts.values.map(&:id).sort.join(',')
     end
 
     # hostgroup_name
@@ -122,7 +122,7 @@ class Nagios
     # service "runs" on or is associated with. Multiple hostgroups should be separated by commas.
     # The hostgroup_name may be used instead of, or in addition to, the host_name directive.
     def hostgroup_name
-      @hostgroups.values.map(&:id).join(',')
+      @hostgroups.values.map(&:id).sort.join(',')
     end
 
     def id
@@ -171,7 +171,7 @@ class Nagios
     # No two services associated with the same host can have the same description.
     # Services are uniquely identified with their host_name and service_description directives.
     def servicegroups
-      @servicegroups.values.map(&:id).join(',')
+      @servicegroups.values.map(&:id).sort.join(',')
     end
 
     def self.create(name)

@@ -94,7 +94,7 @@ class Nagios
     # to configure contact groups.
     # You must specify at least one contact or contact group in each host definition.
     def contacts
-      @contacts.values.map(&:id).join(',')
+      @contacts.values.map(&:id).sort.join(',')
     end
 
     # contact_groups
@@ -103,7 +103,7 @@ class Nagios
     # Multiple contact groups should be separated by commas.
     # You must specify at least one contact or contact group in each host definition.
     def contact_groups
-      @contact_groups.values.map(&:id).join(',')
+      @contact_groups.values.map(&:id).sort.join(',')
     end
 
     def definition
@@ -116,7 +116,7 @@ class Nagios
     # This directive may be used as an alternative to (or in addition to)
     # using the members directive in hostgroup definitions.
     def hostgroups
-      @hostgroups.values.map(&:id).join(',')
+      @hostgroups.values.map(&:id).sort.join(',')
     end
 
     def id
@@ -155,7 +155,7 @@ class Nagios
     # (without any intermediate routers, etc.) the host is considered to be on the local
     # network and will not have a parent host.
     def parents
-      @parents.values.map(&:id).join(',')
+      @parents.values.map(&:id).sort.join(',')
     end
 
     # rubocop:disable MethodLength

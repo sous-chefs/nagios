@@ -65,13 +65,17 @@ class Nagios
   end
   # rubocop:enable MethodLength
 
-  @instance = Nagios.new
-
-  # rubocop:disable Style/TrivialAccessors
-  def self.instance
-    @instance
+  def commands
+    Hash[@commands.sort]
   end
-  # rubocop:enable Style/TrivialAccessors
+
+  def contactgroups
+    Hash[@contactgroups.sort]
+  end
+
+  def contacts
+    Hash[@contacts.sort]
+  end
 
   # rubocop:disable MethodLength
   def find(obj)
@@ -103,6 +107,22 @@ class Nagios
     end
   end
   # rubocop:enable MethodLength
+
+  def hosts
+    Hash[@hosts.sort]
+  end
+
+  def hostdependencies
+    Hash[@hostdependencies.sort]
+  end
+
+  def hostescalations
+    Hash[@hostescalations.sort]
+  end
+
+  def hostgroups
+    Hash[@hostgroups.sort]
+  end
 
   def normalize_hostname=(expr)
     if expr == true
@@ -149,6 +169,30 @@ class Nagios
     end
   end
   # rubocop:enable MethodLength
+
+  def timeperiods
+    Hash[@timeperiods.sort]
+  end
+
+  def self.instance
+    @instance ||= Nagios.new
+  end
+
+  def services
+    Hash[@services.sort]
+  end
+
+  def servicedependencies
+    Hash[@servicedependencies.sort]
+  end
+
+  def serviceescalations
+    Hash[@serviceescalations.sort]
+  end
+
+  def servicegroups
+    Hash[@servicegroups.sort]
+  end
 
   private
 

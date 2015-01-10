@@ -54,7 +54,7 @@ class Nagios
     end
 
     def members
-      @members.values.map(&:id).join(',')
+      @members.values.map(&:id).sort.join(',')
     end
 
     def push(obj)
@@ -67,7 +67,7 @@ class Nagios
     end
 
     def servicegroup_members
-      @servicegroup_members.values.map(&:id).join(',')
+      @servicegroup_members.values.map(&:id).sort.join(',')
     end
 
     private

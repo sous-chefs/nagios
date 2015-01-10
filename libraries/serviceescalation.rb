@@ -52,19 +52,19 @@ class Nagios
     end
 
     def contacts
-      @contacts.values.map(&:id).join(',')
+      @contacts.values.map(&:id).sort.join(',')
     end
 
     def contact_groups
-      @contact_groups.values.map(&:id).join(',')
+      @contact_groups.values.map(&:id).sort.join(',')
     end
 
     def host_name
-      @host_name.values.map(&:id).join(',')
+      @host_name.values.map(&:id).sort.join(',')
     end
 
     def hostgroup_name
-      @hostgroup_name.values.map(&:id).join(',')
+      @hostgroup_name.values.map(&:id).sort.join(',')
     end
 
     def id

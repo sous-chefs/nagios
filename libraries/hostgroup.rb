@@ -45,7 +45,7 @@ class Nagios
     end
 
     def hostgroup_members
-      @hostgroup_members.values.map(&:id).join(',')
+      @hostgroup_members.values.map(&:id).sort.join(',')
     end
 
     def id
@@ -59,7 +59,7 @@ class Nagios
     end
 
     def members
-      @members.values.map(&:id).join(',')
+      @members.values.map(&:id).sort.join(',')
     end
 
     def push(obj)

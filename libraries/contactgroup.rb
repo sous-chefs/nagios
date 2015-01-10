@@ -38,7 +38,7 @@ class Nagios
     end
 
     def contactgroup_members
-      @contactgroup_members.values.map(&:id).join(',')
+      @contactgroup_members.values.map(&:id).sort.join(',')
     end
 
     def self.create(name)
@@ -60,7 +60,7 @@ class Nagios
     end
 
     def members
-      @members.values.map(&:id).join(',')
+      @members.values.map(&:id).sort.join(',')
     end
 
     def push(obj)

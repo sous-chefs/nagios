@@ -49,19 +49,19 @@ class Nagios
     end
 
     def dependent_host_name
-      @dependent_host_name.values.map(&:id).join(',')
+      @dependent_host_name.values.map(&:id).sort.join(',')
     end
 
     def dependent_hostgroup_name
-      @dependent_hostgroup_name.values.map(&:id).join(',')
+      @dependent_hostgroup_name.values.map(&:id).sort.join(',')
     end
 
     def host_name
-      @host_name.values.map(&:id).join(',')
+      @host_name.values.map(&:id).sort.join(',')
     end
 
     def hostgroup_name
-      @hostgroup_name.values.map(&:id).join(',')
+      @hostgroup_name.values.map(&:id).sort.join(',')
     end
 
     def id
