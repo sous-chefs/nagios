@@ -214,9 +214,9 @@ end
 # resource.cfg differs on RPM and tarball based systems
 if node['platform_family'] == 'rhel' || node['platform_family'] == 'fedora'
   file "#{node['nagios']['resource_dir']}/resource.cfg" do
-      owner node['nagios']['user']
-      group node['nagios']['group']
-      mode '0600'
+    owner node['nagios']['user']
+    group node['nagios']['group']
+    mode '0600'
   end
 
   directory node['nagios']['resource_dir'] do
