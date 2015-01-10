@@ -2,8 +2,8 @@ nagios Cookbook CHANGELOG
 =========================
 This file is used to list changes made in each version of the nagios cookbook.
 
-Unreleased
-----------
+6.1.0
+-----
 
 ### Bug
 - Fix missing CSS files on RHEL/Fedora package installs
