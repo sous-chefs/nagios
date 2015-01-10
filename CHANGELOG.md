@@ -14,6 +14,9 @@ Unreleased
 - Remove support for SSL V2 / V3 (Apache2/NGINX) and add TLS 1.1 and 1.2 (NGINX)
 - Cleaned up and removed duplicate code from the web server configuration
 
+### New Features
+- Added the ability to tag nodes with an attribute that excludes them from the monitoring search.  See readme for details
+
 ### Breaking Changes
 - The /nagios or /nagios3 URLs are no longer valid.  Nagios should be installed on the root of the webserver and this never entirely worked
 
