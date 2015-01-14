@@ -24,3 +24,10 @@ default_action :create
 
 attribute :host_description, :kind_of => String, :name_attribute => true
 attribute :options, :kind_of => Hash, :default => {}
+
+def after_created
+  # Make sure we execute at compile time.
+  Array(action).each do |action|
+    self.run_action(action)
+  end
+end
