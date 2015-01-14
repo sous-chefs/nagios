@@ -1,9 +1,9 @@
 #
 # Author:: Sander Botman <sbotman@schubergphilis.com>
-# Cookbook Name:: nagios
-# Provider:: contactgroup
+# Cookbook Name : nagios
+# Definition    : servicedependency
 #
-# Copyright 2014, Sander Botman
+# Copyright 2015, Sander Botman
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -18,16 +18,16 @@
 # limitations under the License.
 #
 
-action :create do
-  o = Nagios::Contactgroup.create(@new_resource.contactgroup_name)
-  o.import(@new_resource.options)
-  new_resource.updated_by_last_action(false)
-end
+define :nagios_servicedependency do
+  params[:action] ||= :create  
+  params[:options] ||= {}
 
-action :delete do
-  Nagios.instance.contactgroups.delete(@new_resource.contactgroup_name)
-  new_resource.updated_by_last_action(false)
-end
+  if :action == :create || :add
+    o = Nagios::Servicedependency.create(params[:name])
+    o.import(params[:options])
+  end
 
-alias_method :action_add, :action_create
-alias_method :action_remove, :action_delete
+  if :action == :delete || :remove
+    Nagios.instance.servicedependencies.delete(params[:name])
+  end
+end 

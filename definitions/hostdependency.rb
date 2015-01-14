@@ -1,9 +1,9 @@
 #
 # Author:: Sander Botman <sbotman@schubergphilis.com>
-# Cookbook Name:: nagios
-# Provider:: hostescalation
+# Cookbook Name : nagios
+# Definition    : hostdependency
 #
-# Copyright 2014, Sander Botman
+# Copyright 2015, Sander Botman
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -18,16 +18,16 @@
 # limitations under the License.
 #
 
-action :create do
-  o = Nagios::Hostescalation.create(@new_resource.host_description)
-  o.import(@new_resource.options)
-  new_resource.updated_by_last_action(false)
-end
+define :nagios_hostdependency do
+  params[:action] ||= :create  
+  params[:options] ||= {}
 
-action :delete do
-  Nagios.instance.hostsescalations.delete(@new_resource.host_description)
-  new_resource.updated_by_last_action(false)
-end
+  if :action == :create || :add
+    o = Nagios::Hostdependency.create(params[:name])
+    o.import(params[:options])
+  end
 
-alias_method :action_add, :action_create
-alias_method :action_remove, :action_delete
+  if :action == :delete || :remove
+    Nagios.instance.hostdependencies.delete(params[:name])
+  end
+end 

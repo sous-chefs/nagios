@@ -1,9 +1,9 @@
 #
 # Author:: Sander Botman <sbotman@schubergphilis.com>
-# Cookbook Name:: nagios
-# Provider:: serviceescalation
+# Cookbook Name : nagios
+# Definition    : hostgroup
 #
-# Copyright 2014, Sander Botman
+# Copyright 2015, Sander Botman
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -18,16 +18,16 @@
 # limitations under the License.
 #
 
-action :create do
-  o = Nagios::Serviceescalation.create(@new_resource.service_description)
-  o.import(@new_resource.options)
-  new_resource.updated_by_last_action(false)
-end
+define :nagios_hostgroup do
+  params[:action] ||= :create  
+  params[:options] ||= {}
 
-action :delete do
-  Nagios.instance.serviceescalations.delete(@new_resource.service_description)
-  new_resource.updated_by_last_action(false)
-end
+  if :action == :create || :add
+    o = Nagios::Hostgroup.create(params[:name])
+    o.import(params[:options])
+  end
 
-alias_method :action_add, :action_create
-alias_method :action_remove, :action_delete
+  if :action == :delete || :remove
+    Nagios.instance.hostgroups.delete(params[:name])
+  end
+end 

@@ -1,9 +1,9 @@
 #
 # Author:: Sander Botman <sbotman@schubergphilis.com>
-# Cookbook Name:: nagios
-# Provider:: hostdependency
+# Cookbook Name : nagios
+# Definition    : host
 #
-# Copyright 2014, Sander Botman
+# Copyright 2015, Sander Botman
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -18,16 +18,16 @@
 # limitations under the License.
 #
 
-action :create do
-  o = Nagios::Hostdependency.create(@new_resource.dependent_name)
-  o.import(@new_resource.options)
-  new_resource.updated_by_last_action(false)
-end
+define :nagios_host do
+  params[:action] ||= :create  
+  params[:options] ||= {}
 
-action :delete do
-  Nagios.instance.hostsdependencies.delete(@new_resource.dependent_name)
-  new_resource.updated_by_last_action(false)
-end
+  if :action == :create || :add
+    o = Nagios::Host.create(params[:name])
+    o.import(params[:options])
+  end
 
-alias_method :action_add, :action_create
-alias_method :action_remove, :action_delete
+  if :action == :delete || :remove
+    Nagios.instance.hosts.delete(params[:name])
+  end
+end 

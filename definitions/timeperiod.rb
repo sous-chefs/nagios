@@ -1,9 +1,9 @@
 #
 # Author:: Sander Botman <sbotman@schubergphilis.com>
-# Cookbook Name:: nagios
-# Resource:: hostescalation
+# Cookbook Name : nagios
+# Definition    : timeperiod
 #
-# Copyright 2014, Sander Botman
+# Copyright 2015, Sander Botman
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -18,16 +18,16 @@
 # limitations under the License.
 #
 
-actions :create, :delete, :add, :remove
+define :nagios_timeperiod do
+  params[:action] ||= :create  
+  params[:options] ||= {}
 
-default_action :create
-
-attribute :host_description, :kind_of => String, :name_attribute => true
-attribute :options, :kind_of => Hash, :default => {}
-
-def after_created
-  # Make sure we execute at compile time.
-  Array(action).each do |action|
-    run_action(action)
+  if :action == :create || :add
+    o = Nagios::Timeperiod.create(params[:name])
+    o.import(params[:options])
   end
-end
+
+  if :action == :delete || :remove
+    Nagios.instance.timeperiods.delete(params[:name])
+  end
+end 
