@@ -28,6 +28,6 @@ attribute :options, :kind_of => Hash, :default => {}
 def after_created
   # Make sure we execute at compile time.
   Array(action).each do |action|
-    self.run_action(action)
+    run_action(action)
   end
 end
