@@ -97,13 +97,16 @@ services = nagios_bags.get(node['nagios']['services_databag'])
 services.each do |item|
   command_name = item['id'].downcase.start_with?('check_') ? item['id'].downcase : 'check_' + item['id'].downcase
   service_name = item['id'].downcase.start_with?('check_') ? item['id'].gsub('check_', '') : item['id'].downcase
-  item['command_name'] = command_name
+  item['check_command'] = command_name
+
+  nagios_command command_name do
+    options item
+  end
 
   nagios_service service_name do
     options item
   end
 end
-
 templates = nagios_bags.get(node['nagios']['templates_databag'])
 templates.each do |item|
   item['name'] = item['id']

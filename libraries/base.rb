@@ -160,7 +160,7 @@ class Nagios
     end
 
     def get_definition(options, group)
-      d = ["define #{group}{"]
+      d = ["define #{group} {"]
       d += get_definition_options(options)
       d += ['}']
       d.join("\n")
