@@ -2,6 +2,10 @@ nagios Cookbook CHANGELOG
 =========================
 This file is used to list changes made in each version of the nagios cookbook.
 
+Unreleased
+----------
+- Updated Test Kitchen dependency to 1.3.1 from 1.2.1
+
 6.1.0
 -----
 
