@@ -30,6 +30,9 @@ else
   nagios_service_name = node['nagios']['server']['service_name']
 end
 
+# install nagios service either from source of package
+include_recipe "nagios::server_#{node['nagios']['server']['install_method']}"
+
 # configure either Apache2 or NGINX
 case node['nagios']['server']['web_server']
 when 'nginx'
@@ -47,9 +50,6 @@ else
                   "#{node['nagios']['server']['web_server']} provided. Allowed: 'nginx' or 'apache'")
   fail 'Unknown web server option provided for Nagios server'
 end
-
-# install nagios service either from source of package
-include_recipe "nagios::server_#{node['nagios']['server']['install_method']}"
 
 # use the users_helper.rb library to build arrays of users and contacts
 nagios_users = NagiosUsers.new(node)
