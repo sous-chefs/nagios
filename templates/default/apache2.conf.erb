@@ -15,7 +15,7 @@
   ErrorLog        <%= node['apache']['log_dir'] %>/nagios_error.log
 
 <% if node.platform_family == 'debian' && node['nagios']['server']['install_method'] == 'package'-%>
-  Alias /<%= node['nagios']['server']['vname'] %>/stylesheets /etc/<%= node['nagios']['server']['vname'] %>/stylesheets
+  Alias /stylesheets /etc/<%= node['nagios']['server']['vname'] %>/stylesheets
 <% end -%>
   ScriptAlias <%= node['nagios']['cgi-path'] %> <%= node['nagios']['cgi-bin'] %>
   Alias /<%= node['nagios']['server']['vname'] %> <%= node['nagios']['docroot'] %>
