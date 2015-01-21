@@ -12,6 +12,8 @@ This file is used to list changes made in each version of the nagios cookbook.
 - Installed EPEL on RHEL so package installs work
 - Set the Apache log dir to that provided by Apache since the Nagios log dir is now locked down to just the nagios user / group
 - Template the resource.cfg file on RHEL platforms to prevent check failures
+- Fix cgi-bin page loads on RHEL systems
+- Fix CSS files not loading on Debian based systems
 
 ### Development
 - Updated Test Kitchen dependency to 1.3.1 from 1.2.1
