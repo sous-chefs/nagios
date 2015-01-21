@@ -11,8 +11,8 @@
 <% end %>
 <% end %>
   DocumentRoot    <%= node['nagios']['docroot'] %>
-  CustomLog       <%= node['nagios']['log_dir'] %>/apache_access.log combined
-  ErrorLog        <%= node['nagios']['log_dir'] %>/apache_error.log
+  CustomLog       <%= node['apache']['log_dir'] %>/nagios_access.log combined
+  ErrorLog        <%= node['apache']['log_dir'] %>/nagios_error.log
 
 <% if node.platform_family == 'debian' && node['nagios']['server']['install_method'] == 'package'-%>
   Alias /<%= node['nagios']['server']['vname'] %>/stylesheets /etc/<%= node['nagios']['server']['vname'] %>/stylesheets

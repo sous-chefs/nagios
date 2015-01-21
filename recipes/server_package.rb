@@ -20,7 +20,7 @@
 #
 
 case node['platform_family']
-when 'fedora'
+when 'fedora', 'rhel'
   include_recipe 'yum-epel' if node['platform_version'].to_i < 17 # setup epel on old rhel and pre Fedora 17
 when 'debian'
   # Nagios package requires to enter the admin password
