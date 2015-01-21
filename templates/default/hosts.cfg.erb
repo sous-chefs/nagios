@@ -46,6 +46,7 @@ define host {
   host_name <%= node['nagios']['server']['normalize_hostname'] ? n['id'].downcase : n['id'] %>
   hostgroups all,<%= n['hostgroups'].join(",") %>
   notifications_enabled <%= n['notifications'] %>
+  parents <%= n['parents'] %>
 }
   <% end %>
 <% end -%>
