@@ -2,8 +2,18 @@ nagios Cookbook CHANGELOG
 =========================
 This file is used to list changes made in each version of the nagios cookbook.
 
-Unreleased
+6.1.2
 ----------
+### Feature
+- Allow defining parents in the unmanaged hosts data bag so you can build the host map.
+
+### Bug
+- Setup Apache2 before trying to configure the webserver so paths will be created
+- Installed EPEL on RHEL so package installs work
+- Set the Apache log dir to that provided by Apache since the Nagios log dir is now locked down to just the nagios user / group
+- Template the resource.cfg file on RHEL platforms to prevent check failures
+
+### Development
 - Updated Test Kitchen dependency to 1.3.1 from 1.2.1
 
 6.1.0
