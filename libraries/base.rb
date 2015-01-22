@@ -262,7 +262,9 @@ class Nagios
     end
 
     def update_options(hash)
+      # We can only merge hash or databagitem's, so lets check for them.
       return nil if blank?(hash)
+      return nil unless hash.class == Hash || Chef::DataBagItem
       hash.each do |k, v|
         m = k + '='
         send(m, v) if self.respond_to?(m)

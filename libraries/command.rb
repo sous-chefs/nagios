@@ -47,13 +47,13 @@ class Nagios
     end
 
     def command_line=(command_line)
-      timeout, param = command_timeout(command_line)
-      if timeout.nil?
+      param = command_timeout(command_line)
+      if @timeout.nil?
         @command_line = command_line
       elsif param.nil?
-        @command_line = command_line + " -t #{timeout}"
+        @command_line = command_line + " -t #{@timeout}"
       else
-        @command_line = command_line.gsub(param, "-t #{timeout}")
+        @command_line = command_line.gsub(param, "-t #{@timeout}")
       end
       @command_line
     end
@@ -63,6 +63,8 @@ class Nagios
     end
 
     def import(hash)
+      @command_line = hash if hash.class == String
+      hash['command_line'] == hash['command'] unless hash['command'].nil?
       update_options(hash)
     end
 
@@ -76,10 +78,9 @@ class Nagios
       if command_line =~ /(-t *?(\d+))/
         timeout = Regexp.last_match[2].to_i + 5
         @timeout = timeout if @timeout.nil? || timeout > @timeout
-        return @timeout, Regexp.last_match[1]
-      else
-        return @timeout, nil
+        return Regexp.last_match[1]
       end
+      nil
     end
 
     def config_options
