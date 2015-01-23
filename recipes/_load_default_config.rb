@@ -171,8 +171,8 @@ Nagios.instance.default_host = 'server'
 nagios_users = NagiosUsers.new(node)
 nagios_users.users.each do |item|
   o = Nagios::Contact.create(item['id'])
-  o.import(item)
-  o.import(item['nagios'])
+  o.import(item.to_hash)
+  o.import(item['nagios'].to_hash) unless item['nagios'].nil?
   o.use = 'default-contact'
 end
 
