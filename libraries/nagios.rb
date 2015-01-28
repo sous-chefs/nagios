@@ -78,6 +78,37 @@ class Nagios
   end
 
   # rubocop:disable MethodLength
+  def delete(hash, key)
+    case hash
+    when 'command'
+      @commands.delete(key)
+    when 'contactgroup'
+      @contactgroups.delete(key)
+    when 'contact'
+      @contacts.delete(key)
+    when 'hostgroup'
+      @hostgroups.delete(key)
+    when 'host'
+      @hosts.delete(key)
+    when 'servicegroup'
+      @servicegroups.delete(key)
+    when 'service'
+      @services.delete(key)
+    when 'timeperiod'
+      @timeperiods.delete(key)
+    when 'hostdependency'
+      @hostdependencies.delete(key)
+    when 'hostescalation'
+      @hostescalations.delete(key)
+    when 'servicedependency'
+      @servicedependencies.delete(key)
+    when 'serviceescalation'
+      @serviceescalations.delete(key)
+    end
+  end
+  # rubocop:enable MethodLength
+
+  # rubocop:disable MethodLength
   def find(obj)
     case obj
     when Nagios::Command
