@@ -28,6 +28,6 @@ define :nagios_servicegroup do
   end
 
   if :action == :delete || :remove
-    Nagios.instance.servicegroups.delete(params[:name])
+    Nagios.instance.delete('servicegroup', params[:name])
   end
 end 

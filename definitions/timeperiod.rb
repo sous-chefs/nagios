@@ -28,6 +28,6 @@ define :nagios_timeperiod do
   end
 
   if :action == :delete || :remove
-    Nagios.instance.timeperiods.delete(params[:name])
+    Nagios.instance.delete('timeperiod', params[:name])
   end
 end 

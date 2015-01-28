@@ -28,6 +28,6 @@ define :nagios_service do
   end
 
   if :action == :delete || :remove
-    Nagios.instance.services.delete(params[:name])
+    Nagios.instance.delete('service', params[:name])
   end
 end 

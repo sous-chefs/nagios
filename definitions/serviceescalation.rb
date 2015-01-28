@@ -28,6 +28,6 @@ define :nagios_serviceescalation do
   end
 
   if :action == :delete || :remove
-    Nagios.instance.serviceescalations.delete(params[:name])
+    Nagios.instance.delete('serviceescalation', params[:name])
   end
 end 

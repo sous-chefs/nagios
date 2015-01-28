@@ -28,6 +28,6 @@ define :nagios_hostdependency do
   end
 
   if :action == :delete || :remove
-    Nagios.instance.hostdependencies.delete(params[:name])
+    Nagios.instance.delete('hostdependency', params[:name])
   end
 end 

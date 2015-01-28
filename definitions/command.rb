@@ -28,6 +28,6 @@ define :nagios_command do
   end
 
   if :action == :delete || :remove
-    Nagios.instance.commands.delete(params[:name])
+    Nagios.instance.delete('command', params[:name])
   end
 end 

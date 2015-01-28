@@ -28,6 +28,6 @@ define :nagios_servicedependency do
   end
 
   if :action == :delete || :remove
-    Nagios.instance.servicedependencies.delete(params[:name])
+    Nagios.instance.delete('servicedependency', params[:name])
   end
 end 

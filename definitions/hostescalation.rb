@@ -28,6 +28,6 @@ define :nagios_hostescalation do
   end
 
   if :action == :delete || :remove
-    Nagios.instance.hostescalations.delete(params[:name])
+    Nagios.instance.delete('hostescalation', params[:name])
   end
 end 

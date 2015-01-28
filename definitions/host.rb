@@ -28,6 +28,6 @@ define :nagios_host do
   end
 
   if :action == :delete || :remove
-    Nagios.instance.hosts.delete(params[:name])
+    Nagios.instance.delete('host', params[:name])
   end
 end 

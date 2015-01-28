@@ -28,6 +28,6 @@ define :nagios_contact do
   end
 
   if :action == :delete || :remove
-    Nagios.instance.contacts.delete(params[:name])
+    Nagios.instance.delete('contact', params[:name])
   end
 end 

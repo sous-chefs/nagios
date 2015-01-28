@@ -28,6 +28,6 @@ define :nagios_hostgroup do
   end
 
   if :action == :delete || :remove
-    Nagios.instance.hostgroups.delete(params[:name])
+    Nagios.instance.delete('hostgroup', params[:name])
   end
 end 
