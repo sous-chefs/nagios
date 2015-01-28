@@ -22,12 +22,12 @@ define :nagios_hostgroup do
   params[:action] ||= :create  
   params[:options] ||= {}
 
-  if :action == :create || :add
+  if :action == :create || :action == :add
     o = Nagios::Hostgroup.create(params[:name])
     o.import(params[:options])
   end
 
-  if :action == :delete || :remove
+  if :action == :delete || :action == :remove
     Nagios.instance.delete('hostgroup', params[:name])
   end
 end 

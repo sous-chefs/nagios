@@ -22,12 +22,12 @@ define :nagios_timeperiod do
   params[:action] ||= :create  
   params[:options] ||= {}
 
-  if :action == :create || :add
+  if :action == :create || :action == :add
     o = Nagios::Timeperiod.create(params[:name])
     o.import(params[:options])
   end
 
-  if :action == :delete || :remove
+  if :action == :delete || :action == :remove
     Nagios.instance.delete('timeperiod', params[:name])
   end
 end 
