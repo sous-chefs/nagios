@@ -22,12 +22,12 @@ define :nagios_hostescalation do
   params[:action] ||= :create  
   params[:options] ||= {}
 
-  if :action == :create || :action == :add
+  if params[:action] == :create || params[:action] == :add
     o = Nagios::Hostescalation.create(params[:name])
     o.import(params[:options])
   end
 
-  if :action == :delete || :action == :remove
+  if params[:action] == :delete || params[:action] == :remove
     Nagios.instance.delete('hostescalation', params[:name])
   end
 end 
