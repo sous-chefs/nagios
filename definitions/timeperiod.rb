@@ -19,7 +19,7 @@
 #
 
 define :nagios_timeperiod do
-  params[:action] ||= :create  
+  params[:action] ||= :create
   params[:options] ||= {}
 
   if params[:action] == :create || params[:action] == :add
@@ -30,4 +30,4 @@ define :nagios_timeperiod do
   if params[:action] == :delete || params[:action] == :remove
     Nagios.instance.delete('timeperiod', params[:name])
   end
-end 
+end
