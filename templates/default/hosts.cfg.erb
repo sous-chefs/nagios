@@ -10,5 +10,6 @@
 <% Nagios.instance.hosts.each do |key,host| -%>
 <% if host.name.nil? # Skipping all the template hosts %>
 <%= host.definition %>
+
 <% end %>
 <% end -%>
