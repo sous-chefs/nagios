@@ -33,7 +33,8 @@ class Nagios
               :hostdependencies,
               :hostescalations,
               :servicedependencies,
-              :serviceescalations
+              :serviceescalations,
+              :resources
 
   attr_accessor :host_name_attribute,
                 :normalize_hostname,
@@ -60,6 +61,7 @@ class Nagios
     @hostescalations     = {}
     @servicedependencies = {}
     @serviceescalations  = {}
+    @resources           = {}
     @host_name_attribute = 'hostname'
     @normalize_hostname  = false
   end
@@ -104,6 +106,8 @@ class Nagios
       @servicedependencies.delete(key)
     when 'serviceescalation'
       @serviceescalations.delete(key)
+    when 'resource'
+      @resources.delete(key)
     end
   end
   # rubocop:enable MethodLength
@@ -135,6 +139,8 @@ class Nagios
       find_object(obj, @servicedependencies)
     when Nagios::Serviceescalation
       find_object(obj, @serviceescalations)
+    when Nagios::Resource
+      find_object(obj, @resources)
     end
   end
   # rubocop:enable MethodLength
@@ -194,6 +200,8 @@ class Nagios
       push_object(obj)
     when Nagios::Serviceescalation
       push_object(obj)
+    when Nagios::Resource
+      push_object(obj)
     else
       Chef::Log.fail("Nagios error: Pushing unknown object: #{obj.class} into Nagios.instance")
       fail
@@ -203,6 +211,10 @@ class Nagios
 
   def timeperiods
     Hash[@timeperiods.sort]
+  end
+
+  def resources
+    Hash[@resources.sort]
   end
 
   def self.instance

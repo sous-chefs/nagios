@@ -238,3 +238,7 @@ nagios_service 'service-template' do
           'notification_interval' => nagios_interval(nagios_attr(:default_service)[:notification_interval]),
           'register'              => 0
 end
+
+nagios_resource 'USER1' do
+  options 'value' => node['nagios']['plugin_dir']
+end
