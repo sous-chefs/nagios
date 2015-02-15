@@ -21,7 +21,7 @@
 
 case node['platform_family']
 when 'rhel'
-  include_recipe 'yum-epel'
+  include_recipe 'yum-epel' if node['nagios']['install_epel']
 when 'debian'
   # Nagios package requires to enter the admin password
   # We generate it randomly as it's overwritten later in the config templates
