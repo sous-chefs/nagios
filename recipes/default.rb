@@ -181,7 +181,7 @@ nagios_conf 'cgi' do
   variables(:nagios_service_name => nagios_service_name)
 end
 
-# Update all items before writing the templates 
+# Update all items before writing the templates
 nagios_resourcelist_items 'update'
 
 nagios_conf 'timeperiods'
