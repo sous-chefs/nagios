@@ -40,14 +40,6 @@ define service {
     use                 default-service,srv-pnp
 }
 
-define service {
-    service_description Check Uconnect Files to Process
-    hostgroup_name      uconnect_logger,hostname_uconnect
-    check_command       check_dir_files
-    use                 uconnect-service,srv-pnp
-    event_handler       s2s-resolve
-}
-
 <% unless @main_nagios.nil? -%>
 
 define service {
@@ -111,6 +103,20 @@ define service {
     use                 default-service,srv-pnp
 }
 
+define service {
+    service_description Check Rabbit permission_cache queue VPC US WEST CLUSTER
+    <%= @designation %> <%= @main_nagios %>
+    check_command       check_rabbit_queues!us-west-1.cluster.rabbitmq.tealiumiq.com!/permission_cache!permission_cache!monitor!ifyouaremonitoringtheworld!1000,-1,1000,-1!1000,-1,1000,-1
+    use                 default-service,srv-pnp
+}
+
+define service {
+    service_description Check Rabbit shared_events_workqueue VPC US WEST CLUSTER
+    <%= @designation %> <%= @main_nagios %>
+    check_command       check_rabbit_queues!us-west-1.cluster.rabbitmq.tealiumiq.com!/server2server!shared_events_workqueue!monitor!ifyouaremonitoringtheworld!300000,-1,300000,-1!10000,-1,1000,-1
+    use                 default-service,srv-pnp
+}
+
 #define service {
 #    service_description Check MongoDB Backup - Cluster 1
 #    <%= @designation %>	<%= @main_nagios %>
@@ -156,6 +162,20 @@ define service {
     check_command       check_smtp
     use                 default-service,srv-pnp
 }
+
+#define service {
+#    service_description Check AWS Instance Events VPC
+#    <%= @designation %> <%= @main_nagios %>
+#    check_command       check_events_vpc
+#    use                 default-service,srv-pnp
+#}
+
+#define service {
+#    service_description Check AWS Instance Events Non VPC
+#    <%= @designation %> <%= @main_nagios %>
+#3    check_command       check_events_non_vpc
+#    use                 default-service,srv-pnp
+#}
 <% end %>
 
 #define service {
@@ -202,12 +222,12 @@ define service {
     use                 default-service,srv-pnp
 }
 
-define service {
-    service_description Check DC_Uconnect Heap
-    hostgroup_name      dc_uconnect
-    use                 passive-service
-    event_handler       dc_uconnect_restart
-}
+#define service {
+#    service_description Check DC_Uconnect Heap
+#    hostgroup_name      dc_uconnect
+#    use                 passive-service
+#    event_handler       dc_uconnect_restart
+#}
 
 define service {
     service_description UTUI HTTP Auth

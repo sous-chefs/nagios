@@ -79,11 +79,20 @@ service "nagios-nrpe-server" do
 end
 
 # Use NRPE LWRP to define a few checks
-nagios_nrpecheck "check_load" do
-  command "#{node['nagios']['plugin_dir']}/check_load"
-  warning_condition node['nagios']['checks']['load']['warning']
-  critical_condition node['nagios']['checks']['load']['critical']
-  action :add
+if node.roles.include?("mongodb_config")
+  nagios_nrpecheck "check_load" do
+    command "#{node['nagios']['plugin_dir']}/check_load"
+    warning_condition "20,15,8"
+    critical_condition node['nagios']['checks']['load']['critical']
+    action :add
+  end
+else
+  nagios_nrpecheck "check_load" do
+    command "#{node['nagios']['plugin_dir']}/check_load"
+    warning_condition node['nagios']['checks']['load']['warning']
+    critical_condition node['nagios']['checks']['load']['critical']
+    action :add
+  end
 end
 
 if node.roles.include?("server2server")
@@ -93,6 +102,14 @@ if node.roles.include?("server2server")
      critical_condition "5%"
      parameters "-W 15 -K 8 -A -x /dev/shm -X nfs -i /boot"
      action :add
+  end
+elsif node.roles.include?("mongodb_cluster")
+  nagios_nrpecheck "check_all_disks" do
+    command "#{node['nagios']['plugin_dir']}/check_disk"
+    warning_condition "4%"
+    critical_condition "4%"
+    parameters "-W 15 -K 8 -A -x /dev/shm -X nfs -i /boot"
+    action :add
   end
 elsif node.roles.include?("rabbitmq_server") || node.roles.include?("rabbitmq_server_cluster_disc") || node.roles.include?("rabbitmq_server_cluster_ram")
   nagios_nrpecheck "check_all_disks" do

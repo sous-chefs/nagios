@@ -109,11 +109,14 @@ end
  
 region = node[:ec2][:region]
 
-if node[:monitored_region].nil? 
-  nodes = search(:node, "app_environment:#{node[:app_environment]} AND placement_availability_zone:#{region}* NOT domain:prod*")
+unless node['domain'].match(/^prod1?.\w{2}-\w{2}/)
+
+  nodes = search(:node, "app_environment:production AND placement_availability_zone:#{region}* NOT domain:prod*")
+
 else
 
   nodes1 = search(:node, "(domain:prod* OR domain:v* OR domain:ops*) AND app_environment:production* AND ec2_region:#{region} AND tealium_use_nagios:true")
+
 
   nagiosnodes = search(:node, "domain:prod* AND role:nagios NOT ec2_instance_id:#{node['ec2']['instance_id']}")
 

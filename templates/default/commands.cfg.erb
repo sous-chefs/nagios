@@ -21,7 +21,7 @@ define command {
 }
 
 
-<% if node[:monitored_region].nil? -%>
+<% unless node['domain'].match(/^prod1?.\w{2}-\w{2}/) -%>
 
 define command {
   command_name    check_jmx_dc_dd_total_messages_received
@@ -30,7 +30,7 @@ define command {
 
 define command {
   command_name    check_jmx_heap
-  command_line    $USER1$/check_jmx -U service:jmx:rmi:///jndi/rmi://$HOSTADDRESS$:9001/jmxrmi -O java.lang:type=Memory -A HeapMemoryUsage -K used -I HeapMemoryUsage -J used -vvvv -c $ARG1$
+  command_line    $USER1$/check_jmx -U service:jmx:rmi:///jndi/rmi://$HOSTADDRESS$:9001/jmxrmi -O java.lang:type=Memory -A HeapMemoryUsage -K used -I HeapMemoryUsage -J used -vvvv
 }
 
 define command {
@@ -776,6 +776,16 @@ define command {
 define command {
     command_name    check_smtp
     command_line    $USER1$/check_smtp -H localhost -p 2525 -U AKIAIU254TK3C4L25ODQ -P Av5w7z7/attZltIki5SjzCa3HzBa8z/Sj5ikiYAwnALK
+}
+
+define command {
+    command_name    check_events_non_vpc
+    command_line    $USER1$/check_events -H localhost -p 2525 -U AKIAIU254TK3C4L25ODQ -P Av5w7z7/attZltIki5SjzCa3HzBa8z/Sj5ikiYAwnALK
+}
+
+define command {
+    command_name    check_events_vpc
+    command_line    $USER1$/check_events -H localhost -p 2525 -U AKIAIU254TK3C4L25ODQ -P Av5w7z7/attZltIki5SjzCa3HzBa8z/Sj5ikiYAwnALK
 }
 
 # Notification
