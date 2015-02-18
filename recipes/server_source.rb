@@ -96,7 +96,7 @@ bash 'compile-nagios' do
     ./configure --prefix=/usr \
         --mandir=/usr/share/man \
         --bindir=/usr/sbin \
-        --sbindir=/usr/lib/cgi-bin/#{node['nagios']['server']['vname']} \
+        --sbindir=#{node['nagios']['cgi-bin']} \
         --datadir=#{node['nagios']['docroot']} \
         --sysconfdir=#{node['nagios']['conf_dir']} \
         --infodir=/usr/share/info \
