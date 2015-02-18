@@ -2,6 +2,19 @@ nagios Cookbook CHANGELOG
 =========================
 This file is used to list changes made in each version of the nagios cookbook.
 
+7.0.0
+-----
+### Feature
+- Added providers for all nagios configuration objects.
+- Added wiki pages explaining the providers.
+- Added wiki pages explaining the databags.
+
+### Development
+- Updated chefspec (4.2.0)
+
+### Extra note
+- Please test this version before using it in production. Some logic and attributes have changes, so this might break your current setup.
+
 6.1.2
 ----------
 ### Feature
