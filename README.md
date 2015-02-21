@@ -47,6 +47,7 @@ Attributes
 * `node['nagios']['exclude_tag_host']` - If set, hosts tagged with this value will be excluded from nagios monitoring.  Defaults to ''
 
 * `node['nagios']['server']['install_method']` - whether to install from package or source. Default chosen by platform based on known packages available for Nagios: debian/ubuntu 'package', redhat/centos/fedora/scientific: source
+* `node['nagios']['server']['install_yum-epel']` - whether to install the EPEL repo or not (only applies to RHEL platform family). The default value is `true`. Set this to `false` if you do not wish to install the EPEL RPM; in this scenario you will need to make the relevant packages available via another method e.g. local repo, or install from source.
 * `node['nagios']['server']['service_name']` - name of the service used for Nagios, default chosen by platform, debian/ubuntu "nagios3", redhat family "nagios", all others, "nagios"
 * `node['nagios']['home']` - Nagios main home directory, default "/usr/lib/nagios3"
 * `node['nagios']['conf_dir']` - location where main Nagios config lives, default "/etc/nagios3"

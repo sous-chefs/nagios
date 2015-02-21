@@ -126,6 +126,7 @@ default['nagios']['server']['patches']  = []
 case node['platform_family']
 when 'rhel', 'fedora'
   default['nagios']['server']['packages'] = %w(nagios nagios-plugins-nrpe)
+  default['nagios']['server']['install_yum-epel'] = true
 else
   default['nagios']['server']['packages'] = %w(nagios3 nagios-nrpe-plugin nagios-images)
 end
