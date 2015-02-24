@@ -159,7 +159,7 @@ nagios_host 'server' do
           'check_command'          => nagios_attr(:default_host)[:check_command],
           'notification_interval'  => nagios_interval(nagios_attr(:default_host)[:notification_interval]),
           'notification_options'   => nagios_attr(:default_host)[:notification_options],
-          'default_contact_groups' => nagios_attr(:default_contact_groups),
+          'contact_groups'         => nagios_attr(:default_contact_groups),
           'register'               => 0
 end
 
@@ -205,7 +205,7 @@ nagios_service 'default-service' do
           'max_check_attempts'           => nagios_attr(:default_service)[:max_check_attempts],
           'check_interval'               => nagios_interval(nagios_attr(:default_service)[:check_interval]),
           'retry_interval'               => nagios_interval(nagios_attr(:default_service)[:retry_interval]),
-          'default_contact_groups'       => nagios_attr(:default_contact_groups),
+          'contact_groups'               => nagios_attr(:default_contact_groups),
           'notification_options'         => 'w,u,c,r',
           'notification_interval'        => nagios_interval(nagios_attr(:default_service)[:notification_interval]),
           'notification_period'          => '24x7',
@@ -223,7 +223,7 @@ nagios_service 'default-logfile' do
           'max_check_attempts'     => 1,
           'check_interval'         => nagios_interval(nagios_attr(:default_service)[:check_interval]),
           'retry_interval'         => nagios_interval(nagios_attr(:default_service)[:retry_interval]),
-          'default_contact_groups' => nagios_attr(:default_contact_groups),
+          'contact_groups'         => nagios_attr(:default_contact_groups),
           'notification_options'   => 'w,u,c,r',
           'notification_period'    => '24x7',
           'register'               => 0,
