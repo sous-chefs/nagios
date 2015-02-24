@@ -130,7 +130,12 @@ service_freshness_check_interval=60
 check_host_freshness=0
 host_freshness_check_interval=60
 additional_freshness_latency=15
+<% if node['nagios']['server']['install_method'] == 'source' ||
+      (node['platform_family'] == 'debian' && node['platform_version'].to_i >= 7) ||
+      (node['platform_family'] == 'rhel' && node['platform_version'].to_i >= 6) ||
+      (node['platform_family'] == 'ubuntu' && node['platform_version'].to_f >= 14.04) -%>
 allow_empty_hostgroup_assignment=1
+<% end -%>
 
 enable_flap_detection=1
 low_service_flap_threshold=5.0
