@@ -103,7 +103,7 @@ class Nagios
       when Nagios::Timeperiod
         push_object(obj, @exclude)
       when Nagios::Timeperiodentry
-        push_object(obj, @periods)
+        push_object(obj, @periods) unless obj.period.nil?
       end
     end
 
