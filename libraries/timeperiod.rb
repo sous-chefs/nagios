@@ -135,14 +135,6 @@ class Nagios
 
     private
 
-    def check_timeperiod(obj)
-      if obj.class == Nagios::Timeperiodentry
-        obj
-      else
-        Chef::Log.debug("Nagios debug: Use Nagios::Timeperiodentry when setting time and not #{obj.class}")
-      end
-    end
-
     def config_options
       {
         'timeperiod_name' => 'timeperiod_name',
