@@ -44,11 +44,8 @@ class Nagios
     private
 
     def check_period(period)
-      if period =~ /^(([01]?[0-9]|2[0-3])\:[0-5][0-9]-([01]?[0-9]|2[0-4])\:[0-5][0-9],?)*$/
-        period
-      else
-        nil
-      end
+      return period if period =~ /^(([01]?[0-9]|2[0-3])\:[0-5][0-9]-([01]?[0-9]|2[0-4])\:[0-5][0-9],?)*$/
+      nil
     end
   end
 
