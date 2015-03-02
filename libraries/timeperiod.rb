@@ -44,9 +44,11 @@ class Nagios
     private
 
     def check_period(period)
-      # should be HH:MM-HH:MM ([01]?[0-9]|2[0-3])\:[0-5][0-9]
-      return period if period =~ /^([01]?[0-9]|2[0-3])\:[0-5][0-9]-([01]?[0-9]|2[0-4])\:[0-5][0-9]$/
-      nil
+      if period =~ /^(([01]?[0-9]|2[0-3])\:[0-5][0-9]-([01]?[0-9]|2[0-4])\:[0-5][0-9],?)*$/
+        period
+      else
+        nil
+      end
     end
   end
 
