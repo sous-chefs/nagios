@@ -44,8 +44,7 @@ class Nagios
     private
 
     def check_period(period)
-      # should be HH:MM-HH:MM ([01]?[0-9]|2[0-3])\:[0-5][0-9]
-      return period if period =~ /^([01]?[0-9]|2[0-3])\:[0-5][0-9]-([01]?[0-9]|2[0-4])\:[0-5][0-9]$/
+      return period if period =~ /^(([01]?[0-9]|2[0-3])\:[0-5][0-9]-([01]?[0-9]|2[0-4])\:[0-5][0-9],?)*$/
       nil
     end
   end
@@ -103,7 +102,7 @@ class Nagios
       when Nagios::Timeperiod
         push_object(obj, @exclude)
       when Nagios::Timeperiodentry
-        push_object(obj, @periods)
+        push_object(obj, @periods) unless obj.period.nil?
       end
     end
 
@@ -134,14 +133,6 @@ class Nagios
     # so its important to understand how they can affect each other.
 
     private
-
-    def check_timeperiod(obj)
-      if obj.class == Nagios::Timeperiodentry
-        obj
-      else
-        Chef::Log.debug("Nagios debug: Use Nagios::Timeperiodentry when setting time and not #{obj.class}")
-      end
-    end
 
     def config_options
       {
