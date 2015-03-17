@@ -2,6 +2,11 @@ nagios Cookbook CHANGELOG
 =========================
 This file is used to list changes made in each version of the nagios cookbook.
 
+7.0.4
+-----
+### Bug
+- Fixed the order for resource.cfg population to be correct.
+
 7.0.2
 -----
 ### Bug
