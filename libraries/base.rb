@@ -279,5 +279,6 @@ class Nagios
         n.push(self) if remote
       end
     end
+    alias_method :update_dependency_members, :update_members
   end
 end
