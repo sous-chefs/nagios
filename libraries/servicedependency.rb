@@ -151,6 +151,7 @@ class Nagios
         'dependent_host_name'           => 'dependent_host_name',
         'dependent_hostgroup_name'      => 'dependent_hostgroup_name',
         'dependent_servicegroup_name'   => 'dependent_servicegroup_name',
+        'service_description'           => 'service_description',
         'servicegroup_name'             => 'servicegroup_name',
         'dependent_service_description' => 'dependent_service_description',
         'host_name'                     => 'host_name',
