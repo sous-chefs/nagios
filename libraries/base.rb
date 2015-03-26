@@ -279,6 +279,12 @@ class Nagios
         n.push(self) if remote
       end
     end
-    alias_method :update_dependency_members, :update_members
+
+    def update_dependency_members(hash, option, object)
+      return if blank?(hash) || hash[option].nil?
+      get_members(hash[option]).each do |member|
+        push_dependency(Nagios.instance.find(object.new(member)))
+      end
+    end
   end
 end
