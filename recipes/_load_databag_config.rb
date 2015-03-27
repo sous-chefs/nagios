@@ -74,7 +74,8 @@ end
 
 servicedependencies = nagios_bags.get(node['nagios']['servicedependencies_databag'])
 servicedependencies.each do |item|
-  nagios_servicedependency item['id'] do
+  name = item['service_description'] || item['id']
+  nagios_servicedependency name do
     options item
   end
 end
