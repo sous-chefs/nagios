@@ -38,36 +38,41 @@ end
 
 contactgroups = nagios_bags.get(node['nagios']['contactgroups_databag'])
 contactgroups.each do |item|
-  nagios_contactgroup item['id'] do
+  name = item['contactgroup_name'] || item['id']
+  nagios_contactgroup name do
     options item
   end
 end
 
 contacts = nagios_bags.get(node['nagios']['contacts_databag'])
 contacts.each do |item|
-  nagios_contact item['id'] do
+  name = item['contact_name'] || item['id']
+  nagios_contact name do
     options item
   end
 end
 
 eventhandlers = nagios_bags.get(node['nagios']['eventhandlers_databag'])
 eventhandlers.each do |item|
-  nagios_command item['id'] do
+  name = item['command_name'] || item['id']
+  nagios_command name do
     options item
   end
 end
 
 hostescalations = nagios_bags.get(node['nagios']['hostescalations_databag'])
 hostescalations.each do |item|
-  nagios_hostescalation item['id'] do
+  name = item['host_description'] || item['id']
+  nagios_hostescalation name do
     options item
   end
 end
 
 hosttemplates = nagios_bags.get(node['nagios']['hosttemplates_databag'])
 hosttemplates.each do |item|
-  item['name'] = item['id']
-  nagios_host item['id'] do
+  name = item['host_name'] || item['id']
+  item['name'] = name if item['name'].nil?
+  nagios_host name do
     options item
   end
 end
@@ -82,22 +87,25 @@ end
 
 serviceescalations = nagios_bags.get(node['nagios']['serviceescalations_databag'])
 serviceescalations.each do |item|
-  nagios_serviceescalation item['id'] do
+  name = item['service_description'] || item['id']
+  nagios_serviceescalation name do
     options item
   end
 end
 
 servicegroups = nagios_bags.get(node['nagios']['servicegroups_databag'])
 servicegroups.each do |item|
-  nagios_servicegroup item['id'] do
+  name = item['servicegroup_name'] || item['id']
+  nagios_servicegroup name do
     options item
   end
 end
 
 services = nagios_bags.get(node['nagios']['services_databag'])
 services.each do |item|
-  command_name = item['id'].downcase.start_with?('check_') ? item['id'].downcase : 'check_' + item['id'].downcase
-  service_name = item['id'].downcase.start_with?('check_') ? item['id'].gsub('check_', '') : item['id'].downcase
+  name = item['service_description'] || item['id']
+  command_name = name.downcase.start_with?('check_') ? name.downcase : 'check_' + name.downcase
+  service_name = name.downcase.start_with?('check_') ? name.gsub('check_', '') : name.downcase
   item['check_command'] = command_name
 
   nagios_command command_name do
@@ -108,24 +116,28 @@ services.each do |item|
     options item
   end
 end
+
 templates = nagios_bags.get(node['nagios']['templates_databag'])
 templates.each do |item|
-  item['name'] = item['id']
-  nagios_service item['id'] do
+  name = item['name'] || item['id']
+  item['name'] = name
+  nagios_service name do
     options item
   end
 end
 
 timeperiods = nagios_bags.get(node['nagios']['timeperiods_databag'])
 timeperiods.each do |item|
-  nagios_timeperiod item['id'] do
+  name = item['timeperiod_name'] || item['id']
+  nagios_timeperiod name do
     options item
   end
 end
 
 unmanaged_hosts = nagios_bags.get(node['nagios']['unmanagedhosts_databag'])
 unmanaged_hosts.each do |item|
-  nagios_host item['id'] do
+  name = item['host_name'] || item['id']
+  nagios_host name do
     options item
   end
 end
