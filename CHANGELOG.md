@@ -1,6 +1,12 @@
 nagios Cookbook CHANGELOG
 =========================
 This file is used to list changes made in each version of the nagios cookbook.
+7.0.6
+-----
+### Bug
+- Fixed data bag import.(#346)
+- Fixed missing create method on Servicegroup object. (#348)
+- Fixed update_dependency_members for depedency objects.
 
 7.0.4
 -----
