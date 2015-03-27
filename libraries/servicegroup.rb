@@ -66,6 +66,10 @@ class Nagios
       end
     end
 
+    def self.create(name)
+      Nagios.instance.find(Nagios::Servicegroup.new(name))
+    end
+
     def servicegroup_members
       @servicegroup_members.values.map(&:id).sort.join(',')
     end
