@@ -37,8 +37,8 @@ class Nagios
       @contactgroup_members = {}
     end
 
-    def contactgroup_members
-      @contactgroup_members.values.map(&:id).sort.join(',')
+    def contactgroup_members_list
+      @contactgroup_members.values.map(&:to_s).sort.join(',')
     end
 
     def self.create(name)
@@ -49,18 +49,14 @@ class Nagios
       get_definition(configured_options, 'contactgroup')
     end
 
-    def id
-      contactgroup_name
-    end
-
     def import(hash)
       update_options(hash)
       update_members(hash, 'members', Nagios::Contact, true)
       update_members(hash, 'contactgroups_members', Nagios::Contactgroup, true)
     end
 
-    def members
-      @members.values.map(&:id).sort.join(',')
+    def members_list
+      @members.values.map(&:to_s).sort.join(',')
     end
 
     def push(obj)
@@ -80,13 +76,13 @@ class Nagios
 
     def config_options
       {
-        'name'                 => 'name',
-        'use'                  => 'use',
-        'contactgroup_name'    => 'contactgroup_name',
-        'members'              => 'members',
-        'contactgroup_members' => 'contactgroup_members',
-        'alias'                => 'alias',
-        'register'             => 'register'
+        'name'                      => 'name',
+        'use'                       => 'use',
+        'contactgroup_name'         => 'contactgroup_name',
+        'members_list'              => 'members',
+        'contactgroup_members_list' => 'contactgroup_members',
+        'alias'                     => 'alias',
+        'register'                  => 'register'
       }
     end
 

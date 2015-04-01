@@ -33,10 +33,6 @@ class Nagios
       @period = check_period(period)
     end
 
-    def id
-      moment
-    end
-
     def to_s
       moment
     end
@@ -82,11 +78,7 @@ class Nagios
     # Multiple timeperiod names should be separated with a comma.
 
     def exclude
-      @exclude.values.map(&:id).sort.join(',')
-    end
-
-    def id
-      timeperiod_name
+      @exclude.values.map(&:to_s).sort.join(',')
     end
 
     def import(hash)

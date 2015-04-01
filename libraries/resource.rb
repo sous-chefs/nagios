@@ -47,10 +47,6 @@ class Nagios
       Nagios.instance.find(Nagios::Resource.new(name))
     end
 
-    def id
-      key
-    end
-
     def import(hash)
       update_options(hash)
     end

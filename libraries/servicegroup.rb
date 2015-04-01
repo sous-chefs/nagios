@@ -44,17 +44,15 @@ class Nagios
       get_definition(configured_options, 'servicegroup')
     end
 
-    def id
-      servicegroup_name
-    end
-
     def import(hash)
+      update_options(hash)
       update_members(hash, 'members', Nagios::Service, true)
       update_members(hash, 'servicegroup_members', Nagios::Servicegroup, true)
     end
 
-    def members
-      @members.values.map(&:id).sort.join(',')
+    def members_list
+      result = lookup_hostgroup_members
+      result.join(',')
     end
 
     def push(obj)
@@ -70,22 +68,49 @@ class Nagios
       Nagios.instance.find(Nagios::Servicegroup.new(name))
     end
 
-    def servicegroup_members
-      @servicegroup_members.values.map(&:id).sort.join(',')
+    def servicegroup_members_list
+      @servicegroup_members.values.map(&:to_s).sort.join(',')
+    end
+
+    def to_s
+      servicegroup_name
     end
 
     private
 
     def config_options
       {
-        'servicegroup_name'    => 'servicegroup_name',
-        'members'              => 'members',
-        'servicegroup_members' => 'servicegroup_members',
-        'alias'                => 'alias',
-        'notes'                => 'notes',
-        'notes_url'            => 'notes_url',
-        'action_url'           => 'action_url'
+        'servicegroup_name'         => 'servicegroup_name',
+        'members_list'              => 'members',
+        'servicegroup_members_list' => 'servicegroup_members',
+        'alias'                     => 'alias',
+        'notes'                     => 'notes',
+        'notes_url'                 => 'notes_url',
+        'action_url'                => 'action_url'
       }
+    end
+
+    def convert_hostgroup_hash(hash)
+      result = []
+      hash.each do |group_name, group_members|
+        group_members.each do |member|
+          result << member
+          result << group_name
+        end
+      end
+      result
+    end
+
+    def lookup_hostgroup_members
+      hostgroup_hash = {}
+      @members.each do |service_name, service_obj|
+        hostgroup_array = []
+        service_obj.hostgroups.each do |_, hostgroup_obj|
+          hostgroup_obj.members.each { |host_name, _| hostgroup_array << host_name }
+        end
+        hostgroup_hash[service_name] = hostgroup_array
+      end
+      convert_hostgroup_hash(hostgroup_hash)
     end
 
     def merge_members(obj)

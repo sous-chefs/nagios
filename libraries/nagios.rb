@@ -253,13 +253,13 @@ class Nagios
   end
 
   def find_object(obj, hash)
-    current = hash[obj.id]
+    current = hash[obj.to_s]
     if current.nil?
-      Chef::Log.debug("Nagios debug: Creating entry for #{obj.class} with id: #{obj.id}")
-      hash[obj.id] = obj
+      Chef::Log.debug("Nagios debug: Creating entry for #{obj.class} with name: #{obj}")
+      hash[obj.to_s] = obj
       obj
     else
-      Chef::Log.debug("Nagios debug: Found entry for #{obj.class} with id: #{obj.id}")
+      Chef::Log.debug("Nagios debug: Found entry for #{obj.class} with name: #{obj}")
       current
     end
   end
@@ -297,7 +297,7 @@ class Nagios
   # rubocop:enable MethodLength
 
   def push_object(obj)
-    object = find(obj.class.new(obj.id))
+    object = find(obj.class.new(obj.to_s))
     object.merge!(obj)
   end
 end
