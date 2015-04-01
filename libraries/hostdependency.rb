@@ -48,24 +48,20 @@ class Nagios
       get_definition(configured_options, 'hostdependency')
     end
 
-    def dependent_host_name
-      @dependent_host_name.values.map(&:id).sort.join(',')
+    def dependent_host_name_list
+      @dependent_host_name.values.map(&:to_s).sort.join(',')
     end
 
-    def dependent_hostgroup_name
-      @dependent_hostgroup_name.values.map(&:id).sort.join(',')
+    def dependent_hostgroup_name_list
+      @dependent_hostgroup_name.values.map(&:to_s).sort.join(',')
     end
 
-    def host_name
-      @host_name.values.map(&:id).sort.join(',')
+    def host_name_list
+      @host_name.values.map(&:to_s).sort.join(',')
     end
 
-    def hostgroup_name
-      @hostgroup_name.values.map(&:id).sort.join(',')
-    end
-
-    def id
-      dependent_name
+    def hostgroup_name_list
+      @hostgroup_name.values.map(&:to_s).sort.join(',')
     end
 
     def import(hash)
@@ -126,18 +122,15 @@ class Nagios
     # rubocop:disable MethodLength
     def config_options
       {
-        # 'name'                          => 'name',
-        # 'use'                           => 'use',
         'dependent_name'                => nil,
         'dependency_period'             => 'dependency_period',
-        'dependent_host_name'           => 'dependent_host_name',
-        'dependent_hostgroup_name'      => 'dependent_hostgroup_name',
-        'host_name'                     => 'host_name',
-        'hostgroup_name'                => 'hostgroup_name',
+        'dependent_host_name_list'      => 'dependent_host_name',
+        'dependent_hostgroup_name_list' => 'dependent_hostgroup_name',
+        'host_name_list'                => 'host_name',
+        'hostgroup_name_list'           => 'hostgroup_name',
         'inherits_parent'               => 'inherits_parent',
         'execution_failure_criteria'    => 'execution_failure_criteria',
-        'notification_failure_criteria' => 'notification_failure_criteria',
-        # 'register'                      => 'register'
+        'notification_failure_criteria' => 'notification_failure_criteria'
       }
     end
     # rubocop:enable MethodLength

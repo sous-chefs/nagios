@@ -83,9 +83,9 @@ class Nagios
 
     def check_state_option(arg, options, entry)
       if options.include?(arg)
-        Chef::Log.debug("#{self.class} #{id} adding option #{arg} for entry #{entry}")
+        Chef::Log.debug("#{self.class} #{self} adding option #{arg} for entry #{entry}")
       else
-        Chef::Log.fail("#{self.class} #{id} object error: Unknown option #{arg} for entry #{entry}")
+        Chef::Log.fail("#{self.class} #{self} object error: Unknown option #{arg} for entry #{entry}")
         fail
       end
     end
@@ -135,7 +135,7 @@ class Nagios
     # rubocop:enable MethodLength
 
     def get_commands(obj)
-      obj.map(&:id).join(',')
+      obj.map(&:to_s).join(',')
     end
 
     def configured_option(method)
@@ -192,6 +192,7 @@ class Nagios
       case option
       when String
         members = option.split(',')
+        members.map(&:strip!)
       when Array
         members = option
       else
@@ -204,7 +205,7 @@ class Nagios
 
     def get_timeperiod(obj)
       return nil if obj.nil?
-      return obj.id if obj.class == Nagios::Timeperiod
+      return obj.to_s if obj.class == Nagios::Timeperiod
       obj
     end
 
@@ -222,10 +223,10 @@ class Nagios
     end
 
     def push_object(obj, hash)
-      if hash[obj.id].nil?
-        hash[obj.id] = obj
+      if hash[obj.to_s].nil?
+        hash[obj.to_s] = obj
       else
-        Chef::Log.debug("Nagios debug: #{self.class} already contains #{obj.class} with id: #{obj.id}")
+        Chef::Log.debug("Nagios debug: #{self.class} already contains #{obj.class} with name: #{obj}")
       end
     end
 

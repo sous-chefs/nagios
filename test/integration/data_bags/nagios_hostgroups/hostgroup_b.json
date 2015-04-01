@@ -1,0 +1,5 @@
+{
+  "id": "hostgroup_b",
+  "alias": "contains host_b",
+  "members": "host_b"
+}

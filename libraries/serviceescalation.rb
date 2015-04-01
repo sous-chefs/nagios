@@ -51,24 +51,20 @@ class Nagios
       get_definition(configured_options, 'serviceescalation')
     end
 
-    def contacts
-      @contacts.values.map(&:id).sort.join(',')
+    def contacts_list
+      @contacts.values.map(&:to_s).sort.join(',')
     end
 
-    def contact_groups
-      @contact_groups.values.map(&:id).sort.join(',')
+    def contact_groups_list
+      @contact_groups.values.map(&:to_s).sort.join(',')
     end
 
-    def host_name
-      @host_name.values.map(&:id).sort.join(',')
+    def host_name_list
+      @host_name.values.map(&:to_s).sort.join(',')
     end
 
-    def hostgroup_name
-      @hostgroup_name.values.map(&:id).sort.join(',')
-    end
-
-    def id
-      service_description
+    def hostgroup_name_list
+      @hostgroup_name.values.map(&:to_s).sort.join(',')
     end
 
     def import(hash)
@@ -130,19 +126,16 @@ class Nagios
     # rubocop:disable MethodLength
     def config_options
       {
-        'name'                  => 'name',
-        'use'                   => 'use',
         'service_description'   => 'service_description',
-        'contacts'              => 'contacts',
-        'contact_groups'        => 'contact_groups',
+        'contacts_list'         => 'contacts',
+        'contact_groups_list'   => 'contact_groups',
         'escalation_period'     => 'escalation_period',
-        'host_name'             => 'host_name',
-        'hostgroup_name'        => 'hostgroup_name',
+        'host_name_list'        => 'host_name',
+        'hostgroup_name_list'   => 'hostgroup_name',
         'escalation_options'    => 'escalation_options',
         'first_notification'    => 'first_notification',
         'last_notification'     => 'last_notification',
-        'notification_interval' => 'notification_interval',
-        'register'              => 'register'
+        'notification_interval' => 'notification_interval'
       }
     end
     # rubocop:enable MethodLength

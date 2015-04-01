@@ -58,10 +58,6 @@ class Nagios
       @command_line
     end
 
-    def id
-      command_name
-    end
-
     def import(hash)
       @command_line = hash if hash.class == String
       hash['command_line'] == hash['command'] unless hash['command'].nil?

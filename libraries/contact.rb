@@ -52,8 +52,8 @@ class Nagios
       @service_notification_commands = []
     end
 
-    def contactgroups
-      @contactgroups.values.map(&:id).sort.join(',')
+    def contactgroups_list
+      @contactgroups.values.map(&:to_s).sort.join(',')
     end
 
     def definition
@@ -78,10 +78,6 @@ class Nagios
 
     def host_notification_period
       get_timeperiod(@host_notification_period)
-    end
-
-    def id
-      contact_name
     end
 
     def import(hash)
@@ -181,7 +177,7 @@ class Nagios
         'name'                          => 'name',
         'use'                           => 'use',
         'contact_name'                  => 'contact_name',
-        'contactgroups'                 => 'contactgroups',
+        'contactgroups_list'            => 'contactgroups',
         'alias'                         => 'alias',
         'host_notifications_enabled'    => 'host_notifications_enabled',
         'service_notifications_enabled' => 'service_notifications_enabled',

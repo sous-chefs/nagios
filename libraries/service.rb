@@ -33,7 +33,8 @@ class Nagios
                   :contacts,
                   :contact_groups,
                   :check_command,
-                  :servicegroups
+                  :servicegroups,
+                  :hostgroups
 
     attr_accessor :display_name,
                   :is_volatile,
@@ -89,8 +90,8 @@ class Nagios
     # Useful if you want notifications to go to just a few people and don't want
     # to configure contact groups.
     # You must specify at least one contact or contact group in each host definition.
-    def contacts
-      @contacts.values.map(&:id).sort.join(',')
+    def contacts_list
+      @contacts.values.map(&:to_s).sort.join(',')
     end
 
     # contact_groups
@@ -98,12 +99,12 @@ class Nagios
     # whenever there are problems (or recoveries) with this host.
     # Multiple contact groups should be separated by commas.
     # You must specify at least one contact or contact group in each host definition.
-    def contact_groups
-      @contact_groups.values.map(&:id).sort.join(',')
+    def contact_groups_list
+      @contact_groups.values.map(&:to_s).sort.join(',')
     end
 
     def definition
-      if blank?(hostgroup_name) && blank?(host_name) && name.nil?
+      if blank?(hostgroup_name_list) && blank?(host_name_list) && name.nil?
         "# Skipping #{service_description} because host_name and hostgroup_name are missing."
       else
         get_definition(configured_options, 'service')
@@ -113,20 +114,16 @@ class Nagios
     # host_name
     # This directive is used to specify the short name(s) of the host(s) that the service
     # "runs" on or is associated with. Multiple hosts should be separated by commas.
-    def host_name
-      @hosts.values.map(&:id).sort.join(',')
+    def host_name_list
+      @hosts.values.map(&:to_s).sort.join(',')
     end
 
     # hostgroup_name
     # This directive is used to specify the short name(s) of the hostgroup(s) that the
     # service "runs" on or is associated with. Multiple hostgroups should be separated by commas.
     # The hostgroup_name may be used instead of, or in addition to, the host_name directive.
-    def hostgroup_name
-      @hostgroups.values.map(&:id).sort.join(',')
-    end
-
-    def id
-      service_description
+    def hostgroup_name_list
+      @hostgroups.values.map(&:to_s).sort.join(',')
     end
 
     def import(hash)
@@ -170,8 +167,8 @@ class Nagios
     # dashes, and colons (semicolons, apostrophes, and quotation marks should be avoided).
     # No two services associated with the same host can have the same description.
     # Services are uniquely identified with their host_name and service_description directives.
-    def servicegroups
-      @servicegroups.values.map(&:id).sort.join(',')
+    def servicegroups_list
+      @servicegroups.values.map(&:to_s).sort.join(',')
     end
 
     def self.create(name)
@@ -327,9 +324,9 @@ class Nagios
         'name'                         => 'name',
         'use'                          => 'use',
         'service_description'          => 'service_description',
-        'host_name'                    => 'host_name',
-        'hostgroup_name'               => 'hostgroup_name',
-        'servicegroups'                => 'servicegroups',
+        'host_name_list'               => 'host_name',
+        'hostgroup_name_list'          => 'hostgroup_name',
+        'servicegroups_list'           => 'servicegroups',
         'display_name'                 => 'display_name',
         'is_volatile'                  => 'is_volatile',
         'check_command'                => 'check_command',
@@ -358,8 +355,8 @@ class Nagios
         'notification_options'         => 'notification_options',
         'notifications_enabled'        => 'notifications_enabled',
         'parallelize_check'            => 'parallelize_check',
-        'contacts'                     => 'contacts',
-        'contact_groups'               => 'contact_groups',
+        'contacts_list'                => 'contacts',
+        'contact_groups_list'          => 'contact_groups',
         'stalking_options'             => 'stalking_options',
         'notes'                        => 'notes',
         'notes_url'                    => 'notes_url',

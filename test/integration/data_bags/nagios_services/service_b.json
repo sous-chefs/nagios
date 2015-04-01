@@ -1,0 +1,6 @@
+{
+  "id": "service_b",
+  "hostgroup_name": "hostgroup_a, hostgroup_b",
+  "command_line": "$USER1$/check_something else...",
+  "servicegroups": "servicegroup_a"
+}

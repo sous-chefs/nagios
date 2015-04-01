@@ -93,8 +93,8 @@ class Nagios
     # Useful if you want notifications to go to just a few people and don't want
     # to configure contact groups.
     # You must specify at least one contact or contact group in each host definition.
-    def contacts
-      @contacts.values.map(&:id).sort.join(',')
+    def contacts_list
+      @contacts.values.map(&:to_s).sort.join(',')
     end
 
     # contact_groups
@@ -102,8 +102,8 @@ class Nagios
     # whenever there are problems (or recoveries) with this host.
     # Multiple contact groups should be separated by commas.
     # You must specify at least one contact or contact group in each host definition.
-    def contact_groups
-      @contact_groups.values.map(&:id).sort.join(',')
+    def contact_groups_list
+      @contact_groups.values.map(&:to_s).sort.join(',')
     end
 
     def definition
@@ -115,12 +115,8 @@ class Nagios
     # that the host belongs to. Multiple hostgroups should be separated by commas.
     # This directive may be used as an alternative to (or in addition to)
     # using the members directive in hostgroup definitions.
-    def hostgroups
-      @hostgroups.values.map(&:id).sort.join(',')
-    end
-
-    def id
-      host_name
+    def hostgroups_list
+      @hostgroups.values.map(&:to_s).sort.join(',')
     end
 
     def import(hash)
@@ -154,8 +150,8 @@ class Nagios
     # If this host is on the same network segment as the host doing the monitoring
     # (without any intermediate routers, etc.) the host is considered to be on the local
     # network and will not have a parent host.
-    def parents
-      @parents.values.map(&:id).sort.join(',')
+    def parents_list
+      @parents.values.map(&:to_s).sort.join(',')
     end
 
     # rubocop:disable MethodLength
@@ -183,6 +179,7 @@ class Nagios
     def to_s
       host_name
     end
+
     # check the integer options
     # default = nil
 
@@ -320,11 +317,11 @@ class Nagios
         'name'                         => 'name',
         'use'                          => 'use',
         'host_name'                    => 'host_name',
-        'hostgroups'                   => 'hostgroups',
+        'hostgroups_list'              => 'hostgroups',
         'alias'                        => 'alias',
         'display_name'                 => 'display_name',
         'address'                      => 'address',
-        'parents'                      => 'parents',
+        'parents_list'                 => 'parents',
         'check_command'                => 'check_command',
         'initial_state'                => 'initial_state',
         'max_check_attempts'           => 'max_check_attempts',
@@ -345,8 +342,8 @@ class Nagios
         'process_perf_data'            => 'process_perf_data',
         'retain_status_information'    => 'retain_status_information',
         'retain_nonstatus_information' => 'retain_nonstatus_information',
-        'contacts'                     => 'contacts',
-        'contact_groups'               => 'contact_groups',
+        'contacts_list'                => 'contacts',
+        'contact_groups_list'          => 'contact_groups',
         'notification_interval'        => 'notification_interval',
         'first_notification_delay'     => 'first_notification_delay',
         'notification_period'          => 'notification_period',

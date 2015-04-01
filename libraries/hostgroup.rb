@@ -44,12 +44,8 @@ class Nagios
       get_definition(configured_options, 'hostgroup')
     end
 
-    def hostgroup_members
-      @hostgroup_members.values.map(&:id).sort.join(',')
-    end
-
-    def id
-      hostgroup_name
+    def hostgroup_members_list
+      @hostgroup_members.values.map(&:to_s).sort.join(',')
     end
 
     def import(hash)
@@ -58,8 +54,8 @@ class Nagios
       update_members(hash, 'hostgroups_members', Nagios::Hostgroup, true)
     end
 
-    def members
-      @members.values.map(&:id).sort.join(',')
+    def members_list
+      @members.values.map(&:to_s).sort.join(',')
     end
 
     def push(obj)
@@ -84,16 +80,16 @@ class Nagios
     # rubocop:disable MethodLength
     def config_options
       {
-        'name'              => 'name',
-        'use'               => 'use',
-        'hostgroup_name'    => 'hostgroup_name',
-        'members'           => 'members',
-        'hostgroup_members' => 'hostgroup_members',
-        'alias'             => 'alias',
-        'notes'             => 'notes',
-        'notes_url'         => 'notes_url',
-        'action_url'        => 'action_url',
-        'register'          => 'register'
+        'name'                   => 'name',
+        'use'                    => 'use',
+        'hostgroup_name'         => 'hostgroup_name',
+        'members_list'           => 'members',
+        'hostgroup_members_list' => 'hostgroup_members',
+        'alias'                  => 'alias',
+        'notes'                  => 'notes',
+        'notes_url'              => 'notes_url',
+        'action_url'             => 'action_url',
+        'register'               => 'register'
       }
     end
     # rubocop:enable MethodLength

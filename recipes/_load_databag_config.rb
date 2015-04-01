@@ -36,6 +36,22 @@ hostgroups.each do |group|
   end
 end
 
+services = nagios_bags.get(node['nagios']['services_databag'])
+services.each do |item|
+  name = item['service_description'] || item['id']
+  command_name = name.downcase.start_with?('check_') ? name.downcase : 'check_' + name.downcase
+  service_name = name.downcase.start_with?('check_') ? name.gsub('check_', '') : name.downcase
+  item['check_command'] = command_name
+
+  nagios_command command_name do
+    options item
+  end
+
+  nagios_service service_name do
+    options item
+  end
+end
+
 contactgroups = nagios_bags.get(node['nagios']['contactgroups_databag'])
 contactgroups.each do |item|
   name = item['contactgroup_name'] || item['id']
@@ -97,22 +113,6 @@ servicegroups = nagios_bags.get(node['nagios']['servicegroups_databag'])
 servicegroups.each do |item|
   name = item['servicegroup_name'] || item['id']
   nagios_servicegroup name do
-    options item
-  end
-end
-
-services = nagios_bags.get(node['nagios']['services_databag'])
-services.each do |item|
-  name = item['service_description'] || item['id']
-  command_name = name.downcase.start_with?('check_') ? name.downcase : 'check_' + name.downcase
-  service_name = name.downcase.start_with?('check_') ? name.gsub('check_', '') : name.downcase
-  item['check_command'] = command_name
-
-  nagios_command command_name do
-    options item
-  end
-
-  nagios_service service_name do
     options item
   end
 end

@@ -1,0 +1,6 @@
+{
+  "id": "host_a",
+  "alias": "Host A Alias Name",
+  "display_name": "Host A Display Name",
+  "hostgroups": "hostgroup_a"
+}
