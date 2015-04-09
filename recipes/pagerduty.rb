@@ -94,7 +94,7 @@ pagerduty_contacts.each do |contact|
   name = contact['contact'] || contact['id']
   nagios_contact name do
     options 'alias'                         => "PagerDuty Pseudo-Contact #{name}",
-            'service_notification_period'   => contact['service_notification_period'] || '25x7',
+            'service_notification_period'   => contact['service_notification_period'] || '24x7',
             'host_notification_period'      => contact['host_notification_period'] || '24x7',
             'service_notification_options'  => contact['service_notification_options'] || 'w,u,c,r',
             'host_notification_options'     => contact['host_notification_options'] || 'd,r',
