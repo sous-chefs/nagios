@@ -29,7 +29,7 @@ hostgroups.each do |group|
     end.join(' OR ')
     result = search(:node, "(#{group['search_query']}) AND (#{query_environments})")
   else
-    result = search(:node, "#{group['search_query']} AND chef_environment:#{node.chef_environment}")
+    result = search(:node, "chef_environment:#{node.chef_environment} AND #{group['search_query']}")
   end
 
   result.each do |n|
