@@ -35,9 +35,9 @@ describe 'Nagios Configuration' do
   end
 
   file_hosts = []
-  file_hosts << 'host_name.*host_a'
-  file_hosts << 'host_name.*host_b'
-  file_hosts << 'host_name.*server-source-centos-65'
+  file_hosts << 'host_name[ \t]+host_a'
+  file_hosts << 'host_name[ \t]+host_b'
+  file_hosts << 'host_name[ \t]+' + `hostname`.split('.').first
 
   file_hosts.each do |line|
     describe file('/etc/nagios/conf.d/hosts.cfg') do
