@@ -109,6 +109,8 @@ end
  
 region = node[:ec2][:region]
 
+#node.set['domain'] = "prod1.eu-w1.int.ops.tlium.com"
+
 unless node['domain'].match(/^prod1?.\w{2}-\w{2}/)
 
   nodes = search(:node, "app_environment:production AND placement_availability_zone:#{region}* NOT domain:prod*")

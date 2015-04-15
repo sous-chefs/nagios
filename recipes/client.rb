@@ -136,6 +136,10 @@ nagios_nrpecheck "check_users" do
   action :add
 end
 
+#get and set stunnel version
+version = `dpkg -s stunnel4 | grep Version | cut -d ' ' -f2 | cut -d : -f2 | cut -d - -f1`
+node.set['stunnel']['version'] = version.to_f
+
 include_recipe "nagios::passive_crons"
 include_recipe "nagios::sudoers"
 include_recipe "nagios::nsca_client"
