@@ -35,6 +35,7 @@ describe 'Nagios Configuration' do
   end
 
   file_hosts = []
+  file_hosts << 'notes[ \t]+configured via chef attributes'
   file_hosts << 'host_name[ \t]+host_a'
   file_hosts << 'host_name[ \t]+host_b'
   file_hosts << 'host_name[ \t]+' + `hostname`.split('.').first

@@ -264,11 +264,7 @@ class Nagios
 
     def update_options(hash)
       return nil if blank?(hash)
-      # We can only merge hash or databagitem's, so lets check for them.
-      case hash
-      when Hash, Chef::DataBagItem
-        update_hash_options(hash)
-      end
+      update_hash_options(hash) if hash.respond_to?('each_pair')
     end
 
     def update_hash_options(hash)
