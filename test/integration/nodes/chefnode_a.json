@@ -1,0 +1,8 @@
+{
+  "normal": {
+    "nagios": {
+      "notes": "notes configured via chef node attributes"
+    }
+   },
+  "run_list": []
+}

@@ -36,6 +36,8 @@ if nodes.empty?
   nodes << node
 end
 
+Nagios.instance.host_name_attribute = node['nagios']['host_name_attribute'] 
+
 # Pushing current node to prevent empty hosts.cfg
 Nagios.instance.push(node)
 
@@ -164,7 +166,7 @@ nagios_host 'server' do
 end
 
 # Defaut host template
-Nagios.instance.default_host = 'server'
+Nagios.instance.default_host = node['nagios']['host_template']
 
 # Users
 # use the users_helper.rb library to build arrays of users and contacts

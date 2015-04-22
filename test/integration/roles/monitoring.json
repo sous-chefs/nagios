@@ -1,4 +1,9 @@
 {
   "id": "monitoring",
-  "name": "monitoring"
+  "name": "monitoring",
+  "override_attributes": {
+    "nagios": {
+      "host_name_attribute": "custom_host_name_attribute"
+    }
+  }
 }

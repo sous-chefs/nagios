@@ -35,10 +35,15 @@ describe 'Nagios Configuration' do
   end
 
   file_hosts = []
-  file_hosts << 'notes[ \t]+configured via chef attributes'
-  file_hosts << 'host_name[ \t]+host_a'
+  file_hosts << 'host_name[ \t]+host_a_alt'
   file_hosts << 'host_name[ \t]+host_b'
   file_hosts << 'host_name[ \t]+' + `hostname`.split('.').first
+  file_hosts << 'host_name[ \t]+chefnode_a'
+  file_hosts << 'notes[ \t]+configured via chef node attributes'
+  file_hosts << 'host_name[ \t]+chefnode_b_alt'
+  file_hosts << 'host_name[ \t]+chefnode_c_alt'
+  file_hosts << 'host_name[ \t]+chefnode_d_alt'
+  
 
   file_hosts.each do |line|
     describe file('/etc/nagios/conf.d/hosts.cfg') do
@@ -75,7 +80,7 @@ describe 'Nagios Configuration' do
   end
 
   file_servicegroups = []
-  file_servicegroups << 'servicegroup_name.*servicegroup_a\n\s*members.*host_a,service_a,host_a,service_b,host_b,service_b,host_b,service_c'
+  file_servicegroups << 'servicegroup_name.*servicegroup_a\n\s*members.*host_a_alt,service_a,host_a_alt,service_b,host_b,service_b,host_b,service_c'
   file_servicegroups << 'servicegroup_name.*servicegroup_b\n\s*members.*host_b,service_c'
 
   file_servicegroups.each do |line|
