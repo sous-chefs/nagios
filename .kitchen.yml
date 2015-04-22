@@ -78,9 +78,6 @@ suites:
    - recipe[nagios::default]
    - recipe[nrpe::default]
    - role[monitoring]
-   attributes:
-     nagios:
-       notes: 'configured via chef attributes'
  - name: server_source
    run_list:
    - recipe[nagios::default]
@@ -88,9 +85,8 @@ suites:
    - role[monitoring]
    attributes:
      nagios:
-         notes: 'configured via chef attributes'
-         server:
-           install_method: 'source'
+       server:
+         install_method: 'source'
 data_bags_path: test/data_bags
 roles_path: test/roles
 

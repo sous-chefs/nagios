@@ -271,9 +271,10 @@ class Nagios
   end
 
   def get_hostname(obj)
+    return obj['nagios']['host_name'] unless blank?(obj['nagios']) || blank?(obj['nagios']['host_name'])
     return obj[@host_name_attribute] unless blank?(obj[@host_name_attribute])
     return obj['hostname'] unless blank?(obj['hostname'])
-    return obj['name'] unless blank?(obj['name'])
+    return obj.name unless blank?(obj.name)
     nil
   end
 
