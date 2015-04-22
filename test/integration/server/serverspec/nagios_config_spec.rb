@@ -21,6 +21,17 @@ describe 'Nagios Configuration' do
     end
   end
 
+  file_nagios_config = []
+  file_nagios_config << 'host_perfdata_command=command_a'
+  file_nagios_config << 'host_perfdata_command=command_b'
+  file_nagios_config << 'use_syslog=0'
+
+  file_nagios_config.each do |line|
+    describe file('/etc/nagios/nagios.cfg') do
+      its(:content) { should match line }
+    end
+  end
+
   file_services = []
   file_services << 'service_description.*all_hostgroup_service'
   file_services << 'service_description.*load'

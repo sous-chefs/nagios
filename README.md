@@ -36,6 +36,18 @@ The functionality that was previously in the nagios::client recipe has been move
 
 Attributes
 ----------
+### config
+* `node['nagios']['conf']['max_service_check_spread']`                   - Defaults to 5
+* `node['nagios']['conf']['max_host_check_spread']`                      - Defaults to 5
+* `node['nagios']['conf']['service_check_timeout']`                      - Defaults to 60
+* `node['nagios']['conf']['host_check_timeout']`                         - Defaults to 30
+* `node['nagios']['conf']['process_performance_data']`                   - Defaults to 0
+* `node['nagios']['conf']['date_format']`                                - Defaults to 'iso8601'
+* `node['nagios']['conf']['p1_file']`                                    - Defaults to `#{node['nagios']['home']}/p1.pl`
+* `node['nagios']['conf']['debug_level']`                                - Defaults to 0
+* `node['nagios']['conf']['debug_verbosity']`                            - Defaults to 1
+* `node['nagios']['conf']['debug_file']`                                 - Defaults to `#{node['nagios']['state_dir']}/#{node['nagios']['server']['name']}.debug`
+* `node['nagios']['conf']['use_timezone']`                               - Defaults to `node['nagios']['timezone']`
 
 ### default
 * `node['nagios']['user']` - Nagios user, default 'nagios'.
@@ -130,31 +142,6 @@ Attributes
 * `node['nagios']['server']['stop_apache']` - stop apache service if using nginx, default false
 * `node['nagios']['server']['redirect_root']` - if using Apache, should http://server/ redirect to http://server/nagios3 automatically, default false
 * `node['nagios']['server']['normalize_hostname']` - If set to true, normalize all hostnames in hosts.cfg to lowercase. Defaults to false.
-
-These are additional nagios.cfg options.
-
- * `node['nagios']['conf']['max_service_check_spread']`                   - Defaults to 5
- * `node['nagios']['conf']['max_host_check_spread']`                      - Defaults to 5
- * `node['nagios']['conf']['service_check_timeout']`                      - Defaults to 60
- * `node['nagios']['conf']['host_check_timeout']`                         - Defaults to 30
- * `node['nagios']['conf']['process_performance_data']`                   - Defaults to 0
- * `node['nagios']['conf']['host_perfdata_command']`                      - Defaults to nil
- * `node['nagios']['conf']['host_perfdata_file']`                         - Defaults to nil
- * `node['nagios']['conf']['host_perfdata_file_template']`                - Defaults to nil
- * `node['nagios']['conf']['host_perfdata_file_mode']`                    - Defaults to nil
- * `node['nagios']['conf']['host_perfdata_file_processing_interval']`     - Defaults to nil
- * `node['nagios']['conf']['host_perfdata_file_processing_command']`      - Defaults to nil
- * `node['nagios']['conf']['service_perfdata_command']`                   - Defaults to nil
- * `node['nagios']['conf']['service_perfdata_file']`                      - Defaults to nil
- * `node['nagios']['conf']['service_perfdata_file_template']`             - Defaults to nil
- * `node['nagios']['conf']['service_perfdata_file_mode']`                 - Defaults to nil
- * `node['nagios']['conf']['service_perfdata_file_processing_interval']`  - Defaults to nil
- * `node['nagios']['conf']['service_perfdata_file_processing_command']`   - Defaults to nil
- * `node['nagios']['conf']['date_format']`                                - Defaults to 'iso8601'
- * `node['nagios']['conf']['p1_file']`                                    - Defaults to `#{node['nagios']['home']}/p1.pl`
- * `node['nagios']['conf']['debug_level']`                                - Defaults to 0
- * `node['nagios']['conf']['debug_verbosity']`                            - Defaults to 1
- * `node['nagios']['conf']['debug_file']`                                 - Defaults to `#{node['nagios']['state_dir']}/#{node['nagios']['server']['name']}.debug`
 
  These are nagios cgi.config options.
 
