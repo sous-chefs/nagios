@@ -43,7 +43,6 @@ describe 'Nagios Configuration' do
   file_hosts << 'host_name[ \t]+chefnode_b_alt'
   file_hosts << 'host_name[ \t]+chefnode_c_alt'
   file_hosts << 'host_name[ \t]+chefnode_d_alt'
-  
 
   file_hosts.each do |line|
     describe file('/etc/nagios/conf.d/hosts.cfg') do
