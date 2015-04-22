@@ -136,6 +136,7 @@ default['nagios']['execute_service_checks']        = 1
 default['nagios']['accept_passive_service_checks'] = 1
 default['nagios']['execute_host_checks']           = 1
 default['nagios']['accept_passive_host_checks']    = 1
+default['nagios']['service_check_timeout_state']   = 'c'
 
 default['nagios']['obsess_over_services'] = 0
 default['nagios']['ocsp_command']         = nil
