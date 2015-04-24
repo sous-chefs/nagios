@@ -13,7 +13,14 @@ class NagiosUsers
     group = node['nagios']['users_databag_group']
 
     begin
-      Chef::Search::Query.new.search(user_databag, "groups:#{group} NOT action:remove") { |d| @users << d unless d['nagios'].nil? || d['nagios']['email'].nil? }
+      if node['nagios']['server']['use_encrypted_data_bags']
+        Chef::DataBag.load(user_databag).each do |u, _|
+          d = Chef::EncryptedDataBagItem.load(user_databag, u)
+          @users << d unless d['nagios'].nil? || d['nagios']['email'].nil?
+        end
+      else
+        Chef::Search::Query.new.search(user_databag, "groups:#{group} NOT action:remove") { |d| @users << d unless d['nagios'].nil? || d['nagios']['email'].nil?  }
+      end
     rescue Net::HTTPServerException
       Chef::Log.fatal("\"#{node['nagios']['users_databag']}\" databag could not be found.")
       raise "\"#{node['nagios']['users_databag']}\" databag could not be found."

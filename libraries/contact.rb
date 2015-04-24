@@ -57,8 +57,8 @@ class Nagios
     end
 
     def definition
-      if email.nil? && name.nil?
-        "# Skipping #{contact_name} because missing email."
+      if email.nil? && name.nil? && pager.nil?
+        "# Skipping #{contact_name} because missing email/pager."
       else
         get_definition(configured_options, 'contact')
       end
