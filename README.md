@@ -37,11 +37,9 @@ The functionality that was previously in the nagios::client recipe has been move
 Attributes
 ----------
 ### config
-The Nagios configuration options which are allowed in the Nagios config file. Consult the Nagios documentation for available settings and allowed options.
-Configuration entries of which multiple entries are allowed, need to be specified as an Array.
+[The config file](https://github.com/tas50/nagios/blob/master/attributes/config.rb) contains the Nagios configuration options. Consult the [nagios documentation](http://nagios.sourceforge.net/docs/3_0/configmain.html) for available settings and allowed options. Configuration entries of which multiple entries are allowed, need to be specified as an Array.
 
-E.g. default['nagios']['conf']['cfg_dir'] = [ '/etc/nagios/conf.d' , '/usr/local/nagios/conf.d' ]
-
+Example: `default['nagios']['conf']['cfg_dir'] = [ '/etc/nagios/conf.d' , '/usr/local/nagios/conf.d' ]`
 
 ### default
 * `node['nagios']['user']` - Nagios user, default 'nagios'.
