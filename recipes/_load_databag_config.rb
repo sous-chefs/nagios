@@ -20,6 +20,8 @@
 # Loading all databag information
 nagios_bags = NagiosDataBags.new
 
+Nagios.instance.host_name_attribute = node['nagios']['host_name_attribute']
+
 hostgroups = nagios_bags.get(node['nagios']['hostgroups_databag'])
 hostgroups.each do |group|
   next if group['search_query'].nil?
