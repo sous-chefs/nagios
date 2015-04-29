@@ -31,10 +31,10 @@ describe 'Nagios Configuration' do
       its(:content) { should match line }
     end
   end
-  
+
   file_nagios_config = []
   file_nagios_config << 'query_socket='
-  
+
   file_nagios_config.each do |line|
     describe file('/etc/nagios/nagios.cfg') do
       its(:content) { should_not match line }
