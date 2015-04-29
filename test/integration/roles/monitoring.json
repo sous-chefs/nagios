@@ -3,7 +3,12 @@
   "name": "monitoring",
   "override_attributes": {
     "nagios": {
-      "host_name_attribute": "custom_host_name_attribute"
+      "host_name_attribute": "custom_host_name_attribute",
+      "conf": {
+        "use_syslog": "0",
+        "host_perfdata_command": [ "command_a", "command_b" ],
+        "query_socket": null
+      }
     }
   }
 }

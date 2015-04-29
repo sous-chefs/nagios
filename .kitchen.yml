@@ -87,8 +87,5 @@ suites:
      nagios:
        server:
          install_method: 'source'
-       conf:
-         use_syslog: '0'
-         host_perfdata_command: [ 'command_a', 'command_b' ] 
 data_bags_path: test/data_bags
 roles_path: test/roles

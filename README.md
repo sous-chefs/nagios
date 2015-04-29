@@ -37,17 +37,11 @@ The functionality that was previously in the nagios::client recipe has been move
 Attributes
 ----------
 ### config
-* `node['nagios']['conf']['max_service_check_spread']`                   - Defaults to 5
-* `node['nagios']['conf']['max_host_check_spread']`                      - Defaults to 5
-* `node['nagios']['conf']['service_check_timeout']`                      - Defaults to 60
-* `node['nagios']['conf']['host_check_timeout']`                         - Defaults to 30
-* `node['nagios']['conf']['process_performance_data']`                   - Defaults to 0
-* `node['nagios']['conf']['date_format']`                                - Defaults to 'iso8601'
-* `node['nagios']['conf']['p1_file']`                                    - Defaults to `#{node['nagios']['home']}/p1.pl`
-* `node['nagios']['conf']['debug_level']`                                - Defaults to 0
-* `node['nagios']['conf']['debug_verbosity']`                            - Defaults to 1
-* `node['nagios']['conf']['debug_file']`                                 - Defaults to `#{node['nagios']['state_dir']}/#{node['nagios']['server']['name']}.debug`
-* `node['nagios']['conf']['use_timezone']`                               - Defaults to `node['nagios']['timezone']`
+The Nagios configuration options which are allowed in the Nagios config file. Consult the Nagios documentation for available settings and allowed options.
+Configuration entries of which multiple entries are allowed, need to be specified as an Array.
+
+E.g. default['nagios']['conf']['cfg_dir'] = [ '/etc/nagios/conf.d' , '/usr/local/nagios/conf.d' ]
+
 
 ### default
 * `node['nagios']['user']` - Nagios user, default 'nagios'.
