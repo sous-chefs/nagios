@@ -59,13 +59,13 @@ platforms:
         - ["forwarded_port", {guest: 80, host: 8088}]
     run_list:
     - recipe[yum::default]
-  - name: fedora-19
+  - name: fedora-20
     driver_config:
       network:
         - ["forwarded_port", {guest: 80, host: 8089}]
     run_list:
     - recipe[yum::default]
-  - name: fedora-20
+  - name: fedora-21
     driver_config:
       network:
         - ["forwarded_port", {guest: 80, host: 8090}]
