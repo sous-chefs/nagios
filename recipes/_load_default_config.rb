@@ -36,8 +36,6 @@ if nodes.empty?
   nodes << node
 end
 
-Nagios.instance.host_name_attribute = node['nagios']['host_name_attribute']
-
 # Pushing current node to prevent empty hosts.cfg
 Nagios.instance.push(node)
 
