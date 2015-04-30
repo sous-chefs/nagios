@@ -1,0 +1,10 @@
+{
+  "normal": {
+    "custom_host_name_attribute": "chefnode_c",
+    "nagios": {
+      "host_name": "chefnode_c_alt",
+      "notes": "hostname via chef attribute node.nagios.host_name, despite presence custom_host_name_attribute"
+    }
+   },
+  "run_list": []
+}

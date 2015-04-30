@@ -75,10 +75,8 @@ when 'debian'
   default['nagios']['server']['install_method'] = 'package'
   default['nagios']['server']['service_name']   = 'nagios3'
   default['nagios']['server']['mail_command']   = '/usr/bin/mail'
-  default['nagios']['conf']['p1_file']          = "#{node['nagios']['home']}/p1.pl"
   default['nagios']['cgi-path']       = "/cgi-bin/#{node['nagios']['server']['service_name']}"
 when 'rhel', 'fedora'
-  default['nagios']['conf']['p1_file']          = '/usr/sbin/p1.pl'
   default['nagios']['cgi-path']       = '/nagios/cgi-bin/'
   # install via source on RHEL releases less than 6, otherwise use packages
   if node['platform_family'] == 'rhel' && node['platform_version'].to_i < 6
@@ -92,7 +90,6 @@ else
   default['nagios']['server']['install_method'] = 'source'
   default['nagios']['server']['service_name']   = 'nagios'
   default['nagios']['server']['mail_command']   = '/bin/mail'
-  default['nagios']['conf']['p1_file']          = "#{node['nagios']['home']}/p1.pl"
 end
 
 # webserver configuration
@@ -130,17 +127,6 @@ when 'rhel', 'fedora'
 else
   default['nagios']['server']['packages'] = %w(nagios3 nagios-nrpe-plugin nagios-images)
 end
-
-default['nagios']['notifications_enabled']         = 0
-default['nagios']['execute_service_checks']        = 1
-default['nagios']['accept_passive_service_checks'] = 1
-default['nagios']['execute_host_checks']           = 1
-default['nagios']['accept_passive_host_checks']    = 1
-
-default['nagios']['obsess_over_services'] = 0
-default['nagios']['ocsp_command']         = nil
-default['nagios']['obsess_over_hosts']    = 0
-default['nagios']['ochp_command']         = nil
 
 default['nagios']['check_external_commands']     = true
 default['nagios']['default_contact_groups']      = %w(admins)
@@ -211,16 +197,6 @@ default['nagios']['server']['stop_apache']         = false
 default['nagios']['server']['normalize_hostname']  = false
 default['nagios']['server']['load_default_config'] = true
 default['nagios']['server']['load_databag_config'] = true
-
-default['nagios']['conf']['max_service_check_spread'] = 5
-default['nagios']['conf']['max_host_check_spread']    = 5
-default['nagios']['conf']['service_check_timeout']    = 60
-default['nagios']['conf']['host_check_timeout']       = 30
-default['nagios']['conf']['process_performance_data'] = 0
-default['nagios']['conf']['date_format']              = 'iso8601'
-default['nagios']['conf']['debug_level']              = 0
-default['nagios']['conf']['debug_verbosity']          = 1
-default['nagios']['conf']['debug_file']               = "#{node['nagios']['state_dir']}/#{node['nagios']['server']['name']}.debug"
 
 default['nagios']['cgi']['show_context_help']                        = 1
 default['nagios']['cgi']['authorized_for_system_information']        = '*'

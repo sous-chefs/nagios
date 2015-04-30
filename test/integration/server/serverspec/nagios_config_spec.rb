@@ -21,6 +21,26 @@ describe 'Nagios Configuration' do
     end
   end
 
+  file_nagios_config = []
+  file_nagios_config << 'host_perfdata_command=command_a'
+  file_nagios_config << 'host_perfdata_command=command_b'
+  file_nagios_config << 'use_syslog=0'
+
+  file_nagios_config.each do |line|
+    describe file('/etc/nagios/nagios.cfg') do
+      its(:content) { should match line }
+    end
+  end
+
+  file_nagios_config = []
+  file_nagios_config << 'query_socket='
+
+  file_nagios_config.each do |line|
+    describe file('/etc/nagios/nagios.cfg') do
+      its(:content) { should_not match line }
+    end
+  end
+
   file_services = []
   file_services << 'service_description.*all_hostgroup_service'
   file_services << 'service_description.*load'
@@ -35,10 +55,14 @@ describe 'Nagios Configuration' do
   end
 
   file_hosts = []
-  file_hosts << 'notes[ \t]+configured via chef attributes'
-  file_hosts << 'host_name[ \t]+host_a'
+  file_hosts << 'host_name[ \t]+host_a_alt'
   file_hosts << 'host_name[ \t]+host_b'
   file_hosts << 'host_name[ \t]+' + `hostname`.split('.').first
+  file_hosts << 'host_name[ \t]+chefnode_a'
+  file_hosts << 'notes[ \t]+configured via chef node attributes'
+  file_hosts << 'host_name[ \t]+chefnode_b_alt'
+  file_hosts << 'host_name[ \t]+chefnode_c_alt'
+  file_hosts << 'host_name[ \t]+chefnode_d_alt'
 
   file_hosts.each do |line|
     describe file('/etc/nagios/conf.d/hosts.cfg') do
@@ -75,7 +99,7 @@ describe 'Nagios Configuration' do
   end
 
   file_servicegroups = []
-  file_servicegroups << 'servicegroup_name.*servicegroup_a\n\s*members.*host_a,service_a,host_a,service_b,host_b,service_b,host_b,service_c'
+  file_servicegroups << 'servicegroup_name.*servicegroup_a\n\s*members.*host_a_alt,service_a,host_a_alt,service_b,host_b,service_b,host_b,service_c'
   file_servicegroups << 'servicegroup_name.*servicegroup_b\n\s*members.*host_b,service_c'
 
   file_servicegroups.each do |line|

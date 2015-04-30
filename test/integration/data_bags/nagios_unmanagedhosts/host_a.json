@@ -1,5 +1,7 @@
 {
   "id": "host_a",
+  "host_name": "host_a_alt",
+  "notes": "via chef attribute node.nagios.host_name from databag",
   "alias": "Host A Alias Name",
   "display_name": "Host A Display Name",
   "hostgroups": "hostgroup_a"

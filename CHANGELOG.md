@@ -1,6 +1,23 @@
 nagios Cookbook CHANGELOG
 =========================
 This file is used to list changes made in each version of the nagios cookbook.
+7.1.0
+-----
+### Bug
+- Fixed class-type checking with duck-typing on update_options.
+- Fixed host_name_attribute on nagios model.
+
+### Improvement
+- Moved all nagios configuration options within attributes.
+- Moved all nagios configuration attributes into separate file.
+
+### Breaking Changes
+- With the change above we might introduced some config problems.
+  Please check your attributes when upgrading.
+
+### Development
+- Added extra kitchen serverspec tests.
+
 7.0.8
 -----
 ### Bug
