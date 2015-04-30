@@ -104,6 +104,8 @@ unless node['nagios'].nil?
   end
 end
 
+Nagios.instance.host_name_attribute = node['nagios']['host_name_attribute']
+
 # loading all databag configurations
 if node['nagios']['server']['load_databag_config']
   include_recipe 'nagios::_load_databag_config'
