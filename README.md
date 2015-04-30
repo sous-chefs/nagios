@@ -1,6 +1,6 @@
 nagios cookbook
 ===============
-[![Build Status](https://secure.travis-ci.org/tas50/nagios.svg?branch=master)](http://travis-ci.org/tas50/nagios)
+[![Build Status](https://travis-ci.org/tas50/nagios.svg)](https://travis-ci.org/tas50/nagios)
 
 Installs and configures Nagios server. Chef nodes are automatically discovered using search, and Nagios host groups are created based on Chef roles and optionally environments as well.
 
