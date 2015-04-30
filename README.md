@@ -79,7 +79,7 @@ Example: `default['nagios']['conf']['cfg_dir'] = [ '/etc/nagios/conf.d' , '/usr/
 *  `node['nagios']['server']['patches']` - array of patch filenames to apply if installing from source
 *  `node['nagios']['url']` - URL to host Nagios from - defaults to nil and instead uses  FQDN
 
-* `node['nagios']['notifications_enabled']` - set to 1 to enable notification.
+* `node['nagios']['conf']['enable_notifications']` - set to 1 to enable notification.
 * `node['nagios']['check_external_commands']`
 * `node['nagios']['default_contact_groups']`
 * `node['nagios']['sysadmin_email']` - default notification email.
