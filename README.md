@@ -286,9 +286,9 @@ $ knife role from file monitoring.rb
 License & Authors
 -----------------
 - Author:: Joshua Sierles <joshua@37signals.com>
-- Author:: Nathan Haneysmith <nathan@getchef.com>
-- Author:: Joshua Timberman <joshua@getchef.com>
-- Author:: Seth Chisamore <schisamo@getchef.com>
+- Author:: Nathan Haneysmith <nathan@chef.io>
+- Author:: Joshua Timberman <joshua@chef.io>
+- Author:: Seth Chisamore <schisamo@chef.io>
 - Author:: Tim Smith <tim@cozy.co>
 
 ```text
