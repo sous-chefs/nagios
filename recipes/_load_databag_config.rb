@@ -23,9 +23,11 @@ nagios_bags = NagiosDataBags.new
 hostgroups = nagios_bags.get(node['nagios']['hostgroups_databag'])
 hostgroups.each do |group|
   next if group['search_query'].nil?
-
   if node['nagios']['multi_environment_monitoring']
-    result = search(:node, group['search_query'])
+    query_environments = node['nagios']['monitored_environments'].map do |environment|
+      "chef_environment:#{environment}"
+    end.join(' OR ')
+    result = search(:node, "(#{group['search_query']}) AND (#{query_environments})")
   else
     result = search(:node, "#{group['search_query']} AND chef_environment:#{node.chef_environment}")
   end
