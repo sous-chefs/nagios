@@ -1,6 +1,18 @@
 nagios Cookbook CHANGELOG
 =========================
 This file is used to list changes made in each version of the nagios cookbook.
+7.1.2
+-----
+### Bug
+- Fixed display of style sheets on Ubuntu 14.04+
+- service_check_timeout_state config option is now only set on modern Nagios releases.  This broke Ubuntu 10.04/12.04 service startup
+- Updated Test Kitchen release / added additional platforms for testing
+- Fixed the attribute used to enable notifications in the Readme file
+- Fixed loading of node['nagios']['host_name_attribute']
+
+### Improvement
+- Search queries in hostgroups data bag are now limited to the monitored environments if using node['nagios']['monitored_environments']
+
 7.1.0
 -----
 ### Bug
