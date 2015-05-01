@@ -16,6 +16,7 @@
 
 <% if node.platform_family == 'debian' && node['nagios']['server']['install_method'] == 'package'-%>
   Alias /stylesheets /etc/<%= node['nagios']['server']['vname'] %>/stylesheets
+  Alias /nagios3/stylesheets /etc/<%= node['nagios']['server']['vname'] %>/stylesheets
 <% end -%>
   ScriptAlias <%= node['nagios']['cgi-path'] %> <%= node['nagios']['cgi-bin'] %>
   Alias /<%= node['nagios']['server']['vname'] %> <%= node['nagios']['docroot'] %>
