@@ -23,7 +23,7 @@ platforms:
         - ["forwarded_port", {guest: 80, host: 8082}]
     run_list:
     - recipe[apt::default]
-  - name: debian-7.7
+  - name: debian-7.8
     driver_config:
       network:
         - ["forwarded_port", {guest: 80, host: 8083}]
@@ -35,40 +35,46 @@ platforms:
         - ["forwarded_port", {guest: 80, host: 8084}]
     run_list:
     - recipe[apt::default]
-  - name: freebsd-9.2
+  - name: freebsd-9.3
     driver_config:
       network:
         - ["forwarded_port", {guest: 80, host: 8085}]
     run_list:
     - recipe[freebsd::portsnap]
-  - name: centos-7.0
+  - name: freebsd-10.1
     driver_config:
       network:
         - ["forwarded_port", {guest: 80, host: 8086}]
     run_list:
-    - recipe[yum::default]
-  - name: centos-6.5
+    - recipe[freebsd::portsnap]
+  - name: centos-7.0
     driver_config:
       network:
         - ["forwarded_port", {guest: 80, host: 8087}]
     run_list:
     - recipe[yum::default]
-  - name: centos-5.10
+  - name: centos-6.6
     driver_config:
       network:
         - ["forwarded_port", {guest: 80, host: 8088}]
     run_list:
     - recipe[yum::default]
-  - name: fedora-20
+  - name: centos-5.10
     driver_config:
       network:
         - ["forwarded_port", {guest: 80, host: 8089}]
     run_list:
     - recipe[yum::default]
-  - name: fedora-21
+  - name: fedora-20
     driver_config:
       network:
         - ["forwarded_port", {guest: 80, host: 8090}]
+    run_list:
+    - recipe[yum::default]
+  - name: fedora-21
+    driver_config:
+      network:
+        - ["forwarded_port", {guest: 80, host: 8091}]
     run_list:
     - recipe[yum::default]
 
