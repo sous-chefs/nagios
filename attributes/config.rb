@@ -90,7 +90,6 @@ default['nagios']['conf']['low_host_flap_threshold']                     = '5.0'
 default['nagios']['conf']['high_host_flap_threshold']                    = '20.0'
 default['nagios']['conf']['soft_state_dependencies']                     = '0'
 default['nagios']['conf']['service_check_timeout']                       = '60'
-default['nagios']['conf']['service_check_timeout_state']                 = 'c'
 default['nagios']['conf']['host_check_timeout']                          = '30'
 default['nagios']['conf']['event_handler_timeout']                       = '30'
 default['nagios']['conf']['notification_timeout']                        = '30'
@@ -159,6 +158,7 @@ if node['nagios']['server']['install_method'] == 'source' ||
    (node['platform'] == 'debian' && node['platform_version'].to_i >= 7) ||
    (node['platform'] == 'ubuntu' && node['platform_version'].to_f >= 14.04)
   default['nagios']['conf']['allow_empty_hostgroup_assignment'] = '1'
+  default['nagios']['conf']['service_check_timeout_state']      = 'c'
 end
 
 case node['platform_family']
