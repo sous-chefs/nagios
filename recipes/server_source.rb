@@ -112,7 +112,7 @@ bash 'compile-nagios' do
         --with-mail=/usr/bin/mail \
         --with-perlcache \
         --with-htmurl=/ \
-        --with-cgiurl=/cgi-bin/#{node['nagios']['server']['vname']}
+        --with-cgiurl=#{node['nagios']['cgi-path']}
     make all
     make install
     make install-init
