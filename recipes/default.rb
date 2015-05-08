@@ -65,7 +65,7 @@ when 'openid'
     include_recipe 'apache2::mod_auth_openid'
   else
     Chef::Log.fatal('OpenID authentication for Nagios is not supported on NGINX')
-    Chef::Log.fatal("Set node['nagios']['server_auth_method'] attribute in your role: #{node['nagios']['server_role']}")
+    Chef::Log.fatal("Set node['nagios']['server_auth_method'] attribute in your Nagios role")
     fail
   end
 when 'cas'
@@ -73,7 +73,7 @@ when 'cas'
     include_recipe 'apache2::mod_auth_cas'
   else
     Chef::Log.fatal('CAS authentication for Nagios is not supported on NGINX')
-    Chef::Log.fatal("Set node['nagios']['server_auth_method'] attribute in your role: #{node['nagios']['server_role']}")
+    Chef::Log.fatal("Set node['nagios']['server_auth_method'] attribute in your Nagios role")
     fail
   end
 when 'ldap'
@@ -81,7 +81,7 @@ when 'ldap'
     include_recipe 'apache2::mod_authnz_ldap'
   else
     Chef::Log.fatal('LDAP authentication for Nagios is not supported on NGINX')
-    Chef::Log.fatal("Set node['nagios']['server_auth_method'] attribute in your role: #{node['nagios']['server_role']}")
+    Chef::Log.fatal("Set node['nagios']['server_auth_method'] attribute in your Nagios role")
     fail
   end
 else
