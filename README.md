@@ -209,7 +209,7 @@ You can add these contacts to any contactgroups you create.
 
 Monitoring Role
 ---------------
-Create a role to use for the monitoring server. The role name should match the value of the attribute "`node['nagios']['server_role']`". By default, this is '`monitoring`'. For example:
+Create a role to use for the monitoring server. The role name should match the value of the attribute "`node['nrpe']['server_role']`" on your clients. By default, this is '`monitoring`'. For example:
 
 ```ruby
 # roles/monitoring.rb
