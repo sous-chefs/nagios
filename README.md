@@ -1,5 +1,7 @@
 nagios cookbook
 ===============
+
+[![Join the chat at https://gitter.im/tas50/nagios](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/tas50/nagios?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![Build Status](https://travis-ci.org/tas50/nagios.svg)](https://travis-ci.org/tas50/nagios)
 
 Installs and configures Nagios server. Chef nodes are automatically discovered using search, and Nagios host groups are created based on Chef roles and optionally environments as well.
