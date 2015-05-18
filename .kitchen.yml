@@ -103,5 +103,7 @@ suites:
      nagios:
        server:
          install_method: 'source'
+       pagerduty:
+         key: 'your_key_here_3eC2'
 data_bags_path: test/data_bags
 roles_path: test/roles
