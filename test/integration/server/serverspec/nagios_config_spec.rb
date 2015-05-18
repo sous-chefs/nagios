@@ -3,6 +3,14 @@ require 'serverspec'
 # Required by serverspec
 set :backend, :exec
 
+if %w( redhat fedora ).include?(os[:family])
+  path_config_dir    = '/etc/nagios/conf.d'
+  path_conf_dir      = '/etc/nagios'
+else
+  path_config_dir    = '/etc/nagios3/conf.d'
+  path_conf_dir      = '/etc/nagios3'
+end
+
 describe 'Nagios Configuration' do
   %w(check_all_hostgroup_service
      check_host_alive
@@ -16,7 +24,7 @@ describe 'Nagios Configuration' do
      host_notify_by_email
      host_notify_by_sms_email
      service_notify_by_email).each do |line|
-    describe file('/etc/nagios/conf.d/commands.cfg') do
+    describe file("#{path_config_dir}/commands.cfg") do
       its(:content) { should match line }
     end
   end
@@ -27,7 +35,7 @@ describe 'Nagios Configuration' do
   file_nagios_config << 'use_syslog=0'
 
   file_nagios_config.each do |line|
-    describe file('/etc/nagios/nagios.cfg') do
+    describe file("#{path_conf_dir}/nagios.cfg") do
       its(:content) { should match line }
     end
   end
@@ -36,7 +44,7 @@ describe 'Nagios Configuration' do
   file_nagios_config << 'query_socket='
 
   file_nagios_config.each do |line|
-    describe file('/etc/nagios/nagios.cfg') do
+    describe file("#{path_conf_dir}/nagios.cfg") do
       its(:content) { should_not match line }
     end
   end
@@ -49,7 +57,7 @@ describe 'Nagios Configuration' do
   file_services << 'service_description.*service_c'
 
   file_services.each do |line|
-    describe file('/etc/nagios/conf.d/services.cfg') do
+    describe file("#{path_config_dir}/services.cfg") do
       its(:content) { should match line }
     end
   end
@@ -65,7 +73,7 @@ describe 'Nagios Configuration' do
   file_hosts << 'host_name[ \t]+chefnode_d_alt'
 
   file_hosts.each do |line|
-    describe file('/etc/nagios/conf.d/hosts.cfg') do
+    describe file("#{path_config_dir}/hosts.cfg") do
       its(:content) { should match line }
     end
   end
@@ -78,7 +86,7 @@ describe 'Nagios Configuration' do
   file_contacts << 'contactgroup_name.*admins-sms'
 
   file_contacts.each do |line|
-    describe file('/etc/nagios/conf.d/contacts.cfg') do
+    describe file("#{path_config_dir}/contacts.cfg") do
       its(:content) { should match line }
     end
   end
@@ -93,7 +101,7 @@ describe 'Nagios Configuration' do
   file_hostgroups << 'hostgroup_c'
 
   file_hostgroups.each do |line|
-    describe file('/etc/nagios/conf.d/hostgroups.cfg') do
+    describe file("#{path_config_dir}/hostgroups.cfg") do
       its(:content) { should match line }
     end
   end
@@ -103,7 +111,7 @@ describe 'Nagios Configuration' do
   file_servicegroups << 'servicegroup_name.*servicegroup_b\n\s*members.*host_b,service_c'
 
   file_servicegroups.each do |line|
-    describe file('/etc/nagios/conf.d/servicegroups.cfg') do
+    describe file("#{path_config_dir}/servicegroups.cfg") do
       its(:content) { should match line }
     end
   end
@@ -117,7 +125,7 @@ describe 'Nagios Configuration' do
   file_templates << 'define service {\n\s*name\s*service-template'
 
   file_templates.each do |line|
-    describe file('/etc/nagios/conf.d/templates.cfg') do
+    describe file("#{path_config_dir}/templates.cfg") do
       its(:content) { should match line }
     end
   end
@@ -126,7 +134,7 @@ describe 'Nagios Configuration' do
   file_timeperiods << 'define timeperiod {\n\s*timeperiod_name\s*24x7'
 
   file_timeperiods.each do |line|
-    describe file('/etc/nagios/conf.d/timeperiods.cfg') do
+    describe file("#{path_config_dir}/timeperiods.cfg") do
       its(:content) { should match line }
     end
   end
