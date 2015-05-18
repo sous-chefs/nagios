@@ -28,7 +28,7 @@ multi_env_search = multi_env.empty? ? '' : ' AND (chef_environment:' + multi_env
 if node['nagios']['multi_environment_monitoring']
   nodes = search(:node, "name:*#{multi_env_search}")
 else
-  nodes = search(:node, "chef_environment:#{node.chef_environment} AND node:*")
+  nodes = search(:node, "name:* AND chef_environment:#{node.chef_environment}")
 end
 
 if nodes.empty?
