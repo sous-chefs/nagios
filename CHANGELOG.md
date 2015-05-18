@@ -9,6 +9,7 @@ This file is used to list changes made in each version of the nagios cookbook.
 
 ### Improvement
 - Made test config os (in)dependent.
+- Added zap for config file cleanup.
 - Added encrypted user databag support. 
 - Added extra configuration tests.
 - Added gitter badge.
