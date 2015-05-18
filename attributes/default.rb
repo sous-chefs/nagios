@@ -191,12 +191,13 @@ default['nagios']['default_service']['notification_interval'] = 1200
 default['nagios']['default_service']['flap_detection']        = true
 default['nagios']['default_service']['action_url']            = nil
 
-default['nagios']['server']['web_server']          = 'apache'
-default['nagios']['server']['nginx_dispatch']      = 'cgi'
-default['nagios']['server']['stop_apache']         = false
-default['nagios']['server']['normalize_hostname']  = false
-default['nagios']['server']['load_default_config'] = true
-default['nagios']['server']['load_databag_config'] = true
+default['nagios']['server']['web_server']              = 'apache'
+default['nagios']['server']['nginx_dispatch']          = 'cgi'
+default['nagios']['server']['stop_apache']             = false
+default['nagios']['server']['normalize_hostname']      = false
+default['nagios']['server']['load_default_config']     = true
+default['nagios']['server']['load_databag_config']     = true
+default['nagios']['server']['use_encrypted_data_bags'] = false
 
 default['nagios']['cgi']['show_context_help']                        = 1
 default['nagios']['cgi']['authorized_for_system_information']        = '*'
@@ -213,10 +214,6 @@ default['nagios']['cgi']['action_url_target']                        = '_blank'
 default['nagios']['cgi']['notes_url_target']                         = '_blank'
 default['nagios']['cgi']['lock_author_names']                        = 1
 
-# backwards compatibility for the old attribute structure
-node.set['nagios']['pagerduty']['key'] = node['nagios']['pagerduty_key']
-
-default['nagios']['pagerduty']['key'] = ''
 default['nagios']['pagerduty']['script_url'] = 'https://raw.github.com/PagerDuty/pagerduty-nagios-pl/master/pagerduty_nagios.pl'
 default['nagios']['pagerduty']['service_notification_options'] = 'w,u,c,r'
 default['nagios']['pagerduty']['host_notification_options'] = 'd,r'

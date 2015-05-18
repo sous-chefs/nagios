@@ -196,6 +196,10 @@ nagios_conf 'services'
 nagios_conf 'servicegroups'
 nagios_conf 'servicedependencies'
 
+zap_directory node['nagios']['config_dir'] do
+  pattern '*.cfg'
+end
+
 service 'nagios' do
   service_name nagios_service_name
   supports :status => true, :restart => true, :reload => true
