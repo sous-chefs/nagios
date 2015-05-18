@@ -69,10 +69,6 @@ nagios_command 'notify-service-by-pagerduty' do
   options 'command_line' => ::File.join(node['nagios']['plugin_dir'], 'notify_pagerduty.pl') + ' enqueue -f pd_nagios_object=service'
 end
 
-nagios_command 'notify-service-by-pagerduty' do
-  options 'command_line' => ::File.join(node['nagios']['plugin_dir'], 'notify_pagerduty.pl') + ' enqueue -f pd_nagios_object=service'
-end
-
 nagios_command 'notify-host-by-pagerduty' do
   options 'command_line' => ::File.join(node['nagios']['plugin_dir'], 'notify_pagerduty.pl') + ' enqueue -f pd_nagios_object=host'
 end
