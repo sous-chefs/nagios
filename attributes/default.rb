@@ -214,10 +214,6 @@ default['nagios']['cgi']['action_url_target']                        = '_blank'
 default['nagios']['cgi']['notes_url_target']                         = '_blank'
 default['nagios']['cgi']['lock_author_names']                        = 1
 
-# backwards compatibility for the old attribute structure
-node.set['nagios']['pagerduty']['key'] = node['nagios']['pagerduty_key']
-
-default['nagios']['pagerduty']['key'] = ''
 default['nagios']['pagerduty']['script_url'] = 'https://raw.github.com/PagerDuty/pagerduty-nagios-pl/master/pagerduty_nagios.pl'
 default['nagios']['pagerduty']['service_notification_options'] = 'w,u,c,r'
 default['nagios']['pagerduty']['host_notification_options'] = 'd,r'
