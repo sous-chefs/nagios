@@ -1,6 +1,18 @@
 nagios Cookbook CHANGELOG
 =========================
 This file is used to list changes made in each version of the nagios cookbook.
+7.1.4
+-----
+### Bug
+- AuthzLDAPAuthoritative is removed in Apache 2.4.
+- Fixed the pagerduty config by using LWRP.
+
+### Improvement
+- Made test config os (in)dependent.
+- Added encrypted user databag support. 
+- Added extra configuration tests.
+- Added gitter badge.
+
 7.1.2
 -----
 ### Bug
