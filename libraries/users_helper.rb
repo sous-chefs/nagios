@@ -35,9 +35,6 @@ class NagiosUsers
       contacts << s['id']
     end
 
-    # add pagerduty user if enabled
-    contacts << 'pagerduty' unless @node['nagios']['pagerduty']['key'].empty?
-
     contacts
   end
 end
