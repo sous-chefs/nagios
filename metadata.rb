@@ -4,7 +4,7 @@ maintainer_email  'tsmith84@gmail.com'
 license           'Apache 2.0'
 description       'Installs and configures Nagios server'
 long_description  IO.read(File.join(File.dirname(__FILE__), 'README.md'))
-version           '7.1.4'
+version           '7.1.5'
 
 recipe 'default', 'Installs Nagios server.'
 recipe 'nagios::pagerduty', 'Integrates contacts w/ PagerDuty API'
