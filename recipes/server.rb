@@ -109,7 +109,7 @@ end
  
 region = node[:ec2][:region]
 
-#node.set['domain'] = "prod1.eu-w1.int.ops.tlium.com"
+node.set['domain'] = "prod1.eu-c1.int.ops.tlium.com"
 
 unless node['domain'].match(/^prod1?.\w{2}-\w{2}/)
 
@@ -264,6 +264,8 @@ when "prod1.us-e1.int.ops.tlium.com"
   url = "us-east-1-vpc.nagios.ops.tlium.com/nagios3/"
 when "prod1.eu-w1.int.ops.tlium.com"
   url = "eu-west-1-vpc.nagios.ops.tlium.com/nagios3/"
+when "prod1.eu-c1.int.ops.tlium.com"
+  url = "eu-central-1-vpc.nagios.ops.tlium.com/nagios3/"
 when "us-west-1.compute.internal"
   url = "us-west-1.nagios.ops.tlium.com/nagios3/"
 when "eu-w1"

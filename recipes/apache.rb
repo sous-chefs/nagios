@@ -44,3 +44,9 @@ file "#{node['apache']['dir']}/conf.d/nagios3.conf" do
 end
 
 apache_site "nagios3.conf"
+
+file "/etc/apache2/sites-enabled/000-default.conf" do
+  action :delete
+  only_if { ::File.exists?("/etc/apache2/sites-enabled/000-default.conf") }
+  notifies :reload, "service[apache2]"
+end

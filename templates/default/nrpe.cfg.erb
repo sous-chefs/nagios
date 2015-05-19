@@ -24,7 +24,7 @@ command[check_mysql_server]=<%= node['nagios']['plugin_dir'] %>/check_mysql -H l
 #check mailq
 command[check_mailq]=<%= node['nagios']['plugin_dir'] %>/check_mailq -w 20 -c 50
 
-<% if node['stunnel']['version'] < 5 -%>
+<% if node['stunnel']['version'] < 4.6 -%>
 #check stunnel process
 command[check_stunnel]=<%= node['nagios']['plugin_dir'] %>/check_procs -c 6:6 -C stunnel4
 <% else -%>
