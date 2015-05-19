@@ -53,7 +53,7 @@
 
   <Location />
     AuthType CAS
-    require valid-user
+    require <%= node['nagios']['server_auth_require'] %>
   </Location>
 <% when "ldap" -%>
   <Location />
@@ -64,14 +64,14 @@
     <% unless node['nagios']['ldap_bind_password'].nil? -%>AuthLDAPBindPassword "<%= node['nagios']['ldap_bind_password'] %>"<% end -%>
     AuthLDAPURL "<%= node['nagios']['ldap_url'] %>"
     <% if node['apache']['version'] < "2.4" %>AuthzLDAPAuthoritative <%= node['nagios']['ldap_authoritative'] %><% end %>
-    require valid-user
+    require <%= node['nagios']['server_auth_require'] %>
   </Location>
 <% else -%>
   <Location />
     AuthName "Nagios Server"
     AuthType Basic
     AuthUserFile "<%= node['nagios']['conf_dir'] %>/htpasswd.users"
-    require valid-user
+    require <%= node['nagios']['server_auth_require'] %>
   </Location>
 <% end -%>
 
