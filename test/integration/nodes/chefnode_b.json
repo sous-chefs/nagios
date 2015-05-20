@@ -2,6 +2,7 @@
   "normal": {
     "nagios": {
       "host_name": "chefnode_b_alt",
+      "address": "127.0.0.1",
       "notes": "hostname via chef attribute node.nagios.host_name"
     }
    },

@@ -3,6 +3,7 @@
     "custom_host_name_attribute": "chefnode_c",
     "nagios": {
       "host_name": "chefnode_c_alt",
+      "address": "127.0.0.1",
       "notes": "hostname via chef attribute node.nagios.host_name, despite presence custom_host_name_attribute"
     }
    },
