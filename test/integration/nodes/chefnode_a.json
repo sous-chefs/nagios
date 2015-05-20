@@ -1,6 +1,7 @@
 {
   "normal": {
     "nagios": {
+      "address": "127.0.0.1",
       "notes": "notes configured via chef node attributes"
     }
    },

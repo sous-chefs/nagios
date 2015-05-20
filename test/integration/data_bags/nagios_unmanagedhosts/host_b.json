@@ -1,5 +1,6 @@
 {
   "id": "host_b",
+  "address": "127.0.0.1",
   "alias": "Host B Alias Name",
   "display_name": "Host B Display Name",
   "hostgroups": "hostgroup_b"
