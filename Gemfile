@@ -7,5 +7,5 @@ gem 'rubocop',    '~> 0.30.1'
 
 group :integration do
   gem 'test-kitchen',    '~> 1.4.0'
-  gem 'kitchen-vagrant', '~> 0.17.0'
+  gem 'kitchen-vagrant', '~> 0.18.0'
 end
