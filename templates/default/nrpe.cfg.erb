@@ -96,7 +96,7 @@ command[check_rabbitmq_unackd]=sudo <%= node['nagios']['plugin_dir'] %>/check_ra
 command[check_rabbitmq_epmd]=<%= node['nagios']['plugin_dir'] %>/check_procs -c 1:1 -C epmd
 command[check_rabbitmq_beam]=<%= node['nagios']['plugin_dir'] %>/check_procs -c 1:2 -C beam.smp
 #NOTE: The paramaters set below <2:10> is set that way because of a bug in this version of check_procs that sees itself when checking processes, thus we need to find at least 2
-command[check_rabbitmq_server]=<%= node['nagios']['plugin_dir'] %>/check_procs -a "/usr/sbin/rabbitmq-server" -c 2:2 
+command[check_rabbitmq_server]=<%= node['nagios']['plugin_dir'] %>/check_procs -a "/usr/sbin/rabbitmq-server" -c 1:2 
 command[check_rabbitmq_unackd]=sudo <%= node['nagios']['plugin_dir'] %>/check_rabbitmq_unackd.py
 <% end %>
 

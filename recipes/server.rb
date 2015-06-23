@@ -109,9 +109,11 @@ end
  
 region = node[:ec2][:region]
 
-node.set['domain'] = "prod1.eu-c1.int.ops.tlium.com"
+#node.set['domain'] = "prod1.eu-c1.int.ops.tlium.com"
 
-unless node['domain'].match(/^prod1?.\w{2}-\w{2}/)
+domain = DNSHelpers.get_domain(node)
+
+unless domain.match(/^prod1?.\w{2}-\w{2}/)
 
   nodes = search(:node, "app_environment:production AND placement_availability_zone:#{region}* NOT domain:prod*")
 
@@ -121,6 +123,8 @@ else
 
 
   nagiosnodes = search(:node, "domain:prod* AND role:nagios NOT ec2_instance_id:#{node['ec2']['instance_id']}")
+
+  Chef::Log.warn("Nagios Nodes are #{nagiosnodes}.")
 
   nodes = []
   nodes1 = nodes1.concat(nagiosnodes)

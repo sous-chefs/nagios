@@ -815,15 +815,16 @@ define command {
 #        command_line /usr/lib/nagios/plugins/process_perfdata.pl -d HOSTPERFDATA
 #}
 
-define command {
-       command_name    process-service-perfdata
-       command_line    /usr/lib/pnp4nagios/libexec/process_perfdata.pl
-}
+#Casuing an issue with Nagios on 14.04, probably Apache related
+#define command {
+#       command_name    process-service-perfdata
+#       command_line    /usr/lib/pnp4nagios/libexec/process_perfdata.pl
+#}
 
-define command {
-       command_name    process-host-perfdata
-       command_line    /usr/lib/pnp4nagios/libexec/process_perfdata.pl -d HOSTPERFDATA
-}
+#define command {
+#       command_name    process-host-perfdata
+#       command_line    /usr/lib/pnp4nagios/libexec/process_perfdata.pl -d HOSTPERFDATA
+#}
 
 define command{
 	command_name	s2s-resolve

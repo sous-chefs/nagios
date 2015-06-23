@@ -724,12 +724,12 @@ define service {
   use                   default-service,srv-pnp
 }
 
-define service {
-  service_description   Check mongodb Process
-  hostgroup_name        mongodb_cluster,!mongos,!hostname_mongos
-  check_command         check_nrpe!check_mongod
-  use                   default-service,srv-pnp
-}
+#define service {
+#  service_description   Check mongodb Process
+#  hostgroup_name        mongodb_cluster,!mongos,!hostname_mongos
+#  check_command         check_nrpe!check_mongod
+#  use                   default-service,srv-pnp
+#}
 
 define service {
   service_description   Check mongos Process
