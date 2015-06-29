@@ -109,6 +109,8 @@ if node.roles.include?("dc_uconnect")
   cron "Check DC Uconnect Logs" do
     minute "*/15"
     command "/bin/sleep `/usr/bin/expr $RANDOM \\% 90` &> /dev/null ; /usr/lib/nagios/plugins/Check_DC_Uconnect_Logs.sh"
+    command "cat /dev/null"
+
   end
 
   template "/usr/lib/nagios/plugins/Check_DC_Uconnect_Logs.sh" do

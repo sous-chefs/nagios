@@ -139,7 +139,7 @@ command[check_visitor_processor]=<%= node['nagios']['plugin_dir'] %>/check_procs
 
 <% if node.roles.include?("dc_uconnect") %>
 #check DC Uconnect process
-command[check_uconnect]=<%= node['nagios']['plugin_dir'] %>/check_procs -a "/usr/share/tealium/datacloud/uconnect.jar uconnect" -c 2:2
+command[check_uconnect]=<%= node['nagios']['plugin_dir'] %>/check_procs -a "/usr/share/tealium/datacloud/uconnect.jar uconnect" -c 1:2
 <% end %>
 
 <% if node.roles.include?("dc_bulk_downloader") %>
