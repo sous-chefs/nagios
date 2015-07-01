@@ -23,6 +23,7 @@
 
   <Directory "<%= node['nagios']['cgi-bin'] %>">
      Options ExecCGI
+     require all granted
   </Directory>
 
 <% if @https -%>
@@ -71,7 +72,7 @@
     AuthName "Nagios Server"
     AuthType Basic
     AuthUserFile "<%= node['nagios']['conf_dir'] %>/htpasswd.users"
-    require <%= node['nagios']['server_auth_require'] %>
+    require all granted
   </Location>
 <% end -%>
 

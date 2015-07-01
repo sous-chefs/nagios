@@ -1,3 +1,6 @@
+Forked from [schubergphilis](https://github.com/schubergphilis/nagios) to allow for unauthenticated access of nagios behind a secure Firebase proxy.
+
+
 nagios cookbook
 ===============
 
