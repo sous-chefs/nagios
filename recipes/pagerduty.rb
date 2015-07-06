@@ -41,30 +41,33 @@ package "libcrypt-ssleay-perl" do
   action :install
 end
 
-domain = DNSHelpers.get_domain(node)
+#domain = DNSHelpers.get_domain(node)
 
-case domain
-when "prod1.us-w1.int.ops.tlium.com"
-  region = "us_west_1_vpc"
-when "prod1.us-e1.int.ops.tlium.com"
-  region = "us_east_1_vpc"
-when "prod1.eu-w1.int.ops.tlium.com"
-  region = "eu_west_1_vpc"
-when "prod1.eu-c1.int.ops.tlium.com"
-  region = "eu_central_1_vpc"
-when "us-west-1.compute.internal"
-  region = "us_west_1"
-when "eu-west-1.compute.internal"
-  region = "eu_west_1"
-when "ec2.internal"
-  region = "us_east_1"
-end
-
-unless node['instance_role'] == 'vagrant'
-  key_bag = data_bag_item('pager_duty', "#{region}")
-  api_key = key_bag['api_key']
-else
+# need to support domains like: qa42.us-east-1.int.ops.tlium.com.
+api_key = ''
+if node['instance_role'] == 'vagrant' || node['app_environment'] == 'qa'
   api_key = "test"
+else
+    # we really only want to do this for prod
+    region = 'foo'
+    case node['ec2']['region']
+        when "us-west-1"
+            region = "us_west_1"
+        when "us-east-1"
+          region = "us_east_1"
+        when "eu-west-1"
+          region = "eu_west_1"
+        when "eu-central-1"
+          region = "eu_central_1"
+    end
+
+    # if its private only, its VPC so tack that on
+    if node['cloud']['public_ipv4'].nil?
+        region = "#{region}_vpc"
+    end
+
+    key_bag = data_bag_item('pager_duty', "#{region}")
+    api_key = key_bag['api_key']
 end
 
 template "/etc/nagios3/conf.d/pagerduty_nagios.cfg" do
