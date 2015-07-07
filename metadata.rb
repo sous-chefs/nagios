@@ -4,7 +4,7 @@ maintainer_email  'tsmith84@gmail.com'
 license           'Apache 2.0'
 description       'Installs and configures Nagios server and the NRPE client'
 long_description  IO.read(File.join(File.dirname(__FILE__), 'README.md'))
-version           '5.1.3'
+version           '5.2.0'
 
 recipe 'nagios', 'Includes the client recipe.'
 recipe 'nagios::client', 'Installs and configures a nrpe client'
@@ -12,7 +12,7 @@ recipe 'nagios::server', 'Installs and configures a nagios server'
 recipe 'nagios::pagerduty', 'Integrates contacts w/ PagerDuty API'
 
 depends 'apache2', '= 1.10.4'
-depends 'build-essential', '= 2.0.6'
+depends 'build-essential', '~> 2.2.3'
 depends 'php', '= 1.3.0'
 depends 'nginx', '= 1.8.0'
 depends 'nginx_simplecgi', '= 0.1.2'
