@@ -21,31 +21,31 @@ action :update do
   run_context.resource_collection.each do |r|
     case r
     when Chef::Resource::NagiosCommand
-      update_object(r, 'commands', Nagios::Command)
+      update_object(r, 'command', Nagios::Command)
     when Chef::Resource::NagiosContact
-      update_object(r, 'contacts', Nagios::Contact)
+      update_object(r, 'contact', Nagios::Contact)
     when Chef::Resource::NagiosContactgroup
-      update_object(r, 'contactgroups', Nagios::Contactgroup)
+      update_object(r, 'contactgroup', Nagios::Contactgroup)
     when Chef::Resource::NagiosHost
-      update_object(r, 'hosts', Nagios::Host)
+      update_object(r, 'host', Nagios::Host)
     when Chef::Resource::NagiosHostdependency
-      update_object(r, 'hostdependencies', Nagios::Hostdependency)
+      update_object(r, 'hostdependency', Nagios::Hostdependency)
     when Chef::Resource::NagiosHostescalation
-      update_object(r, 'hostescalations', Nagios::Hostescalation)
+      update_object(r, 'hostescalation', Nagios::Hostescalation)
     when Chef::Resource::NagiosHostgroup
-      update_object(r, 'hostgroups', Nagios::Hostgroup)
+      update_object(r, 'hostgroup', Nagios::Hostgroup)
     when Chef::Resource::NagiosResource
-      update_object(r, 'resources', Nagios::Resource)
+      update_object(r, 'resource', Nagios::Resource)
     when Chef::Resource::NagiosService
-      update_object(r, 'services', Nagios::Service)
+      update_object(r, 'service', Nagios::Service)
     when Chef::Resource::NagiosServicedependency
-      update_object(r, 'servicedependencies', Nagios::Servicedependency)
+      update_object(r, 'servicedependency', Nagios::Servicedependency)
     when Chef::Resource::NagiosServiceescalation
-      update_object(r, 'serviceescalations', Nagios::Serviceescalation)
+      update_object(r, 'serviceescalation', Nagios::Serviceescalation)
     when Chef::Resource::NagiosServicegroup
-      update_object(r, 'servicegroups', Nagios::Servicegroup)
+      update_object(r, 'servicegroup', Nagios::Servicegroup)
     when Chef::Resource::NagiosTimeperiod
-      update_object(r, 'timeperiods', Nagios::Timeperiod)
+      update_object(r, 'timeperiod', Nagios::Timeperiod)
     end
   end
   new_resource.updated_by_last_action(false)
