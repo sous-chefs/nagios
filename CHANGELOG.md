@@ -1,6 +1,17 @@
 nagios Cookbook CHANGELOG
 =========================
 This file is used to list changes made in each version of the nagios cookbook.
+7.1.6
+-----
+### Bug
+- Fixing the nagios_[resource] provider delete action.
+
+### Improvement
+- Added option for custom apache auth based on attribute.
+- Update cgi-path attibute on source install.
+- Update on test-kitchen tests.
+- Update on kitchen-vagrant version.
+
 7.1.4
 -----
 ### Bug
