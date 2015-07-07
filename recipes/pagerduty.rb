@@ -58,7 +58,7 @@ else
     end
 
     key_bag = data_bag_item('pager_duty', node['app_environment'])
-    api_key = key_bag[region]
+    api_key = key_bag['keys'][region]
 end
 
 template "/etc/nagios3/conf.d/pagerduty_nagios.cfg" do
