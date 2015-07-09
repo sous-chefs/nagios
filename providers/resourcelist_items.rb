@@ -53,8 +53,18 @@ end
 
 private
 
+def isdelete?(action)
+  if action.is_a?(Symbol)
+    return true if action == :delete || action == :delete
+  elsif action.is_a?(Array)
+    return true if action.include?(:delete) || action.include?(:remove)
+  else
+    return false
+  end
+end
+
 def update_object(obj, entry, type)
-  if obj.action == :delete || obj.action == :remove
+  if isdelete?(obj.action)
     Nagios.instance.delete(entry, obj.name)
   else
     o = type.create(obj.name)
