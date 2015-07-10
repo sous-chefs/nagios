@@ -40,7 +40,7 @@ end
 
 services = nagios_bags.get(node['nagios']['services_databag'])
 services.each do |item|
-  if item['activate_check_in_environment'].nil? || item['activate_check_in_environment'].include? node.chef_environment
+  if item['activate_check_in_environment'].nil? || item['activate_check_in_environment'].include?(node.chef_environment)
     name = item['service_description'] || item['id']
     command_name = name.downcase.start_with?('check_') ? name.downcase : 'check_' + name.downcase
     service_name = name.downcase.start_with?('check_') ? name.gsub('check_', '') : name.downcase
