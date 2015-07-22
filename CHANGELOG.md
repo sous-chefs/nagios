@@ -7,6 +7,9 @@ v5.2.0
 ### Update
 - Bumped build-essential to 2.2.3 with a pessimistic version contraint
 
+### Improvement
+- Enable process_performance_data setting by default for services and hosts
+
 v5.1.0
 ------
 ### Bug
