@@ -30,35 +30,35 @@ include_recipe "pnp4nagios_tealium"
 include_recipe "nagios::nsca_server"
 
 %w{make libnet-nslookup-perl libmodule-install-perl libyaml-perl libyaml-syck-perl libwww-perl libnagios-plugin-perl}.each do |pkg|
-  package pkg do
-    action :install
-  end
+    package pkg do
+        action :install
+    end
 end
 
 [
-  "LWP::UserAgent::DNS::Hosts"
+   "LWP::UserAgent::DNS::Hosts"
 ].each { |package|
-   cpan_module package
+    cpan_module package
 }
 
 web_srv = node['nagios']['server']['web_server'].to_sym
 
 case web_srv
 when :nginx
-  Chef::Log.info "Setting up Nagios server via NGINX"
-  include_recipe 'nagios::nginx'
-  web_user = node["nginx"]["user"]
-  web_group = node["nginx"]["group"] || web_user
+    Chef::Log.info "Setting up Nagios server via NGINX"
+    include_recipe 'nagios::nginx'
+    web_user = node["nginx"]["user"]
+    web_group = node["nginx"]["group"] || web_user
 when :apache
-  Chef::Log.info "Setting up Nagios server via Apache2"
-  include_recipe 'nagios::apache'
-  web_user = node["apache"]["user"]
-  web_group = node["apache"]["group"] || web_user
+    Chef::Log.info "Setting up Nagios server via Apache2"
+    include_recipe 'nagios::apache'
+    web_user = node["apache"]["user"]
+    web_group = node["apache"]["group"] || web_user
 else
-  Chef::Log.fatal("Unknown web server option provided for Nagios server: " <<
-    "#{node['nagios']['server']['web_server']} provided. Allowed: :nginx or :apache"
-  )
-  raise 'Unknown web server option provided for Nagios server'
+    Chef::Log.fatal("Unknown web server option provided for Nagios server: " <<
+        "#{node['nagios']['server']['web_server']} provided. Allowed: :nginx or :apache"
+    )
+    raise 'Unknown web server option provided for Nagios server'
 end
 
 # Install nagios either from source of package
@@ -66,47 +66,60 @@ include_recipe "nagios::server_#{node['nagios']['server']['install_method']}"
 
 
 unless node['instance_role'] == 'vagrant'
-  sysadmins = search(:users, 'groups:sysadmin')
-  nagiosadmins = search(:users, 'group:devops')
-  admins = sysadmins.concat(nagiosadmins)
+    tries = 3
+    begin
+        sysadmins = search(:users, 'groups:sysadmin')
+        nagiosadmins = search(:users, 'group:devops')
+    rescue Net::HTTPServerException => err
+        Chef::Log.info("Search for all sysadmin users or devops group members failed with: #{err}")
+        tries -= 1
+        if tries > 0
+            Chef::Log.info("Retrying")
+            retry
+        else
+            Chef::Log.error("Tried a few times and we keep getting exceptions talking to chef API.  Bailing out")
+            raise err
+        end
+    end
+    admins = sysadmins.concat(nagiosadmins)
 else
-  sysadmins = ["nagiosadmin"]
+    sysadmins = ["nagiosadmin"]
 end
 
 case node['nagios']['server_auth_method']
 when "openid"
-  if(web_srv == :apache)
-    include_recipe "apache2::mod_auth_openid"
-  else
-    Chef::Log.fatal("OpenID authentication for Nagios is not supported on NGINX")
-    Chef::Log.fatal("Set node['nagios']['server_auth_method'] attribute in your role: #{node['nagios']['server_role']}")
-    raise
-  end
+    if(web_srv == :apache)
+        include_recipe "apache2::mod_auth_openid"
+    else
+        Chef::Log.fatal("OpenID authentication for Nagios is not supported on NGINX")
+        Chef::Log.fatal("Set node['nagios']['server_auth_method'] attribute in your role: #{node['nagios']['server_role']}")
+        raise "OpenID authentication for Nagios is not supported on NGINX"
+    end
 else
-  template "#{node['nagios']['conf_dir']}/htpasswd.users" do
-    source "htpasswd.users.erb"
-    owner node['nagios']['user']
-    group web_group
-    mode 0640
-    variables(
-      :sysadmins => admins
-    )
-  end
+    template "#{node['nagios']['conf_dir']}/htpasswd.users" do
+        source "htpasswd.users.erb"
+        owner node['nagios']['user']
+        group web_group
+        mode 0640
+        variables(
+            :sysadmins => admins
+        )
+    end
 end
 
-  directory "#{node['nagios']['docroot_pub']}" do
+directory "#{node['nagios']['docroot_pub']}" do
     owner node['nagios']['user']
     group node['nagios']['group']
     mode 00755
-  end
+end
 
-  template "#{node['nagios']['docroot_pub']}/index.html" do
+template "#{node['nagios']['docroot_pub']}/index.html" do
     source "index.html.erb"
     owner node['nagios']['user']
     group web_group
     mode 0644
-  end
- 
+end
+
 region = node[:ec2][:region]
 
 #node.set['domain'] = "prod1.eu-c1.int.ops.tlium.com"
@@ -115,47 +128,95 @@ domain = DNSHelpers.get_domain(node)
 
 unless domain.match(/^prod1?.\w{2}-\w{2}/)
 
-  nodes = search(:node, "app_environment:production AND placement_availability_zone:#{region}* NOT domain:prod*")
-
+    tries = 3
+    begin
+        nodes = search(:node, "app_environment:production AND placement_availability_zone:#{region}* NOT domain:prod*")
+    rescue Net::HTTPServerException => err
+        Chef::Log.info("Search for all roles failed with: #{err}")
+        tries -= 1
+        if tries > 0
+            Chef::Log.info("Retrying")
+            retry
+        else
+            Chef::Log.error("Tried a few times and we keep getting exceptions talking to chef API.  Bailing out")
+            raise err
+        end
+    end
 else
 
-  nodes1 = search(:node, "(domain:prod* OR domain:v* OR domain:ops*) AND app_environment:production* AND ec2_region:#{region} AND tealium_use_nagios:true")
-
-
-  nagiosnodes = search(:node, "domain:prod* AND role:nagios NOT ec2_instance_id:#{node['ec2']['instance_id']}")
-
-  Chef::Log.warn("Nagios Nodes are #{nagiosnodes}.")
-
-  nodes = []
-  nodes1 = nodes1.concat(nagiosnodes)
-  nodes1.each do |n|
-    if n.roles.include?("base")
-      nodes << n
+    tries = 3
+    begin
+        nodes1 = search(:node, "(domain:prod* OR domain:v* OR domain:ops*) AND app_environment:production* AND ec2_region:#{region} AND tealium_use_nagios:true")
+    rescue Net::HTTPServerException => err
+        Chef::Log.info("Search for all roles failed with: #{err}")
+        tries -= 1
+        if tries > 0
+            Chef::Log.info("Retrying")
+            retry
+        else
+            Chef::Log.error("Tried a few times and we keep getting exceptions talking to chef API.  Bailing out")
+            raise err
+        end
     end
-  end
+
+
+
+    tries = 3
+    begin
+        nagiosnodes = search(:node, "domain:prod* AND role:nagios NOT ec2_instance_id:#{node['ec2']['instance_id']}")
+    rescue Net::HTTPServerException => err
+        Chef::Log.info("Search for all roles failed with: #{err}")
+        tries -= 1
+        if tries > 0
+            Chef::Log.info("Retrying")
+            retry
+        else
+            Chef::Log.error("Tried a few times and we keep getting exceptions talking to chef API.  Bailing out")
+            raise err
+        end
+    end
+  
+    Chef::Log.warn("Nagios Nodes are #{nagiosnodes}.")
+  
+    nodes = []
+    nodes1 = nodes1.concat(nagiosnodes)
+    nodes1.each do |n|
+        if n.roles.include?("base")
+            nodes << n
+        end
+    end
 end
 
 if nodes.empty?
-  Chef::Log.warn("No nodes returned from search, using this node so hosts.cfg has data")
-  nodes = Array.new
-  nodes << node
+    Chef::Log.warn("No nodes returned from search, using this node so hosts.cfg has data")
+    nodes = Array.new
+    nodes << node
 end
 
 # find all unique platforms to create hostgroups
 os_list = Array.new
 
 nodes.each do |n|
-  if !os_list.include?(n['os'])
-    os_list << n['os']
-  end
+    if !os_list.include?(n['os'])
+        os_list << n['os']
+    end
 end
 
 # Load Nagios services from the nagios_services data bag
+tries = 3
 begin
   services = search(:nagios_services, '*:*')
-rescue Net::HTTPServerException
-  Chef::Log.info("Could not search for nagios_service data bag items, skipping dynamically generated service checks")
+rescue Net::HTTPServerException => err
+    Chef::Log.info("Search for all roles failed with: #{err}")
+    tries -= 1
+    if tries > 0
+        Chef::Log.info("Retrying")
+        retry
+    else
+        Chef::Log.info("Could not search for nagios_service data bag items, skipping dynamically generated service checks")
+    end
 end
+
 
 if services.nil? || services.empty?
   Chef::Log.info("No services returned from data bag search.")
@@ -163,19 +224,26 @@ if services.nil? || services.empty?
 end
 
 # Load search defined Nagios hostgroups from the nagios_hostgroups data bag and find nodes
+tries = 3
 begin
-  hostgroup_nodes= Hash.new
-  hostgroup_list = Array.new
-  search(:nagios_hostgroups, '*:*') do |hg|
-    hostgroup_list << hg['hostgroup_name']
-    temp_hostgroup_array= Array.new
-    search(:node, "#{hg['search_query']}") do |n|
-       temp_hostgroup_array << n['hostname']
+    hostgroup_nodes= Hash.new
+    hostgroup_list = Array.new
+    search(:nagios_hostgroups, '*:*') do |hg|
+        hostgroup_list << hg['hostgroup_name']
+        temp_hostgroup_array= Array.new
+        search(:node, "#{hg['search_query']}") do |n|
+            temp_hostgroup_array << n['hostname']
+        end
+        hostgroup_nodes[hg['hostgroup_name']] = temp_hostgroup_array.join(",")
     end
-    hostgroup_nodes[hg['hostgroup_name']] = temp_hostgroup_array.join(",")
-  end
 rescue Net::HTTPServerException
-  Chef::Log.info("Search for nagios_hostgroups data bag failed, so we'll just move on.")
+    tries -= 1
+    if tries > 0
+        Chef::Log.info("Retrying")
+        retry
+    else
+        Chef::Log.info("Search for nagios_hostgroups data bag failed, so we'll just move on.")
+    end
 end
 
 members = Array.new
@@ -190,110 +258,154 @@ end
 
 # maps nodes into nagios hostgroups
 role_list = Array.new
-service_hosts= Hash.new
-search(:role, "*:*") do |r|
-  role_list << r.name
-  search(:node, "role:#{r.name} AND app_environment:#{node[:app_environment]}") do |n|
-    service_hosts[r.name] = n['hostname']
-  end
+service_hosts = Hash.new
+tries = 3
+begin
+    search(:role, "*:*") do |r|
+        role_list << r.name
+        triesA = 3
+        begin
+            search(:node, "role:#{r.name} AND app_environment:#{node[:app_environment]}") do |n|
+                service_hosts[r.name] = n['hostname']
+            end
+        rescue Net::HTTPServerException => errr
+            Chef::Log.info("Search for hosts in role #{r.name} with app env #{node[:app_environment]} failed with: #{errr}")
+            triesA -= 1
+            if triesA > 0
+                Chef::Log.info("Retrying #{triesA} more times")
+                retry
+            else
+                Chef::Log.error("Tried a few times and we keep getting exceptions talking to chef API.  Bailing out")
+                raise "no_retry"
+            end
+        end
+    end
+rescue Net::HTTPServerException => err
+    Chef::Log.info("Search for all roles failed with: #{err}")
+    tries -= 1
+    if tries > 0
+        Chef::Log.info("Retrying")
+        retry
+    else
+        Chef::Log.error("Tried a few times and we keep getting exceptions talking to chef API.  Bailing out")
+        raise err
+    end
+rescue StandardError => err
+    Chef::Log.info("while searching for all hosts in all roles in this app_environment, search failed with: #{err}")
+    raise err
 end
 
 if node['public_domain']
-  public_domain = node['public_domain']
+    public_domain = node['public_domain']
 else
-  public_domain = node['domain']
+    public_domain = node['domain']
 end
 
 
 nagios_conf "nagios" do
-  config_subdir false
+    config_subdir false
 end
 
 directory "#{node['nagios']['conf_dir']}/dist" do
-  owner node['nagios']['user']
-  group node['nagios']['group']
-  mode 00755
+    owner node['nagios']['user']
+    group node['nagios']['group']
+    mode 00755
 end
 
 directory node['nagios']['state_dir'] do
-  owner node['nagios']['user']
-  group node['nagios']['group']
-  mode 00751
+    owner node['nagios']['user']
+    group node['nagios']['group']
+    mode 00751
 end
 
 directory "#{node['nagios']['state_dir']}/rw" do
-  owner node['nagios']['user']
-  group web_group
-  mode 02710
+    owner node['nagios']['user']
+    group web_group
+    mode 02710
 end
 
 execute "archive-default-nagios-object-definitions" do
-  command "mv #{node['nagios']['config_dir']}/*_nagios*.cfg #{node['nagios']['conf_dir']}/dist"
-  not_if { Dir.glob("#{node['nagios']['config_dir']}/*_nagios*.cfg").empty? }
-end
+    command "mv #{node['nagios']['config_dir']}/*_nagios*.cfg #{node['nagios']['conf_dir']}/dist"
+    not_if { Dir.glob("#{node['nagios']['config_dir']}/*_nagios*.cfg").empty? }
+    end
 
 directory "#{node['nagios']['conf_dir']}/certificates" do
-  owner web_user
-  group web_group
-  mode 00700
+    owner web_user
+    group web_group
+    mode 00700
 end
 
 bash "Create SSL Certificates" do
-  cwd "#{node['nagios']['conf_dir']}/certificates"
-  code <<-EOH
-  umask 077
-  openssl genrsa 2048 > nagios-server.key
-  openssl req -subj "#{node['nagios']['ssl_req']}" -new -x509 -nodes -sha1 -days 3650 -key nagios-server.key > nagios-server.crt
-  cat nagios-server.key nagios-server.crt > nagios-server.pem
-  EOH
-  not_if { ::File.exists?("#{node['nagios']['conf_dir']}/certificates/nagios-server.pem") }
+    cwd "#{node['nagios']['conf_dir']}/certificates"
+    code <<-EOH
+    umask 077
+    openssl genrsa 2048 > nagios-server.key
+    openssl req -subj "#{node['nagios']['ssl_req']}" -new -x509 -nodes -sha1 -days 3650 -key nagios-server.key > nagios-server.crt
+    cat nagios-server.key nagios-server.crt > nagios-server.pem
+    EOH
+    not_if { ::File.exists?("#{node['nagios']['conf_dir']}/certificates/nagios-server.pem") }
 end
 
 %w{ nagios cgi }.each do |conf|
-  nagios_conf conf do
-    config_subdir false
-  end
+    nagios_conf conf do
+        config_subdir false
+    end
 end
 
 %w{ templates timeperiods}.each do |conf|
-  nagios_conf conf
+    nagios_conf conf
 end
 
 domain = node[:domain]
 
+# this will probably need adjustment for privatecloud
 case domain
 when "prod1.us-w1.int.ops.tlium.com"
-  url = "us-west-1-vpc.nagios.ops.tlium.com/nagios3/"
+    url = "us-west-1-vpc.nagios.ops.tlium.com/nagios3/"
 when "prod1.us-e1.int.ops.tlium.com"
-  url = "us-east-1-vpc.nagios.ops.tlium.com/nagios3/"
+    url = "us-east-1-vpc.nagios.ops.tlium.com/nagios3/"
 when "prod1.eu-w1.int.ops.tlium.com"
-  url = "eu-west-1-vpc.nagios.ops.tlium.com/nagios3/"
+    url = "eu-west-1-vpc.nagios.ops.tlium.com/nagios3/"
 when "prod1.eu-c1.int.ops.tlium.com"
-  url = "eu-central-1-vpc.nagios.ops.tlium.com/nagios3/"
+    url = "eu-central-1-vpc.nagios.ops.tlium.com/nagios3/"
 when "us-west-1.compute.internal"
-  url = "us-west-1.nagios.ops.tlium.com/nagios3/"
+    url = "us-west-1.nagios.ops.tlium.com/nagios3/"
 when "eu-w1"
-  url = "eu-west-1.nagios.ops.tlium.com/nagios3/"
+    url = "eu-west-1.nagios.ops.tlium.com/nagios3/"
 when "ec2.internal"
-  url = "us-east-1.nagios.ops.tlium.com/nagios3/"
+    url = "us-east-1.nagios.ops.tlium.com/nagios3/"
 end
 
 nagios_conf "commands" do
-  variables(
-    :services => services,
-    :url => url
-  )
+    variables(
+        :services => services,
+        :url => url
+    )
 end
 
 if node[:monitored_region].nil?
-uconnects = []
+    uconnects = []
 else
-  uconnects = []
-  search = search(:node, "domain:prod* AND app_environment:production* AND placement_availability_zone:#{region}*")
-    search.each do |n|
-      if n.recipes.include?("uconnect::s2s_logger_plenv") || n.recipes.include?("uconnect")
-        uconnects << n
-      end
+    uconnects = []
+    tries = 3
+    begin
+        # these search terms will definitely need ajustment for private cloud
+        search = search(:node, "domain:prod* AND app_environment:production* AND placement_availability_zone:#{region}*")
+        search.each do |n|
+            if n.recipes.include?("uconnect::s2s_logger_plenv") || n.recipes.include?("uconnect")
+                uconnects << n
+            end
+        end
+    rescue Net::HTTPServerException => err
+        Chef::Log.info("Search for prod nodes failed with: #{err}")
+        tries -= 1
+        if tries > 0
+            Chef::Log.info("Retrying")
+            retry
+        else
+            Chef::Log.error("Tried a few times and we keep getting exceptions talking to chef API.  Bailing out")
+            raise err
+        end
     end
 end
 
