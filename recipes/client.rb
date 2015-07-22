@@ -86,6 +86,13 @@ if node.roles.include?("mongodb_config")
     critical_condition node['nagios']['checks']['load']['critical']
     action :add
   end
+elsif node.recipes.include?("mongodb::mongos")
+  nagios_nrpecheck "check_load" do
+    command "#{node['nagios']['plugin_dir']}/check_load"
+    warning_condition "20,15,10"
+    critical_condition "30,25,20"
+    action :add
+  end
 else
   nagios_nrpecheck "check_load" do
     command "#{node['nagios']['plugin_dir']}/check_load"
