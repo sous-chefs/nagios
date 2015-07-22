@@ -41,30 +41,24 @@ package "libcrypt-ssleay-perl" do
   action :install
 end
 
-domain = DNSHelpers.get_domain(node)
+# need to support 
+#   multi-region VPC and non VPC for our not fully VPC prod env
+#   multi-region VPC for private clouds (currently single region, but could become multi sometime)
 
-case domain
-when "prod1.us-w1.int.ops.tlium.com"
-  region = "us_west_1_vpc"
-when "prod1.us-e1.int.ops.tlium.com"
-  region = "us_east_1_vpc"
-when "prod1.eu-w1.int.ops.tlium.com"
-  region = "eu_west_1_vpc"
-when "prod1.eu-c1.int.ops.tlium.com"
-  region = "eu_central_1_vpc"
-when "us-west-1.compute.internal"
-  region = "us_west_1"
-when "eu-west-1.compute.internal"
-  region = "eu_west_1"
-when "ec2.internal"
-  region = "us_east_1"
-end
-
-unless node['instance_role'] == 'vagrant'
-  key_bag = data_bag_item('pager_duty', "#{region}")
-  api_key = key_bag['api_key']
+api_key = ''
+if node['instance_role'] == 'vagrant'
+    api_key = "test"
 else
-  api_key = "test"
+    # we really only want to do this for prod
+    region = node['ec2']['region']
+
+    # if its private only, its VPC so tack that on
+    unless node['cloud']['public_ipv4'].nil?
+        region = "#{region}-nonvpc"
+    end
+
+    key_bag = data_bag_item('pager_duty', node['app_environment'])
+    api_key = key_bag['keys'][region]
 end
 
 template "/etc/nagios3/conf.d/pagerduty_nagios.cfg" do
