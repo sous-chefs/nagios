@@ -2,7 +2,7 @@ nagios Cookbook CHANGELOG
 =========================
 This file is used to list changes made in each version of the nagios cookbook.
 
-v5.2.0
+v5.1.4
 ------
 ### Update
 - Bumped build-essential to 2.2.3 with a pessimistic version contraint
