@@ -95,11 +95,11 @@ default['nagios']['large_installation_tweaks']   = 0
 
 # for overriding nagios templates with your own. By default it'll use the
 # included one with this cookbook.
-default['nagios']['server']['templates']['nagios']['cookbook'] = 'nagios' 
-default['nagios']['server']['templates']['cgi']['cookbook'] = 'nagios' 
-default['nagios']['server']['templates']['timeperiods']['cookbook'] = 'nagios' 
-default['nagios']['server']['templates']['templates']['cookbook'] = 'nagios' 
-default['nagios']['server']['templates']['commands']['cookbook'] = 'nagios' 
+default['nagios']['server']['templates']['nagios']['cookbook'] = 'nagios'
+default['nagios']['server']['templates']['cgi']['cookbook'] = 'nagios'
+default['nagios']['server']['templates']['timeperiods']['cookbook'] = 'nagios'
+default['nagios']['server']['templates']['templates']['cookbook'] = 'nagios'
+default['nagios']['server']['templates']['commands']['cookbook'] = 'nagios'
 default['nagios']['server']['templates']['services']['cookbook'] = 'nagios'
 default['nagios']['server']['templates']['servicegroups']['cookbook'] = 'nagios'
 default['nagios']['server']['templates']['contacts']['cookbook'] = 'nagios'
@@ -151,7 +151,9 @@ default['nagios']['conf']['max_service_check_spread'] = 5
 default['nagios']['conf']['max_host_check_spread']    = 5
 default['nagios']['conf']['service_check_timeout']    = 60
 default['nagios']['conf']['host_check_timeout']       = 30
-default['nagios']['conf']['process_performance_data'] = 0
+default['nagios']['conf']['process_performance_data'] = 1
+default['nagios']['conf']['host_perfdata_command']    = 'process-host-perfdata'
+default['nagios']['conf']['service_perfdata_command'] = 'process-service-perfdata'
 default['nagios']['conf']['date_format']              = 'iso8601'
 default['nagios']['conf']['p1_file']                  = "#{node['nagios']['home']}/p1.pl"
 default['nagios']['conf']['debug_level']              = 0
