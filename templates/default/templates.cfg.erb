@@ -32,8 +32,7 @@ define host {
   event_handler_enabled           1
   flap_detection_enabled          <%= nagios_boolean(nagios_attr(:default_host)[:flap_detection]) %>
   failure_prediction_enabled      1
-#  process_perf_data               1
-  process_perf_data               0
+  process_perf_data               1
   retain_status_information       1
   retain_nonstatus_information    1
   notification_period             24x7
@@ -65,8 +64,7 @@ define service {
   event_handler_enabled           1
   flap_detection_enabled          <%= nagios_boolean(nagios_attr(:default_service)[:flap_detection]) %>
   failure_prediction_enabled      1
-#  process_perf_data               1
-  process_perf_data               0
+  process_perf_data               1
   retain_status_information       1
   retain_nonstatus_information    1
   is_volatile                     0

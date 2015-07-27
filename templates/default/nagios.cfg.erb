@@ -90,22 +90,21 @@ accept_passive_host_checks=1
 enable_notifications=<%= node['nagios']['notifications_enabled'] %>
 enable_event_handlers=1
 
-#process_performance_data=1
 process_performance_data=<%= node['nagios']['conf']['process_performance_data'] %>
 
 #service_perfdata_command=ngraph-process-service-perfdata-pipe
 <%= "host_perfdata_command=#{node['nagios']['conf']['host_perfdata_command']}" unless node['nagios']['conf']['host_perfdata_command'].nil? %>
-<%= "host_perfdata_command=#{node['nagios']['conf']['service_perfdata_command']}" unless node['nagios']['conf']['service_perfdata_command'].nil? %>#service_perfdata_command=process-service-perfdata
-#host_perfdata_file=/tmp/host-perfdata
-#service_perfdata_file=/tmp/service-perfdata
-#host_perfdata_file_template=[HOSTPERFDATA]\t$TIMET$\t$HOSTNAME$\t$HOSTEXECUTIONTIME$\t$HOSTOUTPUT$\t$HOSTPERFDATA$
-#service_perfdata_file_template=[SERVICEPERFDATA]\t$TIMET$\t$HOSTNAME$\t$SERVICEDESC$\t$SERVICEEXECUTIONTIME$\t$SERVICELATENCY$\t$SERVICEOUTPUT$\t$SERVICEPERFDATA$
-#host_perfdata_file_mode=a
-#service_perfdata_file_mode=a
-#host_perfdata_file_processing_interval=0
-#service_perfdata_file_processing_interval=0
-#host_perfdata_file_processing_command=process-host-perfdata-file
-#service_perfdata_file_processing_command=process-service-perfdata-file
+<%= "host_perfdata_command=#{node['nagios']['conf']['service_perfdata_command']}" unless node['nagios']['conf']['service_perfdata_command'].nil? %>service_perfdata_command=process-service-perfdata
+host_perfdata_file=/tmp/host-perfdata
+service_perfdata_file=/tmp/service-perfdata
+host_perfdata_file_template=[HOSTPERFDATA]\t$TIMET$\t$HOSTNAME$\t$HOSTEXECUTIONTIME$\t$HOSTOUTPUT$\t$HOSTPERFDATA$
+service_perfdata_file_template=[SERVICEPERFDATA]\t$TIMET$\t$HOSTNAME$\t$SERVICEDESC$\t$SERVICEEXECUTIONTIME$\t$SERVICELATENCY$\t$SERVICEOUTPUT$\t$SERVICEPERFDATA$
+host_perfdata_file_mode=a
+service_perfdata_file_mode=a
+host_perfdata_file_processing_interval=15
+service_perfdata_file_processing_interval=15
+host_perfdata_file_processing_command=process-host-perfdata-file
+service_perfdata_file_processing_command=process-service-perfdata-file
 
 obsess_over_services=0
 #ocsp_command=somecommand
