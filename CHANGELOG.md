@@ -1,6 +1,12 @@
 nagios Cookbook CHANGELOG
 =========================
 This file is used to list changes made in each version of the nagios cookbook.
+7.1.8
+-----
+### Bug
+- Fixing the unmanagedhosts databag filter on environment.
+- Fixing the services databag filter on environment.
+
 7.1.6
 -----
 ### Bug
