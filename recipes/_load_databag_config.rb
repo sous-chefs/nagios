@@ -139,10 +139,10 @@ end
 
 unmanaged_hosts = nagios_bags.get(node['nagios']['unmanagedhosts_databag'])
 unmanaged_hosts.each do |item|
-	if item['environment'].nil? || item['environment'] == node.chef_environment
-	  name = item['host_name'] || item['id']
-	  nagios_host name do
-    	  options item
+  if item['environment'].nil? || item['environment'] == node.chef_environment
+    name = item['host_name'] || item['id']
+    nagios_host name do
+      options item
     end
   end
 end
