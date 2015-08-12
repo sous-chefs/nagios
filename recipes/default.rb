@@ -106,14 +106,14 @@ end
 
 Nagios.instance.host_name_attribute = node['nagios']['host_name_attribute']
 
-# loading all databag configurations
-if node['nagios']['server']['load_databag_config']
-  include_recipe 'nagios::_load_databag_config'
-end
-
 # loading default configuration data
 if node['nagios']['server']['load_default_config']
   include_recipe 'nagios::_load_default_config'
+end
+
+# loading all databag configurations
+if node['nagios']['server']['load_databag_config']
+  include_recipe 'nagios::_load_databag_config'
 end
 
 directory "#{node['nagios']['conf_dir']}/dist" do
@@ -166,9 +166,6 @@ nagios_conf 'cgi' do
   config_subdir false
   variables(:nagios_service_name => nagios_service_name)
 end
-
-# Update all items before writing the templates
-nagios_resourcelist_items 'update'
 
 # resource.cfg differs on RPM and tarball based systems
 if node['platform_family'] == 'rhel' || node['platform_family'] == 'fedora'

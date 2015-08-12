@@ -1,7 +1,7 @@
 #
 # Author:: Sander Botman <sbotman@schubergphilis.com>
-# Cookbook Name:: nagios
-# Provider:: host
+# Cookbook Name : nagios
+# Definition    : command
 #
 # Copyright 2015, Sander Botman
 #
@@ -16,19 +16,18 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+#
 
-action :create do
-  new_resource.updated_by_last_action(false)
-end
+define :nagios_command do
+  params[:action] ||= :create
+  params[:options] ||= {}
 
-action :delete do
-  new_resource.updated_by_last_action(false)
-end
+  if nagios_action_create?(params[:action])
+    o = Nagios::Command.create(params[:name])
+    o.import(params[:options])
+  end
 
-action :add do
-  new_resource.updated_by_last_action(false)
-end
-
-action :remove do
-  new_resource.updated_by_last_action(false)
+  if nagios_action_delete?(params[:action])
+    Nagios.instance.delete('command', params[:name])
+  end
 end

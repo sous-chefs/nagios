@@ -33,6 +33,26 @@ def nagios_interval(seconds)
   interval
 end
 
+def nagios_action_delete?(action)
+  if action.is_a?(Symbol)
+    return true if action == :delete || action == :remove
+  elsif action.is_a?(Array)
+    return true if action.include?(:delete) || action.include?(:remove)
+  else
+    return false
+  end
+end
+
+def nagios_action_create?(action)
+  if action.is_a?(Symbol)
+    return true if action == :create || action == :add
+  elsif action.is_a?(Array)
+    return true if action.include?(:create) || action.include?(:add)
+  else
+    return false
+  end
+end
+
 def nagios_attr(name)
   node['nagios'][name]
 end
