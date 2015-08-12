@@ -7,6 +7,11 @@ This file is used to list changes made in each version of the nagios cookbook.
 - Fixing the unmanagedhosts databag filter on environment.
 - Fixing the services databag filter on environment.
 
+### Improvement
+- Moving the LWRP's providers into definitions.
+  This will remove some extra complexity and output will be
+  much nicer during the chef-converge.
+
 7.1.6
 -----
 ### Bug
