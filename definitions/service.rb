@@ -1,7 +1,7 @@
 #
 # Author:: Sander Botman <sbotman@schubergphilis.com>
-# Cookbook Name:: nagios
-# Resource:: hostgroup
+# Cookbook Name : nagios
+# Definition    : service
 #
 # Copyright 2015, Sander Botman
 #
@@ -16,9 +16,18 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+#
 
-actions :create, :add, :delete, :remove
-default_action :create
+define :nagios_service do
+  params[:action] ||= :create
+  params[:options] ||= {}
 
-attribute :name, :kind_of => String, :name_attribute => true
-attribute :options, :kind_of => [Hash, DataBagItem], :default => nil
+  if nagios_action_create?(params[:action])
+    o = Nagios::Service.create(params[:name])
+    o.import(params[:options])
+  end
+
+  if nagios_action_delete?(params[:action])
+    Nagios.instance.delete('service', params[:name])
+  end
+end

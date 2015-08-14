@@ -1,7 +1,7 @@
 #
 # Author:: Sander Botman <sbotman@schubergphilis.com>
-# Cookbook Name:: nagios
-# Resource:: resourcelist_items
+# Cookbook Name : nagios
+# Definition    : resource
 #
 # Copyright 2015, Sander Botman
 #
@@ -16,8 +16,18 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+#
 
-actions :update
-default_action :update
+define :nagios_resource do
+  params[:action] ||= :create
+  params[:options] ||= {}
 
-attribute :name, :kind_of => String, :name_attribute => true
+  if nagios_action_create?(params[:action])
+    o = Nagios::Resource.create(params[:name])
+    o.import(params[:options])
+  end
+
+  if nagios_action_delete?(params[:action])
+    Nagios.instance.delete('resource', params[:name])
+  end
+end
