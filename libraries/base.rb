@@ -187,11 +187,15 @@ class Nagios
     end
 
     # rubocop:disable MethodLength
-    def get_members(option)
+    def get_members(option, object)
       members = []
       case option
       when String
-        members = option.split(',')
+        if object == Nagios::Command
+          members = [option]
+        else
+          members = option.split(',')
+        end
         members.map(&:strip!)
       when Array
         members = option
@@ -276,7 +280,7 @@ class Nagios
 
     def update_members(hash, option, object, remote = false)
       return if blank?(hash) || hash[option].nil?
-      get_members(hash[option]).each do |member|
+      get_members(hash[option], object).each do |member|
         n = Nagios.instance.find(object.new(member))
         push(n)
         n.push(self) if remote
@@ -285,7 +289,7 @@ class Nagios
 
     def update_dependency_members(hash, option, object)
       return if blank?(hash) || hash[option].nil?
-      get_members(hash[option]).each do |member|
+      get_members(hash[option], object).each do |member|
         push_dependency(Nagios.instance.find(object.new(member)))
       end
     end

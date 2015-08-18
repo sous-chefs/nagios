@@ -72,11 +72,22 @@ class Nagios
 
     def initialize(service_description)
       @service_description = service_description
+      srv = service_description.split('!')
+      @check_command       = srv.shift
+      @arguments           = srv
       @servicegroups       = {}
       @contacts            = {}
       @contact_groups      = {}
       @hostgroups          = {}
       @hosts               = {}
+    end
+
+    def check_command
+      if blank?(@arguments)
+        @check_command.to_s
+      else
+        @check_command.to_s + '!' + @arguments.join('!')
+      end
     end
 
     def check_period
