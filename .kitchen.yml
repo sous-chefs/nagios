@@ -59,7 +59,7 @@ platforms:
         - ["forwarded_port", {guest: 80, host: 8088}]
     run_list:
     - recipe[yum::default]
-  - name: centos-5.10
+  - name: centos-5.11
     driver_config:
       network:
         - ["forwarded_port", {guest: 80, host: 8089}]
