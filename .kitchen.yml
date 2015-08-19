@@ -47,7 +47,7 @@ platforms:
         - ["forwarded_port", {guest: 80, host: 8086}]
     run_list:
     - recipe[freebsd::portsnap]
-  - name: centos-7.0
+  - name: centos-7.1
     driver_config:
       network:
         - ["forwarded_port", {guest: 80, host: 8087}]
