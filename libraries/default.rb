@@ -33,6 +33,15 @@ def nagios_interval(seconds)
   interval
 end
 
+def nagios_array(exp)
+  case exp
+  when Array
+    exp
+  when String
+    [exp]
+  end
+end
+
 def nagios_action_delete?(action)
   if action.is_a?(Symbol)
     return true if action == :delete || action == :remove
