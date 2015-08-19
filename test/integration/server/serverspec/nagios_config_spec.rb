@@ -78,6 +78,16 @@ describe 'Nagios Configuration' do
     end
   end
 
+  file_hosts_exclude = []
+  file_hosts_exclude << 'chefnode_exclude_arr'
+  file_hosts_exclude << 'chefnode_exclude_str'
+
+  file_hosts_exclude.each do |line|
+    describe file("#{path_config_dir}/hosts.cfg") do
+      its(:content) { should_not match line }
+    end
+  end
+
   file_contacts = []
   file_contacts << 'contact.*devs'
   file_contacts << 'contact.*root'
