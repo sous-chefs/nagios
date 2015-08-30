@@ -1,0 +1,12 @@
+{
+  "chef_type": "node",
+  "json_class": "Chef::Node",
+  "normal": {
+    "nagios": {
+      "address": "127.0.0.1",
+      "notes": "we want to exclude nodes with array tag: foo"
+    },
+    "tags": [ "foo", "bar" ]
+  },
+  "run_list": []
+}
