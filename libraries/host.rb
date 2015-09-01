@@ -131,11 +131,9 @@ class Nagios
       get_timeperiod(@notification_period)
     end
 
-    # rubocop:disable Style/TrivialAccessors
     def notifications
       @notifications_enabled
     end
-    # rubocop:enable Style/TrivialAccessors
 
     def notifications=(arg)
       @notifications_enabled = check_bool(arg)

@@ -38,12 +38,12 @@ class Nagios
                   :escalation_options
 
     def initialize(name)
-      @host_description, @name  = name
-      @contacts         = {}
-      @contact_groups   = {}
-      @host_name        = {}
-      @hostgroup_name   = {}
-      @register         = 0
+      @host_description, @name = name
+      @contacts       = {}
+      @contact_groups = {}
+      @host_name      = {}
+      @hostgroup_name = {}
+      @register       = 0
     end
 
     def definition

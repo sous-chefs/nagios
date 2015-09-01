@@ -4,9 +4,9 @@ require 'serverspec'
 set :backend, :exec
 
 if %w( redhat fedora ).include?(os[:family])
-  path_config_dir    = '/etc/nagios/conf.d'
+  path_config_dir = '/etc/nagios/conf.d'
 else
-  path_config_dir    = '/etc/nagios3/conf.d'
+  path_config_dir = '/etc/nagios3/conf.d'
 end
 
 describe 'Pagerduty Configuration' do
