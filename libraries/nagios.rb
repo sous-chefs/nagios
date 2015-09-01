@@ -45,7 +45,8 @@ class Nagios
                 :default_host,
                 :default_servicegroup,
                 :default_service,
-                :default_timeperiod
+                :default_timeperiod,
+                :server_node
 
   # rubocop:disable MethodLength
   def initialize
@@ -285,7 +286,7 @@ class Nagios
     return nil if hostname.nil?
 
     host = find(Nagios::Host.new(hostname))
-    host.address = ip_to_monitor(obj)
+    host.address = ip_to_monitor(obj, @server_node)
     host.import(obj['nagios']) unless obj['nagios'].nil?
 
     groups.each do |r|

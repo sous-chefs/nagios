@@ -105,6 +105,7 @@ unless node['nagios'].nil?
 end
 
 Nagios.instance.host_name_attribute = node['nagios']['host_name_attribute']
+Nagios.instance.server_node = node
 
 # loading default configuration data
 if node['nagios']['server']['load_default_config']
