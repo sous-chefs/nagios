@@ -63,7 +63,7 @@ end
 
 # Host checks
 nagios_command 'check_host_alive' do
-  options  'command_line' => '$USER1$/check_ping -H $HOSTADDRESS$ -w 2000,80% -c 3000,100% -p 1'
+  options 'command_line' => '$USER1$/check_ping -H $HOSTADDRESS$ -w 2000,80% -c 3000,100% -p 1'
 end
 
 # Service checks
