@@ -86,7 +86,6 @@ suites:
    - role[monitoring]
    attributes:
      nagios:
-       exclude_tag_host: ['foo']
  - name: server_source
    run_list:
    - recipe[nagios::default]
@@ -96,7 +95,6 @@ suites:
      nagios:
        server:
          install_method: 'source'
-       exclude_tag_host: ['foo']
  - name: pagerduty
    run_list:
    - recipe[nagios::default]
@@ -105,7 +103,6 @@ suites:
    - role[monitoring]
    attributes:
      nagios:
-       exclude_tag_host: ['foo']
        server:
          install_method: 'source'
        pagerduty:
