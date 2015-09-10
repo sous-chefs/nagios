@@ -1,6 +1,17 @@
 nagios Cookbook CHANGELOG
 =========================
 This file is used to list changes made in each version of the nagios cookbook.
+7.2.0
+-----
+### Testing
+- Added centos 7.1 for testing.
+- Added centos 5.11 for testing.
+- Added test-kitchen tests.
+
+### Improvement
+- Added logic to exclude nodes based on tag.
+- Including apache2::mpm_prefork for apache.
+
 7.1.8
 -----
 ### Bug
