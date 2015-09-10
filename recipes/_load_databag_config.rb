@@ -46,7 +46,7 @@ services.each do |item|
     command_name = name.downcase.start_with?('check_') ? name.downcase : 'check_' + name.downcase
   else
     command_name = item['check_command']
-  end 
+  end
   service_name = name.downcase.start_with?('check_') ? name.gsub('check_', '') : name.downcase
   item['check_command'] = command_name
 

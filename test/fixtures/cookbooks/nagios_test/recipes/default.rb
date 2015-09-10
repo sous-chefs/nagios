@@ -18,17 +18,17 @@
 # limitations under the License.
 
 nagios_command 'system-load' do
-  options 'command_line'    => '$USER1$/check_load -w $ARG1$ -c $ARG2$'
+  options 'command_line' => '$USER1$/check_load -w $ARG1$ -c $ARG2$'
 end
 
 nagios_service 'system-high-load' do
-  options 'check_command'       => 'system-load!20,15,10!40,35,30',
-          'use'                 => 'default-service',
-          'hostgroup_name'      => 'high_load_servers'
+  options 'check_command'  => 'system-load!20,15,10!40,35,30',
+          'use'            => 'default-service',
+          'hostgroup_name' => 'high_load_servers'
 end
 
 nagios_service 'system-medium-load' do
-  options 'check_command'       => 'system-load!15,10,5!30,25,20',
-          'use'                 => 'default-service',
-          'hostgroup_name'      => 'medium_load_servers'
+  options 'check_command'  => 'system-load!15,10,5!30,25,20',
+          'use'            => 'default-service',
+          'hostgroup_name' => 'medium_load_servers'
 end
