@@ -90,6 +90,12 @@ class Nagios
       end
     end
 
+    def check_command=(cmd)
+      cmd = cmd.split('!')
+      cmd.shift
+      @arguments = cmd
+    end
+
     def check_period
       get_timeperiod(@check_period)
     end
