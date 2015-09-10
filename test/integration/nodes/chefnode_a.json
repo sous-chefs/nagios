@@ -2,7 +2,8 @@
   "normal": {
     "nagios": {
       "address": "127.0.0.1",
-      "notes": "notes configured via chef node attributes"
+      "notes": "notes configured via chef node attributes",
+      "_custom_host_option": "custom_host_value"
     }
    },
   "run_list": []

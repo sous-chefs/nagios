@@ -32,3 +32,11 @@ nagios_service 'system-medium-load' do
           'use'            => 'default-service',
           'hostgroup_name' => 'medium_load_servers'
 end
+
+nagios_contact 'sander botman' do
+  options 'use'            => 'default-contact',
+          'alias'          => 'Nagios Noob',
+          'pager'          => '+31651425985',
+          'email'          => 'sbotman@schubergphilis.com',
+          '_my_custom_key' => 'custom_value'
+end
