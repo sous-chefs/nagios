@@ -27,7 +27,8 @@ class Nagios
   #
   class Contact < Nagios::Base
     attr_reader   :contact_name,
-                  :contactgroups
+                  :contactgroups,
+                  :custom_options
 
     attr_accessor :alias,
                   :host_notifications_enabled,
@@ -50,6 +51,7 @@ class Nagios
       @contactgroups = {}
       @host_notification_commands = []
       @service_notification_commands = []
+      @custom_options = {}
     end
 
     def contactgroups_list
@@ -60,7 +62,9 @@ class Nagios
       if email.nil? && name.nil? && pager.nil?
         "# Skipping #{contact_name} because missing email/pager."
       else
-        get_definition(configured_options, 'contact')
+        configured = configured_options
+        custom_options.each { |_, v| configured[v.option] = v.value }
+        get_definition(configured, 'contact')
       end
     end
 
@@ -92,6 +96,8 @@ class Nagios
       when Nagios::Timeperiod
         @host_notification_period = obj
         @service_notification_period = obj
+      when Nagios::CustomOption
+        push_object(obj, @custom_options)
       end
     end
 
@@ -199,6 +205,7 @@ class Nagios
 
     def merge_members(obj)
       obj.contactgroups.each { |m| push(m) }
+      obj.custom_options.each { |_, m| push(m) }
     end
   end
 end
