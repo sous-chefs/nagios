@@ -83,6 +83,7 @@ suites:
    run_list:
    - recipe[nagios::default]
    - recipe[nrpe::default]
+   - recipe[nagios_test::default]
    - role[monitoring]
    attributes:
      nagios:
@@ -90,6 +91,7 @@ suites:
    run_list:
    - recipe[nagios::default]
    - recipe[nrpe::default]
+   - recipe[nagios_test::default]
    - role[monitoring]
    attributes:
      nagios:
@@ -100,6 +102,7 @@ suites:
    - recipe[nagios::default]
    - recipe[nagios::pagerduty]
    - recipe[nrpe::default]
+   - recipe[nagios_test::default]
    - role[monitoring]
    attributes:
      nagios:
