@@ -63,7 +63,7 @@ class Nagios
         "# Skipping #{contact_name} because missing email/pager."
       else
         configured = configured_options
-        custom_options.each { |_, v| configured[v.option] = v.value }
+        custom_options.each { |_, v| configured[v.to_s] = v.value }
         get_definition(configured, 'contact')
       end
     end

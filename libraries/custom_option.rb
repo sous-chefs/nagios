@@ -17,15 +17,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require_relative 'base'
-
 class Nagios
   #
   #  This class holds all methods with regard to custom_options
   #
-  class CustomOption < Nagios::Base
-    attr_reader :option,
-                :value
+  class CustomOption
+    attr_reader :value
 
     def initialize(option, value)
       @option = option
@@ -33,7 +30,7 @@ class Nagios
     end
 
     def to_s
-      option
+      @option
     end
   end
 end

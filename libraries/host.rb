@@ -110,7 +110,7 @@ class Nagios
 
     def definition
       configured = configured_options
-      custom_options.each { |_, v| configured[v.option] = v.value }
+      custom_options.each { |_, v| configured[v.to_s] = v.value }
       get_definition(configured, 'host')
     end
 
