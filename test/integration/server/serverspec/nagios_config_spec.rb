@@ -68,7 +68,7 @@ describe 'Nagios Configuration' do
   file_hosts << 'host_name[ \t]+host_b'
   file_hosts << 'host_name[ \t]+' + `hostname`.split('.').first
   file_hosts << 'host_name[ \t]+chefnode_a'
-  file_hosts << '_CUSTOM_HOST_OPTION[ \t]+custom_host_value'
+  file_hosts << '_CUSTOM_HOST_OPTION[ \t]+custom_host_value.*\n}'
   file_hosts << 'notes[ \t]+configured via chef node attributes'
   file_hosts << 'host_name[ \t]+chefnode_b_alt'
   file_hosts << 'host_name[ \t]+chefnode_c_alt'
