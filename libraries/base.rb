@@ -273,6 +273,7 @@ class Nagios
 
     def update_hash_options(hash)
       hash.each do |k, v|
+        push(Nagios::CustomOption.new(k.upcase, v)) if k.start_with?('_')
         m = k + '='
         send(m, v) if self.respond_to?(m)
       end

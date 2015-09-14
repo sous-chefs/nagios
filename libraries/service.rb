@@ -34,7 +34,8 @@ class Nagios
                   :contact_groups,
                   :check_command,
                   :servicegroups,
-                  :hostgroups
+                  :hostgroups,
+                  :custom_options
 
     attr_accessor :display_name,
                   :is_volatile,
@@ -80,6 +81,7 @@ class Nagios
       @contact_groups      = {}
       @hostgroups          = {}
       @hosts               = {}
+      @custom_options      = {}
     end
 
     def check_command
@@ -124,7 +126,9 @@ class Nagios
       if blank?(hostgroup_name_list) && blank?(host_name_list) && name.nil?
         "# Skipping #{service_description} because host_name and hostgroup_name are missing."
       else
-        get_definition(configured_options, 'service')
+        configured = configured_options
+        custom_options.each { |_, v| configured[v.to_s] = v.value }
+        get_definition(configured, 'service')
       end
     end
 
@@ -175,6 +179,8 @@ class Nagios
       when Nagios::Timeperiod
         @check_period = obj
         @notification_period = obj
+      when Nagios::CustomOption
+        push_object(obj, @custom_options)
       end
     end
     # rubocop:enable MethodLength
@@ -391,6 +397,7 @@ class Nagios
       obj.servicegroups.each { |m| push(m) }
       obj.hostgroup_name.each { |m| push(m) }
       obj.contact_groups.each { |m| push(m) }
+      obj.custom_options.each { |_, m| push(m) }
     end
   end
 end

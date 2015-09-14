@@ -12,6 +12,7 @@ This file is used to list changes made in each version of the nagios cookbook.
 - Added logic to exclude nodes based on tag.
 - Including apache2::mpm_prefork for apache.
 - Added the ability to specify command arguments within services.
+- Added the ability to specify custom options on hosts, contacts and services.
 
 7.1.8
 -----
