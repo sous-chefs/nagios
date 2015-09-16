@@ -81,6 +81,13 @@ define service {
 }
 
 define service {
+  name                            rappid-rabbit
+  use                             default-service
+  check_interval                  60
+  retry_interval                  30
+}
+
+define service {
   name				  load-service
   use                             default-service
   max_check_attempts              10
