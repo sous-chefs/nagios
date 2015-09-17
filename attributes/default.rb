@@ -227,3 +227,6 @@ default['nagios']['exclude_tag_host'] = ''
 
 # Set the prefork module for Apache as PHP is not thread-safe
 default['apache']['mpm'] = 'prefork'
+
+# attribute to add commands to source build
+default['nagios']['source']['add_build_commands'] = [ 'make install-exfoliation' ]
