@@ -224,3 +224,6 @@ default['nagios']['brokers'] = {}
 
 # attribute defining tag used to exclude hosts
 default['nagios']['exclude_tag_host'] = ''
+
+# Set the prefork module for Apache as PHP is not thread-safe
+default['apache']['mpm'] = 'prefork'
