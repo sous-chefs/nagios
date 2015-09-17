@@ -224,3 +224,6 @@ default['nagios']['brokers'] = {}
 
 # attribute defining tag used to exclude hosts
 default['nagios']['exclude_tag_host'] = ''
+
+# attribute to add commands to source build
+default['nagios']['source']['add_build_commands'] = [ 'make install-exfoliation' ]
