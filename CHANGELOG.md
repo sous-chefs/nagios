@@ -1,6 +1,11 @@
 nagios Cookbook CHANGELOG
 =========================
 This file is used to list changes made in each version of the nagios cookbook.
+7.2.2
+-----
+### Bug
+- Fixing the apache mpm breaking on centos.
+
 7.2.0
 -----
 ### Testing
