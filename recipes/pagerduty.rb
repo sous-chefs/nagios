@@ -86,8 +86,13 @@ unless node['nagios']['pagerduty']['key'].nil? || node['nagios']['pagerduty']['k
   end
 end
 
+
 pagerduty_contacts.each do |contact|
   name = contact['contact'] || contact['id']
+
+  contactgroups = []
+  contactgroups = ["admins"] if pagerduty_contact['admin_contactgroup']
+
   nagios_contact name do
     options 'alias'                         => "PagerDuty Pseudo-Contact #{name}",
             'service_notification_period'   => contact['service_notification_period'] || '24x7',
@@ -96,7 +101,8 @@ pagerduty_contacts.each do |contact|
             'host_notification_options'     => contact['host_notification_options'] || 'd,r',
             'service_notification_commands' => 'notify-service-by-pagerduty',
             'host_notification_commands'    => 'notify-host-by-pagerduty',
-            'pager'                         => contact['key'] || contact['pagerduty_key']
+            'pager'                         => contact['key'] || contact['pagerduty_key'],
+            'contactgroups'                 => contactgroups
   end
 end
 
