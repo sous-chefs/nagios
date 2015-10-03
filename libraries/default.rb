@@ -23,12 +23,12 @@ def nagios_boolean(true_or_false)
 end
 
 def nagios_interval(seconds)
-  if seconds.to_i != 0 && seconds.to_i < node['nagios']['interval_length'].to_i
-    fail ArgumentError, "Specified nagios interval of #{seconds} seconds must ether be zero or be equal to or greater than the default interval length of #{node['nagios']['interval_length']}"
+  if seconds.to_i == 0
+    fail ArgumentError, "Specified nagios interval of 0 seconds is not allowed"
   end
-  interval = seconds.to_f / node['nagios']['interval_length']
-  if interval != interval.to_i
-    fail ArgumentError, "Specified nagios interval of #{seconds} seconds must be a multiple of the interval length of #{node['nagios']['interval_length']}"
+  interval = seconds
+  if node['nagios']['conf']['interval_length'].to_i != 1
+    interval = seconds.to_f / node['nagios']['conf']['interval_length']
   end
   interval
 end
