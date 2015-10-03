@@ -144,6 +144,7 @@ describe 'Nagios Configuration' do
 
   file_timeperiods = []
   file_timeperiods << 'define timeperiod {\n\s*timeperiod_name\s*24x7'
+  file_timeperiods << 'Joshua Skains\n  sunday           09:00-17:00'
 
   file_timeperiods.each do |line|
     describe file("#{path_config_dir}/timeperiods.cfg") do
