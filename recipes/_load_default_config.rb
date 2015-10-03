@@ -95,6 +95,11 @@ nagios_command 'host_notify_by_sms_email' do
   options 'command_line' => '/usr/bin/printf "%b" "$HOSTALIAS$ $NOTIFICATIONTYPE$ $HOSTSTATE$\n\n$HOSTOUTPUT$" | ' + node['nagios']['server']['mail_command'] + ' -s "$HOSTALIAS$ $HOSTSTATE$!" $CONTACTPAGER$'
 end
 
+# service_notify_by_sms_email command
+nagios_command 'service_notify_by_sms_email' do
+  options 'command_line' => '/usr/bin/printf "%b" "$SERVICEDESC$ $NOTIFICATIONTYPE$ $SERVICESTATE$\n\n$SERVICEOUTPUT$" | ' + node['nagios']['server']['mail_command'] + ' -s "$HOSTALIAS$ $SERVICEDESC$ $SERVICESTATE$!" $CONTACTPAGER$'
+end
+
 # root contact
 nagios_contact 'root' do
   options 'alias'                         => 'Root',
