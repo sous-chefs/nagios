@@ -24,7 +24,7 @@ end
 
 def nagios_interval(seconds)
   if seconds.to_i == 0
-    fail ArgumentError, "Specified nagios interval of 0 seconds is not allowed"
+    fail ArgumentError, 'Specified nagios interval of 0 seconds is not allowed'
   end
   interval = seconds
   if node['nagios']['conf']['interval_length'].to_i != 1
