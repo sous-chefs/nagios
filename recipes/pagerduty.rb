@@ -30,6 +30,10 @@ if using_old_pagerduty_key_attribute?
   node.set['nagios']['pagerduty']['key'] = node['nagios']['pagerduty_key']
 end
 
+package 'perl-CGI' do
+  action :install
+end
+
 package 'libwww-perl' do
   case node['platform_family']
   when 'rhel', 'fedora'
