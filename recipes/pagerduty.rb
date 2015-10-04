@@ -89,8 +89,7 @@ end
 pagerduty_contacts.each do |contact|
   name = contact['contact'] || contact['id']
 
-  contactgroups = []
-  contactgroups = ['admins'] if contact['admin_contactgroup']
+  contactgroups = contact['contactgroups'] || []
 
   nagios_contact name do
     options 'alias'                         => "PagerDuty Pseudo-Contact #{name}",
