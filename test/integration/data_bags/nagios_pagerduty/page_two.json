@@ -1,0 +1,5 @@
+{
+  "id": "page_two",
+  "alias": "PagerDuty contact",
+  "pagerduty_key": "TEST_KEY_2"
+}
