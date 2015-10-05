@@ -133,20 +133,6 @@ nagios_contact 'default-contact' do
           'host_notification_commands'      => 'host_notify_by_email'
 end
 
-# This was taken from the origional cookbook, but cannot find the
-# commands service-notify-by-sms-gateway and host-notify-by-sms-gateway
-# anywhere defined, so skipping this here.
-#
-# nagios_contact 'sms-contact' do
-#   options 'name'                          => 'sms-contact',
-#           'service_notification_period'   => '24x7',
-#           'host_notification_period'      => '24x7',
-#           'service_notification_options'  => 'w,u,c,r,f',
-#           'host_notification_options'     => 'd,u,r,f,s',
-#           'service_notification_commands' => 'service-notify-by-sms-gateway',
-#           'host_notification_commands'    => 'host-notify-by-sms-gateway'
-# end
-
 nagios_host 'default-host' do
   options 'name'                         => 'default-host',
           'notifications_enabled'        => 1,
