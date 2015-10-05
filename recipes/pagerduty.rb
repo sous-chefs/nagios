@@ -30,6 +30,30 @@ if using_old_pagerduty_key_attribute?
   node.set['nagios']['pagerduty']['key'] = node['nagios']['pagerduty_key']
 end
 
+package 'perl-CGI' do
+  case node['platform_family']
+  when 'rhel', 'fedora'
+    package_name 'perl-CGI'
+  when 'debian'
+    package_name 'libcgi-pm-perl'
+  when 'arch'
+    package_name 'perl-cgi'
+  end
+  action :install
+end
+
+package 'perl-JSON' do
+  case node['platform_family']
+  when 'rhel', 'fedora'
+    package_name 'perl-JSON'
+  when 'debian'
+    package_name 'libjson-perl'
+  when 'arch'
+    package_name 'perl-json'
+  end
+  action :install
+end
+
 package 'libwww-perl' do
   case node['platform_family']
   when 'rhel', 'fedora'
@@ -60,6 +84,16 @@ remote_file "#{node['nagios']['plugin_dir']}/notify_pagerduty.pl" do
   mode '0755'
   source node['nagios']['pagerduty']['script_url']
   action :create_if_missing
+end
+
+template "#{node['nagios']['cgi-bin']}/pagerduty.cgi" do
+  source 'pagerduty.cgi.erb'
+  owner node['nagios']['user']
+  group node['nagios']['group']
+  mode '0755'
+  variables(
+    :command_file => node['nagios']['conf']['command_file']
+  )
 end
 
 nagios_bags = NagiosDataBags.new
