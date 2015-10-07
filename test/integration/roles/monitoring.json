@@ -6,7 +6,7 @@
       "exclude_tag_host": [ "foo" ],
       "host_name_attribute": "custom_host_name_attribute",
       "conf": {
-        "use_syslog": "0",
+        "use_syslog": 0,
         "host_perfdata_command": [ "command_a", "command_b" ],
         "query_socket": null
       }
