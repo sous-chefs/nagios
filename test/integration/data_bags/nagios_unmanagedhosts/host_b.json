@@ -3,5 +3,6 @@
   "address": "127.0.0.1",
   "alias": "Host B Alias Name",
   "display_name": "Host B Display Name",
+  "environment": "_default",
   "hostgroups": "hostgroup_b"
 }
