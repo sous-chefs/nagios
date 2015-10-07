@@ -2,6 +2,7 @@ nagios Cookbook CHANGELOG
 =========================
 This file is used to list changes made in each version of the nagios cookbook.
 7.2.4
+-----
 ### Bug
 - #491 Fixing the nagios_interval logic and readme.
 - #421 Fixing loading of pagerduty databag contacts.
