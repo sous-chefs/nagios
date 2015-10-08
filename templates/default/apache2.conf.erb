@@ -76,6 +76,6 @@
   </Location>
 <% end -%>
 
-  SetEnv TZ "<%= node['nagios']['timezone'] %>"
+  SetEnv TZ "<%= node['nagios']['conf']['use_timezone'] %>"
 
 </VirtualHost>
