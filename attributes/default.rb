@@ -93,7 +93,6 @@ else
 end
 
 # webserver configuration
-default['nagios']['timezone']      = 'UTC'
 default['nagios']['enable_ssl']    = false
 default['nagios']['http_port']     = node['nagios']['enable_ssl'] ? '443' : '80'
 default['nagios']['server_name']   = node['fqdn']
