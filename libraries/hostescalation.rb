@@ -29,13 +29,13 @@ class Nagios
                   :host_name,
                   :hostgroup_name,
                   :contacts,
-                  :contact_groups,
-                  :escalation_period
+                  :contact_groups
 
     attr_accessor :first_notification,
                   :last_notification,
                   :notification_interval,
-                  :escalation_options
+                  :escalation_options,
+                  :escalation_period
 
     def initialize(name)
       @host_description, @name = name
