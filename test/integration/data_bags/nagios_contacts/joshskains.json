@@ -1,0 +1,8 @@
+{
+  "id": "devs",
+  "alias": "Josh Skains",
+  "use": "default-contact",
+  "email": "josh@company.com",
+  "service_notification_commands": "service_notify_by_sms_email",
+  "pager": "page_the_devs@company.com"
+}

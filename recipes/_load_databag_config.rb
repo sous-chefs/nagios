@@ -40,19 +40,22 @@ end
 
 services = nagios_bags.get(node['nagios']['services_databag'])
 services.each do |item|
-  if item['activate_check_in_environment'].nil? || item['activate_check_in_environment'].include?(node.chef_environment)
-    name = item['service_description'] || item['id']
+  next unless item['activate_check_in_environment'].nil? || item['activate_check_in_environment'].include?(node.chef_environment)
+  name = item['service_description'] || item['id']
+  if item['check_command'].nil?
     command_name = name.downcase.start_with?('check_') ? name.downcase : 'check_' + name.downcase
-    service_name = name.downcase.start_with?('check_') ? name.gsub('check_', '') : name.downcase
-    item['check_command'] = command_name
+  else
+    command_name = item['check_command']
+  end
+  service_name = name.downcase.start_with?('check_') ? name.gsub('check_', '') : name.downcase
+  item['check_command'] = command_name
 
-    nagios_command command_name do
-      options item
-    end
+  nagios_command command_name do
+    options item
+  end
 
-    nagios_service service_name do
-      options item
-    end
+  nagios_service service_name do
+    options item
   end
 end
 
@@ -140,6 +143,12 @@ end
 
 unmanaged_hosts = nagios_bags.get(node['nagios']['unmanagedhosts_databag'])
 unmanaged_hosts.each do |item|
+  if node['nagios']['multi_environment_monitoring']
+    envs = node['nagios']['monitored_environments']
+    next if item['environment'].nil? || !envs.include?(item['environment'])
+  else
+    next if item['environment'].nil? || item['environment'] != node.chef_environment
+  end
   name = item['host_name'] || item['id']
   nagios_host name do
     options item

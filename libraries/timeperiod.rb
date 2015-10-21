@@ -83,7 +83,7 @@ class Nagios
 
     def import(hash)
       update_options(hash)
-      if hash['times'].class == Hash
+      if hash['times'].respond_to?('each_pair')
         hash['times'].each { |k, v| push(Nagios::Timeperiodentry.new(k, v)) }
       end
       update_members(hash, 'exclude', Nagios::Timeperiod)

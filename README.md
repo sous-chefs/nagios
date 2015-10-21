@@ -6,6 +6,7 @@ nagios cookbook
 
 [![Join the chat at https://gitter.im/schubergphilis/nagios](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/schubergphilis/nagios?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![Build Status](https://travis-ci.org/schubergphilis/nagios.svg)](https://travis-ci.org/schubergphilis/nagios)
+[![Cookbook Version](https://img.shields.io/cookbook/v/nagios.svg)](https://supermarket.chef.io/cookbooks/nagios)
 
 Installs and configures Nagios server. Chef nodes are automatically discovered using search, and Nagios host groups are created based on Chef roles and optionally environments as well.
 
@@ -67,7 +68,6 @@ Example: `default['nagios']['conf']['cfg_dir'] = [ '/etc/nagios/conf.d' , '/usr/
 * `node['nagios']['state_dir']` - Nagios runtime state information, default "/var/lib/nagios3"
 * `node['nagios']['run_dir']` - where pidfiles are stored, default "/var/run/nagios3"
 * `node['nagios']['docroot']` - Nagios webui docroot, default "/usr/share/nagios3/htdocs"
-* `node['nagios']['timezone']` - Nagios timezone, defaults to UTC
 * `node['nagios']['enable_ssl]` - boolean for whether Nagios web server should be https, default false
 * `node['nagios']['ssl_cert_file']` = Location of SSL Certificate File. default "/etc/nagios3/certificates/nagios-server.pem"
 * `node['nagios']['ssl_cert_chain_file']` = Optional location of SSL Intermediate Certificate File. No default.
@@ -85,6 +85,9 @@ Example: `default['nagios']['conf']['cfg_dir'] = [ '/etc/nagios/conf.d' , '/usr/
 *  `node['nagios']['url']` - URL to host Nagios from - defaults to nil and instead uses  FQDN
 
 * `node['nagios']['conf']['enable_notifications']` - set to 1 to enable notification.
+* `node['nagios']['conf']['interval_length']` - minimum interval. Defaults to '1'.
+* `node['nagios']['conf']['use_timezone']` - set the timezone for nagios AND apache.  Defaults to UTC.
+
 * `node['nagios']['check_external_commands']`
 * `node['nagios']['default_contact_groups']`
 * `node['nagios']['sysadmin_email']` - default notification email.
@@ -116,7 +119,6 @@ Example: `default['nagios']['conf']['cfg_dir'] = [ '/etc/nagios/conf.d' , '/usr/
 * `node['nagios']['large_installation_tweaks']` - Attribute to enable [large installation tweaks](http://nagios.sourceforge.net/docs/3_0/largeinstalltweaks.html). Defaults to 0.
 * `node['nagios']['templates']` - These set directives in the default host template. Unless explicitly overridden, they will be inherited by the host definitions for each discovered node and `nagios_unmanagedhosts` data bag. For more information about these directives, see the Nagios documentation for [host definitions](http://nagios.sourceforge.net/docs/3_0/objectdefinitions.html#host).
 * `node['nagios']['hosts_template']` - Host template you want to inherit properties/variables from, default 'server'. For more information, see the nagios doc on [Object Inheritance](http://nagios.sourceforge.net/docs/3_0/objectinheritance.html).
-* `node['nagios']['interval_length']` - minimum interval.
 * `node['nagios']['brokers']` - Hash of broker modules to include in the config. Hash key is the path to the broker module, the value is any parameters to pass to it.
 
 

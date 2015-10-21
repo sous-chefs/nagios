@@ -47,7 +47,7 @@ platforms:
         - ["forwarded_port", {guest: 80, host: 8086}]
     run_list:
     - recipe[freebsd::portsnap]
-  - name: centos-7.0
+  - name: centos-7.1
     driver_config:
       network:
         - ["forwarded_port", {guest: 80, host: 8087}]
@@ -59,7 +59,7 @@ platforms:
         - ["forwarded_port", {guest: 80, host: 8088}]
     run_list:
     - recipe[yum::default]
-  - name: centos-5.10
+  - name: centos-5.11
     driver_config:
       network:
         - ["forwarded_port", {guest: 80, host: 8089}]
@@ -83,11 +83,15 @@ suites:
    run_list:
    - recipe[nagios::default]
    - recipe[nrpe::default]
+   - recipe[nagios_test::default]
    - role[monitoring]
+   attributes:
+     nagios:
  - name: server_source
    run_list:
    - recipe[nagios::default]
    - recipe[nrpe::default]
+   - recipe[nagios_test::default]
    - role[monitoring]
    attributes:
      nagios:
@@ -98,6 +102,7 @@ suites:
    - recipe[nagios::default]
    - recipe[nagios::pagerduty]
    - recipe[nrpe::default]
+   - recipe[nagios_test::default]
    - role[monitoring]
    attributes:
      nagios:

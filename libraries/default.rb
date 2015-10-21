@@ -23,14 +23,44 @@ def nagios_boolean(true_or_false)
 end
 
 def nagios_interval(seconds)
-  if seconds.to_i != 0 && seconds.to_i < node['nagios']['interval_length'].to_i
-    fail ArgumentError, "Specified nagios interval of #{seconds} seconds must ether be zero or be equal to or greater than the default interval length of #{node['nagios']['interval_length']}"
+  if seconds.to_i == 0
+    fail ArgumentError, 'Specified nagios interval of 0 seconds is not allowed'
   end
-  interval = seconds.to_f / node['nagios']['interval_length']
-  if interval != interval.to_i
-    fail ArgumentError, "Specified nagios interval of #{seconds} seconds must be a multiple of the interval length of #{node['nagios']['interval_length']}"
+  interval = seconds
+  if node['nagios']['conf']['interval_length'].to_i != 1
+    interval = seconds.to_f / node['nagios']['conf']['interval_length']
   end
   interval
+end
+
+def nagios_array(exp)
+  return [] if exp.nil?
+  case exp
+  when Array
+    exp
+  when String
+    [exp]
+  end
+end
+
+def nagios_action_delete?(action)
+  if action.is_a?(Symbol)
+    return true if action == :delete || action == :remove
+  elsif action.is_a?(Array)
+    return true if action.include?(:delete) || action.include?(:remove)
+  else
+    return false
+  end
+end
+
+def nagios_action_create?(action)
+  if action.is_a?(Symbol)
+    return true if action == :create || action == :add
+  elsif action.is_a?(Array)
+    return true if action.include?(:create) || action.include?(:add)
+  else
+    return false
+  end
 end
 
 def nagios_attr(name)

@@ -30,7 +30,8 @@ class Nagios
     attr_accessor :command_line
 
     def initialize(command_name)
-      @command_name = command_name
+      cmd = command_name.split('!')
+      @command_name = cmd.shift
       @timeout = nil
     end
 

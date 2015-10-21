@@ -75,9 +75,9 @@ when 'debian'
   default['nagios']['server']['install_method'] = 'package'
   default['nagios']['server']['service_name']   = 'nagios3'
   default['nagios']['server']['mail_command']   = '/usr/bin/mail'
-  default['nagios']['cgi-path']       = "/cgi-bin/#{node['nagios']['server']['service_name']}"
+  default['nagios']['cgi-path'] = "/cgi-bin/#{node['nagios']['server']['service_name']}"
 when 'rhel', 'fedora'
-  default['nagios']['cgi-path']       = '/nagios/cgi-bin/'
+  default['nagios']['cgi-path'] = '/nagios/cgi-bin/'
   # install via source on RHEL releases less than 6, otherwise use packages
   if node['platform_family'] == 'rhel' && node['platform_version'].to_i < 6
     default['nagios']['server']['install_method'] = 'source'
@@ -93,18 +93,17 @@ else
 end
 
 # webserver configuration
-default['nagios']['timezone']      = 'UTC'
 default['nagios']['enable_ssl']    = false
 default['nagios']['http_port']     = node['nagios']['enable_ssl'] ? '443' : '80'
 default['nagios']['server_name']   = node['fqdn']
-default['nagios']['server']['server_alias']   = nil
+default['nagios']['server']['server_alias'] = nil
 default['nagios']['ssl_cert_file'] = "#{node['nagios']['conf_dir']}/certificates/nagios-server.pem"
 default['nagios']['ssl_cert_key']  = "#{node['nagios']['conf_dir']}/certificates/nagios-server.pem"
 default['nagios']['ssl_req']       = '/C=US/ST=Several/L=Locality/O=Example/OU=Operations/' \
   "CN=#{node['nagios']['server_name']}/emailAddress=ops@#{node['nagios']['server_name']}"
 
 # nagios server name and webserver vname.  this can be changed to allow for the installation of icinga
-default['nagios']['server']['name']  = 'nagios'
+default['nagios']['server']['name'] = 'nagios'
 case node['platform_family']
 when 'rhel', 'fedora'
   default['nagios']['server']['vname'] = 'nagios'
@@ -113,11 +112,11 @@ else
 end
 
 # for server from source installation
-default['nagios']['server']['url']      = 'http://iweb.dl.sourceforge.net/project/nagios/nagios-4.x/nagios-4.0.8/nagios-4.0.8.tar.gz'
-default['nagios']['server']['checksum'] = '8b268d250c97851775abe162f46f64724f95f367d752ae4630280cc5d368ca4b'
-default['nagios']['server']['src_dir']  = node['nagios']['server']['url'].split('/')[-1].chomp('.tar.gz')
+default['nagios']['server']['url']       = 'http://iweb.dl.sourceforge.net/project/nagios/nagios-4.x/nagios-4.0.8/nagios-4.0.8.tar.gz'
+default['nagios']['server']['checksum']  = '8b268d250c97851775abe162f46f64724f95f367d752ae4630280cc5d368ca4b'
+default['nagios']['server']['src_dir']   = node['nagios']['server']['url'].split('/')[-1].chomp('.tar.gz')
+default['nagios']['server']['patches']   = []
 default['nagios']['server']['patch_url'] = nil
-default['nagios']['server']['patches']  = []
 
 # for server from packages installation
 case node['platform_family']
@@ -166,11 +165,7 @@ default['nagios']['ldap_bind_password'] = nil
 default['nagios']['ldap_url']           = nil
 default['nagios']['ldap_authoritative'] = nil
 
-default['nagios']['templates']       = Mash.new
-
-# This setting is effectively sets the minimum interval (in seconds) nagios can handle.
-# Other interval settings provided in seconds will calculate their actual from this value, since nagios works in 'time units' rather than allowing definitions everywhere in seconds
-default['nagios']['interval_length'] = 1
+default['nagios']['templates'] = Mash.new
 
 default['nagios']['default_host']['flap_detection']        = true
 default['nagios']['default_host']['process_perf_data']     = false
@@ -224,3 +219,9 @@ default['nagios']['brokers'] = {}
 
 # attribute defining tag used to exclude hosts
 default['nagios']['exclude_tag_host'] = ''
+
+# Set the prefork module for Apache as PHP is not thread-safe
+default['apache']['mpm'] = 'prefork'
+
+# attribute to add commands to source build
+default['nagios']['source']['add_build_commands'] = ['make install-exfoliation']

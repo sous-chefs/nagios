@@ -55,6 +55,7 @@ describe 'Nagios Configuration' do
   file_services << 'service_description.*service_a'
   file_services << 'service_description.*service_b'
   file_services << 'service_description.*service_c'
+  file_services << 'check_command.*system-load!15,10,5!30,25,20'
 
   file_services.each do |line|
     describe file("#{path_config_dir}/services.cfg") do
@@ -67,6 +68,7 @@ describe 'Nagios Configuration' do
   file_hosts << 'host_name[ \t]+host_b'
   file_hosts << 'host_name[ \t]+' + `hostname`.split('.').first
   file_hosts << 'host_name[ \t]+chefnode_a'
+  file_hosts << '_CUSTOM_HOST_OPTION[ \t]+custom_host_value.*\n}'
   file_hosts << 'notes[ \t]+configured via chef node attributes'
   file_hosts << 'host_name[ \t]+chefnode_b_alt'
   file_hosts << 'host_name[ \t]+chefnode_c_alt'
@@ -75,6 +77,16 @@ describe 'Nagios Configuration' do
   file_hosts.each do |line|
     describe file("#{path_config_dir}/hosts.cfg") do
       its(:content) { should match line }
+    end
+  end
+
+  file_hosts_exclude = []
+  file_hosts_exclude << 'chefnode_exclude_arr'
+  file_hosts_exclude << 'chefnode_exclude_str'
+
+  file_hosts_exclude.each do |line|
+    describe file("#{path_config_dir}/hosts.cfg") do
+      its(:content) { should_not match line }
     end
   end
 
@@ -132,6 +144,7 @@ describe 'Nagios Configuration' do
 
   file_timeperiods = []
   file_timeperiods << 'define timeperiod {\n\s*timeperiod_name\s*24x7'
+  file_timeperiods << 'Joshua Skains\n  sunday           09:00-17:00'
 
   file_timeperiods.each do |line|
     describe file("#{path_config_dir}/timeperiods.cfg") do

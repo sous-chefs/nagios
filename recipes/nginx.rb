@@ -67,7 +67,7 @@ template File.join(node['nginx']['dir'], 'sites-available', 'nagios3.conf') do
     :log_dir       => node['nagios']['log_dir'],
     :fqdn          => node['fqdn'],
     :nagios_url    => node['nagios']['url'],
-    :chef_env =>  node.chef_environment == '_default' ? 'default' : node.chef_environment,
+    :chef_env => node.chef_environment == '_default' ? 'default' : node.chef_environment,
     :htpasswd_file => File.join(node['nagios']['conf_dir'], 'htpasswd.users'),
     :cgi => %w(cgi both).include?(dispatch_type),
     :php => %w(php both).include?(dispatch_type)

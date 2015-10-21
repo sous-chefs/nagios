@@ -1,0 +1,6 @@
+{
+  "id": "page_one",
+  "alias": "PagerDuty contact",
+  "contactgroups": "non_admins",
+  "pagerduty_key": "TEST_KEY"
+}

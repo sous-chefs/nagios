@@ -1,0 +1,7 @@
+{
+  "id": "ping",
+  "service_description": "ping_medium",
+  "hostgroup_name": "linux",
+  "arguments": "!200.0,80%!400.0,40%",
+  "command_line": "$USER1$/check_ping -H $HOSTADDRESS$ -w $ARG1$ -c $ARG2$"
+}

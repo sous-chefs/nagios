@@ -19,6 +19,7 @@
   Alias /nagios3/stylesheets /etc/<%= node['nagios']['server']['vname'] %>/stylesheets
 <% end -%>
   ScriptAlias <%= node['nagios']['cgi-path'] %> <%= node['nagios']['cgi-bin'] %>
+  ScriptAlias /cgi-bin/statusjson.cgi <%= node['nagios']['cgi-bin'] %>/statusjson.cgi
   Alias /<%= node['nagios']['server']['vname'] %> <%= node['nagios']['docroot'] %>
 
   <Directory "<%= node['nagios']['cgi-bin'] %>">
@@ -76,6 +77,6 @@
   </Location>
 <% end -%>
 
-  SetEnv TZ "<%= node['nagios']['timezone'] %>"
+  SetEnv TZ "<%= node['nagios']['conf']['use_timezone'] %>"
 
 </VirtualHost>

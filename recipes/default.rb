@@ -106,14 +106,14 @@ end
 
 Nagios.instance.host_name_attribute = node['nagios']['host_name_attribute']
 
-# loading all databag configurations
-if node['nagios']['server']['load_databag_config']
-  include_recipe 'nagios::_load_databag_config'
-end
-
 # loading default configuration data
 if node['nagios']['server']['load_default_config']
   include_recipe 'nagios::_load_default_config'
+end
+
+# loading all databag configurations
+if node['nagios']['server']['load_databag_config']
+  include_recipe 'nagios::_load_databag_config'
 end
 
 directory "#{node['nagios']['conf_dir']}/dist" do
@@ -145,14 +145,14 @@ directory "#{node['nagios']['conf_dir']}/certificates" do
   mode '0700'
 end
 
+ssl_code = "umask 077
+openssl genrsa 2048 > nagios-server.key
+openssl req -subj #{node['nagios']['ssl_req']} -new -x509 -nodes -sha1 -days 3650 -key nagios-server.key > nagios-server.crt
+cat nagios-server.key nagios-server.crt > nagios-server.pem"
+
 bash 'Create SSL Certificates' do
   cwd "#{node['nagios']['conf_dir']}/certificates"
-  code <<-EOH
-  umask 077
-  openssl genrsa 2048 > nagios-server.key
-  openssl req -subj "#{node['nagios']['ssl_req']}" -new -x509 -nodes -sha1 -days 3650 -key nagios-server.key > nagios-server.crt
-  cat nagios-server.key nagios-server.crt > nagios-server.pem
-  EOH
+  code ssl_code
   not_if { ::File.exist?(node['nagios']['ssl_cert_file']) }
 end
 
@@ -166,9 +166,6 @@ nagios_conf 'cgi' do
   config_subdir false
   variables(:nagios_service_name => nagios_service_name)
 end
-
-# Update all items before writing the templates
-nagios_resourcelist_items 'update'
 
 # resource.cfg differs on RPM and tarball based systems
 if node['platform_family'] == 'rhel' || node['platform_family'] == 'fedora'

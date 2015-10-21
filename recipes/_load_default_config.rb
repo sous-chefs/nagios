@@ -40,7 +40,13 @@ end
 Nagios.instance.push(node)
 
 # Pushing all nodes into the Nagios.instance model
-nodes.each { |n| Nagios.instance.push(n) }
+nodes.each do |n|
+  include = true
+  nagios_array(n.tags).each do |tag|
+    include = false if node['nagios']['exclude_tag_host'].include?(tag)
+  end
+  Nagios.instance.push(n) if include
+end
 
 # 24x7 timeperiod
 nagios_timeperiod '24x7' do
@@ -57,7 +63,7 @@ end
 
 # Host checks
 nagios_command 'check_host_alive' do
-  options  'command_line' => '$USER1$/check_ping -H $HOSTADDRESS$ -w 2000,80% -c 3000,100% -p 1'
+  options 'command_line' => '$USER1$/check_ping -H $HOSTADDRESS$ -w 2000,80% -c 3000,100% -p 1'
 end
 
 # Service checks
@@ -87,6 +93,11 @@ end
 # host_notify_by_sms_email command
 nagios_command 'host_notify_by_sms_email' do
   options 'command_line' => '/usr/bin/printf "%b" "$HOSTALIAS$ $NOTIFICATIONTYPE$ $HOSTSTATE$\n\n$HOSTOUTPUT$" | ' + node['nagios']['server']['mail_command'] + ' -s "$HOSTALIAS$ $HOSTSTATE$!" $CONTACTPAGER$'
+end
+
+# service_notify_by_sms_email command
+nagios_command 'service_notify_by_sms_email' do
+  options 'command_line' => '/usr/bin/printf "%b" "$SERVICEDESC$ $NOTIFICATIONTYPE$ $SERVICESTATE$\n\n$SERVICEOUTPUT$" | ' + node['nagios']['server']['mail_command'] + ' -s "$HOSTALIAS$ $SERVICEDESC$ $SERVICESTATE$!" $CONTACTPAGER$'
 end
 
 # root contact
@@ -121,20 +132,6 @@ nagios_contact 'default-contact' do
           'service_notification_commands'   => 'service_notify_by_email',
           'host_notification_commands'      => 'host_notify_by_email'
 end
-
-# This was taken from the origional cookbook, but cannot find the
-# commands service-notify-by-sms-gateway and host-notify-by-sms-gateway
-# anywhere defined, so skipping this here.
-#
-# nagios_contact 'sms-contact' do
-#   options 'name'                          => 'sms-contact',
-#           'service_notification_period'   => '24x7',
-#           'host_notification_period'      => '24x7',
-#           'service_notification_options'  => 'w,u,c,r,f',
-#           'host_notification_options'     => 'd,u,r,f,s',
-#           'service_notification_commands' => 'service-notify-by-sms-gateway',
-#           'host_notification_commands'    => 'host-notify-by-sms-gateway'
-# end
 
 nagios_host 'default-host' do
   options 'name'                         => 'default-host',

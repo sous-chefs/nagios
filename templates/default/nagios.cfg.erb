@@ -12,6 +12,8 @@
   <% case items %>
   <% when String %>
 <%= key + '=' + items %>
+  <% when Fixnum %>
+<%= key + '=' + items.to_s %>
   <% when Array %>
     <% items.each do |item| %>
 <%= key + '=' + item %>
