@@ -38,8 +38,7 @@ class Nagios
                   :escalation_period
 
     def initialize(name)
-      @service_description = name
-      @name                = name
+      @service_description, @name = name
       @contacts            = {}
       @contact_groups      = {}
       @host_name           = {}
@@ -126,7 +125,7 @@ class Nagios
     # rubocop:disable MethodLength
     def config_options
       {
-        'service_description'   => 'service_description',
+        'service_description'   => nil,
         'contacts_list'         => 'contacts',
         'contact_groups_list'   => 'contact_groups',
         'escalation_period'     => 'escalation_period',
