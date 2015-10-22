@@ -18,7 +18,7 @@
 # limitations under the License.
 
 require_relative 'base'
-
+# rubocop:disable ClassLength
 class Nagios
   #
   #  This class holds all methods with regard to serviceescalation options,
