@@ -38,12 +38,12 @@ class Nagios
                   :escalation_period
 
     def initialize(name)
-      @host_description, @name = name
-      @contacts       = {}
-      @contact_groups = {}
-      @host_name      = {}
-      @hostgroup_name = {}
-      @register       = 0
+      @host_description = name
+      @contacts         = {}
+      @contact_groups   = {}
+      @host_name        = {}
+      @hostgroup_name   = {}
+      @register         = 0
     end
 
     def definition

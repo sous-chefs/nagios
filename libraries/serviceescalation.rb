@@ -39,7 +39,6 @@ class Nagios
 
     def initialize(name)
       @service_description = name
-      @name                = name
       @contacts            = {}
       @contact_groups      = {}
       @host_name           = {}
