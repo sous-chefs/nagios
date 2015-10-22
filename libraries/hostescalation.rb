@@ -123,6 +123,8 @@ class Nagios
     # rubocop:disable MethodLength
     def config_options
       {
+        'name'                  => 'name',
+        'use'                   => 'use',
         'host_description'      => nil,
         'contacts_list'         => 'contacts',
         'contact_groups_list'   => 'contact_groups',
@@ -132,7 +134,8 @@ class Nagios
         'escalation_options'    => 'escalation_options',
         'first_notification'    => 'first_notification',
         'last_notification'     => 'last_notification',
-        'notification_interval' => 'notification_interval'
+        'notification_interval' => 'notification_interval',
+        'register'              => 'register'
       }
     end
     # rubocop:enable MethodLength
