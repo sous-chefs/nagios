@@ -90,10 +90,6 @@ class Nagios
     end
     # rubocop:enable MethodLength
 
-    def self.create(name)
-      Nagios.instance.find(Nagios::Hostescalation.new(name))
-    end
-
     def to_s
       host_description
     end

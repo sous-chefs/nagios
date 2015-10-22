@@ -58,9 +58,9 @@ class Nagios
     @services            = {}
     @timeperiods         = {}
     @hostdependencies    = {}
-    @hostescalations     = {}
+    @hostescalations     = []
     @servicedependencies = {}
-    @serviceescalations  = {}
+    @serviceescalations  = []
     @resources           = {}
     @host_name_attribute = 'hostname'
     @normalize_hostname  = false
@@ -133,12 +133,8 @@ class Nagios
       find_object(obj, @timeperiods)
     when Nagios::Hostdependency
       find_object(obj, @hostdependencies)
-    when Nagios::Hostescalation
-      find_object(obj, @hostescalations)
     when Nagios::Servicedependency
       find_object(obj, @servicedependencies)
-    when Nagios::Serviceescalation
-      find_object(obj, @serviceescalations)
     when Nagios::Resource
       find_object(obj, @resources)
     end
@@ -151,10 +147,6 @@ class Nagios
 
   def hostdependencies
     Hash[@hostdependencies.sort]
-  end
-
-  def hostescalations
-    Hash[@hostescalations.sort]
   end
 
   def hostgroups
@@ -195,11 +187,11 @@ class Nagios
     when Nagios::Hostdependency
       push_object(obj)
     when Nagios::Hostescalation
-      push_object(obj)
+      @hostescalations.push(obj)
     when Nagios::Servicedependency
       push_object(obj)
     when Nagios::Serviceescalation
-      push_object(obj)
+      @serviceescalations.push(obj)
     when Nagios::Resource
       push_object(obj)
     else
@@ -227,10 +219,6 @@ class Nagios
 
   def servicedependencies
     Hash[@servicedependencies.sort]
-  end
-
-  def serviceescalations
-    Hash[@serviceescalations.sort]
   end
 
   def servicegroups

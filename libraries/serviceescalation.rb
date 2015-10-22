@@ -99,10 +99,6 @@ class Nagios
     end
     # rubocop:enable MethodLength
 
-    def self.create(name)
-      Nagios.instance.find(Nagios::Serviceescalation.new(name))
-    end
-
     def to_s
       service_description
     end

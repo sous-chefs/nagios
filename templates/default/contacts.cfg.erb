@@ -22,14 +22,14 @@
 <% end %>
 <% end -%>
 
-<% Nagios.instance.serviceescalations.each do |key,escalation| -%>
+<% Nagios.instance.serviceescalations.each do |escalation| -%>
 <% if escalation.name.nil? # Skipping all the template serviceescalations %>
 <%= escalation.definition %>
 
 <% end %>
 <% end -%>
 
-<% Nagios.instance.hostescalations.each do |key,escalation| -%>
+<% Nagios.instance.hostescalations.each do |escalation| -%>
 <% if escalation.name.nil? # Skipping all the template hostescalations %>
 <%= escalation.definition %>
 
