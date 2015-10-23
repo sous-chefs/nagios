@@ -48,7 +48,12 @@ class Nagios
     end
 
     def definition
-      get_definition(configured_options, 'serviceescalation')
+      configured = configured_options
+      unless blank?(servicegroup_name)
+        configured.delete('service_description')
+        configured.delete('host_name')
+      end
+      get_definition(configured, 'serviceescalation')
     end
 
     def contacts_list
