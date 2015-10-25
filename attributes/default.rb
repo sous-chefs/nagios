@@ -129,10 +129,15 @@ end
 
 default['nagios']['check_external_commands']     = true
 default['nagios']['default_contact_groups']      = %w(admins)
+default['nagios']['default_user_name']           = nil
 default['nagios']['sysadmin_email']              = 'root@localhost'
 default['nagios']['sysadmin_sms_email']          = 'root@localhost'
 default['nagios']['server_auth_method']          = 'htauth'
-default['nagios']['server_auth_require']         = 'valid-user'
+if node['nagios']['default_user_name']
+  default['nagios']['server_auth_require']       = 'all granted'
+else
+  default['nagios']['server_auth_require']       = 'valid-user'
+end
 default['nagios']['users_databag']               = 'users'
 default['nagios']['users_databag_group']         = 'sysadmin'
 default['nagios']['services_databag']            = 'nagios_services'

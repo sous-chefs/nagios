@@ -82,7 +82,11 @@ use_authentication=1
 # define this variable, anyone who has not authenticated to the web
 # server will inherit all rights you assign to this user!
 
-default_user_name=FirebaseAdmin
+<% if node['nagios']['default_user_name'] -%>
+default_user_name=<%= @node['nagios']['default_user_name'] %>
+<% else -%>
+#default_user_name=guest
+<% end -%>
 
 # SYSTEM/PROCESS INFORMATION ACCESS
 # This option is a comma-delimited list of all usernames that
