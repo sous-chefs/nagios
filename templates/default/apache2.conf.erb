@@ -75,7 +75,7 @@
     AuthName "Nagios Server"
     AuthType Basic
     AuthUserFile "<%= node['nagios']['conf_dir'] %>/htpasswd.users"
-    require all granted
+    require <%= node['nagios']['server_auth_require'] %>
   </Location>
 <% end -%>
 
