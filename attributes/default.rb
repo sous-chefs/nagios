@@ -133,11 +133,7 @@ default['nagios']['default_user_name']           = nil
 default['nagios']['sysadmin_email']              = 'root@localhost'
 default['nagios']['sysadmin_sms_email']          = 'root@localhost'
 default['nagios']['server_auth_method']          = 'htauth'
-if node['nagios']['default_user_name']
-  default['nagios']['server_auth_require']       = 'all granted'
-else
-  default['nagios']['server_auth_require']       = 'valid-user'
-end
+default['nagios']['server_auth_require']         = 'valid-user'
 default['nagios']['users_databag']               = 'users'
 default['nagios']['users_databag_group']         = 'sysadmin'
 default['nagios']['services_databag']            = 'nagios_services'

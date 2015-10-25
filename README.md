@@ -87,7 +87,7 @@ Example: `default['nagios']['conf']['cfg_dir'] = [ '/etc/nagios/conf.d' , '/usr/
 
 * `node['nagios']['check_external_commands']`
 * `node['nagios']['default_contact_groups']`
-* `node['nagios']['default_user_name']` - Specify a defaut guest user to allow page access without authentication.  **Only** use this if nagios is running behind a secure webserver and users have been authenticated in some manner.  Defaults to `nil`.
+* `node['nagios']['default_user_name']` - Specify a defaut guest user to allow page access without authentication.  **Only** use this if nagios is running behind a secure webserver and users have been authenticated in some manner.  You'll likely want to change `node['nagios']['server_auth_require']` to `all granted`.  Defaults to `nil`.
 * `node['nagios']['sysadmin_email']` - default notification email.
 * `node['nagios']['sysadmin_sms_email']` - default notification sms.
 * `node['nagios']['server_auth_method']` - authentication with the server can be done with openid (using `apache2::mod_auth_openid`), cas (using `apache2::mod_auth_cas`),ldap (using `apache2::mod_authnz_ldap`), or htauth (basic). The default is htauth. "openid" will utilize openid authentication, "cas" will utilize cas authentication, "ldap" will utilize LDAP authentication, and any other value will use htauth (basic).
