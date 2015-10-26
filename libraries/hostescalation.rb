@@ -38,12 +38,11 @@ class Nagios
                   :escalation_period
 
     def initialize(name)
-      @host_description, @name = name
-      @contacts       = {}
-      @contact_groups = {}
-      @host_name      = {}
-      @hostgroup_name = {}
-      @register       = 0
+      @host_description = name
+      @contacts         = {}
+      @contact_groups   = {}
+      @host_name        = {}
+      @hostgroup_name   = {}
     end
 
     def definition
@@ -91,10 +90,6 @@ class Nagios
     end
     # rubocop:enable MethodLength
 
-    def self.create(name)
-      Nagios.instance.find(Nagios::Hostescalation.new(name))
-    end
-
     def to_s
       host_description
     end
@@ -123,6 +118,8 @@ class Nagios
     # rubocop:disable MethodLength
     def config_options
       {
+        'name'                  => 'name',
+        'use'                   => 'use',
         'host_description'      => nil,
         'contacts_list'         => 'contacts',
         'contact_groups_list'   => 'contact_groups',
@@ -132,7 +129,8 @@ class Nagios
         'escalation_options'    => 'escalation_options',
         'first_notification'    => 'first_notification',
         'last_notification'     => 'last_notification',
-        'notification_interval' => 'notification_interval'
+        'notification_interval' => 'notification_interval',
+        'register'              => 'register'
       }
     end
     # rubocop:enable MethodLength

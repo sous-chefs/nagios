@@ -23,8 +23,9 @@ define :nagios_hostescalation do
   params[:options] ||= {}
 
   if nagios_action_create?(params[:action])
-    o = Nagios::Hostescalation.create(params[:name])
+    o = Nagios::Hostescalation.new(params[:name])
     o.import(params[:options])
+    Nagios.instance.push(o)
   end
 
   if nagios_action_delete?(params[:action])

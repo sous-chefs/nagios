@@ -23,8 +23,9 @@ define :nagios_serviceescalation do
   params[:options] ||= {}
 
   if nagios_action_create?(params[:action])
-    o = Nagios::Serviceescalation.create(params[:name])
+    o = Nagios::Serviceescalation.new(params[:name])
     o.import(params[:options])
+    Nagios.instance.push(o)
   end
 
   if nagios_action_delete?(params[:action])
