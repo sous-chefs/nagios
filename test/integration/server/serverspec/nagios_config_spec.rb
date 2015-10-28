@@ -56,7 +56,7 @@ describe 'Nagios Configuration' do
   file_services << 'service_description.*service_b'
   file_services << 'service_description.*service_c'
   file_services << 'check_command.*system-load!15,10,5!30,25,20'
-  file_services << 'contact_groups.*\+non_admins'
+  file_services << 'contact_groups.*\+[^ ]+non_admins'
   file_services << 'contact_groups.*null'
   file_services << 'host_name.*\*'
 
@@ -108,6 +108,7 @@ describe 'Nagios Configuration' do
   end
 
   file_contacts_exclude = []
+  file_contacts_exclude << 'contact_name.*null'
   file_contacts_exclude << 'contact_group.*null'
   file_contacts_exclude << 'contact_group.*\+non_admins'
 
