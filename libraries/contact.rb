@@ -60,7 +60,7 @@ class Nagios
     end
 
     def definition
-      return if name == 'null'
+      return if contact_name == 'null'
       if email.nil? && name.nil? && pager.nil?
         "# Skipping #{contact_name} because missing email/pager."
       else
