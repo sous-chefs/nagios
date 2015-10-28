@@ -35,6 +35,7 @@ class Nagios
       @contactgroup_name = contactgroup_name
       @members = {}
       @contactgroup_members = {}
+      super()
     end
 
     def contactgroup_members_list

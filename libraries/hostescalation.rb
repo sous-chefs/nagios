@@ -43,6 +43,7 @@ class Nagios
       @contact_groups   = {}
       @host_name        = {}
       @hostgroup_name   = {}
+      super()
     end
 
     def definition

@@ -82,6 +82,7 @@ class Nagios
       @hostgroups          = {}
       @hosts               = {}
       @custom_options      = {}
+      super()
     end
 
     def check_command

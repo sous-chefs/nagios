@@ -60,6 +60,7 @@ class Nagios
       @timeperiod_name = timeperiod_name
       @periods = {}
       @exclude = {}
+      super()
     end
 
     def self.create(name)
