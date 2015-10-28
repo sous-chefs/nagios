@@ -41,6 +41,7 @@ class Nagios
     end
 
     def definition
+      return if hostgroup_name == 'null'
       get_definition(configured_options, 'hostgroup')
     end
 
