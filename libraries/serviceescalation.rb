@@ -45,6 +45,7 @@ class Nagios
       @host_name           = {}
       @hostgroup_name      = {}
       @servicegroup_name   = {}
+      super()
     end
 
     def definition

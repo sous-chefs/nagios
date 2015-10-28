@@ -33,6 +33,7 @@ class Nagios
       cmd = command_name.split('!')
       @command_name = cmd.shift
       @timeout = nil
+      super()
     end
 
     def definition

@@ -82,6 +82,7 @@ class Nagios
       @check_period = nil
       @notification_period = nil
       @custom_options = {}
+      super()
     end
 
     def check_period

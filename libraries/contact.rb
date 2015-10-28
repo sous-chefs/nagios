@@ -52,6 +52,7 @@ class Nagios
       @host_notification_commands = []
       @service_notification_commands = []
       @custom_options = {}
+      super()
     end
 
     def contactgroups_list

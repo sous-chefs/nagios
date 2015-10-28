@@ -42,6 +42,7 @@ class Nagios
       @hostgroup_name           = {}
       @dependent_host_name      = {}
       @dependent_hostgroup_name = {}
+      super()
     end
 
     def definition

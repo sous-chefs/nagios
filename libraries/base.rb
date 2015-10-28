@@ -26,6 +26,10 @@ class Nagios
                   :name,
                   :use
 
+    def initialize
+      @modifiers = {}
+    end
+
     def merge!(obj)
       merge_members(obj)
       merge_attributes(obj)
@@ -171,7 +175,7 @@ class Nagios
       longest = get_longest_option(options)
       options.each do |k, v|
         k = k.to_s
-        v = v.to_s
+        v = ( @modifiers[k] || '' ) + v.to_s
         diff = longest - k.length
         r.push(k.rjust(k.length + 2) + v.rjust(v.length + diff + 2))
       end
@@ -274,6 +278,10 @@ class Nagios
     def update_hash_options(hash)
       hash.each do |k, v|
         push(Nagios::CustomOption.new(k.upcase, v)) if k.start_with?('_')
+        if v.is_a? String
+          @modifiers[k] = v[/^[+!]/]
+          v = v.gsub /^[+!]/, ''
+        end
         m = k + '='
         send(m, v) if self.respond_to?(m)
       end
@@ -282,7 +290,7 @@ class Nagios
     def update_members(hash, option, object, remote = false)
       return if blank?(hash) || hash[option].nil?
       get_members(hash[option], object).each do |member|
-        n = Nagios.instance.find(object.new(member))
+        n = Nagios.instance.find(object.new(member.gsub /^[+!]/, ''))
         push(n)
         n.push(self) if remote
       end
