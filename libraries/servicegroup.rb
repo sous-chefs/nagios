@@ -41,6 +41,7 @@ class Nagios
     end
 
     def definition
+      return if servicegroup_name == '*' || servicegroup_name == 'null'
       get_definition(configured_options, 'servicegroup')
     end
 
