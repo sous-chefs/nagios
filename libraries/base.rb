@@ -231,7 +231,11 @@ class Nagios
     end
 
     def push_object(obj, hash)
-      if hash[obj.to_s].nil?
+      return if hash.key?('null')
+      if obj.to_s == 'null'
+        hash.delete_if { |_k, _v| true }
+        hash[obj.to_s] = obj
+      elsif hash[obj.to_s].nil?
         hash[obj.to_s] = obj
       else
         Chef::Log.debug("Nagios debug: #{self.class} already contains #{obj.class} with name: #{obj}")
