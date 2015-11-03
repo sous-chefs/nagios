@@ -69,6 +69,17 @@ class Nagios
       end
     end
 
+    def pop(obj)
+      case obj
+      when Nagios::Contact
+        pop_object(obj, @members)
+        pop(self, obj)
+      when Nagios::Contactgroup
+        pop_object(obj, @contactgroup_members)
+        pop(self, obj)
+      end
+    end
+
     def to_s
       contactgroup_name
     end

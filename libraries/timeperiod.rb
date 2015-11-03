@@ -99,6 +99,17 @@ class Nagios
       end
     end
 
+    def pop(obj)
+      case obj
+      when Nagios::Timeperiod
+        pop_object(obj, @exclude)
+        pop(self, obj)
+      when Nagios::Timeperiodentry
+        pop_object(obj, @periods)
+        pop(self, obj)
+      end
+    end
+
     def to_s
       timeperiod_name
     end
