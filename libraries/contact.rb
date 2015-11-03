@@ -103,6 +103,22 @@ class Nagios
       end
     end
 
+    # rubocop:disable MethodLength
+    def pop(obj)
+      case obj
+      when Nagios::Contactgroup
+        pop_object(obj, @contactgroups)
+        pop(self, obj)
+      when Nagios::Timeperiod
+        @host_notification_period = nil if obj == @host_notification_period
+        @service_notification_period = nil if obj == @service_notification_period
+      when Nagios::CustomOption
+        pop_object(obj, @custom_options)
+        pop(self, obj)
+      end
+    end
+    # rubocop:enable MethodLength
+
     def service_notification_commands
       get_commands(@service_notification_commands)
     end

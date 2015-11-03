@@ -66,6 +66,17 @@ class Nagios
       end
     end
 
+    def pop(obj)
+      case obj
+      when Nagios::Service
+        pop_object(obj, @members)
+        pop(self, obj)
+      when Nagios::Servicegroup
+        pop_object(obj, @servicegroup_members)
+        pop(self, obj)
+      end
+    end
+
     def self.create(name)
       Nagios.instance.find(Nagios::Servicegroup.new(name))
     end

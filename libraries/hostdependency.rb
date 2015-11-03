@@ -19,6 +19,7 @@
 
 require_relative 'base'
 
+# rubocop:disable ClassLength
 class Nagios
   #
   # This class holds all methods with regard to hostdependency options,
@@ -84,12 +85,36 @@ class Nagios
       end
     end
 
+    def pop(obj)
+      case obj
+      when Nagios::Host
+        pop_object(obj, @host_name)
+        pop(self, obj)
+      when Nagios::Hostgroup
+        pop_object(obj, @hostgroup_name)
+        pop(self, obj)
+      when Nagios::Timeperiod
+        @dependency_period = nil if @dependency_period == obj
+      end
+    end
+
     def push_dependency(obj)
       case obj
       when Nagios::Host
         push_object(obj, @dependent_host_name)
       when Nagios::Hostgroup
         push_object(obj, @dependent_hostgroup_name)
+      end
+    end
+
+    def pop_dependency(obj)
+      case obj
+      when Nagios::Host
+        pop_object(obj, @dependent_host_name)
+        pop(self, obj)
+      when Nagios::Hostgroup
+        pop_object(obj, @dependent_hostgroup_name)
+        pop(self, obj)
       end
     end
 
@@ -144,3 +169,4 @@ class Nagios
     end
   end
 end
+# rubocop:enable ClassLength

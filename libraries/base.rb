@@ -233,12 +233,20 @@ class Nagios
     def push_object(obj, hash)
       return if hash.key?('null')
       if obj.to_s == 'null'
-        hash.delete_if { |_k, _v| true }
+        hash.values { |object| pop(object) }
         hash[obj.to_s] = obj
       elsif hash[obj.to_s].nil?
         hash[obj.to_s] = obj
       else
         Chef::Log.debug("Nagios debug: #{self.class} already contains #{obj.class} with name: #{obj}")
+      end
+    end
+
+    def pop_object(obj, hash)
+      if hash.key?(obj.to_s)
+        hash.delete(obj.to_s)
+      else
+        Chef::Log.debug("Nagios debug: #{self.class} does not contain #{obj.class} with name: #{obj}")
       end
     end
 

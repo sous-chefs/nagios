@@ -69,6 +69,17 @@ class Nagios
       end
     end
 
+    def pop(obj)
+      case obj
+      when Nagios::Host
+        pop_object(obj, @members)
+        pop(self, obj)
+      when Nagios::Hostgroup
+        pop_object(obj, @hostgroup_members)
+        pop(self, obj)
+      end
+    end
+
     def self.create(name)
       Nagios.instance.find(Nagios::Hostgroup.new(name))
     end
