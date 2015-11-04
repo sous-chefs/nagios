@@ -293,7 +293,7 @@ License & Authors
 - Author:: Nathan Haneysmith <nathan@chef.io>
 - Author:: Joshua Timberman <joshua@chef.io>
 - Author:: Seth Chisamore <schisamo@chef.io>
-- Author:: Tim Smith <tim@cozy.co>
+- Author:: Tim Smith <tsmith@chef.io>
 
 ```text
 Copyright 2009, 37signals
