@@ -45,6 +45,7 @@ class Nagios
       @host_name           = {}
       @hostgroup_name      = {}
       @servicegroup_name   = {}
+      super()
     end
 
     def definition
@@ -100,6 +101,28 @@ class Nagios
         push_object(obj, @contact_groups)
       when Nagios::Timeperiod
         @escalation_period = obj
+      end
+    end
+
+    def pop(obj)
+      case obj
+      when Nagios::Host
+        pop_object(obj, @host_name)
+        pop(self, obj)
+      when Nagios::Hostgroup
+        pop_object(obj, @hostgroup_name)
+        pop(self, obj)
+      when Nagios::Servicegroup
+        pop_object(obj, @servicegroup_name)
+        pop(self, obj)
+      when Nagios::Contact
+        pop_object(obj, @contacts)
+        pop(self, obj)
+      when Nagios::Contactgroup
+        pop_object(obj, @contact_groups)
+        pop(self, obj)
+      when Nagios::Timeperiod
+        @escalation_period = nil if @escalation_period == obj
       end
     end
     # rubocop:enable MethodLength

@@ -38,9 +38,11 @@ class Nagios
       @hostgroup_name = hostgroup_name
       @members = {}
       @hostgroup_members = {}
+      super()
     end
 
     def definition
+      return if hostgroup_name == 'null'
       get_definition(configured_options, 'hostgroup')
     end
 
@@ -64,6 +66,17 @@ class Nagios
         push_object(obj, @members)
       when Nagios::Hostgroup
         push_object(obj, @hostgroup_members)
+      end
+    end
+
+    def pop(obj)
+      case obj
+      when Nagios::Host
+        pop_object(obj, @members)
+        pop(self, obj)
+      when Nagios::Hostgroup
+        pop_object(obj, @hostgroup_members)
+        pop(self, obj)
       end
     end
 

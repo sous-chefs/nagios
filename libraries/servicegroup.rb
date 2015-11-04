@@ -38,9 +38,11 @@ class Nagios
       @servicegroup_name = servicegroup_name
       @members = {}
       @servicegroup_members = {}
+      super()
     end
 
     def definition
+      return if servicegroup_name == '*' || servicegroup_name == 'null'
       get_definition(configured_options, 'servicegroup')
     end
 
@@ -61,6 +63,17 @@ class Nagios
         push_object(obj, @members)
       when Nagios::Servicegroup
         push_object(obj, @servicegroup_members)
+      end
+    end
+
+    def pop(obj)
+      case obj
+      when Nagios::Service
+        pop_object(obj, @members)
+        pop(self, obj)
+      when Nagios::Servicegroup
+        pop_object(obj, @servicegroup_members)
+        pop(self, obj)
       end
     end
 

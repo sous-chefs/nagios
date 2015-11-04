@@ -35,6 +35,7 @@ class Nagios
       @contactgroup_name = contactgroup_name
       @members = {}
       @contactgroup_members = {}
+      super()
     end
 
     def contactgroup_members_list
@@ -46,6 +47,7 @@ class Nagios
     end
 
     def definition
+      return if contactgroup_name == '*' || contactgroup_name == 'null'
       get_definition(configured_options, 'contactgroup')
     end
 
@@ -65,6 +67,17 @@ class Nagios
         push_object(obj, @members)
       when Nagios::Contactgroup
         push_object(obj, @contactgroup_members)
+      end
+    end
+
+    def pop(obj)
+      case obj
+      when Nagios::Contact
+        pop_object(obj, @members)
+        pop(self, obj)
+      when Nagios::Contactgroup
+        pop_object(obj, @contactgroup_members)
+        pop(self, obj)
       end
     end
 

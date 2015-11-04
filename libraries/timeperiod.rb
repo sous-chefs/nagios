@@ -60,6 +60,7 @@ class Nagios
       @timeperiod_name = timeperiod_name
       @periods = {}
       @exclude = {}
+      super()
     end
 
     def self.create(name)
@@ -67,6 +68,7 @@ class Nagios
     end
 
     def definition
+      return if timeperiod_name == 'null'
       configured = configured_options
       periods.values.each { |v| configured[v.moment] = v.period }
       get_definition(configured, 'timeperiod')
@@ -95,6 +97,17 @@ class Nagios
         push_object(obj, @exclude)
       when Nagios::Timeperiodentry
         push_object(obj, @periods) unless obj.period.nil?
+      end
+    end
+
+    def pop(obj)
+      case obj
+      when Nagios::Timeperiod
+        pop_object(obj, @exclude)
+        pop(self, obj)
+      when Nagios::Timeperiodentry
+        pop_object(obj, @periods)
+        pop(self, obj)
       end
     end
 

@@ -71,6 +71,7 @@ class Nagios
                   :icon_image,
                   :icon_image_alt
 
+    # rubocop:disable MethodLength
     def initialize(service_description)
       @service_description = service_description
       srv = service_description.split('!')
@@ -82,7 +83,9 @@ class Nagios
       @hostgroups          = {}
       @hosts               = {}
       @custom_options      = {}
+      super()
     end
+    # rubocop:enable MethodLength
 
     def check_command
       if blank?(@arguments)
@@ -181,6 +184,34 @@ class Nagios
         @notification_period = obj
       when Nagios::CustomOption
         push_object(obj, @custom_options)
+      end
+    end
+
+    def pop(obj)
+      case obj
+      when Nagios::Servicegroup
+        pop_object(obj, @servicegroups)
+        pop(self, obj)
+      when Nagios::Hostgroup
+        pop_object(obj, @hostgroups)
+        pop(self, obj)
+      when Nagios::Host
+        pop_object(obj, @hosts)
+        pop(self, obj)
+      when Nagios::Contact
+        pop_object(obj, @contacts)
+        pop(self, obj)
+      when Nagios::Contactgroup
+        pop_object(obj, @contact_groups)
+        pop(self, obj)
+      when Nagios::Command
+        @check_command = nil if @check_command == obj
+      when Nagios::Timeperiod
+        @check_period = nil if @check_command == obj
+        @notification_period = nil if @check_command == obj
+      when Nagios::CustomOption
+        pop_object(obj, @custom_options)
+        pop(self, obj)
       end
     end
     # rubocop:enable MethodLength

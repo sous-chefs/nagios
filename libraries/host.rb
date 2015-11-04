@@ -82,6 +82,7 @@ class Nagios
       @check_period = nil
       @notification_period = nil
       @custom_options = {}
+      super()
     end
 
     def check_period
@@ -109,6 +110,7 @@ class Nagios
     end
 
     def definition
+      return if host_name == '*' || host_name == 'null'
       configured = configured_options
       custom_options.each { |_, v| configured[v.to_s] = v.value }
       get_definition(configured, 'host')
