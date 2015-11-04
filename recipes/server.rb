@@ -126,6 +126,21 @@ region = node[:ec2][:region]
 
 domain = DNSHelpers.get_domain(node)
 
+Chef::Log.warn(" ###############Domain is #{domain}. ##################")
+
+
+#nodes = search(:node, "app_environment:#{node['app_environment']} AND domain:#{node['domain']}")
+
+#Chef::Log.warn("Nagios Nodes are #{nodes}.")
+
+#vnodes = search(:node, "app_environment:#{node['app_environment']} AND domain:v*")
+
+#Chef::Log.warn("Nagios vNodes are #{vnodes}.")
+
+#nodes = vnodes.concat(nodes)
+
+
+
 unless domain.match(/^prod1?.\w{2}-\w{2}/)
 
     tries = 3
@@ -185,6 +200,11 @@ else
             nodes << n
         end
     end
+end
+
+if domain.match(/^privatecloud\d/) or domain.match(/^pc\d/)
+    #nodes = search(:node, "app_environment:#{node['app_environment']} AND domain:#{node['domain']}")
+    nodes = search(:node, "app_environment:#{node['app_environment']}")
 end
 
 if nodes.empty?
@@ -413,8 +433,14 @@ Chef::Log.warn("Uconnects are: #{uconnects}")
 
 designation = "host_name"
 
-if node[:ec2][:local_ipv4] == "10.1.2.7"
-main_nagios = "#{node['hostname']} - #{node[:ipaddress]}"
+Chef::Log.warn("First App_Environment is: #{node[:app_environment]}")
+
+if node[:ec2][:local_ipv4] == "10.1.2.7" or node[:app_environment].match(/^privatecloud\d/)
+ip = "#{node['hostname']} - #{node[:ipaddress]}"
+environment = "#{node[:app_environment]}"
+
+Chef::Log.warn("Nagios IP is: #{ip}")
+Chef::Log.warn("Second App_Environment is: #{environment}")
 
   template "/home/ubuntu/nagios" do
     source "nagios.sudoers.erb"
@@ -431,7 +457,8 @@ main_nagios = "#{node['hostname']} - #{node[:ipaddress]}"
     variables(
       :service_hosts => service_hosts,
       :services => services,
-      :main_nagios => main_nagios,
+      :ip => ip,
+      :environment => environment,
       :designation => designation,
       :uconnects => uconnects
     )
@@ -442,7 +469,8 @@ else
       :service_hosts => service_hosts,
       :services => services,
       :uconnects => uconnects,
-      :designation => designation
+      :designation => designation,
+      :region => region
     )
   end
 end

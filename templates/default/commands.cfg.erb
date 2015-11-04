@@ -20,6 +20,20 @@ define command {
   command_line    $USER1$/check_rabbitmq_queue -H $ARG1$ --port 15672 --vhost $ARG2$ --queue $ARG3$ -u $ARG4$ -p $ARG5$ -w $ARG6$ -c $ARG7$
 }
 
+define command{
+  command_name    check_rabbitmq_queue_availability
+  command_line    $USER1$/check_rabbitmq_queue_count.sh $ARG1$ $ARG2$ $ARG3$ $ARG4$ $ARG5$
+}
+
+#define command{
+#  command_name    check_rabbitmq_objects_by_ssh
+#  command_line    exec ssh $HOSTADDRESS$ sudo /usr/lib/nagios/plugins/check_rabbitmq_objects --extra-opts=$ARG1$
+#}
+
+define command {
+  command_name    check_jmx_VP_node_status
+  command_line    $USER1$/check_jmx -U service:jmx:rmi:///jndi/rmi://$HOSTADDRESS$:9001/jmxrmi -O "DataCloud:type=VisitorProcessorCluster" -A NodeStatus -w ^$ARG1$
+}
 
 <% unless node['domain'].match(/^prod1?.\w{2}-\w{2}/) -%>
 
@@ -740,6 +754,11 @@ define command {
 define command {
         command_name    check_urest_service
         command_line    $USER1$/check_http -I $HOSTADDRESS$ -H $HOSTADDRESS$ -p 8085 -u /urest_service/health
+}
+
+define command {
+        command_name    check_dc_visitor_service
+        command_line    $USER1$/check_http -I $HOSTADDRESS$ -H $HOSTADDRESS$ -p 8085 -u /health
 }
 
 define command {

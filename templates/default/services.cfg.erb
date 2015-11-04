@@ -40,39 +40,141 @@ define service {
     use                 default-service,srv-pnp
 }
 
-<% unless @main_nagios.nil? -%>
+#define service {
+#    service_description Check Rabbit VP Queue Availability VPC <%= @region %> CLUSTER
+#    hostgroup_name nagios
+#    check_command       check_rabbitmq_queue_availability!<%= @region %>.cluster.rabbitmq.tealiumiq.com!/server2server!monitor!ifyouaremonitoringtheworld
+#    use                 rappid-rabbit,srv-pnp
+#}
+
+<% if @environment == "privatecloud1" -%>
+
+define service {
+    service_description Check Rabbit record_requests_queue PC1
+    <%= @designation %> <%= @ip %>
+    check_command       check_rabbit_queues!pc1.rabbitmq.tealiumiq.com!/server2server!record_requests_queue!monitor!ifyouaremonitoringtheworld!2500,-1,500,-1!3000,-1,600,-1
+    use                 default-service,srv-pnp
+}
+
+<% end %>
+
+<% if @environment == "production_vpc1" -%>
+
+define service {
+    service_description Check Rabbit record_requests_queue VPC US WEST CLUSTER
+    <%= @designation %> <%= @ip %>
+    check_command       check_rabbit_queues!us-west-1.cluster.rabbitmq.tealiumiq.com!/server2server!record_requests_queue!monitor!ifyouaremonitoringtheworld!2500,-1,500,-1!3000,-1,600,-1
+    use                 default-service,srv-pnp
+}
+
+define service {
+    service_description Check Rabbit request_tracers_queue VPC US WEST CLUSTER
+    <%= @designation %> <%= @ip %>
+    check_command       check_rabbit_queues!us-west-1.cluster.rabbitmq.tealiumiq.com!/server2server!request_tracers_queue!monitor!ifyouaremonitoringtheworld!2500,-1,500,-1!3000,-1,600,-1
+    use                 default-service,srv-pnp
+}
+
+define service {
+    service_description Check Rabbit vp_to_au_expiredvisitor_queue VPC US WEST CLUSTER
+    <%= @designation %> <%= @ip %>
+    check_command       check_rabbit_queues!us-west-1.cluster.rabbitmq.tealiumiq.com!/server2server!vp_to_au_expiredvisitor_queue!monitor!ifyouaremonitoringtheworld!2500,-1,500,-1!3000,-1,600,-1
+    use                 default-service,srv-pnp
+}
+
+define service {
+    service_description Check Rabbit audit_analyzer VPC US WEST CLUSTER
+    <%= @designation %> <%= @ip %>
+    check_command       check_rabbit_queues!us-west-1.cluster.rabbitmq.tealiumiq.com!/sitemap_audit!audit_analyzer!monitor!ifyouaremonitoringtheworld!2500,-1,500,-1!3000,-1,600,-1
+    use                 default-service,srv-pnp
+}
+
+define service {
+    service_description Check Rabbit audit_complete_site_companion VPC US WEST CLUSTER
+    <%= @designation %> <%= @ip %>
+    check_command       check_rabbit_queues!us-west-1.cluster.rabbitmq.tealiumiq.com!/sitemap_audit!audit_complete_site_companion!monitor!ifyouaremonitoringtheworld!2500,-1,500,-1!3000,-1,600,-1
+    use                 default-service,srv-pnp
+}
+
+define service {
+    service_description Check Rabbit audit_complete_site_scan VPC US WEST CLUSTER
+    <%= @designation %> <%= @ip %>
+    check_command       check_rabbit_queues!us-west-1.cluster.rabbitmq.tealiumiq.com!/sitemap_audit!audit_complete_site_scan!monitor!ifyouaremonitoringtheworld!2500,-1,500,-1!3000,-1,600,-1
+    use                 default-service,srv-pnp
+}
+
+define service {
+    service_description Check Rabbit audit_sitemap VPC US WEST CLUSTER
+    <%= @designation %> <%= @ip %>
+    check_command       check_rabbit_queues!us-west-1.cluster.rabbitmq.tealiumiq.com!/sitemap_audit!audit_sitemap!monitor!ifyouaremonitoringtheworld!2500,-1,500,-1!3000,-1,600,-1
+    use                 default-service,srv-pnp
+}
+
+define service {
+    service_description Check Rabbit audit_url VPC US WEST CLUSTER
+    <%= @designation %> <%= @ip %>
+    check_command       check_rabbit_queues!us-west-1.cluster.rabbitmq.tealiumiq.com!/sitemap_audit!audit_url!monitor!ifyouaremonitoringtheworld!2500,-1,500,-1!3000,-1,600,-1
+    use                 default-service,srv-pnp
+}
+
+define service {
+    service_description Check Rabbit tiq_verifier VPC US WEST CLUSTER
+    <%= @designation %> <%= @ip %>
+    check_command       check_rabbit_queues!us-west-1.cluster.rabbitmq.tealiumiq.com!/tiq_verifier!tiq_verifier!monitor!ifyouaremonitoringtheworld!2500,-1,500,-1!3000,-1,600,-1
+    use                 default-service,srv-pnp
+}
 
 define service {
     service_description Check Rabbit http_requests_queue VPC US WEST CLUSTER
-    <%= @designation %> <%= @main_nagios %>
+    <%= @designation %> <%= @ip %>
     check_command       check_rabbit_queues!us-west-1.cluster.rabbitmq.tealiumiq.com!/server2server!http_requests_queue!monitor!ifyouaremonitoringtheworld!2500,-1,500,-1!3000,-1,600,-1
     use                 default-service,srv-pnp
 }
 
 define service {
     service_description Check Rabbit tag_request_queue VPC US WEST CLUSTER
-   <%= @designation %> <%= @main_nagios %>
+   <%= @designation %> <%= @ip %>
     check_command       check_rabbit_queues!us-west-1.cluster.rabbitmq.tealiumiq.com!/server2server!tag_request_queue!monitor!ifyouaremonitoringtheworld!200,-1,200,-1!300,-1,300,-1
     use                 default-service,srv-pnp
 }
 
 define service {
     service_description Check Rabbit http_response_task VPC US WEST CLUSTER
-    <%= @designation %> <%= @main_nagios %>
+    <%= @designation %> <%= @ip %>
     check_command       check_rabbit_queues!us-west-1.cluster.rabbitmq.tealiumiq.com!/server2server!http_response_task!monitor!ifyouaremonitoringtheworld!200,-1,200,-1!300,-1,300,-1
     use                 default-service,srv-pnp
 }
 
 define service {
+    service_description Check Rabbit http_response_task VPC US EAST CLUSTER
+    <%= @designation %> <%= @ip %>
+    check_command       check_rabbit_queues!us-east-1.cluster.rabbitmq.tealiumiq.com!/server2server!http_response_task!monitor!ifyouaremonitoringtheworld!200,-1,200,-1!300,-1,300,-1
+    use                 default-service,srv-pnp
+}
+
+define service {
+    service_description Check Rabbit vp_to_au_expiredvisitor_queue VPC US EAST CLUSTER
+    <%= @designation %> <%= @ip %>
+    check_command       check_rabbit_queues!us-east-1.cluster.rabbitmq.tealiumiq.com!/server2server!vp_to_au_expiredvisitor_queue!monitor!ifyouaremonitoringtheworld!2500,-1,500,-1!3000,-1,600,-1
+    use                 default-service,srv-pnp
+}
+
+define service {
+    service_description Check Rabbit request_tracers_queue VPC US EAST CLUSTER
+    <%= @designation %> <%= @ip %>
+    check_command       check_rabbit_queues!us-east-1.cluster.rabbitmq.tealiumiq.com!/server2server!request_tracers_queue!monitor!ifyouaremonitoringtheworld!2500,-1,500,-1!3000,-1,600,-1
+    use                 default-service,srv-pnp
+}
+
+define service {
     service_description Check Rabbit http_requests_queue VPC US EAST CLUSTER
-    <%= @designation %> <%= @main_nagios %>
+    <%= @designation %> <%= @ip %>
     check_command       check_rabbit_queues!us-east-1.cluster.rabbitmq.tealiumiq.com!/server2server!http_requests_queue!monitor!ifyouaremonitoringtheworld!40000,-1,20000,-1!45000,-1,25000,-1
     use                 default-service,srv-pnp
 }
 
 define service {
    service_description Check Rabbit tag_request_queue VPC US EAST CLUSTER
-    <%= @designation %> <%= @main_nagios %>
+    <%= @designation %> <%= @ip %>
     check_command       check_rabbit_queues!us-east-1.cluster.rabbitmq.tealiumiq.com!/server2server!tag_request_queue!monitor!ifyouaremonitoringtheworld!200,-1,200,-1!300,-1,300,-1
     use                 default-service,srv-pnp
 }
@@ -83,98 +185,162 @@ define service {
 }
 
 define service {
+    service_description Check Rabbit vp_to_au_expiredvisitor_queue VPC EU WEST CLUSTER
+    <%= @designation %> <%= @ip %>
+    check_command       check_rabbit_queues!eu-west-1.cluster.rabbitmq.tealiumiq.com!/server2server!vp_to_au_expiredvisitor_queue!monitor!ifyouaremonitoringtheworld!2500,-1,500,-1!3000,-1,600,-1
+    use                 default-service,srv-pnp
+}
+
+define service {
+    service_description Check Rabbit request_tracers_queue VPC EU WEST CLUSTER
+    <%= @designation %> <%= @ip %>
+    check_command       check_rabbit_queues!eu-west-1.cluster.rabbitmq.tealiumiq.com!/server2server!request_tracers_queue!monitor!ifyouaremonitoringtheworld!2500,-1,500,-1!3000,-1,600,-1
+    use                 default-service,srv-pnp
+}
+
+define service {
     service_description Check Rabbit http_requests_queue VPC EU WEST CLUSTER
-    <%= @designation %> <%= @main_nagios %>
+    <%= @designation %> <%= @ip %>
     check_command       check_rabbit_queues!eu-west-1.cluster.rabbitmq.tealiumiq.com!/server2server!http_requests_queue!monitor!ifyouaremonitoringtheworld!4000,-1,2000,-1!4500,-1,2500,-1
     use                 default-service,srv-pnp
 }
 
 define service {
     service_description Check Rabbit tag_request_queue VPC EU WEST CLUSTER
-    <%= @designation %> <%= @main_nagios %>
+    <%= @designation %> <%= @ip %>
     check_command       check_rabbit_queues!eu-west-1.cluster.rabbitmq.tealiumiq.com!/server2server!tag_request_queue!monitor!ifyouaremonitoringtheworld!200,-1,200,-1!300,-1,300,-1
     use                 default-service,srv-pnp
 }
 
 define service {
     service_description Check Rabbit http_response_task VPC EU WEST CLUSTER
-    <%= @designation %> <%= @main_nagios %>
+    <%= @designation %> <%= @ip %>
     check_command       check_rabbit_queues!eu-west-1.cluster.rabbitmq.tealiumiq.com!/server2server!http_response_task!monitor!ifyouaremonitoringtheworld!200,-1,200,-1!300,-1,300,-1
     use                 default-service,srv-pnp
 }
 
 define service {
     service_description Check Rabbit permission_cache queue VPC US WEST CLUSTER
-    <%= @designation %> <%= @main_nagios %>
+    <%= @designation %> <%= @ip %>
     check_command       check_rabbit_queues!us-west-1.cluster.rabbitmq.tealiumiq.com!/permission_cache!permission_cache!monitor!ifyouaremonitoringtheworld!1000,-1,1000,-1!1000,-1,1000,-1
     use                 default-service,srv-pnp
 }
 
 define service {
-    service_description Check Rabbit shared_events_workqueue VPC WTF US WEST CLUSTER
-    <%= @designation %> <%= @main_nagios %>
-    check_command       check_rabbit_queues!us-west-1.cluster.rabbitmq.tealiumiq.com!/server2server!shared_events_workqueue!monitor!ifyouaremonitoringtheworld!20000,2000,1000,-1!20000,1000,500,-1
-    use                 rappid-rabbit,srv-pnp
+    service_description Check Rabbit vp_to_dd_visitor_action queue VPC US WEST CLUSTER
+    <%= @designation %> <%= @ip %>
+    check_command       check_rabbit_queues!us-west-1.cluster.rabbitmq.tealiumiq.com!/server2server!vp_to_dd_visitor_action!monitor!ifyouaremonitoringtheworld!1000,-1,1000,-1!1000,-1,1000,-1
+    use                 default-service,srv-pnp
 }
 
 define service {
-    service_description Check Rabbit shared_events_workqueue VPC US EAST CLUSTER
-    <%= @designation %> <%= @main_nagios %>
-    check_command       check_rabbit_queues!us-east-1.cluster.rabbitmq.tealiumiq.com!/server2server!shared_events_workqueue!monitor!ifyouaremonitoringtheworld!20000,2000,1000,-1!20000,1000,500,-1
-    use                 rappid-rabbit,srv-pnp
+    service_description Check Rabbit vp_to_dd_visitor_action queue VPC US EAST CLUSTER
+    <%= @designation %> <%= @ip %>
+    check_command       check_rabbit_queues!us-east-1.cluster.rabbitmq.tealiumiq.com!/server2server!vp_to_dd_visitor_action!monitor!ifyouaremonitoringtheworld!1000,-1,1000,-1!1000,-1,1000,-1
+    use                 default-service,srv-pnp
 }
 
 define service {
-    service_description Check Rabbit shared_events_workqueue VPC EU WEST CLUSTER
-    <%= @designation %> <%= @main_nagios %>
-    check_command       check_rabbit_queues!eu-west-1.cluster.rabbitmq.tealiumiq.com!/server2server!shared_events_workqueue!monitor!ifyouaremonitoringtheworld!20000,2000,1000,-1!20000,1000,500,-1
-    use                 rappid-rabbit,srv-pnp
+    service_description Check Rabbit vp_to_dd_visitor_action queue VPC EU WEST CLUSTER
+    <%= @designation %> <%= @ip %>
+    check_command       check_rabbit_queues!eu-west-1.cluster.rabbitmq.tealiumiq.com!/server2server!vp_to_dd_visitor_action!monitor!ifyouaremonitoringtheworld!1000,-1,1000,-1!1000,-1,1000,-1
+    use                 default-service,srv-pnp
 }
+
+#define service {
+#    service_description Check Rabbit shared_events_workqueue VPC WTF US WEST CLUSTER
+#    <%= @designation %> <%= @ip %>
+#    check_command       check_rabbit_queues!us-west-1.cluster.rabbitmq.tealiumiq.com!/server2server!shared_events_workqueue!monitor!ifyouaremonitoringtheworld!20000,2000,1000,-1!20000,1000,500,-1
+#    use                 rappid-rabbit,srv-pnp
+#}
+
+#define service {
+#    service_description Check Rabbit shared_events_workqueue VPC US EAST CLUSTER
+#    <%= @designation %> <%= @ip %>
+#    check_command       check_rabbit_queues!us-east-1.cluster.rabbitmq.tealiumiq.com!/server2server!shared_events_workqueue!monitor!ifyouaremonitoringtheworld!20000,2000,1000,-1!20000,1000,500,-1
+#    use                 rappid-rabbit,srv-pnp
+#}
+
+#define service {
+#    service_description Check Rabbit shared_events_workqueue VPC EU WEST CLUSTER
+#    <%= @designation %> <%= @ip %>
+#    check_command       check_rabbit_queues!eu-west-1.cluster.rabbitmq.tealiumiq.com!/server2server!shared_events_workqueue!monitor!ifyouaremonitoringtheworld!20000,2000,1000,-1!20000,1000,500,-1
+#    use                 rappid-rabbit,srv-pnp
+#}
 
 define service {
     service_description Check Rabbit uconnector_queue VPC US WEST CLUSTER
-    <%= @designation %> <%= @main_nagios %>
+    <%= @designation %> <%= @ip %>
     check_command       check_rabbit_queues!us-west-1.cluster.rabbitmq.tealiumiq.com!/server2server!uconnector_queue!monitor!ifyouaremonitoringtheworld!20000,2000,1000,-1!20000,1000,500,-1
     use                 rappid-rabbit,srv-pnp
 }
 
 define service {
     service_description Check Rabbit uconnector_queue VPC US EAST CLUSTER
-    <%= @designation %> <%= @main_nagios %>
+    <%= @designation %> <%= @ip %>
     check_command       check_rabbit_queues!us-east-1.cluster.rabbitmq.tealiumiq.com!/server2server!uconnector_queue!monitor!ifyouaremonitoringtheworld!20000,2000,1000,-1!20000,1000,500,-1
     use                 rappid-rabbit,srv-pnp
 }
 
 define service {
     service_description Check Rabbit uconnector_queue VPC EU WEST CLUSTER
-    <%= @designation %> <%= @main_nagios %>
+    <%= @designation %> <%= @ip %>
     check_command       check_rabbit_queues!eu-west-1.cluster.rabbitmq.tealiumiq.com!/server2server!uconnector_queue!monitor!ifyouaremonitoringtheworld!20000,2000,1000,-1!20000,1000,500,-1
     use                 rappid-rabbit,srv-pnp
 }
 
 define service {
     service_description Check Rabbit esp_to_au_event_queue VPC US WEST CLUSTER
-    <%= @designation %> <%= @main_nagios %>
+    <%= @designation %> <%= @ip %>
     check_command       check_rabbit_queues!us-west-1.cluster.rabbitmq.tealiumiq.com!/server2server!esp_to_au_event_queue!monitor!ifyouaremonitoringtheworld!20000,2000,1000,-1!20000,1000,500,-1
     use                 rappid-rabbit,srv-pnp
 }
 
 define service {
     service_description Check Rabbit esp_to_au_event_queue VPC US EAST CLUSTER
-    <%= @designation %> <%= @main_nagios %>
+    <%= @designation %> <%= @ip %>
     check_command       check_rabbit_queues!us-east-1.cluster.rabbitmq.tealiumiq.com!/server2server!esp_to_au_event_queue!monitor!ifyouaremonitoringtheworld!20000,2000,1000,-1!20000,1000,500,-1
     use                 rappid-rabbit,srv-pnp
 }
 
 define service {
     service_description Check Rabbit esp_to_au_event_queue VPC EU WEST CLUSTER
-    <%= @designation %> <%= @main_nagios %>
+    <%= @designation %> <%= @ip %>
     check_command       check_rabbit_queues!eu-west-1.cluster.rabbitmq.tealiumiq.com!/server2server!esp_to_au_event_queue!monitor!ifyouaremonitoringtheworld!20000,2000,1000,-1!20000,1000,500,-1
     use                 rappid-rabbit,srv-pnp
 }
+
+define service {
+    service_description Check Rabbit VP Queue Availability VPC US WEST CLUSTER
+    <%= @designation %> <%= @ip %>
+    check_command       check_rabbitmq_queue_availability!us-west-1.cluster.rabbitmq.tealiumiq.com!/server2server!monitor!ifyouaremonitoringtheworld!us-west
+    use                 rappid-rabbit,srv-pnp
+}
+
+define service {
+    service_description Check Rabbit VP Queue Availability VPC US EAST CLUSTER
+    <%= @designation %> <%= @ip %>
+    check_command       check_rabbitmq_queue_availability!us-east-1.cluster.rabbitmq.tealiumiq.com!/server2server!monitor!ifyouaremonitoringtheworld!us-east
+    use                 rappid-rabbit,srv-pnp
+}
+
+define service {
+    service_description Check Rabbit VP Queue Availability VPC EU WEST CLUSTER
+    <%= @designation %> <%= @ip %>
+    check_command       check_rabbitmq_queue_availability!eu-west-1.cluster.rabbitmq.tealiumiq.com!/server2server!monitor!ifyouaremonitoringtheworld!eu-west
+    use                 rappid-rabbit,srv-pnp
+}
+
+#define service {
+#    service_description Check Rabbit VP Queue Availability VPC EU CENTRAL CLUSTER
+#    <%= @designation %> <%= @ip %>
+#    check_command       check_rabbitmq_queue_availability!eu-central-1.cluster.rabbitmq.tealiumiq.com!/server2server!monitor!ifyouaremonitoringtheworld!eu-central
+#    use                 rappid-rabbit,srv-pnp
+#}
+
 #define service {
 #    service_description Check MongoDB Backup - Cluster 1
-#    <%= @designation %>	<%= @main_nagios %>
+#    <%= @designation %>	<%= @ip %>
 #    check_command       check_mongodb_backup!production_cluster_1
 #    use                 mongo-service,srv-pnp
 #    contact_groups      dbadmins
@@ -182,7 +348,7 @@ define service {
 
 #define service {
 #    service_description Check MongoDB Backup - Cluster 2
-#    <%= @designation %>	<%= @main_nagios %>
+#    <%= @designation %>	<%= @ip %>
 #    check_command       check_mongodb_backup!production_cluster_2
 #    use                 mongo-service,srv-pnp
 #    contact_groups      dbadmins
@@ -190,7 +356,7 @@ define service {
 
 #define service {
 #    service_description Check MongoDB Snapshots - Cluster 1
-#    <%= @designation %>	<%= @main_nagios %>
+#    <%= @designation %>	<%= @ip %>
 #    check_command       check_mongodb_snapshots!production_cluster_1
 #    use                 mongo-service,srv-pnp
 #    contact_groups      dbadmins
@@ -198,7 +364,7 @@ define service {
 
 #define service {
 #    service_description Check MongoDB Snapshots - Cluster 2
-#    <%= @designation %>	<%= @main_nagios %>
+#    <%= @designation %>	<%= @ip %>
 #    check_command       check_mongodb_snapshots!production_cluster_2
 #    use                 mongo-service,srv-pnp
 #    contact_groups      dbadmins
@@ -206,28 +372,28 @@ define service {
 
 #define service {
 #    service_description Check CDN Max Age
-#    <%= @designation %>	<%= @main_nagios %>
+#    <%= @designation %>	<%= @ip %>
 #    check_command       check_cdn_maxage
 #    use                 default-service,srv-pnp
 #}
 
 define service {
     service_description Check SES SMTP Availability
-    <%= @designation %> <%= @main_nagios %>
+    <%= @designation %> <%= @ip %>
     check_command       check_smtp
     use                 default-service,srv-pnp
 }
 
 #define service {
 #    service_description Check AWS Instance Events VPC
-#    <%= @designation %> <%= @main_nagios %>
+#    <%= @designation %> <%= @ip %>
 #    check_command       check_events_vpc
 #    use                 default-service,srv-pnp
 #}
 
 #define service {
 #    service_description Check AWS Instance Events Non VPC
-#    <%= @designation %> <%= @main_nagios %>
+#    <%= @designation %> <%= @ip %>
 #3    check_command       check_events_non_vpc
 #    use                 default-service,srv-pnp
 #}
@@ -321,12 +487,27 @@ define service {
     use                 jmx-service,srv-pnp
 }
 
+define service {
+    service_description Check if VISITOR PROCESSOR java heap
+    hostgroup_name      dc_visitor_processor
+    check_command       check_jmx_heap!<%= @vp_heap %>500000000
+    #check_command       check_jmx_heap
+    use                 jmx-service,srv-pnp
+}
 
 define service {
     service_description Check if UCONNECT IS DOWN
     hostgroup_name      dc_uconnect
     #check_command       check_jmx_heap!<%= @u_heap %>500000000
     check_command       check_jmx_heap
+    use                 jmx-service,srv-pnp
+}
+
+define service {
+    service_description Check UCONNECT java heap
+    hostgroup_name      dc_uconnect
+    check_command       check_jmx_heap!<%= @u_heap %>500000000
+    #check_command       check_jmx_heap
     use                 jmx-service,srv-pnp
 }
 
@@ -339,10 +520,26 @@ define service {
 }
 
 define service {
+    service_description Check MESSAGE ROUTER java heap
+    hostgroup_name      dc_message_router
+    check_command       check_jmx_heap!<%= @mr_heap %>500000000
+    #check_command       check_jmx_heap
+    use                 jmx-service,srv-pnp
+}
+
+define service {
     service_description Check if QUERY AGGREGATOR IS DOWN
     hostgroup_name      dc_query_aggregator
     #check_command       check_jmx_heap!<%= @qa_heap %>500000000
     check_command       check_jmx_heap
+    use                 jmx-service,srv-pnp
+}
+
+define service {
+    service_description Check QUERY AGGREGATOR java heap
+    hostgroup_name      dc_query_aggregator
+    check_command       check_jmx_heap!<%= @qa_heap %>500000000
+    #check_command       check_jmx_heap
     use                 jmx-service,srv-pnp
 }
 
@@ -355,6 +552,14 @@ define service {
 }
 
 define service {
+    service_description Check DATA DISTRIBUTOR java heap
+    hostgroup_name      dc_data_distributor
+    check_command       check_jmx_heap!<%= @dd_heap %>500000000
+    #check_command       check_jmx_heap
+    use                 jmx-service,srv-pnp
+}
+
+define service {
     service_description Check if VISITOR SERVICE IS DOWN
     hostgroup_name      dc_visitor_service
     #check_command       check_jmx_heap!<%= @dd_heap %>500000000
@@ -363,10 +568,18 @@ define service {
 }
 
 define service {
-    service_description Check if BULK DOWNLOADER IS DOWN
+    service_description Check VISITOR SERVICE java heap
+    hostgroup_name      dc_visitor_service
+    check_command       check_jmx_heap!<%= @dd_heap %>500000000
+    #check_command       check_jmx_heap
+    use                 jmx-service,srv-pnp
+}
+
+define service {
+    service_description Check BULK DOWNLOADER java heap
     hostgroup_name      dc_bulk_downloader
-    #check_command       check_jmx_heap!<%= @dd_heap %>500000000
-    check_command       check_jmx_heap
+    check_command       check_jmx_heap!<%= @dd_heap %>500000000
+    #check_command       check_jmx_heap
     use                 jmx-service,srv-pnp
 }
 
@@ -400,10 +613,17 @@ define service {
 #
 #define service {
 #    service_description Check JMX DataCloud Threading
-#    hostgroup_name      dc_visytor_service
+#    hostgroup_name      dc_visitor_service
 #    check_command       check_jmx_threads!60!70
 #    use                 jmx-service,srv-pnp
 #}
+
+define service {
+    service_description Check JMX DataCloud VP Status
+    hostgroup_name      dc_visitor_processor
+    check_command       check_jmx_VP_node_status!ACTIVE
+    use                 jmx-service,srv-pnp
+}
 
 define service {
     service_description Check Permission Cache Process
@@ -811,6 +1031,13 @@ define service {
   service_description   Check urest_service
   hostgroup_name        urest
   check_command         check_urest_service
+  use                   default-service,srv-pnp
+}
+
+define service {
+  service_description   Check dc_visitor_service
+  hostgroup_name        dc_visitor_service
+  check_command         check_dc_visitor_service
   use                   default-service,srv-pnp
 }
 
