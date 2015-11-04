@@ -22,8 +22,8 @@ The system running this cookbooks should have a role named 'monitoring' so that 
 The functionality that was previously in the nagios::client recipe has been moved to its own NRPE cookbook at https://github.com/schubergphilis/nrpe
 
 ### Platform
-* Debian 6.X, 7.X
-* Ubuntu 10.04, 12.04, 13.04
+* Debian 7+
+* Ubuntu 12.04+
 * Red Hat Enterprise Linux (CentOS/Amazon/Scientific/Oracle) 5.X, 6.X
 
 **Notes**: This cookbook has been tested on the listed platforms. It may work on other platforms with or without modification.
