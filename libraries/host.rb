@@ -175,6 +175,29 @@ class Nagios
         push_object(obj, @custom_options)
       end
     end
+
+    def pop(obj)
+      case obj
+      when Nagios::Hostgroup
+        pop_object(obj, @hostgroups)
+        obj.pop(self)
+      when Nagios::Host
+        pop_object(obj, @parents)
+        obj.pop(self)
+      when Nagios::Contact
+        pop_object(obj, @contacts)
+        obj.pop(self)
+      when Nagios::Contactgroup
+        pop_object(obj, @contact_groups)
+        obj.pop(self)
+      when Nagios::Timeperiod
+        @check_period = nil if @check_period == obj
+        @notification_period = nil if @notification_period == obj
+      when Nagios::CustomOption
+        pop_object(obj, @custom_options)
+        obj.pop(self)
+      end
+    end
     # rubocop:enable MethodLength
 
     def self.create(name)

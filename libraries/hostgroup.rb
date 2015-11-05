@@ -72,10 +72,10 @@ class Nagios
       case obj
       when Nagios::Host
         pop_object(obj, @members)
-        pop(self, obj)
+        obj.pop(obj)
       when Nagios::Hostgroup
         pop_object(obj, @hostgroup_members)
-        pop(self, obj)
+        obj.pop(obj)
       end
     end
 
