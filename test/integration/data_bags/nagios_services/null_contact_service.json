@@ -1,0 +1,7 @@
+{
+  "id": "null_contact_service",
+  "hostgroup_name": "all",
+  "command_line": "$USER1$/check_nrpe -H $HOSTADDRESS$ -c check_something -t 20",
+  "contact_groups": "null",
+  "contacts": "devs"
+}
