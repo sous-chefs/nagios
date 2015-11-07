@@ -104,22 +104,33 @@ class Nagios
     end
 
     def pop(obj)
+      return if obj == self
       case obj
       when Nagios::Host
-        pop_object(obj, @host_name)
-        pop(self, obj)
+        if @host_name.keys?(obj.to_s)
+          pop_object(obj, @host_name)
+          pop(self, obj)
+        end
       when Nagios::Hostgroup
-        pop_object(obj, @hostgroup_name)
-        pop(self, obj)
+        if @hostgroup_name.keys?(obj.to_s)
+          pop_object(obj, @hostgroup_name)
+          pop(self, obj)
+        end
       when Nagios::Servicegroup
-        pop_object(obj, @servicegroup_name)
-        pop(self, obj)
+        if @servicegroup_name.keys?(obj.to_s)
+          pop_object(obj, @servicegroup_name)
+          pop(self, obj)
+        end
       when Nagios::Contact
-        pop_object(obj, @contacts)
-        pop(self, obj)
+        if @contacts.keys?(obj.to_s)
+          pop_object(obj, @contacts)
+          pop(self, obj)
+        end
       when Nagios::Contactgroup
-        pop_object(obj, @contact_groups)
-        pop(self, obj)
+        if @contact_groups.keys?(obj.to_s)
+          pop_object(obj, @contact_groups)
+          pop(self, obj)
+        end
       when Nagios::Timeperiod
         @escalation_period = nil if @escalation_period == obj
       end

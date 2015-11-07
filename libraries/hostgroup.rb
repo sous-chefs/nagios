@@ -68,16 +68,23 @@ class Nagios
       end
     end
 
+    # rubocop:disable MethodLength
     def pop(obj)
+      return if obj == self
       case obj
       when Nagios::Host
-        pop_object(obj, @members)
-        obj.pop(obj)
+        if @members.key?(obj.to_s)
+          pop_object(obj, @members)
+          obj.pop(obj)
+        end
       when Nagios::Hostgroup
-        pop_object(obj, @hostgroup_members)
-        obj.pop(obj)
+        if @hostgroups_members.key?(obj.to_s)
+          pop_object(obj, @hostgroup_members)
+          obj.pop(obj)
+        end
       end
     end
+    # rubocop:enable MethodLength
 
     def self.create(name)
       Nagios.instance.find(Nagios::Hostgroup.new(name))

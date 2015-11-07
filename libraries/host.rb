@@ -177,25 +177,36 @@ class Nagios
     end
 
     def pop(obj)
+      return if obj == self
       case obj
       when Nagios::Hostgroup
-        pop_object(obj, @hostgroups)
-        obj.pop(self)
+        if @hostgroups.key?(obj.to_s)
+          pop_object(obj, @hostgroups)
+          obj.pop(self)
+        end
       when Nagios::Host
-        pop_object(obj, @parents)
-        obj.pop(self)
+        if @parents.key?(obj.to_s)
+          pop_object(obj, @parents)
+          obj.pop(self)
+        end
       when Nagios::Contact
-        pop_object(obj, @contacts)
-        obj.pop(self)
+        if @contacts.keys?(obj.to_s)
+          pop_object(obj, @contacts)
+          obj.pop(self)
+        end
       when Nagios::Contactgroup
-        pop_object(obj, @contact_groups)
-        obj.pop(self)
+        if @contact_groups.keys?(obj.to_s)
+          pop_object(obj, @contact_groups)
+          obj.pop(self)
+        end
       when Nagios::Timeperiod
         @check_period = nil if @check_period == obj
         @notification_period = nil if @notification_period == obj
       when Nagios::CustomOption
-        pop_object(obj, @custom_options)
-        obj.pop(self)
+        if @custom_options.keys?(obj.to_s)
+          pop_object(obj, @custom_options)
+          obj.pop(self)
+        end
       end
     end
     # rubocop:enable MethodLength
