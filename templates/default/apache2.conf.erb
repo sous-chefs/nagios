@@ -24,6 +24,9 @@
 
   <Directory "<%= node['nagios']['cgi-bin'] %>">
      Options ExecCGI
+     <% if node['nagios']['default_user_name'] -%>
+     require all granted
+     <% end -%>
   </Directory>
 
 <% if @https -%>

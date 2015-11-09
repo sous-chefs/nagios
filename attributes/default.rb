@@ -129,6 +129,7 @@ end
 
 default['nagios']['check_external_commands']     = true
 default['nagios']['default_contact_groups']      = %w(admins)
+default['nagios']['default_user_name']           = nil
 default['nagios']['sysadmin_email']              = 'root@localhost'
 default['nagios']['sysadmin_sms_email']          = 'root@localhost'
 default['nagios']['server_auth_method']          = 'htauth'
