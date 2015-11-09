@@ -56,6 +56,7 @@ describe 'Nagios Configuration' do
   file_services << 'service_description.*service_b'
   file_services << 'service_description.*service_c'
   file_services << 'check_command.*system-load!15,10,5!30,25,20'
+  file_services << 'contact_groups.*\+[^ ]+non_admins'
 
   file_services.each do |line|
     describe file("#{path_config_dir}/services.cfg") do
@@ -100,6 +101,15 @@ describe 'Nagios Configuration' do
   file_contacts.each do |line|
     describe file("#{path_config_dir}/contacts.cfg") do
       its(:content) { should match line }
+    end
+  end
+
+  file_contacts_exclude = []
+  file_contacts_exclude << 'contact_group.*\+non_admins'
+
+  file_contacts_exclude.each do |line|
+    describe file("#{path_config_dir}/contacts.cfg") do
+      its(:content) { should_not match line }
     end
   end
 

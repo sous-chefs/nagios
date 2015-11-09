@@ -38,6 +38,7 @@ class Nagios
       @hostgroup_name = hostgroup_name
       @members = {}
       @hostgroup_members = {}
+      super()
     end
 
     def definition

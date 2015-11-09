@@ -71,6 +71,7 @@ class Nagios
                   :icon_image,
                   :icon_image_alt
 
+    # rubocop:disable MethodLength
     def initialize(service_description)
       @service_description = service_description
       srv = service_description.split('!')
@@ -82,7 +83,9 @@ class Nagios
       @hostgroups          = {}
       @hosts               = {}
       @custom_options      = {}
+      super()
     end
+    # rubocop:enable MethodLength
 
     def check_command
       if blank?(@arguments)
