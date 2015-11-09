@@ -40,12 +40,12 @@ end
 Nagios.instance.push(node)
 
 # Pushing all nodes into the Nagios.instance model
+exclude_tag = node['nagios']['exclude_tag_host']
 nodes.each do |n|
   if n.tags.nil?
     Nagios.instance.push(n)
   else
-    Nagios.instance.push(n) unless nagios_array(n.tags).any? { 
-      |tag| node['nagios']['exclude_tag_host'].include?(tag) }
+    Nagios.instance.push(n) unless nagios_array(n.tags).any? { |tag| nagios_array(exclude_tag).include?(tag) }
   end
 end
 
