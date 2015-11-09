@@ -41,11 +41,12 @@ Nagios.instance.push(node)
 
 # Pushing all nodes into the Nagios.instance model
 nodes.each do |n|
-  include = true
-  nagios_array(n.tags).each do |tag|
-    include = false if node['nagios']['exclude_tag_host'].include?(tag)
+  if n.tags.nil?
+    Nagios.instance.push(n)
+  else
+    Nagios.instance.push(n) unless nagios_array(n.tags).any? { 
+      |tag| node['nagios']['exclude_tag_host'].include?(tag) }
   end
-  Nagios.instance.push(n) if include
 end
 
 # 24x7 timeperiod
