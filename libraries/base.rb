@@ -28,6 +28,7 @@ class Nagios
 
     def initialize
       @add_modifiers = {}
+      @not_modifiers = Hash.new { |h, k| h[k] = {} }
     end
 
     def merge!(obj)
@@ -142,21 +143,21 @@ class Nagios
       obj.map(&:to_s).join(',')
     end
 
-    def configured_option(method)
+    def configured_option(method, option)
       value = send(method)
       return nil if blank?(value)
-      if value.class == Array
-        value.join(',')
-      else
-        value
-      end
+      value = value.split(',') if value.is_a? String
+      value = value.map do |e|
+        (@not_modifiers[option][e] || '') + e
+      end.join(',') if value.is_a? Array
+      value
     end
 
     def configured_options
       configured = {}
       config_options.each do |m, o|
         next if o.nil?
-        value = configured_option(m)
+        value = configured_option(m, o)
         next if value.nil?
         configured[o] = value
       end
@@ -283,6 +284,7 @@ class Nagios
       end
     end
 
+    # rubocop:disable MethodLength
     def update_members(hash, option, object, remote = false)
       return if blank?(hash) || hash[option].nil?
       if hash[option].is_a?(String) && hash[option].start_with?('+')
@@ -290,11 +292,16 @@ class Nagios
         hash[option] = hash[option][1..-1]
       end
       get_members(hash[option], object).each do |member|
+        if member.start_with?('!')
+          member = member[1..-1]
+          @not_modifiers[option][member] = '!'
+        end
         n = Nagios.instance.find(object.new(member))
         push(n)
         n.push(self) if remote
       end
     end
+    # rubocop:enable MethodLength
 
     def update_dependency_members(hash, option, object)
       return if blank?(hash) || hash[option].nil?
