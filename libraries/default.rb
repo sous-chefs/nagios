@@ -34,13 +34,13 @@ def nagios_interval(seconds)
 end
 
 def nagios_array(exp)
-  return [] if exp.nil?
   case exp
   when Array
     exp
   when String
     [exp]
   end
+  []
 end
 
 def nagios_action_delete?(action)
