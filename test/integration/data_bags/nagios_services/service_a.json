@@ -2,5 +2,6 @@
   "id": "service_a",
   "hostgroup_name": "hostgroup_a",
   "command_line": "$USER1$/check_something...",
-  "servicegroups": "servicegroup_a"
+  "servicegroups": "servicegroup_a",
+  "host_name": "!chefnode_c, !chefnode_d"
 }
