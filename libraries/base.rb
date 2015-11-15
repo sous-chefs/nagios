@@ -231,6 +231,10 @@ class Nagios
       Chef::Log.debug("Nagios debug: The method merge_members is not supported by #{obj.class}")
     end
 
+    def push(obj)
+      Chef::Log.debug("Nagios debug: Cannot push #{obj} into #{self.class}")
+    end
+
     def push_object(obj, hash)
       if hash[obj.to_s].nil?
         hash[obj.to_s] = obj
