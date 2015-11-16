@@ -165,6 +165,8 @@ default['nagios']['ldap_bind_dn']       = nil
 default['nagios']['ldap_bind_password'] = nil
 default['nagios']['ldap_url']           = nil
 default['nagios']['ldap_authoritative'] = nil
+default['nagios']['ldap_group_attribute'] = nil
+default['nagios']['ldap_group_attribute_is_dn'] = nil
 
 default['nagios']['templates'] = Mash.new
 

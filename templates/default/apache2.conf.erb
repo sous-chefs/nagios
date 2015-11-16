@@ -64,6 +64,8 @@
     AuthName "Nagios Server"
     AuthType Basic
     AuthBasicProvider ldap
+    <% unless node['nagios']['ldap_group_attribute_is_dn'] or node['nagios']['ldap_group_attribute_is_dn'].nil? -%>AuthLDAPGroupAttributeIsDN Off <% end -%>
+    <% unless node['nagios']['ldap_group_attribute'].nil? -%>AuthLDAPGroupAttribute "<%= node['nagios']['ldap_group_attribute'] %>" <% end -%>
     <% unless node['nagios']['ldap_bind_dn'].nil? -%>AuthLDAPBindDN "<%= node['nagios']['ldap_bind_dn'] %>" <% end -%>
     <% unless node['nagios']['ldap_bind_password'].nil? -%>AuthLDAPBindPassword "<%= node['nagios']['ldap_bind_password'] %>"<% end -%>
     AuthLDAPURL "<%= node['nagios']['ldap_url'] %>"
