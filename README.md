@@ -99,6 +99,11 @@ Example: `default['nagios']['conf']['cfg_dir'] = [ '/etc/nagios/conf.d' , '/usr/
 * `node['nagios']['ldap_bind_password']` - bind password used with the DN provided for searching ldap.
 * `node['nagios']['ldap_url']` - ldap url and search parameters.
 * `node['nagios']['ldap_authoritative']` - accepts "on" or "off". controls other authentication modules from authenticating the user if this one fails.
+* `node['nagios']['ldap_group_attribute']` - Set the Apache AuthLDAPGroupAttribute directive to a non-default value.
+* `node['nagios']['ldap_group_attribute_is_dn']` - accepts "on" or "off". Set the Apache AuthLDAPGroupAttributeIsDN directive. Apache's default behavior is currently "on."
+* `node['nagios']['ldap_verify_cert']` - accepts "on" or "off". Set the Apache mod_ldap LDAPVerifyServerCert directive. Apache's default behavior is currently "on."
+* `node['nagios']['ldap_trusted_mode']` - Set the Apache mod_ldap LDAPTrustedMode directive.
+* `node['nagios']['ldap_trusted_global_cert']` - Set the Apache mod_ldap LDAPTrustedGlobalCert directive.
 * `node['nagios']['users_databag']` - the databag containing users to search for. defaults to users
 * `node['nagios']['users_databag_group']` - users databag group considered Nagios admins.  defaults to sysadmin
 * `node['nagios']['services_databag']` - the databag containing services to search for. defaults to nagios_services
