@@ -165,8 +165,8 @@ class Nagios
     end
 
     def get_definition(options, group)
-      return nil if self.to_s == '*'
-      return nil if self.to_s == 'null'
+      return nil if to_s == '*'
+      return nil if to_s == 'null'
       d = ["define #{group} {"]
       d += get_definition_options(options)
       d += ['}']
