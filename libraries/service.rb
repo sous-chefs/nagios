@@ -186,6 +186,47 @@ class Nagios
         push_object(obj, @custom_options)
       end
     end
+
+    def pop(obj)
+      return if obj == self
+      case obj
+      when Nagios::Servicegroup
+        if @servicegroups.keys?(obj.to_s)
+          pop_object(obj, @servicegroups)
+          pop(self, obj)
+        end
+      when Nagios::Hostgroup
+        if @hostgroups.keys?(obj.to_s)
+          pop_object(obj, @hostgroups)
+          pop(self, obj)
+        end
+      when Nagios::Host
+        if @hosts.keys?(obj.to_s)
+          pop_object(obj, @hosts)
+          pop(self, obj)
+        end
+      when Nagios::Contact
+        if @contacts.keys?(obj.to_s)
+          pop_object(obj, @contacts)
+          pop(self, obj)
+        end
+      when Nagios::Contactgroup
+        if @contact_groups.keys?(obj.to_s)
+          pop_object(obj, @contact_groups)
+          pop(self, obj)
+        end
+      when Nagios::Command
+        @check_command = nil if @check_command == obj
+      when Nagios::Timeperiod
+        @check_period = nil if @check_command == obj
+        @notification_period = nil if @check_command == obj
+      when Nagios::CustomOption
+        if @custom_options.keys?(obj.to_s)
+          pop_object(obj, @custom_options)
+          pop(self, obj)
+        end
+      end
+    end
     # rubocop:enable MethodLength
 
     # servicegroups

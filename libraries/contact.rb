@@ -60,6 +60,7 @@ class Nagios
     end
 
     def definition
+      return if contact_name == 'null'
       if email.nil? && name.nil? && pager.nil?
         "# Skipping #{contact_name} because missing email/pager."
       else
@@ -101,6 +102,27 @@ class Nagios
         push_object(obj, @custom_options)
       end
     end
+
+    # rubocop:disable MethodLength
+    def pop(obj)
+      return if obj == self
+      case obj
+      when Nagios::Contactgroup
+        if @contactgroups.keys?(obj.to_s)
+          pop_object(obj, @contactgroups)
+          pop(self, obj)
+        end
+      when Nagios::Timeperiod
+        @host_notification_period = nil if obj == @host_notification_period
+        @service_notification_period = nil if obj == @service_notification_period
+      when Nagios::CustomOption
+        if @custom_options.keys?(obj.to_s)
+          pop_object(obj, @custom_options)
+          pop(self, obj)
+        end
+      end
+    end
+    # rubocop:enable MethodLength
 
     def service_notification_commands
       get_commands(@service_notification_commands)

@@ -110,6 +110,7 @@ class Nagios
     end
 
     def definition
+      return if host_name == '*' || host_name == 'null'
       configured = configured_options
       custom_options.each { |_, v| configured[v.to_s] = v.value }
       get_definition(configured, 'host')
@@ -173,6 +174,40 @@ class Nagios
         @notification_period = obj
       when Nagios::CustomOption
         push_object(obj, @custom_options)
+      end
+    end
+
+    def pop(obj)
+      return if obj == self
+      case obj
+      when Nagios::Hostgroup
+        if @hostgroups.key?(obj.to_s)
+          pop_object(obj, @hostgroups)
+          obj.pop(self)
+        end
+      when Nagios::Host
+        if @parents.key?(obj.to_s)
+          pop_object(obj, @parents)
+          obj.pop(self)
+        end
+      when Nagios::Contact
+        if @contacts.keys?(obj.to_s)
+          pop_object(obj, @contacts)
+          obj.pop(self)
+        end
+      when Nagios::Contactgroup
+        if @contact_groups.keys?(obj.to_s)
+          pop_object(obj, @contact_groups)
+          obj.pop(self)
+        end
+      when Nagios::Timeperiod
+        @check_period = nil if @check_period == obj
+        @notification_period = nil if @notification_period == obj
+      when Nagios::CustomOption
+        if @custom_options.keys?(obj.to_s)
+          pop_object(obj, @custom_options)
+          obj.pop(self)
+        end
       end
     end
     # rubocop:enable MethodLength

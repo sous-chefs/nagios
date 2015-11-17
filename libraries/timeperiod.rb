@@ -68,6 +68,7 @@ class Nagios
     end
 
     def definition
+      return if timeperiod_name == 'null'
       configured = configured_options
       periods.values.each { |v| configured[v.moment] = v.period }
       get_definition(configured, 'timeperiod')
@@ -98,6 +99,24 @@ class Nagios
         push_object(obj, @periods) unless obj.period.nil?
       end
     end
+
+    # rubocop:disable MethodLength
+    def pop(obj)
+      return if obj == self
+      case obj
+      when Nagios::Timeperiod
+        if @exclude.keys?(obj.to_s)
+          pop_object(obj, @exclude)
+          pop(self, obj)
+        end
+      when Nagios::Timeperiodentry
+        if @periods.keys?(obj.to_s)
+          pop_object(obj, @periods)
+          pop(self, obj)
+        end
+      end
+    end
+    # rubocop:enable MethodLength
 
     def to_s
       timeperiod_name

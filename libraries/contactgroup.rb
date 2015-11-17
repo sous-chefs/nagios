@@ -47,6 +47,7 @@ class Nagios
     end
 
     def definition
+      return if contactgroup_name == '*' || contactgroup_name == 'null'
       get_definition(configured_options, 'contactgroup')
     end
 
@@ -68,6 +69,24 @@ class Nagios
         push_object(obj, @contactgroup_members)
       end
     end
+
+    # rubocop:disable MethodLength
+    def pop(obj)
+      return if obj == self
+      case obj
+      when Nagios::Contact
+        if @members.keys?(obj.to_s)
+          pop_object(obj, @members)
+          pop(self, obj)
+        end
+      when Nagios::Contactgroup
+        if @contactgroups_members.keys?(obj.to_s)
+          pop_object(obj, @contactgroup_members)
+          pop(self, obj)
+        end
+      end
+    end
+    # rubocop:enable MethodLength
 
     def to_s
       contactgroup_name
