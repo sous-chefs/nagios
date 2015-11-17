@@ -136,6 +136,12 @@ class Nagios
     end
 
     # host_name
+    # This directive is used to return all host objects
+    def host_name
+      @hosts
+    end
+
+    # host_name_list
     # This directive is used to specify the short name(s) of the host(s) that the service
     # "runs" on or is associated with. Multiple hosts should be separated by commas.
     def host_name_list
@@ -143,6 +149,12 @@ class Nagios
     end
 
     # hostgroup_name
+    # This directive is used to return all hostgroup objects
+    def hostgroup_name
+      @hostgroups
+    end
+
+    # hostgroup_name_list
     # This directive is used to specify the short name(s) of the hostgroup(s) that the
     # service "runs" on or is associated with. Multiple hostgroups should be separated by commas.
     # The hostgroup_name may be used instead of, or in addition to, the host_name directive.
