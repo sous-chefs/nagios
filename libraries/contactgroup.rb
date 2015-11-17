@@ -47,7 +47,6 @@ class Nagios
     end
 
     def definition
-      return if contactgroup_name == '*' || contactgroup_name == 'null'
       get_definition(configured_options, 'contactgroup')
     end
 
