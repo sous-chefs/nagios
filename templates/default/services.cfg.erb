@@ -49,12 +49,12 @@ define service {
 
 <% if @environment == "privatecloud1" -%>
 
-define service {
-    service_description Check Rabbit record_requests_queue PC1
-    <%= @designation %> <%= @ip %>
-    check_command       check_rabbit_queues!pc1.rabbitmq.tealiumiq.com!/server2server!record_requests_queue!monitor!ifyouaremonitoringtheworld!2500,-1,500,-1!3000,-1,600,-1
-    use                 default-service,srv-pnp
-}
+#define service {
+#    service_description Check Rabbit record_requests_queue PC1
+#    <%= @designation %> <%= @ip %>
+#    check_command       check_rabbit_queues!pc1.rabbitmq.tealiumiq.com!/server2server!record_requests_queue!monitor!ifyouaremonitoringtheworld!2500,-1,500,-1!3000,-1,600,-1
+#    use                 default-service,srv-pnp
+#}
 
 <% end %>
 
@@ -478,107 +478,131 @@ define service {
     use                 default-service,srv-pnp
 }
 
-## JMX Generic ##
+## JMX ##
+#define service {
+#    service_description VISITOR PROCESSOR is DOWN per JMX
+#    hostgroup_name      dc_visitor_processor
+#    check_command       check_jmx_heap!100000000000
+#    #check_command       check_jmx_heap
+#    use                 jmx-service,srv-pnp
+#}
+
 define service {
-    service_description Check if VISITOR PROCESSOR IS DOWN
+    service_description VISITOR PROCESSOR java heap at 90 percent
     hostgroup_name      dc_visitor_processor
-    #check_command       check_jmx_heap!<%= @vp_heap %>500000000
-    check_command       check_jmx_heap
-    use                 jmx-service,srv-pnp
-}
-
-define service {
-    service_description Check if VISITOR PROCESSOR java heap
-    hostgroup_name      dc_visitor_processor
-    check_command       check_jmx_heap!<%= @vp_heap %>500000000
+    check_command       check_jmx_heap!11700000000
     #check_command       check_jmx_heap
     use                 jmx-service,srv-pnp
 }
 
+#define service {
+#    service_description UCONNECT is DOWN per JMX
+#    hostgroup_name      dc_uconnect
+#    check_command       check_jmx_heap!100000000000
+#    #check_command       check_jmx_heap
+#    use                 jmx-service,srv-pnp
+#}
+
 define service {
-    service_description Check if UCONNECT IS DOWN
+    service_description UCONNECT java heap at 90 percent
     hostgroup_name      dc_uconnect
-    #check_command       check_jmx_heap!<%= @u_heap %>500000000
-    check_command       check_jmx_heap
-    use                 jmx-service,srv-pnp
-}
-
-define service {
-    service_description Check UCONNECT java heap
-    hostgroup_name      dc_uconnect
-    check_command       check_jmx_heap!<%= @u_heap %>500000000
+    check_command       check_jmx_heap!1800000000
     #check_command       check_jmx_heap
     use                 jmx-service,srv-pnp
 }
 
-define service {
-    service_description Check if MESSAGE ROUTER IS DOWN
-    hostgroup_name      dc_message_router
-    #check_command       check_jmx_heap!<%= @mr_heap %>500000000
-    check_command       check_jmx_heap
-    use                 jmx-service,srv-pnp
-}
+#define service {
+#    service_description QUERY AGGREGATOR is DOWN per JMX
+#    hostgroup_name      dc_query_aggregator
+#    check_command       check_jmx_heap!100000000000
+#    #check_command       check_jmx_heap
+#    use                 jmx-service,srv-pnp
+#}
 
 define service {
-    service_description Check MESSAGE ROUTER java heap
-    hostgroup_name      dc_message_router
-    check_command       check_jmx_heap!<%= @mr_heap %>500000000
-    #check_command       check_jmx_heap
-    use                 jmx-service,srv-pnp
-}
-
-define service {
-    service_description Check if QUERY AGGREGATOR IS DOWN
+    service_description QUERY AGGREGATOR java heap is at 90 percent
     hostgroup_name      dc_query_aggregator
-    #check_command       check_jmx_heap!<%= @qa_heap %>500000000
-    check_command       check_jmx_heap
-    use                 jmx-service,srv-pnp
-}
-
-define service {
-    service_description Check QUERY AGGREGATOR java heap
-    hostgroup_name      dc_query_aggregator
-    check_command       check_jmx_heap!<%= @qa_heap %>500000000
+    check_command       check_jmx_heap!2600000000
     #check_command       check_jmx_heap
     use                 jmx-service,srv-pnp
 }
 
+#define service {
+#    service_description DATA DISTRIBUTOR is DOWN per JMX
+#    hostgroup_name      dc_data_distributor
+#    check_command       check_jmx_heap!100000000000
+#    #check_command       check_jmx_heap
+#    use                 jmx-service,srv-pnp
+#}
+
 define service {
-    service_description Check if DATA DISTRIBUTOR IS DOWN
+    service_description DATA DISTRIBUTOR java heap is at 90 percent
     hostgroup_name      dc_data_distributor
-    #check_command       check_jmx_heap!<%= @dd_heap %>500000000
-    check_command       check_jmx_heap
-    use                 jmx-service,srv-pnp
-}
-
-define service {
-    service_description Check DATA DISTRIBUTOR java heap
-    hostgroup_name      dc_data_distributor
-    check_command       check_jmx_heap!<%= @dd_heap %>500000000
+    check_command       check_jmx_heap!1800000000
     #check_command       check_jmx_heap
     use                 jmx-service,srv-pnp
 }
 
-define service {
-    service_description Check if VISITOR SERVICE IS DOWN
-    hostgroup_name      dc_visitor_service
-    #check_command       check_jmx_heap!<%= @dd_heap %>500000000
-    check_command       check_jmx_heap
-    use                 jmx-service,srv-pnp
-}
+#define service {
+#    service_description VISITOR SERVICE is DOWN per JMX
+#    hostgroup_name      dc_visitor_service
+#    check_command       check_jmx_heap!100000000000
+#    #check_command       check_jmx_heap
+#    use                 jmx-service,srv-pnp
+#}
 
 define service {
-    service_description Check VISITOR SERVICE java heap
+    service_description VISITOR SERVICE java heap is at 90 percent
     hostgroup_name      dc_visitor_service
-    check_command       check_jmx_heap!<%= @dd_heap %>500000000
+    check_command       check_jmx_heap!11700000000
     #check_command       check_jmx_heap
     use                 jmx-service,srv-pnp
 }
 
+#define service {
+#    service_description BULK DOWNLOADER is DOWN per JMX
+#    hostgroup_name      dc_bulk_downloader
+#    check_command       check_jmx_heap!100000000000
+#    #check_command       check_jmx_heap
+#    use                 jmx-service,srv-pnp
+#}
+
 define service {
-    service_description Check BULK DOWNLOADER java heap
+    service_description BULK DOWNLOADER java heap is at 90 percent
     hostgroup_name      dc_bulk_downloader
-    check_command       check_jmx_heap!<%= @dd_heap %>500000000
+    check_command       check_jmx_heap!4680000000
+    #check_command       check_jmx_heap
+    use                 jmx-service,srv-pnp
+}
+
+#define service {
+#    service_description AMAZON UPLOADER is DOWN per JMX
+#    hostgroup_name      dc_amazon_uploader
+#    check_command       check_jmx_heap!100000000000
+#    #check_command       check_jmx_heap
+#    use                 jmx-service,srv-pnp
+#}
+
+define service {
+    service_description AMAZON UPLOADER java heap is at 90 percent
+    hostgroup_name      dc_amazon_uploader
+    check_command       check_jmx_heap!11200000000
+    #check_command       check_jmx_heap
+    use                 jmx-service,srv-pnp
+}
+
+#define service {
+#    service_description EVENTSTREAM PROCESSOR is DOWN per JMX
+#    hostgroup_name      eventstream_processor
+#    check_command       check_jmx_heap!100000000000
+#    #check_command       check_jmx_heap
+#    use                 jmx-service,srv-pnp
+#}
+
+define service {
+    service_description EVENTSTREAM PROCESSOR java heap is at 90 percent
+    hostgroup_name      eventstream_processor
+    check_command       check_jmx_heap!1800000000
     #check_command       check_jmx_heap
     use                 jmx-service,srv-pnp
 }
@@ -626,21 +650,28 @@ define service {
 }
 
 define service {
-    service_description Check Permission Cache Process
+    service_description Check JMX DataCloud VP Ignored Visitors 15min Rate
+    hostgroup_name      dc_visitor_processor
+    check_command       check_jmx_VP_ignored_visitors_15!1!10
+    use                 jmx-service,srv-pnp
+}
+
+define service {
+    service_description Check Permission Cache process
     hostgroup_name      permission_cache
     check_command       check_nrpe!check_permission_cache
     use                 default-service,srv-pnp
 }
 
 define service {
-    service_description Check DC Visitor Processor
+    service_description Check DC Visitor Processor process
     hostgroup_name      dc_visitor_processor
     check_command       check_nrpe!check_visitor_processor
     use                 default-service,srv-pnp
 }
 
 define service {
-    service_description Check Eventstream Processor
+    service_description Check Eventstream Processor process
     hostgroup_name      eventstream_processor
     check_command       check_nrpe!check_eventstream_processor
     use                 default-service,srv-pnp
@@ -661,35 +692,28 @@ define service {
 }
 
 define service {
-    service_description Check DC Visitor Service
+    service_description Check DC Visitor Service process
     hostgroup_name      dc_visitor_service
     check_command       check_nrpe!check_visitor_service
     use                 default-service,srv-pnp
 }
 
 define service {
-    service_description Check DC Query Aggregator
+    service_description Check DC Query Aggregator process
     hostgroup_name      dc_query_aggregator
     check_command       check_nrpe!check_query_aggregator
     use                 default-service,srv-pnp
 }
 
 define service {
-    service_description Check DC Message Router
-    hostgroup_name      dc_message_router
-    check_command       check_nrpe!check_message_router
-    use                 default-service,srv-pnp
-}
-
-define service {
-    service_description Check DC Data Distributor
+    service_description Check DC Data Distributor process
     hostgroup_name      dc_data_distributor
     check_command       check_nrpe!check_data_distributor
     use                 default-service,srv-pnp
 }
 
 define service {
-    service_description Check Reporting
+    service_description Check Reporting process
     hostgroup_name      reporting
     check_command       check_nrpe!check_s2s_recorder_perl
     use                 default-service,srv-pnp

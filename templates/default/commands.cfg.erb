@@ -35,7 +35,27 @@ define command {
   command_line    $USER1$/check_jmx -U service:jmx:rmi:///jndi/rmi://$HOSTADDRESS$:9001/jmxrmi -O "DataCloud:type=VisitorProcessorCluster" -A NodeStatus -w ^$ARG1$
 }
 
+define command {  
+  command_name    check_jmx_VP_ignored_visitors
+  command_line    $USER1$/check_jmx -U service:jmx:rmi:///jndi/rmi://$HOSTADDRESS$:9001/jmxrmi -O "DataCloud-Metrics:name=VisitorProcessor-TotalEventsIgnoredDueToMaxVisitorsLimit" -A Count -w $ARG1$ -c $ARG2$
+}
+
+define command {
+  command_name    check_jmx_VP_ignored_visitors_15
+  command_line    $USER1$/check_jmx -U service:jmx:rmi:///jndi/rmi://$HOSTADDRESS$:9001/jmxrmi -O "DataCloud-Metrics:name=VisitorProcessor-TotalEventsIgnoredDueToMaxVisitorsLimit" -A FifteenMinuteRate -w $ARG1$ -c $ARG2$
+}
+
 <% unless node['domain'].match(/^prod1?.\w{2}-\w{2}/) -%>
+
+#define command {
+# command_name    check_jmx_VP_ignored_visitors
+#  command_line    $USER1$/check_jmx -U service:jmx:rmi:///jndi/rmi://$HOSTADDRESS$:9001/jmxrmi -O "DataCloud-Metrics:type=VisitorProcessor-TotalEventsIgnoredDueToMaxVisitorsLimit" -A Count -w $ARG1$ -c $ARG2$
+#}
+
+#define command {
+#  command_name    check_jmx_VP_ignored_visitors_15
+#  command_line    $USER1$/check_jmx -U service:jmx:rmi:///jndi/rmi://$HOSTADDRESS$:9001/jmxrmi -O "DataCloud-Metrics:type=VisitorProcessor-TotalEventsIgnoredDueToMaxVisitorsLimit" -A FifteenMinuteRate -w $ARG1$ -c $ARG2$
+#}
 
 define command {
   command_name    check_jmx_dc_dd_total_messages_received
@@ -220,8 +240,8 @@ define command {
 
 define command {
   command_name    check_jmx_heap
-  #command_line    $USER1$/check_jmx -U service:jmx:rmi:///jndi/rmi://$HOSTADDRESS$:9001/jmxrmi -O java.lang:type=Memory -A HeapMemoryUsage -K used -I HeapMemoryUsage -J used -vvvv -c $ARG1$
-  command_line    $USER1$/check_jmx -U service:jmx:rmi:///jndi/rmi://$HOSTADDRESS$:9001/jmxrmi -O java.lang:type=Memory -A HeapMemoryUsage -K used -I HeapMemoryUsage -J used -vvvv
+  command_line    $USER1$/check_jmx -U service:jmx:rmi:///jndi/rmi://$HOSTADDRESS$:9001/jmxrmi -O java.lang:type=Memory -A HeapMemoryUsage -K used -I HeapMemoryUsage -J used -vvvv -c $ARG1$
+  #command_line    $USER1$/check_jmx -U service:jmx:rmi:///jndi/rmi://$HOSTADDRESS$:9001/jmxrmi -O java.lang:type=Memory -A HeapMemoryUsage -K used -I HeapMemoryUsage -J used -vvvv
 }
 
 define command {
