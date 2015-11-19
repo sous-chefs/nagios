@@ -41,8 +41,13 @@ define command {
 }
 
 define command {
-  command_name    check_jmx_VP_ignored_visitors_15
-  command_line    $USER1$/check_jmx -U service:jmx:rmi:///jndi/rmi://$HOSTADDRESS$:9001/jmxrmi -O "DataCloud-Metrics:name=VisitorProcessor-TotalEventsIgnoredDueToMaxVisitorsLimit" -A FifteenMinuteRate -w $ARG1$ -c $ARG2$
+  command_name    check_jmx_VP_ignored_visitors_5
+  command_line    $USER1$/check_jmx -U service:jmx:rmi:///jndi/rmi://$HOSTADDRESS$:9001/jmxrmi -O "DataCloud-Metrics:name=VisitorProcessor-TotalEventsIgnoredDueToMaxVisitorsLimit" -A FiveMinuteRate -w $ARG1$ -c $ARG2$
+}
+
+define command {
+  command_name    check_jmx_VP_expire_latency
+  command_line    $USER1$/check_jmx -U service:jmx:rmi:///jndi/rmi://$HOSTADDRESS$:9001/jmxrmi -O "DataCloud-Metrics:name=VisitorExpirationMonitorTask-ExpirationLatencyMs" -A 50thPercentile -w $ARG1$ -c $ARG2$
 }
 
 <% unless node['domain'].match(/^prod1?.\w{2}-\w{2}/) -%>
@@ -53,8 +58,8 @@ define command {
 #}
 
 #define command {
-#  command_name    check_jmx_VP_ignored_visitors_15
-#  command_line    $USER1$/check_jmx -U service:jmx:rmi:///jndi/rmi://$HOSTADDRESS$:9001/jmxrmi -O "DataCloud-Metrics:type=VisitorProcessor-TotalEventsIgnoredDueToMaxVisitorsLimit" -A FifteenMinuteRate -w $ARG1$ -c $ARG2$
+#  command_name    check_jmx_VP_ignored_visitors_5
+#  command_line    $USER1$/check_jmx -U service:jmx:rmi:///jndi/rmi://$HOSTADDRESS$:9001/jmxrmi -O "DataCloud-Metrics:type=VisitorProcessor-TotalEventsIgnoredDueToMaxVisitorsLimit" -A FivenMinuteRate -w $ARG1$ -c $ARG2$
 #}
 
 define command {

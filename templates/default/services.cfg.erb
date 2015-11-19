@@ -495,6 +495,8 @@ define service {
     use                 jmx-service,srv-pnp
 }
 
+
+
 #define service {
 #    service_description UCONNECT is DOWN per JMX
 #    hostgroup_name      dc_uconnect
@@ -650,9 +652,16 @@ define service {
 }
 
 define service {
-    service_description Check JMX DataCloud VP Ignored Visitors 15min Rate
+    service_description Check JMX DataCloud VP Ignored Visitors 5min Rate
     hostgroup_name      dc_visitor_processor
-    check_command       check_jmx_VP_ignored_visitors_15!1!10
+    check_command       check_jmx_VP_ignored_visitors_5!1!10
+    use                 jmx-service,srv-pnp
+}
+
+define service {
+    service_description Check JMX DataCloud VP Expire Latency
+    hostgroup_name      dc_visitor_processor
+    check_command       check_jmx_VP_expire_latency!300000!480000
     use                 jmx-service,srv-pnp
 }
 
