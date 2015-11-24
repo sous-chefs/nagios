@@ -26,6 +26,7 @@ define :nagios_conf, :variables => {}, :config_subdir => true, :source => nil do
   params[:source] ||= "#{params[:name]}.cfg.erb"
 
   template "#{conf_dir}/#{params[:name]}.cfg" do
+    cookbook params[:cookbook] if params[:cookbook]
     owner node['nagios']['user']
     group node['nagios']['group']
     source params[:source]
