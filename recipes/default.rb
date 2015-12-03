@@ -23,6 +23,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+include_recipe 'systemd::journald'
+
 # workaround to allow for a nagios server install from source using the override attribute on debian/ubuntu (COOK-2350)
 if platform_family?('debian') && node['nagios']['server']['install_method'] == 'source'
   nagios_service_name = node['nagios']['server']['name']
@@ -195,6 +197,19 @@ nagios_conf 'servicedependencies'
 
 zap_directory node['nagios']['config_dir'] do
   pattern '*.cfg'
+end
+
+systemd_service 'nagios3' do
+  description 'Nagios3 server'
+  after %w( network.target )
+  install do
+    wanted_by 'multi-user.target'
+  end
+  service do
+    exec_start "/etc/init.d/nagios3 start"
+    exec_stop "/etc/init.d/nagios3 stop"
+  end
+  only_if { ::File.open('/proc/1/comm').gets.chomp == 'systemd' } # systemd
 end
 
 service 'nagios' do
