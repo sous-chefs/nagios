@@ -206,8 +206,8 @@ systemd_service 'nagios3' do
     wanted_by 'multi-user.target'
   end
   service do
-    exec_start "/etc/init.d/nagios3 start"
-    exec_stop "/etc/init.d/nagios3 stop"
+    exec_start '/etc/init.d/nagios3 start'
+    exec_stop '/etc/init.d/nagios3 stop'
   end
   only_if { ::File.open('/proc/1/comm').gets.chomp == 'systemd' } # systemd
 end
