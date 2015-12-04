@@ -212,6 +212,14 @@ systemd_service 'nagios3' do
   only_if { ::File.open('/proc/1/comm').gets.chomp == 'systemd' } # systemd
 end
 
+template '/etc/init.d/nagios3' do
+  source 'nagios3.erb'
+  owner 'root'
+  group 'root'
+  mode '0755'
+  only_if { ::File.open('/proc/1/comm').gets.chomp == 'systemd' } # systemd
+end
+
 service 'nagios' do
   service_name nagios_service_name
   supports :status => true, :restart => true, :reload => true
