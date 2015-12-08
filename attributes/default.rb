@@ -211,6 +211,7 @@ default['nagios']['cgi']['authorized_for_all_service_commands']      = '*'
 default['nagios']['cgi']['authorized_for_all_host_commands']         = '*'
 default['nagios']['cgi']['default_statusmap_layout']                 = 5
 default['nagios']['cgi']['default_statuswrl_layout']                 = 4
+default['nagios']['cgi']['result_limit']                             = 100
 default['nagios']['cgi']['escape_html_tags']                         = 0
 default['nagios']['cgi']['action_url_target']                        = '_blank'
 default['nagios']['cgi']['notes_url_target']                         = '_blank'

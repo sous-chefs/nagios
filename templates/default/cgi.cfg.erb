@@ -209,6 +209,14 @@ ping_syntax=/bin/ping -n -U -c 5 $HOSTADDRESS$
 
 refresh_rate=90
 
+# DEFAULT PAGE LIMIT
+# This option allows you to specify the default number of results
+# displayed on the status.cgi.  This number can be adjusted from
+# within the UI after the initial page load. Setting this to 0
+# will show all results.
+
+result_limit=<%= node['nagios']['cgi']['result_limit'] %>
+
 # ESCAPE HTML TAGS
 # This option determines whether HTML tags in host and service
 # status output is escaped in the web interface.  If enabled,
