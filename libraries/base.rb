@@ -240,7 +240,7 @@ class Nagios
     def push_object(obj, hash)
       return if hash.key?('null')
       if obj.to_s == 'null'
-        hash.values { |object| pop(object) }
+        hash.clear
         hash[obj.to_s] = obj
       elsif hash[obj.to_s].nil?
         hash[obj.to_s] = obj
