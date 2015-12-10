@@ -157,6 +157,7 @@ Example: `default['nagios']['conf']['cfg_dir'] = [ '/etc/nagios/conf.d' , '/usr/
  * `node['nagios']['cgi']['authorized_for_all_host_commands']`          - Defaults to '*'
  * `node['nagios']['cgi']['default_statusmap_layout']`                  - Defaults to 5
  * `node['nagios']['cgi']['default_statuswrl_layout']`                  - Defaults to 4
+ * `node['nagios']['cgi']['result_limit']`                              - Defaults to 100
  * `node['nagios']['cgi']['escape_html_tags']`                          - Defaults to 0
  * `node['nagios']['cgi']['action_url_target']`                         - Defaults to '_blank'
  * `node['nagios']['cgi']['notes_url_target']`                          - Defaults to '_blank'
