@@ -14,6 +14,9 @@ This file is used to list changes made in each version of the nagios cookbook.
 - #450 Allowing default guest user.
 - #454 Adding inheritance modifiers.
 - #462 Adding Apache LDAP settings.
+- #463 Adding '*' and 'null' as options.
+- #470 Adding option for wrapper cookbooks.
+- #470 Adding result_limit to cgi.cfg.
  
 7.2.4
 -----
