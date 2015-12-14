@@ -136,6 +136,12 @@ class Nagios
     end
 
     # host_name
+    # This directive is used to return all host objects
+    def host_name
+      @hosts
+    end
+
+    # host_name_list
     # This directive is used to specify the short name(s) of the host(s) that the service
     # "runs" on or is associated with. Multiple hosts should be separated by commas.
     def host_name_list
@@ -143,6 +149,12 @@ class Nagios
     end
 
     # hostgroup_name
+    # This directive is used to return all hostgroup objects
+    def hostgroup_name
+      @hostgroups
+    end
+
+    # hostgroup_name_list
     # This directive is used to specify the short name(s) of the hostgroup(s) that the
     # service "runs" on or is associated with. Multiple hostgroups should be separated by commas.
     # The hostgroup_name may be used instead of, or in addition to, the host_name directive.
@@ -184,6 +196,47 @@ class Nagios
         @notification_period = obj
       when Nagios::CustomOption
         push_object(obj, @custom_options)
+      end
+    end
+
+    def pop(obj)
+      return if obj == self
+      case obj
+      when Nagios::Servicegroup
+        if @servicegroups.keys?(obj.to_s)
+          pop_object(obj, @servicegroups)
+          pop(self, obj)
+        end
+      when Nagios::Hostgroup
+        if @hostgroups.keys?(obj.to_s)
+          pop_object(obj, @hostgroups)
+          pop(self, obj)
+        end
+      when Nagios::Host
+        if @hosts.keys?(obj.to_s)
+          pop_object(obj, @hosts)
+          pop(self, obj)
+        end
+      when Nagios::Contact
+        if @contacts.keys?(obj.to_s)
+          pop_object(obj, @contacts)
+          pop(self, obj)
+        end
+      when Nagios::Contactgroup
+        if @contact_groups.keys?(obj.to_s)
+          pop_object(obj, @contact_groups)
+          pop(self, obj)
+        end
+      when Nagios::Command
+        @check_command = nil if @check_command == obj
+      when Nagios::Timeperiod
+        @check_period = nil if @check_command == obj
+        @notification_period = nil if @check_command == obj
+      when Nagios::CustomOption
+        if @custom_options.keys?(obj.to_s)
+          pop_object(obj, @custom_options)
+          pop(self, obj)
+        end
       end
     end
     # rubocop:enable MethodLength

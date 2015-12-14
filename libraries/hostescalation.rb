@@ -19,6 +19,7 @@
 
 require_relative 'base'
 
+# rubocop:disable ClassLength
 class Nagios
   #
   # This class holds all methods with regard to hostescalation options,
@@ -89,6 +90,34 @@ class Nagios
         @escalation_period = obj
       end
     end
+
+    def pop(obj)
+      return if obj == self
+      case obj
+      when Nagios::Host
+        if @host_name.keys?(obj.to_s)
+          pop_object(obj, @host_name)
+          pop(self, obj)
+        end
+      when Nagios::Hostgroup
+        if @hostgroup_name.keys?(obj.to_s)
+          pop_object(obj, @hostgroup_name)
+          pop(self, obj)
+        end
+      when Nagios::Contact
+        if @contacts.keys?(obj.to_s)
+          pop_object(obj, @contacts)
+          pop(self, obj)
+        end
+      when Nagios::Contactgroup
+        if @contact_groups.keys?(obj.to_s)
+          pop_object(obj, @contact_groups)
+          pop(self, obj)
+        end
+      when Nagios::Timeperiod
+        @escalation_period = nil if @escalation_period == obj
+      end
+    end
     # rubocop:enable MethodLength
 
     def to_s
@@ -144,3 +173,4 @@ class Nagios
     end
   end
 end
+# rubocop:enable ClassLength

@@ -40,3 +40,30 @@ nagios_contact 'sander botman' do
           'email'          => 'sbotman@schubergphilis.com',
           '_my_custom_key' => 'custom_value'
 end
+
+nagios_command 'my-event-handler-command' do
+  options 'command_line' => 'ping localhost'
+end
+
+nagios_host 'generichosttemplate' do
+  options 'use'            => 'server',
+          'name'           => 'generichosttemplate',
+          'register'       => 0,
+          'check_interval' => 10,
+          'event_handler'  => 'my-event-handler-command'
+end
+
+# bighost1 should have no event_handler, bithost2 should have my-event-handler-command
+nagios_host 'bighost1' do
+  options 'use'           => 'generichosttemplate',
+          'host_name'     => 'bighost1',
+          'address'       => '192.168.1.3',
+          'event_handler' => 'null'
+end
+
+nagios_host 'bighost2' do
+  options 'use'            => 'generichosttemplate',
+          'host_name'      => 'bighost2',
+          'address'        => '192.168.1.4',
+          'check_interval' => '20'
+end

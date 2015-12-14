@@ -165,6 +165,8 @@ class Nagios
     end
 
     def get_definition(options, group)
+      return nil if to_s == '*'
+      return nil if to_s == 'null'
       d = ["define #{group} {"]
       d += get_definition_options(options)
       d += ['}']
@@ -236,10 +238,22 @@ class Nagios
     end
 
     def push_object(obj, hash)
-      if hash[obj.to_s].nil?
+      return if hash.key?('null')
+      if obj.to_s == 'null'
+        hash.clear
+        hash[obj.to_s] = obj
+      elsif hash[obj.to_s].nil?
         hash[obj.to_s] = obj
       else
         Chef::Log.debug("Nagios debug: #{self.class} already contains #{obj.class} with name: #{obj}")
+      end
+    end
+
+    def pop_object(obj, hash)
+      if hash.key?(obj.to_s)
+        hash.delete(obj.to_s)
+      else
+        Chef::Log.debug("Nagios debug: #{self.class} does not contain #{obj.class} with name: #{obj}")
       end
     end
 

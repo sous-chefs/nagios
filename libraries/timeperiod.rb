@@ -99,6 +99,24 @@ class Nagios
       end
     end
 
+    # rubocop:disable MethodLength
+    def pop(obj)
+      return if obj == self
+      case obj
+      when Nagios::Timeperiod
+        if @exclude.keys?(obj.to_s)
+          pop_object(obj, @exclude)
+          pop(self, obj)
+        end
+      when Nagios::Timeperiodentry
+        if @periods.keys?(obj.to_s)
+          pop_object(obj, @periods)
+          pop(self, obj)
+        end
+      end
+    end
+    # rubocop:enable MethodLength
+
     def to_s
       timeperiod_name
     end

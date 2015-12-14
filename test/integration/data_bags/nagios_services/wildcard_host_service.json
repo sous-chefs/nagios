@@ -1,0 +1,5 @@
+{
+  "id": "wildcard_host_service",
+  "host_name": "*",
+  "command_line": "$USER1$/check_nrpe -H $HOSTADDRESS$ -c check_something -t 20"
+}
