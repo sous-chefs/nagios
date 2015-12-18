@@ -6,5 +6,5 @@
   "alias": "Host A Alias Name",
   "environment": "_default",
   "display_name": "Host A Display Name",
-  "hostgroups": "hostgroup_a"
+  "hostgroups": ["hostgroup_a", "both_hosts"]
 }

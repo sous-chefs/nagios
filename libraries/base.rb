@@ -24,7 +24,8 @@ class Nagios
   class Base
     attr_accessor :register,
                   :name,
-                  :use
+                  :use,
+                  :not_modifiers
 
     def initialize
       @add_modifiers = {}
