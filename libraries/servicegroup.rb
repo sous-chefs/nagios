@@ -111,8 +111,8 @@ class Nagios
 
     def convert_hostgroup_hash(hash)
       result = []
-      hash.each do |group_name, group_members|
-        group_members.each do |member|
+      hash.sort.to_h.each do |group_name, group_members|
+        group_members.sort.each do |member|
           result << member
           result << group_name
         end
