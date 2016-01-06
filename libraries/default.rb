@@ -23,7 +23,7 @@ def nagios_boolean(true_or_false)
 end
 
 def nagios_interval(seconds, forbid_zero)
-  if seconds.to_i == 0 and forbid_zero
+  if seconds.to_i == 0 && forbid_zero
     fail ArgumentError, 'Specified nagios interval of 0 seconds is not allowed'
   end
   interval = seconds
