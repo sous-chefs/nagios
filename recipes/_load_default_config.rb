@@ -151,11 +151,11 @@ nagios_host 'server' do
   options 'name'                   => 'server',
           'use'                    => 'default-host',
           'check_period'           => nagios_attr(:default_host)[:check_period],
-          'check_interval'         => nagios_interval(nagios_attr(:default_host)[:check_interval]),
-          'retry_interval'         => nagios_interval(nagios_attr(:default_host)[:retry_interval]),
+          'check_interval'         => nagios_interval(nagios_attr(:default_host)[:check_interval], true),
+          'retry_interval'         => nagios_interval(nagios_attr(:default_host)[:retry_interval], true),
           'max_check_attempts'     => nagios_attr(:default_host)[:max_check_attempts],
           'check_command'          => nagios_attr(:default_host)[:check_command],
-          'notification_interval'  => nagios_interval(nagios_attr(:default_host)[:notification_interval]),
+          'notification_interval'  => nagios_interval(nagios_attr(:default_host)[:notification_interval], false),
           'notification_options'   => nagios_attr(:default_host)[:notification_options],
           'contact_groups'         => nagios_attr(:default_contact_groups),
           'register'               => 0
@@ -201,11 +201,11 @@ nagios_service 'default-service' do
           'is_volatile'                  => 0,
           'check_period'                 => '24x7',
           'max_check_attempts'           => nagios_attr(:default_service)[:max_check_attempts],
-          'check_interval'               => nagios_interval(nagios_attr(:default_service)[:check_interval]),
-          'retry_interval'               => nagios_interval(nagios_attr(:default_service)[:retry_interval]),
+          'check_interval'               => nagios_interval(nagios_attr(:default_service)[:check_interval], true),
+          'retry_interval'               => nagios_interval(nagios_attr(:default_service)[:retry_interval], true),
           'contact_groups'               => nagios_attr(:default_contact_groups),
           'notification_options'         => 'w,u,c,r',
-          'notification_interval'        => nagios_interval(nagios_attr(:default_service)[:notification_interval]),
+          'notification_interval'        => nagios_interval(nagios_attr(:default_service)[:notification_interval], false),
           'notification_period'          => '24x7',
           'register'                     => 0,
           'action_url'                   => nagios_attr(:default_service)[:action_url]
@@ -219,8 +219,8 @@ nagios_service 'default-logfile' do
           'use'                    => 'default-service',
           'check_period'           => '24x7',
           'max_check_attempts'     => 1,
-          'check_interval'         => nagios_interval(nagios_attr(:default_service)[:check_interval]),
-          'retry_interval'         => nagios_interval(nagios_attr(:default_service)[:retry_interval]),
+          'check_interval'         => nagios_interval(nagios_attr(:default_service)[:check_interval], true),
+          'retry_interval'         => nagios_interval(nagios_attr(:default_service)[:retry_interval], true),
           'contact_groups'         => nagios_attr(:default_contact_groups),
           'notification_options'   => 'w,u,c,r',
           'notification_period'    => '24x7',
@@ -231,9 +231,9 @@ end
 nagios_service 'service-template' do
   options 'name'                  => 'service-template',
           'max_check_attempts'    => nagios_attr(:default_service)[:max_check_attempts],
-          'check_interval'        => nagios_interval(nagios_attr(:default_service)[:check_interval]),
-          'retry_interval'        => nagios_interval(nagios_attr(:default_service)[:retry_interval]),
-          'notification_interval' => nagios_interval(nagios_attr(:default_service)[:notification_interval]),
+          'check_interval'        => nagios_interval(nagios_attr(:default_service)[:check_interval], true),
+          'retry_interval'        => nagios_interval(nagios_attr(:default_service)[:retry_interval], true),
+          'notification_interval' => nagios_interval(nagios_attr(:default_service)[:notification_interval], false),
           'register'              => 0
 end
 
