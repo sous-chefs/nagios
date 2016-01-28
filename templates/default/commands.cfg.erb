@@ -15,6 +15,12 @@ command_name check_website_response
 command_line $USER1$/check_website_response.sh -u $ARG1$ -w $ARG2$ -c $ARG3$
 }
 
+#event handler for splunk
+define command {
+  command_name    splunk_forwarder_restart
+  command_line    /etc/tealium/scripts/splunk_restart.sh $SERVICESTATE$, $SERVICESTATETYPE$, $SERVICEATTEMPT$
+}
+
 define command {
   command_name    check_rabbit_queues
   command_line    $USER1$/check_rabbitmq_queue -H $ARG1$ --port 15672 --vhost $ARG2$ --queue $ARG3$ -u $ARG4$ -p $ARG5$ -w $ARG6$ -c $ARG7$
@@ -23,6 +29,11 @@ define command {
 define command{
   command_name    check_rabbitmq_queue_availability
   command_line    $USER1$/check_rabbitmq_queue_count.sh $ARG1$ $ARG2$ $ARG3$ $ARG4$ $ARG5$
+}
+
+define command{
+  command_name    check_rabbitmq_queue_consumers
+  command_line    $USER1$/check_rabbitmq_queue_consumers.sh $ARG1$ $ARG2$ $ARG3$ $ARG4$ $ARG5$ $ARG6$ $ARG7$
 }
 
 #define command{

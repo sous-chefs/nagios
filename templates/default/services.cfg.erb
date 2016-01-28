@@ -61,6 +61,13 @@ define service {
 <% if @environment == "production_vpc1" -%>
 
 define service {
+    service_description Check Rabbit VP queue subscription count VPC US WEST CLUSTER
+    <%= @designation %> <%= @ip %>
+    check_command       check_rabbit_sub!us-west-1.cluster.rabbitmq.tealiumiq.com!monitor!ifoyuaremonitoringhteworld!-s
+    use                 default-service,srv-pnp
+}
+
+define service {
     service_description Check Rabbit record_requests_queue VPC US WEST CLUSTER
     <%= @designation %> <%= @ip %>
     check_command       check_rabbit_queues!us-west-1.cluster.rabbitmq.tealiumiq.com!/server2server!record_requests_queue!monitor!ifyouaremonitoringtheworld!2500,-1,500,-1!3000,-1,600,-1
@@ -338,6 +345,28 @@ define service {
 #    use                 rappid-rabbit,srv-pnp
 #}
 
+define service {
+    service_description Check Rabbit Amazon Uploader Consumer Count VPC EU WEST CLUSTER
+    <%= @designation %> <%= @ip %>
+    check_command       check_rabbitmq_queue_consumers!eu-west-1.cluster.rabbitmq.tealiumiq.com!/server2server!monitor!ifyouaremonitoringtheworld!eu-west!esp_to_au_event_queue!1
+    use                 rappid-rabbit,srv-pnp
+}
+
+define service {
+    service_description Check Rabbit Amazon Uploader Queue Consumer Count VPC US WEST CLUSTER
+    <%= @designation %> <%= @ip %>
+    check_command       check_rabbitmq_queue_consumers!us-west-1.cluster.rabbitmq.tealiumiq.com!/server2server!monitor!ifyouaremonitoringtheworld!us-west!esp_to_au_event_queue!1
+    use                 rappid-rabbit,srv-pnp
+}
+
+define service {
+    service_description Check Rabbit Amazon Uploader Queue Consumer Count VPC US EAST CLUSTER
+    <%= @designation %> <%= @ip %>
+    check_command       check_rabbitmq_queue_consumers!us-east-1.cluster.rabbitmq.tealiumiq.com!/server2server!monitor!ifyouaremonitoringtheworld!us-east!esp_to_au_event_queue!2
+    use                 rappid-rabbit,srv-pnp
+}
+
+
 #define service {
 #    service_description Check MongoDB Backup - Cluster 1
 #    <%= @designation %>	<%= @ip %>
@@ -427,7 +456,6 @@ define service {
     check_command       check_tcp!8085
     use                 default-service,srv-pnp
 }
-
 
 define service {
     service_description Check DC Uconnect Service HTTP 9090
@@ -586,9 +614,9 @@ define service {
 #}
 
 define service {
-    service_description AMAZON UPLOADER java heap is at 90 percent
+    service_description AMAZON UPLOADER java heap is at 80 percent
     hostgroup_name      dc_amazon_uploader
-    check_command       check_jmx_heap!11200000000
+    check_command       check_jmx_heap!10000000000
     #check_command       check_jmx_heap
     use                 jmx-service,srv-pnp
 }
@@ -652,7 +680,7 @@ define service {
 }
 
 define service {
-    service_description Check JMX DataCloud VP Ignored Visitors 5min Rate
+    service_description Check JMX DataCloud VP Ignored Events 5min Rate
     hostgroup_name      dc_visitor_processor
     check_command       check_jmx_VP_ignored_visitors_5!1!10
     use                 jmx-service,srv-pnp
@@ -687,6 +715,13 @@ define service {
 }
 
 define service {
+    service_description Check Chef process
+    hostgroup_name      nagios
+    check_command       check_nrpe!check_chef
+    use                 default-service,srv-pnp
+}
+
+define service {
     service_description Check DC Uconnect process
     hostgroup_name      dc_uconnect
     check_command       check_nrpe!check_uconnect
@@ -706,6 +741,14 @@ define service {
     check_command       check_nrpe!check_visitor_service
     use                 default-service,srv-pnp
 }
+
+#define service {
+#    service_description Check Visitor Service Splunk Forwarder Procs
+#    hostgroup_name      dc_visitor_service
+#    check_command       check_nrpe!check_splunk_forwarder
+#    use                 default-service,srv-pnp
+#    event_handler       splunk_forwarder_restart
+#}
 
 define service {
     service_description Check DC Query Aggregator process
