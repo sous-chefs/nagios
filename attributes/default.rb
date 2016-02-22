@@ -53,7 +53,7 @@ when 'rhel', 'fedora'
   default['nagios']['log_dir']       = '/var/log/nagios'
   default['nagios']['cache_dir']     = '/var/log/nagios'
   default['nagios']['state_dir']     = '/var/log/nagios'
-  default['nagios']['run_dir']       = '/var/run'
+  default['nagios']['run_dir']       = '/var/run/nagios'
   default['nagios']['docroot']       = '/usr/share/nagios/html'
   default['nagios']['cgi-bin']       = '/usr/lib64/nagios/cgi-bin/'
 else
