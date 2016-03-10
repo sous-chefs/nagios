@@ -51,6 +51,12 @@ define contactgroup {
 }
 
 define contactgroup {
+  contactgroup_name as_low_urgency
+  alias             FTP_ERROR Administrators
+  members           pagerduty_AS_low_urgency
+}
+
+define contactgroup {
   contactgroup_name auto-healers
   alias             Nagios Auto Healers
   members           <%= @members.join(',') %>

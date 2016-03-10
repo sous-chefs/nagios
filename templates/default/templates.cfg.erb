@@ -135,6 +135,12 @@ define service {
 }
 
 define service {
+  name                            as-low-urgency-service
+  use                             default-service
+  contact_groups                  as_low_urgency
+}
+
+define service {
   name                            mongo-service
   use                             default-service
   max_check_attempts              1
