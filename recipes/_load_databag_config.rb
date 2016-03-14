@@ -67,18 +67,18 @@ contactgroups.each do |item|
   end
 end
 
-contacts = nagios_bags.get(node['nagios']['contacts_databag'])
-contacts.each do |item|
-  name = item['contact_name'] || item['id']
-  nagios_contact name do
-    options item
-  end
-end
-
 eventhandlers = nagios_bags.get(node['nagios']['eventhandlers_databag'])
 eventhandlers.each do |item|
   name = item['command_name'] || item['id']
   nagios_command name do
+    options item
+  end
+end
+
+contacts = nagios_bags.get(node['nagios']['contacts_databag'])
+contacts.each do |item|
+  name = item['contact_name'] || item['id']
+  nagios_contact name do
     options item
   end
 end
