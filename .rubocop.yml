@@ -14,7 +14,7 @@ LineLength:
   Enabled: false
 NumericLiterals:
   Enabled: false
-SingleSpaceBeforeFirstArg:
+SpaceBeforeFirstArg:
   Enabled: false
 PerceivedComplexity:
   Enabled: false
