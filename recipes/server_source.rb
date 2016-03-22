@@ -69,7 +69,7 @@ end
 execute 'extract-nagios' do
   cwd Chef::Config[:file_cache_path]
   command 'tar zxvf nagios_core.tar.gz'
-  not_if { ::File.exist?("/usr/sbin/#{node['nagios']['server']['name']}") }
+  not_if { ::File.exist?("#{Chef::Config[:file_cache_path]}/#{node['nagios']['server']['src_dir']}") }
 end
 
 node['nagios']['server']['patches'].each do |patch|
