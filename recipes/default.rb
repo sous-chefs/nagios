@@ -24,11 +24,11 @@
 # limitations under the License.
 
 # workaround to allow for a nagios server install from source using the override attribute on debian/ubuntu (COOK-2350)
-if platform_family?('debian') && node['nagios']['server']['install_method'] == 'source'
-  nagios_service_name = node['nagios']['server']['name']
-else
-  nagios_service_name = node['nagios']['server']['service_name']
-end
+nagios_service_name = if platform_family?('debian') && node['nagios']['server']['install_method'] == 'source'
+                        node['nagios']['server']['name']
+                      else
+                        node['nagios']['server']['service_name']
+                      end
 
 # install nagios service either from source of package
 include_recipe "nagios::server_#{node['nagios']['server']['install_method']}"
@@ -48,7 +48,7 @@ when 'apache'
 else
   Chef::Log.fatal('Unknown web server option provided for Nagios server: ' \
                   "#{node['nagios']['server']['web_server']} provided. Allowed: 'nginx' or 'apache'")
-  fail 'Unknown web server option provided for Nagios server'
+  raise 'Unknown web server option provided for Nagios server'
 end
 
 # use the users_helper.rb library to build arrays of users and contacts
@@ -56,7 +56,7 @@ nagios_users = NagiosUsers.new(node)
 
 Chef::Log.fatal("Could not find users in the \"#{node['nagios']['users_databag']}\" databag with the \"#{node['nagios']['users_databag_group']}\"" \
                 ' group. Users must be defined to allow for logins to the UI. Make sure the databag exists and, if you have set the ' \
-                "\"users_databag_group\", that users in that group exist.") if nagios_users.users.empty?
+                '"users_databag_group", that users in that group exist.') if nagios_users.users.empty?
 
 # configure the appropriate authentication method for the web server
 case node['nagios']['server_auth_method']
@@ -66,7 +66,7 @@ when 'openid'
   else
     Chef::Log.fatal('OpenID authentication for Nagios is not supported on NGINX')
     Chef::Log.fatal("Set node['nagios']['server_auth_method'] attribute in your Nagios role")
-    fail
+    raise 'OpenID authentication not supported on NGINX'
   end
 when 'cas'
   if node['nagios']['server']['web_server'] == 'apache'
@@ -74,7 +74,7 @@ when 'cas'
   else
     Chef::Log.fatal('CAS authentication for Nagios is not supported on NGINX')
     Chef::Log.fatal("Set node['nagios']['server_auth_method'] attribute in your Nagios role")
-    fail
+    raise 'CAS authentivation not supported on NGINX'
   end
 when 'ldap'
   if node['nagios']['server']['web_server'] == 'apache'
@@ -82,7 +82,7 @@ when 'ldap'
   else
     Chef::Log.fatal('LDAP authentication for Nagios is not supported on NGINX')
     Chef::Log.fatal("Set node['nagios']['server_auth_method'] attribute in your Nagios role")
-    fail
+    raise 'LDAP authentication not supported on NGINX'
   end
 else
   # setup htpasswd auth

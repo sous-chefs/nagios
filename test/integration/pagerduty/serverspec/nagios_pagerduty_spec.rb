@@ -3,11 +3,11 @@ require 'serverspec'
 # Required by serverspec
 set :backend, :exec
 
-if %w( redhat fedora ).include?(os[:family])
-  path_config_dir = '/etc/nagios/conf.d'
-else
-  path_config_dir = '/etc/nagios3/conf.d'
-end
+path_config_dir = if %w( redhat fedora ).include?(os[:family])
+                    '/etc/nagios/conf.d'
+                  else
+                    '/etc/nagios3/conf.d'
+                  end
 
 describe 'Pagerduty Configuration' do
   %w(notify-service-by-pagerduty
@@ -39,11 +39,11 @@ describe package(perl_cgi_package) do
   it { should be_installed }
 end
 
-if %w( redhat fedora ).include?(os[:family])
-  pagerduty_cgi_dir = '/usr/lib64/nagios/cgi-bin'
-else
-  pagerduty_cgi_dir = '/usr/lib/cgi-bin/nagios3'
-end
+pagerduty_cgi_dir = if %w( redhat fedora ).include?(os[:family])
+                      '/usr/lib64/nagios/cgi-bin'
+                    else
+                      '/usr/lib/cgi-bin/nagios3'
+                    end
 
 describe 'Pagerduty Integration Script' do
   describe file("#{pagerduty_cgi_dir}/pagerduty.cgi") do

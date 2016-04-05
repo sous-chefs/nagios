@@ -32,7 +32,7 @@ class NagiosUsers
 
   def fail_search(user_databag)
     Chef::Log.fatal("\"#{user_databag}\" databag could not be found.")
-    fail "\"#{user_databag}\" databag could not be found."
+    raise "\"#{user_databag}\" databag could not be found."
   end
 
   def load_encrypted_databag(user_databag)
