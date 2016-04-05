@@ -68,7 +68,7 @@ define command {
 
 define command {
   command_name    check_jmx_VP_expire_latency
-  command_line    $USER1$/check_jmx -U service:jmx:rmi:///jndi/rmi://$HOSTADDRESS$:9001/jmxrmi -O "DataCloud-Metrics:name=VisitorExpirationMonitorTask-ExpirationLatencyMs" -A 50thPercentile -w $ARG1$ -c $ARG2$
+  command_line    $USER1$/check_vp_expire_latency -U service:jmx:rmi:///jndi/rmi://$HOSTADDRESS$:9001/jmxrmi -O "DataCloud-Metrics:name=VisitorExpirationMonitorTask-ExpirationLatencyMs" -A 50thPercentile -w $ARG1$ -c $ARG2$
 	}
 
 <% unless node['domain'].match(/^prod1?.\w{2}-\w{2}/) -%>
