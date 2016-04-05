@@ -29,7 +29,7 @@ include_recipe "tealium_bongo::packages"
 include_recipe "pnp4nagios_tealium"
 include_recipe "nagios::nsca_server"
 
-%w{make libnet-nslookup-perl libmodule-install-perl libyaml-perl libyaml-syck-perl libwww-perl libnagios-plugin-perl}.each do |pkg|
+%w{make libnet-nslookup-perl libmodule-install-perl libyaml-perl libyaml-syck-perl libwww-perl libnagios-plugin-perl java-jmxterm}.each do |pkg|    
     package pkg do
         action :install
     end
