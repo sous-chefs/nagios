@@ -154,13 +154,7 @@ class Nagios
   end
 
   def normalize_hostname=(expr)
-    if expr == true
-      @normalize_hostname = true
-    elsif expr =~ /y|yes|true|1/i
-      @normalize_hostname = true
-    else
-      @normalize_hostname = false
-    end
+    @normalize_hostname = (expr == true || !(expr =~ /y|yes|true|1/).nil?)
   end
 
   # rubocop:disable MethodLength
@@ -196,7 +190,7 @@ class Nagios
       push_object(obj)
     else
       Chef::Log.fail("Nagios error: Pushing unknown object: #{obj.class} into Nagios.instance")
-      fail
+      raise
     end
   end
   # rubocop:enable MethodLength

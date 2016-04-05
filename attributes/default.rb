@@ -34,11 +34,7 @@ case node['platform_family']
 when 'debian'
   default['nagios']['plugin_dir'] = '/usr/lib/nagios/plugins'
 when 'rhel', 'fedora'
-  if node['kernel']['machine'] == 'i686'
-    default['nagios']['plugin_dir'] = '/usr/lib/nagios/plugins'
-  else
-    default['nagios']['plugin_dir'] = '/usr/lib64/nagios/plugins'
-  end
+  default['nagios']['plugin_dir'] = node['kernel']['machine'] == 'i686' ? '/usr/lib/nagios/plugins' : '/usr/lib64/nagios/plugins'
 else
   default['nagios']['plugin_dir'] = '/usr/lib/nagios/plugins'
 end
@@ -79,11 +75,8 @@ when 'debian'
 when 'rhel', 'fedora'
   default['nagios']['cgi-path'] = '/nagios/cgi-bin/'
   # install via source on RHEL releases less than 6, otherwise use packages
-  if node['platform_family'] == 'rhel' && node['platform_version'].to_i < 6
-    default['nagios']['server']['install_method'] = 'source'
-  else
-    default['nagios']['server']['install_method'] = 'package'
-  end
+  method = node['platform_family'] == 'rhel' && node['platform_version'].to_i < 6 ? 'source' : 'package'
+  default['nagios']['server']['install_method'] = method
   default['nagios']['server']['service_name']   = 'nagios'
   default['nagios']['server']['mail_command']   = '/bin/mail'
 else

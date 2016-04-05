@@ -5,7 +5,7 @@ set :backend, :exec
 
 describe 'Nagios Website' do
   it 'should be listening on port 80' do
-    expect(port 80).to be_listening
+    expect(port(80)).to be_listening
   end
 
   it 'should return the default homepage' do

@@ -42,11 +42,8 @@ class Nagios
     end
 
     def register
-      if blank?(@name)
-        return @register
-      else
-        return 0
-      end
+      return @register if blank?(@name)
+      0
     end
 
     def register=(arg)
@@ -73,13 +70,9 @@ class Nagios
     end
 
     def check_bool(arg)
-      if arg.class == TrueClass
-        return 1
-      elsif arg.to_s =~ /^y|yes|true|on|1$/i
-        return 1
-      else
-        return 0
-      end
+      return 1 if arg.class == TrueClass
+      return 1 if arg.to_s =~ /^y|yes|true|on|1$/i
+      0
     end
 
     def check_integer(int)
@@ -92,7 +85,7 @@ class Nagios
         Chef::Log.debug("#{self.class} #{self} adding option #{arg} for entry #{entry}")
       else
         Chef::Log.fail("#{self.class} #{self} object error: Unknown option #{arg} for entry #{entry}")
-        fail
+        raise 'Unknown option'
       end
     end
 
@@ -108,11 +101,8 @@ class Nagios
 
     def check_use_and_name(default)
       return nil if default.nil?
-      if to_s == default.to_s
-        return nil
-      else
-        return default
-      end
+      return nil if to_s == default.to_s
+      default
     end
 
     # rubocop:disable MethodLength
@@ -199,17 +189,13 @@ class Nagios
       members = []
       case option
       when String
-        if object == Nagios::Command
-          members = [option]
-        else
-          members = option.split(',')
-        end
+        members = object == Nagios::Command ? [option] : option.split(',')
         members.map(&:strip!)
       when Array
         members = option
       else
         Chef::Log.fail("Nagios fail: Use an Array or comma seperated String for option: #{option} within #{self.class}")
-        fail
+        raise 'Use an Array or comma seperated String for option'
       end
       members
     end
@@ -226,7 +212,7 @@ class Nagios
         n = obj.send(m)
         next if n.nil?
         m += '='
-        send(m, n) if self.respond_to?(m)
+        send(m, n) if respond_to?(m)
       end
     end
 
@@ -272,7 +258,7 @@ class Nagios
           n = Nagios.instance.find(c)
           if c == n
             Chef::Log.fail("#{self.class} fail: Cannot find command #{o} please define it first.")
-            fail
+            raise "#{self.class} fail: Cannot find command #{o} please define it first."
           else
             commands.push(n)
           end
@@ -299,7 +285,7 @@ class Nagios
       hash.each do |k, v|
         push(Nagios::CustomOption.new(k.upcase, v)) if k.start_with?('_')
         m = k + '='
-        send(m, v) if self.respond_to?(m)
+        send(m, v) if respond_to?(m)
       end
     end
 

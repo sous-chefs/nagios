@@ -50,13 +50,13 @@ class Nagios
 
     def command_line=(command_line)
       param = command_timeout(command_line)
-      if @timeout.nil?
-        @command_line = command_line
-      elsif param.nil?
-        @command_line = command_line + " -t #{@timeout}"
-      else
-        @command_line = command_line.gsub(param, "-t #{@timeout}")
-      end
+      @command_line = if @timeout.nil?
+                        command_line
+                      elsif param.nil?
+                        command_line + " -t #{@timeout}"
+                      else
+                        command_line.gsub(param, "-t #{@timeout}")
+                      end
       @command_line
     end
 

@@ -21,15 +21,14 @@
 # Search in all environments if multi_environment_monitoring is enabled.
 Chef::Log.info('Beginning search for nodes.  This may take some time depending on your node count')
 
-nodes = []
 multi_env = node['nagios']['monitored_environments']
 multi_env_search = multi_env.empty? ? '' : ' AND (chef_environment:' + multi_env.join(' OR chef_environment:') + ')'
 
-if node['nagios']['multi_environment_monitoring']
-  nodes = search(:node, "name:*#{multi_env_search}")
-else
-  nodes = search(:node, "name:* AND chef_environment:#{node.chef_environment}")
-end
+nodes = if node['nagios']['multi_environment_monitoring']
+          search(:node, "name:*#{multi_env_search}")
+        else
+          search(:node, "name:* AND chef_environment:#{node.chef_environment}")
+        end
 
 if nodes.empty?
   Chef::Log.info('No nodes returned from search, using this node so hosts.cfg has data')
