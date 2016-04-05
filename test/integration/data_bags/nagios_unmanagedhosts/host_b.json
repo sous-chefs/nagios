@@ -4,5 +4,5 @@
   "alias": "Host B Alias Name",
   "display_name": "Host B Display Name",
   "environment": "_default",
-  "hostgroups": "hostgroup_b"
+  "hostgroups": ["hostgroup_b", "both_hosts"]
 }

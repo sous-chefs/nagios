@@ -135,6 +135,7 @@ describe 'Nagios Configuration' do
   file_servicegroups = []
   file_servicegroups << 'servicegroup_name.*servicegroup_a\n\s*members.*host_a_alt,service_a,host_a_alt,service_b,host_b,service_b,host_b,service_c'
   file_servicegroups << 'servicegroup_name.*servicegroup_b\n\s*members.*host_b,service_c'
+  file_servicegroups << 'servicegroup_name.*selective_services\n\s*members\s*host_b,selective_service'
 
   file_servicegroups.each do |line|
     describe file("#{path_config_dir}/servicegroups.cfg") do
