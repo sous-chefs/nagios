@@ -45,7 +45,7 @@ command[check_chef_status]=<%= node['nagios']['plugin_dir'] %>/check_last_logs.p
 command[check_ntp]=<%= node['nagios']['plugin_dir'] %>/check_ntp_time -H <%= @ntp_server %> -w 1.5 -c 3
 
 #check Chef processes
-command[check_chef]=<%= node['nagios']['plugin_dir'] %>/check_procs -a "chef-client" -c 0:4
+command[check_chef]=<%= node['nagios']['plugin_dir'] %>/check_procs -a "chef-client" -c 0:5
 
 <% if node.roles.include?("hostname_eventstream") %>
 #check eventstream process

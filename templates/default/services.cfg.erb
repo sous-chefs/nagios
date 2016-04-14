@@ -322,7 +322,7 @@ define service {
 define service {
     service_description Check Rabbit VP Queue Availability US WEST CLUSTER
     <%= @designation %> <%= @ip %>
-    check_command       check_rabbitmq_queue_availability!us-west-1.cluster.rabbitmq.tealiumiq.com!/server2server!monitor!ifyouaremonitoringtheworld!us-west
+    check_command       check_rabbitmq_queue_availability_west!us-west-1.cluster.rabbitmq.tealiumiq.com!/server2server!monitor!ifyouaremonitoringtheworld!us-west
     use                 rappid-rabbit,srv-pnp
 }
 

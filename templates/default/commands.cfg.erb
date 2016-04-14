@@ -37,6 +37,11 @@ define command{
 }
 
 define command{
+  command_name    check_rabbitmq_queue_availability_west
+  command_line    $USER1$/check_rabbitmq_queue_count_west.sh $ARG1$ $ARG2$ $ARG3$ $ARG4$ $ARG5$
+}
+
+define command{
   command_name    check_rabbitmq_queue_consumers
   command_line    $USER1$/check_rabbitmq_queue_consumers.sh $ARG1$ $ARG2$ $ARG3$ $ARG4$ $ARG5$ $ARG6$ $ARG7$
 }
