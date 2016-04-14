@@ -41,6 +41,11 @@ define command{
   command_line    $USER1$/check_rabbitmq_queue_consumers.sh $ARG1$ $ARG2$ $ARG3$ $ARG4$ $ARG5$ $ARG6$ $ARG7$
 }
 
+define command{
+  command_name    check_rabbitmq_queue_consumers_multi
+  command_line    $USER1$/check_rabbitmq_queue_consumers_multi.sh $ARG1$ $ARG2$ $ARG3$ $ARG4$ $ARG5$ $ARG6$ $ARG7$ $ARG8$
+}
+
 #define command{
 #  command_name    check_rabbitmq_objects_by_ssh
 #  command_line    exec ssh $HOSTADDRESS$ sudo /usr/lib/nagios/plugins/check_rabbitmq_objects --extra-opts=$ARG1$
@@ -69,7 +74,12 @@ define command {
 define command {
   command_name    check_jmx_VP_expire_latency
   command_line    $USER1$/check_vp_expire_latency $HOSTADDRESS$ $ARG1$ $ARG2$
-	}
+}
+
+define command {
+  command_name    check_jmx_VP_expire_latency_east
+  command_line    $USER1$/check_vp_expire_latency_east $HOSTADDRESS$ $ARG1$ $ARG2$
+}
 
 <% unless node['domain'].match(/^prod1?.\w{2}-\w{2}/) -%>
 
@@ -894,6 +904,11 @@ define command {
 define command{
 	command_name	s2s-resolve
 	command_line	/usr/share/tealium/server2server/bin/s2s-resolve.sh SERVICESTATE$ $SERVICESTATETYPE$ $SERVICEATTEMPT$
+}
+
+define command{
+        command_name    vp-resolve
+        command_line    /usr/share/tealium/server2server/bin/s2s-resolve.sh SERVICESTATE$ $SERVICESTATETYPE$ $SERVICEATTEMPT$
 }
 
 define command{

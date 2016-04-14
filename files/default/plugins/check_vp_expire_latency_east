@@ -1,0 +1,46 @@
+#!/bin/bash
+
+STATE_OK=0
+STATE_WARNING=1
+STATE_CRITICAL=2
+STATE_UNKNOWN=3
+STATE_DEPENDENT=4
+
+me=`/usr/bin/basename $0`
+path=`/usr/bin/dirname $0`
+
+usage() {
+    echo ""
+    echo "Usage: $me <host_address> <warn> <crit>"
+    echo "Usage: $me -h|--help"
+    echo ""
+    echo "See also check_jmx."
+}
+
+if [ $# -lt 1 ]; then
+    usage
+    exit $STATE_UNKNOWN
+fi
+
+if [ "$1" == "-h" ]; then
+    usage
+    exit $STATE_OK
+fi
+
+if [ $# -gt 3 ]; then
+    usage
+    exit $STATE_UNKNOWN
+fi
+
+host=$1
+warn=$2
+crit=$3
+
+cool_off=`echo get -s -b DataCloud:type=VisitorManager InMaxVisitorCoolOffPeriod | java -jar /usr/share/tealium/datacloud/jmxterm-1.0-alpha-4-uber.jar -l service:jmx:rmi:///jndi/rmi://${host}:9001/jmxrmi -n -v silent`
+
+if [ "$cool_off" == "true" ]; then
+   echo "OK - InMaxCoolOffPeriod = true" 
+   return 0
+fi
+
+exec ${path}/check_jmx -U service:jmx:rmi:///jndi/rmi://${host}:9001/jmxrmi -O "DataCloud-Metrics:name=VisitorExpirationMonitorTask-ExpirationLatencyMs" -A 75thPercentile -w $warn -c $crit
