@@ -624,7 +624,6 @@ define command {
 
 define command {
   command_name    check_rabbitmq_auth
-  #command_line    $USER1$/check_http -I $HOSTADDRESS$ $ARG1$ -a admin:"toor4cars9window14five." -p 15672
   command_line    $USER1$/check_http -I $HOSTADDRESS$ $ARG1$ -a admin:"<%= @adminpass %>" -p 15672
 }
 
