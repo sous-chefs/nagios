@@ -396,10 +396,15 @@ when "ec2.internal"
     url = "us-east-1.nagios.ops.tlium.com/nagios3/"
 end
 
+app_environment = node["app_environment"] || "development"
+rabbitmq_db = search(:rabbitmq_users,"id:production_vpc1").first
+adminpass = rabbitmq_db["users"]["admin"]["password"]
+
 nagios_conf "commands" do
     variables(
         :services => services,
-        :url => url
+        :url => url,
+        :adminpass => adminpass
     )
 end
 
