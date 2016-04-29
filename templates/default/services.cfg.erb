@@ -432,28 +432,28 @@ define service {
 define service {
     service_description Check Rabbit ESP queue availability eu-central-1
     <%= @designation %> <%= @ip %>
-    check_command       check_rabbitmq_queue_availability_new!eu-central-1.cluster.rabbitmq.tealiumiq.com!/server2server!monitor!ifyouaremonitoringtheworld!eu-central!uc_to_esp!350
+    check_command       check_rabbitmq_queue_availability_new!eu-central-1.cluster.rabbitmq.tealiumiq.com!/server2server!monitor!ifyouaremonitoringtheworld!eu-central!uc_to_esp!4
     use                 rappid-rabbit,srv-pnp
 }
 
 define service {
     service_description Check Rabbit ESP queue availability eu-west-1
     <%= @designation %> <%= @ip %>
-    check_command       check_rabbitmq_queue_availability_new!eu-west-1.cluster.rabbitmq.tealiumiq.com!/server2server!monitor!ifyouaremonitoringtheworld!eu-west!uc_to_esp!350
+    check_command       check_rabbitmq_queue_availability_new!eu-west-1.cluster.rabbitmq.tealiumiq.com!/server2server!monitor!ifyouaremonitoringtheworld!eu-west!uc_to_esp!4
     use                 rappid-rabbit,srv-pnp
 }
 
 define service {
     service_description Check Rabbit ESP queue availability us-west-1
     <%= @designation %> <%= @ip %>
-    check_command       check_rabbitmq_queue_availability_new!us-west-1.cluster.rabbitmq.tealiumiq.com!/server2server!monitor!ifyouaremonitoringtheworld!us-west!uc_to_esp!350
+    check_command       check_rabbitmq_queue_availability_new!us-west-1.cluster.rabbitmq.tealiumiq.com!/server2server!monitor!ifyouaremonitoringtheworld!us-west!uc_to_esp!5
     use                 rappid-rabbit,srv-pnp
 }
 
 define service {
     service_description Check Rabbit ESP queue availability us-east-1
     <%= @designation %> <%= @ip %>
-    check_command       check_rabbitmq_queue_availability_new!us-east-1.cluster.rabbitmq.tealiumiq.com!/server2server!monitor!ifyouaremonitoringtheworld!us-east!uc_to_esp!350
+    check_command       check_rabbitmq_queue_availability_new!us-east-1.cluster.rabbitmq.tealiumiq.com!/server2server!monitor!ifyouaremonitoringtheworld!us-east!uc_to_esp!8
     use                 rappid-rabbit,srv-pnp
 }
 
