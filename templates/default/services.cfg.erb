@@ -520,33 +520,33 @@ define service {
     use                 rappid-rabbit,srv-pnp
 }
 
-define service {
-    service_description Check Rabbit uc_to_esp consumer count us-west-1
-    <%= @designation %> <%= @ip %>
-    check_command       check_rabbitmq_queue_consumers!us-west-1.cluster.rabbitmq.tealiumiq.com!/server2server!monitor!ifyouaremonitoringtheworld!us-west!uc_to_esp_event_queue_tealium!5
-    use                 rappid-rabbit,srv-pnp
-}
+#define service {
+#    service_description Check Rabbit uc_to_esp consumer count us-west-1
+#    <%= @designation %> <%= @ip %>
+#    check_command       check_rabbitmq_queue_consumers!us-west-1.cluster.rabbitmq.tealiumiq.com!/server2server!monitor!ifyouaremonitoringtheworld!us-west!uc_to_esp_event_queue_tealium!5
+#    use                 rappid-rabbit,srv-pnp
+#}
 
-define service {
-    service_description Check Rabbit uc_to_esp consumer count us-east-1
-    <%= @designation %> <%= @ip %>
-    check_command       check_rabbitmq_queue_consumers!us-east-1.cluster.rabbitmq.tealiumiq.com!/server2server!monitor!ifyouaremonitoringtheworld!us-east!uc_to_esp_event_queue_tealium!8
-    use                 rappid-rabbit,srv-pnp
-}
+#define service {
+#    service_description Check Rabbit uc_to_esp consumer count us-east-1
+#    <%= @designation %> <%= @ip %>
+#    check_command       check_rabbitmq_queue_consumers!us-east-1.cluster.rabbitmq.tealiumiq.com!/server2server!monitor!ifyouaremonitoringtheworld!us-east!uc_to_esp_event_queue_tealium!8
+#    use                 rappid-rabbit,srv-pnp
+#}
 
-define service {
-    service_description Check Rabbit uc_to_esp consumer count eu-west-1
-    <%= @designation %> <%= @ip %>
-    check_command       check_rabbitmq_queue_consumers!eu-west-1.cluster.rabbitmq.tealiumiq.com!/server2server!monitor!ifyouaremonitoringtheworld!eu-west!uc_to_esp_event_queue_tealium!4
-    use                 rappid-rabbit,srv-pnp
-}
+#define service {
+#    service_description Check Rabbit uc_to_esp consumer count eu-west-1
+#    <%= @designation %> <%= @ip %>
+#    check_command       check_rabbitmq_queue_consumers!eu-west-1.cluster.rabbitmq.tealiumiq.com!/server2server!monitor!ifyouaremonitoringtheworld!eu-west!uc_to_esp_event_queue_tealium!4
+#    use                 rappid-rabbit,srv-pnp
+#}
 
-define service {
-    service_description Check Rabbit uc_to_esp consumer count eu-central-1
-    <%= @designation %> <%= @ip %>
-    check_command       check_rabbitmq_queue_consumers!eu-central-1.cluster.rabbitmq.tealiumiq.com!/server2server!monitor!ifyouaremonitoringtheworld!eu-central!uc_to_esp_event_queue_tealium!4
-    use                 rappid-rabbit,srv-pnp
-}
+#define service {
+#    service_description Check Rabbit uc_to_esp consumer count eu-central-1
+#    <%= @designation %> <%= @ip %>
+#    check_command       check_rabbitmq_queue_consumers!eu-central-1.cluster.rabbitmq.tealiumiq.com!/server2server!monitor!ifyouaremonitoringtheworld!eu-central!uc_to_esp_event_queue_tealium!4
+#    use                 rappid-rabbit,srv-pnp
+#}
 
 define service {
     service_description RabbitMQ mr_to_vp queue consumer count eu-central-1
@@ -911,6 +911,15 @@ define service {
     use                 as-low-urgency-service,srv-pnp
 }
 
+define service {
+    service_description ESP TotalMessageReceived is greater than 1
+    hostgroup_name      eventstream_processor
+    check_command       check_jmx_message_received!1
+    #check_command       check_jmx_message_received!1\:i
+    #check_command       check_jmx_heap
+    use                 jmx-service,srv-pnp
+}
+
 #define service {
 #    service_description Check JMX DataCloud Threading
 #    hostgroup_name      dc_visitor_processor
@@ -974,12 +983,12 @@ define service {
 #    use                 jmx-service,srv-pnp
 #}
 
-define service {
-    service_description Check JMX DataCloud VP Expire Latency
-    hostgroup_name      dc_visitor_processor
-    check_command       check_jmx_VP_expire_latency_east!600000!600000
-    use                 jmx-service,srv-pnp
-}
+#define service {
+#    service_description Check JMX DataCloud VP Expire Latency
+#    hostgroup_name      dc_visitor_processor
+#    check_command       check_jmx_VP_expire_latency_east!600000!600000
+#    use                 jmx-service,srv-pnp
+#}
 
 define service {
     service_description Check Permission Cache process
