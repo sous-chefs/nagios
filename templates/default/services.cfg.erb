@@ -502,7 +502,7 @@ define service {
 define service {
     service_description Check Rabbit vp_to_dd_visitoraction consumer count us-east-1
     <%= @designation %> <%= @ip %>
-    check_command       check_rabbitmq_queue_consumers!us-east-1.cluster.rabbitmq.tealiumiq.com!/server2server!monitor!ifyouaremonitoringtheworld!us-east!vp_to_dd_visitor_action!6
+    check_command       check_rabbitmq_queue_consumers!us-east-1.cluster.rabbitmq.tealiumiq.com!/server2server!monitor!ifyouaremonitoringtheworld!us-east!vp_to_dd_visitor_action!8
     use                 rappid-rabbit,srv-pnp
 }
 
