@@ -939,6 +939,11 @@ define command{
 }
 
 define command{
+        command_name    esp_restart
+        command_line    /usr/lib/nagios/plugins/esp_restart.sh SERVICESTATE$ $SERVICESTATETYPE$ $SERVICEATTEMPT$
+}
+
+define command{
         command_name    queue-purge
         command_line    /usr/lib/nagios/plugins/queue-purge.sh SERVICESTATE$ $SERVICESTATETYPE$ $SERVICEATTEMPT$
 }
