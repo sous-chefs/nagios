@@ -481,7 +481,7 @@ define service {
 define service {
     service_description Check Rabbit Amazon Uploader Queue Consumer Count US EAST CLUSTER
     <%= @designation %> <%= @ip %>
-    check_command       check_rabbitmq_queue_consumers!us-east-1.cluster.rabbitmq.tealiumiq.com!/server2server!monitor!ifyouaremonitoringtheworld!us-east!esp_to_au_event_queue!3
+    check_command       check_rabbitmq_queue_consumers!us-east-1.cluster.rabbitmq.tealiumiq.com!/server2server!monitor!ifyouaremonitoringtheworld!us-east!esp_to_au_event_queue!6
     use                 rappid-rabbit,srv-pnp
 }
 
@@ -918,7 +918,7 @@ define service {
     #check_command       check_jmx_message_received!1\:i
     #check_command       check_jmx_heap
     use                 jmx-service,srv-pnp
-    event_handler       esp-restart
+    #event_handler       esp-restart
 }
 
 #define service {
