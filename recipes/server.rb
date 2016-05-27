@@ -440,6 +440,94 @@ designation = "host_name"
 
 Chef::Log.warn("First App_Environment is: #{node[:app_environment]}")
 
+au_east = search(:node, "chef_environment:production AND role:dc_amazon_uploader AND ec2_region:us-east-1")
+au_eu_west = search(:node, "chef_environment:production AND role:dc_amazon_uploader AND ec2_region:eu-west-1")
+au_eu_central = search(:node, "chef_environment:production AND role:dc_amazon_uploader AND ec2_region:eu-central-1")
+
+esp_us_east = search(:node, "chef_environment:production AND role:eventstream_processor AND ec2_region:us-east-1")
+esp_us_west = search(:node, "chef_environment:production AND role:eventstream_processor AND ec2_region:us-west-1")
+esp_eu_west = search(:node, "chef_environment:production AND role:eventstream_processor AND ec2_region:eu-west-1")
+esp_eu_central = search(:node, "chef_environment:production AND role:eventstream_processor AND ec2_region:eu-central-1")
+
+dd_us_east = search(:node, "chef_environment:production AND role:dc_data_distributor AND ec2_region:us-east-1")
+dd_us_west = search(:node, "chef_environment:production AND role:dc_data_distributor AND ec2_region:us-west-1")
+dd_eu_west = search(:node, "chef_environment:production AND role:dc_data_distributor AND ec2_region:eu-west-1")
+dd_eu_central = search(:node, "chef_environment:production AND role:dc_data_distributor AND ec2_region:eu-central-1")
+
+Chef::Log.warn("**************************** East AUs are: #{au_east} ************************************")
+Chef::Log.warn("**************************** EU West AUs are: #{au_eu_west} ************************************")
+Chef::Log.warn("**************************** EU Central AUs are: #{au_eu_central} ************************************")
+
+au_east_id = []
+au_east.each do |n|
+  Chef::Log.warn("**************************** This AU: #{n} has instance ID : #{n[:ec2][:instance_id]} ***********************************")
+  au_east_id << n[:ec2][:instance_id]
+end
+
+au_eu_west_id = []
+au_eu_west.each do |n|
+  Chef::Log.warn("**************************** This AU: #{n} has instance ID : #{n[:ec2][:instance_id]} ***********************************")
+  au_eu_west_id << n[:ec2][:instance_id]
+end
+
+au_eu_central_id = []
+au_eu_central.each do |n|
+  Chef::Log.warn("**************************** This AU: #{n} has instance ID : #{n[:ec2][:instance_id]} ***********************************")
+  au_eu_central_id << n[:ec2][:instance_id]
+end
+
+esp_us_east_id = []
+esp_us_east.each do |n|
+  Chef::Log.warn("**************************** This ESP: #{n} has instance ID : #{n[:ec2][:instance_id]} ***********************************")
+  esp_us_east_id << n[:ec2][:instance_id]
+end
+
+esp_us_west_id = []
+esp_us_west.each do |n|
+  Chef::Log.warn("**************************** This ESP: #{n} has instance ID : #{n[:ec2][:instance_id]} ***********************************")
+  esp_us_west_id << n[:ec2][:instance_id]
+end
+
+esp_eu_west_id = []
+esp_eu_west.each do |n|
+  Chef::Log.warn("**************************** This ESP: #{n} has instance ID : #{n[:ec2][:instance_id]} ***********************************")
+  esp_eu_west_id << n[:ec2][:instance_id]
+end
+
+esp_eu_central_id = []
+esp_eu_central.each do |n|
+  Chef::Log.warn("**************************** This ESP: #{n} has instance ID : #{n[:ec2][:instance_id]} ***********************************")
+  esp_eu_central_id << n[:ec2][:instance_id]
+end
+
+dd_us_east_id = []
+dd_us_east.each do |n|
+  Chef::Log.warn("**************************** This D: #{n} has instance ID : #{n[:ec2][:instance_id]} ***********************************")
+  dd_us_east_id << n[:ec2][:instance_id]
+end
+
+dd_us_west_id = []
+dd_us_west.each do |n|
+  Chef::Log.warn("**************************** This DD: #{n} has instance ID : #{n[:ec2][:instance_id]} ***********************************")
+  dd_us_west_id << n[:ec2][:instance_id]
+end
+
+dd_eu_west_id = []
+dd_eu_west.each do |n|
+  Chef::Log.warn("**************************** This DD: #{n} has instance ID : #{n[:ec2][:instance_id]} ***********************************")
+  dd_eu_west_id << n[:ec2][:instance_id]
+end
+
+dd_eu_central_id = []
+dd_eu_central.each do |n|
+  Chef::Log.warn("**************************** This DD: #{n} has instance ID : #{n[:ec2][:instance_id]} ***********************************")
+  dd_eu_central_id << n[:ec2][:instance_id]
+end
+
+Chef::Log.warn("**************************** East AU Instance ID array is: #{au_east_id} ************************************")
+Chef::Log.warn("**************************** EU West AU Instance ID array is: #{au_eu_west_id} ************************************")
+Chef::Log.warn("**************************** EU Central AU Instance ID array is: #{au_eu_central_id} ************************************")
+
 if node[:ec2][:local_ipv4] == "10.1.2.7" or node[:app_environment].match(/^privatecloud\d/)
 ip = "#{node['hostname']} - #{node[:ipaddress]}"
 environment = "#{node[:app_environment]}"
@@ -465,7 +553,18 @@ Chef::Log.warn("Second App_Environment is: #{environment}")
       :ip => ip,
       :environment => environment,
       :designation => designation,
-      :uconnects => uconnects
+      :uconnects => uconnects,
+      :au_east_id => au_east_id,
+      :au_eu_west_id => au_eu_west_id,
+      :au_eu_central_id =>au_eu_central_id,
+      :esp_us_east_id => esp_us_east_id,
+      :esp_us_west_id => esp_us_west_id,
+      :esp_eu_west_id => esp_eu_west_id,
+      :esp_eu_central_id => esp_eu_central_id,
+      :dd_us_east_id => dd_us_east_id,
+      :dd_us_west_id => dd_us_west_id,
+      :dd_eu_west_id => dd_eu_west_id,
+      :dd_eu_central_id => dd_eu_central_id
     )
   end
 else
