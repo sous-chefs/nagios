@@ -56,6 +56,11 @@ define command{
   command_line    $USER1$/check_rabbitmq_queue_consumers_multi.sh $ARG1$ $ARG2$ $ARG3$ $ARG4$ $ARG5$ $ARG6$ $ARG7$ $ARG8$
 }
 
+define command{
+  command_name    check_rabbitmq_queue_consumers_lookup
+  command_line    $USER1$/check_rabbitmq_queue_consumers_lookup.sh $ARG1$ $ARG2$ $ARG3$ $ARG4$ $ARG5$ $ARG6$ $ARG7$ $ARG8$
+}
+
 #define command{
 #  command_name    check_rabbitmq_objects_by_ssh
 #  command_line    exec ssh $HOSTADDRESS$ sudo /usr/lib/nagios/plugins/check_rabbitmq_objects --extra-opts=$ARG1$
@@ -925,7 +930,12 @@ define command{
 
 define command{
         command_name    vp-resolve
-        command_line    /usr/share/tealium/server2server/bin/s2s-resolve.sh SERVICESTATE$ $SERVICESTATETYPE$ $SERVICEATTEMPT$
+        command_line    /usr/share/tealium/server2server/bin/vp-resolve.sh $SERVICESTATE$ $SERVICESTATETYPE$ $SERVICEATTEMPT$
+}
+
+define command{
+        command_name    do_something        
+        command_line    /usr/lib/nagios/plugins/do-something.sh $SERVICESTATE$ $SERVICESTATETYPE$ $SERVICEATTEMPT$
 }
 
 define command{
