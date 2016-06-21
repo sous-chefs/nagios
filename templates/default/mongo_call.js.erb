@@ -1,0 +1,3 @@
+use datacloud_cluster_state
+
+db.datacloudcluster_servers.find({"node_type":"VISITOR_PROCESSOR","region":"where","status":"ACTIVE",$and:[{"partition_range_start":{$lte:number}},{"partition_range_end":{$gte:number}}]},{_id:0,node_host:1}).pretty()
