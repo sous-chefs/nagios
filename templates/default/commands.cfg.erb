@@ -57,6 +57,11 @@ define command{
 }
 
 define command{
+  command_name    check_rabbitmq_queue_consumers_multi_vp
+  command_line    $USER1$/check_rabbitmq_queue_consumers_multi_vp.sh $ARG1$ $ARG2$ $ARG3$ $ARG4$ $ARG5$ $ARG6$ $ARG7$ $ARG8$
+}
+
+define command{
   command_name    check_rabbitmq_queue_consumers_lookup
   command_line    $USER1$/check_rabbitmq_queue_consumers_lookup.sh $ARG1$ $ARG2$ $ARG3$ $ARG4$ $ARG5$ $ARG6$ $ARG7$ $ARG8$
 }
@@ -934,9 +939,28 @@ define command{
 }
 
 define command{
-        command_name    do_something        
-        command_line    /usr/lib/nagios/plugins/do-something.sh $SERVICESTATE$ $SERVICESTATETYPE$ $SERVICEATTEMPT$
+        command_name    event_handler
+        command_line    /usr/lib/nagios/plugins/event-handler.sh $SERVICESTATE$ $SERVICESTATETYPE$ $SERVICEATTEMPT$ $ARG1$
+        #command_line    /usr/lib/nagios/plugins/event-handler.sh $SERVICESTATE$ $SERVICESTATETYPE$ $SERVICEATTEMPT$ $ARG1$ $ARG2$ $ARG3$ $ARG4$ $ARG5$ $ARG6$ $ARG7$ $ARG8$ $ARG9$
 }
+
+define command{
+        command_name    vp_handler
+        command_line    /usr/lib/nagios/plugins/vp-handler.sh $SERVICESTATE$ $SERVICESTATETYPE$ $SERVICEATTEMPT$ $ARG1$
+        #command_line    /usr/lib/nagios/plugins/event-handler.sh $SERVICESTATE$ $SERVICESTATETYPE$ $SERVICEATTEMPT$ $ARG1$ $ARG2$ $ARG3$ $ARG4$ $ARG5$ $ARG6$ $ARG7$ $ARG8$ $ARG9$
+}
+
+define command{
+        command_name    event_handler_vp
+        #command_line    /usr/lib/nagios/plugins/event-handler.sh $SERVICESTATE$ $SERVICESTATETYPE$ $SERVICEATTEMPT$
+        command_line    /usr/lib/nagios/plugins/event-handler_vp.sh $SERVICESTATE$ $SERVICESTATETYPE$ $SERVICEATTEMPT$ $ARG1$ $ARG2$ $ARG3$ $ARG4$ $ARG5$ $ARG6$ $ARG7$ $ARG8$ $ARG9$
+}
+
+define command{
+        command_name    do_something
+        command_line    /usr/share/tealium/server2server/bin/vp-resolve.sh $SERVICESTATE$ $SERVICESTATETYPE$ $SERVICEATTEMPT$
+}
+
 
 define command{
         command_name    eventstream_restart

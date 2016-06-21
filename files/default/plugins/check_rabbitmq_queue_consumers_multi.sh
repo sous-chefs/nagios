@@ -20,6 +20,9 @@ while [ $i -le $8 ]; do
   consumer_count=`cat $tmp_file`
   if [ $consumer_count != $7 ]; then
     echo "Not OK - Failed! Consumer count is" $consumer_count ", it should be" $7 "for queue" $queue"."
+
+    echo $i > /tmp/failed_queue.log
+
     exit 2
   fi
 

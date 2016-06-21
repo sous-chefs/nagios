@@ -120,6 +120,13 @@ template "#{node['nagios']['docroot_pub']}/index.html" do
     mode 0644
 end
 
+template "/tmp/mongo_call.js" do
+    source "mongo_call.js.erb"
+    owner node['nagios']['user']
+    group node['nagios']['group']
+    mode 0777
+end
+
 region = node[:ec2][:region]
 
 #node.set['domain'] = "prod1.eu-c1.int.ops.tlium.com"
