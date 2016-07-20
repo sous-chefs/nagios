@@ -82,12 +82,6 @@
     AuthType Basic
     AuthUserFile "<%= node['nagios']['conf_dir'] %>/htpasswd.users"
     require <%= node['nagios']['server_auth_require'] %>
-    <% if node['nagios']['alloved_ips'] -%>
-    Order Deny,Allow
-    Deny from All
-    Allow from <%=node['nagios']['alloved_ips'].join(' ') %>
-    Satisfy Any
-    <% end -%>
   </Location>
 <% end -%>
 
