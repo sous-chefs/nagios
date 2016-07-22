@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe 'nagios::default' do
-  let(:chef_run) do
+  cached(:chef_run) do
     ChefSpec::ServerRunner.new(platform: 'ubuntu', version: '12.04') do |_node, server|
       server.create_data_bag('users',
                                         'user1' => {
