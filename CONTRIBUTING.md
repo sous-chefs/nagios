@@ -9,5 +9,3 @@ updates during the release process.
 If your change adds new attributes, data bags, or other features
 please document how to use the change in the cookbook's README.md file.
 Otherwise no one will know how to use your work.
-
--Tim
