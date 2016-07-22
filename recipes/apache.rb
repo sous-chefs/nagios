@@ -1,5 +1,5 @@
 #
-# Author:: Tim Smith <tim@cozy.co>
+# Author:: Tim Smith <tsmith@chef.io>
 # Cookbook Name:: nagios
 # Recipe:: apache
 #

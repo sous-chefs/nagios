@@ -1,10 +1,10 @@
 #
 # Author:: Seth Chisamore <schisamo@getchef.com>
-# Author:: Tim Smith <tim@cozy.co>
+# Author:: Tim Smith <tsmith@chef.io>
 # Cookbook Name:: nagios
 # Recipe:: server_source
 #
-# Copyright 2011-2013, Chef Software, Inc.
+# Copyright 2011-2016, Chef Software, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.

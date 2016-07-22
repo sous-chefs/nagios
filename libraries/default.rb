@@ -1,6 +1,6 @@
 #
 # Author:: Joshua Sierles <joshua@37signals.com>
-# Author:: Tim Smith <tim@cozy.co>
+# Author:: Tim Smith <tsmith@chef.io>
 # Cookbook Name:: nagios
 # Library:: default
 #
