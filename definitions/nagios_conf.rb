@@ -21,7 +21,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-define :nagios_conf, :variables => {}, :config_subdir => true, :source => nil do
+define :nagios_conf, variables: {}, config_subdir: true, source: nil do
   conf_dir = params[:config_subdir] ? node['nagios']['config_dir'] : node['nagios']['conf_dir']
   params[:source] ||= "#{params[:name]}.cfg.erb"
 

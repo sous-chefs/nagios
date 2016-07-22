@@ -93,7 +93,7 @@ else
     owner node['nagios']['user']
     group web_group
     mode '0640'
-    variables(:nagios_users => nagios_users.users)
+    variables(nagios_users: nagios_users.users)
   end
 end
 
@@ -159,12 +159,12 @@ end
 nagios_conf node['nagios']['server']['name'] do
   config_subdir false
   source 'nagios.cfg.erb'
-  variables(:nagios_config => node['nagios']['conf'])
+  variables(nagios_config: node['nagios']['conf'])
 end
 
 nagios_conf 'cgi' do
   config_subdir false
-  variables(:nagios_service_name => nagios_service_name)
+  variables(nagios_service_name: nagios_service_name)
 end
 
 # resource.cfg differs on RPM and tarball based systems
@@ -199,6 +199,6 @@ end
 
 service 'nagios' do
   service_name nagios_service_name
-  supports :status => true, :restart => true, :reload => true
+  supports status: true, restart: true, reload: true
   action [:enable, :start]
 end

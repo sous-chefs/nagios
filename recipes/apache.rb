@@ -31,10 +31,10 @@ template "#{node['apache']['dir']}/sites-available/#{node['nagios']['server']['v
   source 'apache2.conf.erb'
   mode '0644'
   variables(
-    :nagios_url    => node['nagios']['url'],
-    :https         => node['nagios']['enable_ssl'],
-    :ssl_cert_file => node['nagios']['ssl_cert_file'],
-    :ssl_cert_key  => node['nagios']['ssl_cert_key']
+    nagios_url: node['nagios']['url'],
+    https: node['nagios']['enable_ssl'],
+    ssl_cert_file: node['nagios']['ssl_cert_file'],
+    ssl_cert_key: node['nagios']['ssl_cert_key']
   )
   if File.symlink?("#{node['apache']['dir']}/sites-enabled/#{node['nagios']['server']['vname']}.conf")
     notifies :reload, 'service[apache2]'

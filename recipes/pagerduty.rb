@@ -92,7 +92,7 @@ template "#{node['nagios']['cgi-bin']}/pagerduty.cgi" do
   group node['nagios']['group']
   mode '0755'
   variables(
-    :command_file => node['nagios']['conf']['command_file']
+    command_file: node['nagios']['conf']['command_file']
   )
 end
 
