@@ -225,4 +225,4 @@ default['apache']['mpm'] = 'prefork'
 
 # attribute to add commands to source build
 default['nagios']['source']['add_build_commands'] = ['make install-exfoliation']
-default['nagios']['alloved_ips'] = []
+default['nagios']['allowed_ips'] = []
