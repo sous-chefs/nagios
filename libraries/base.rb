@@ -17,7 +17,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-# rubocop:disable ClassLength
+
 class Nagios
   # This class it the base for all other Nagios classes.
   # It provides common methods to prevent code duplication.
@@ -105,7 +105,6 @@ class Nagios
       default
     end
 
-    # rubocop:disable MethodLength
     def default_template
       return @use unless @use.nil?
       return nil if @name
@@ -184,7 +183,6 @@ class Nagios
       longest
     end
 
-    # rubocop:disable MethodLength
     def get_members(option, object)
       members = []
       case option
@@ -244,7 +242,6 @@ class Nagios
       end
     end
 
-    # rubocop:disable MethodLength
     def notification_commands(obj)
       commands = []
       case obj
@@ -289,7 +286,6 @@ class Nagios
       end
     end
 
-    # rubocop:disable MethodLength
     def update_members(hash, option, object, remote = false)
       return if blank?(hash) || hash[option].nil?
       if hash[option].is_a?(String) && hash[option].start_with?('+')

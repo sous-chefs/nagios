@@ -17,7 +17,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-# rubocop:disable ClassLength
 
 require_relative 'base'
 
@@ -71,7 +70,6 @@ class Nagios
                   :icon_image,
                   :icon_image_alt
 
-    # rubocop:disable MethodLength
     def initialize(service_description)
       @service_description = service_description
       srv = service_description.split('!')
@@ -176,7 +174,6 @@ class Nagios
       get_timeperiod(@notification_period)
     end
 
-    # rubocop:disable MethodLength
     def push(obj)
       case obj
       when Nagios::Servicegroup
@@ -397,7 +394,6 @@ class Nagios
 
     private
 
-    # rubocop:disable MethodLength
     def config_options
       {
         'name'                         => 'name',

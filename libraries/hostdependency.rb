@@ -19,7 +19,6 @@
 
 require_relative 'base'
 
-# rubocop:disable ClassLength
 class Nagios
   #
   # This class holds all methods with regard to hostdependency options,
@@ -94,7 +93,6 @@ class Nagios
       end
     end
 
-    # rubocop:disable MethodLength
     def pop(obj)
       return if obj == self
       case obj
@@ -157,7 +155,6 @@ class Nagios
 
     private
 
-    # rubocop:disable MethodLength
     def config_options
       {
         'dependent_name'                => nil,

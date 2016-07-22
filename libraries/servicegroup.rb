@@ -65,7 +65,6 @@ class Nagios
       end
     end
 
-    # rubocop:disable MethodLength
     def pop(obj)
       return if obj == self
       case obj
@@ -120,7 +119,6 @@ class Nagios
       result
     end
 
-    # rubocop:disable MethodLength
     def lookup_hostgroup_members
       hostgroup_hash = {}
       @members.each do |service_name, service_obj|

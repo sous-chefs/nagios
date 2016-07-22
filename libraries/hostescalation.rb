@@ -19,7 +19,6 @@
 
 require_relative 'base'
 
-# rubocop:disable ClassLength
 class Nagios
   #
   # This class holds all methods with regard to hostescalation options,
@@ -75,7 +74,6 @@ class Nagios
       update_members(hash, 'hostgroup_name', Nagios::Hostgroup)
     end
 
-    # rubocop:disable MethodLength
     def push(obj)
       case obj
       when Nagios::Host
@@ -145,7 +143,6 @@ class Nagios
 
     private
 
-    # rubocop:disable MethodLength
     def config_options
       {
         'name'                  => 'name',
