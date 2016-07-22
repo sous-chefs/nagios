@@ -1,6 +1,7 @@
 require 'chefspec'
 require 'chefspec/berkshelf'
 
-ChefSpec::Coverage.start! do
-  add_filter 'vendor/cookbooks'
+RSpec.configure do |config|
+  config.color = true
+  config.log_level = :error
 end
