@@ -21,5 +21,4 @@ describe 'Nagios Website Host Configuration' do
   it 'should not contain eventhandler for bighost1' do
     expect { system('wget -qO- "http://localhost/nagios/cgi-bin/config.cgi?type=hosts&expand=bighost1" | grep my-event-handler-command') }.not_to output(/.*my-event-handler-command.*/i).to_stdout_from_any_process
   end
-
 end
