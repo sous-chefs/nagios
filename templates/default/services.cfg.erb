@@ -49,8 +49,165 @@ define service {
 
 <% if @environment == "privatecloud1" -%>
 
+#PC1
 #define service {
 #    service_description Check Rabbit record_requests_queue PC1
+#    <%= @designation %> <%= @ip %>
+#    check_command       check_rabbit_queues!pc1.rabbitmq.tealiumiq.com!/pc1_server2server!record_requests_queue!monitor!ifyouaremonitoringtheworld!2500,-1,500,-1!3000,-1,600,-1
+#    use                 default-service,srv-pnp
+#}
+
+#define service {
+#    service_description Check Rabbit request_tracers_queue PC1
+#    <%= @designation %> <%= @ip %>
+#    check_command       check_rabbit_queues!pc1.rabbitmq.tealiumiq.com!/pc1_server2server!request_tracers_queue!monitor!ifyouaremonitoringtheworld!2500,-1,500,-1!3000,-1,600,-1
+#    use                 default-service,srv-pnp
+#}
+
+#define service {
+#    service_description Check Rabbit audit_analyzer PC1
+#    <%= @designation %> <%= @ip %>
+#    check_command       check_rabbit_queues!pc1.rabbitmq.tealiumiq.com!/pc1_sitemap_audit!audit_analyzer!monitor!ifyouaremonitoringtheworld!2500,-1,500,-1!3000,-1,600,-1
+#    use                 default-service,srv-pnp
+#}
+
+#define service {
+#    service_description Check Rabbit audit_complete_site_companion PC1
+#    <%= @designation %> <%= @ip %>
+#    check_command       check_rabbit_queues!pc1.rabbitmq.tealiumiq.com!/pc1_sitemap_audit!audit_complete_site_companion!monitor!ifyouaremonitoringtheworld!2500,-1,500,-1!3000,-1,600,-1
+#    use                 default-service,srv-pnp
+#}
+
+#define service {
+#    service_description Check Rabbit audit_complete_site_scan PC1
+#    <%= @designation %> <%= @ip %>
+#    check_command       check_rabbit_queues!pc1.rabbitmq.tealiumiq.com!/pc1_sitemap_audit!audit_complete_site_scan!monitor!ifyouaremonitoringtheworld!2500,-1,500,-1!3000,-1,600,-1
+#    use                 default-service,srv-pnp
+#}
+
+#define service {
+#    service_description Check Rabbit audit_sitemap PC1
+#    <%= @designation %> <%= @ip %>
+#    check_command       check_rabbit_queues!pc1.rabbitmq.tealiumiq.com!/pc1_sitemap_audit!audit_sitemap!monitor!ifyouaremonitoringtheworld!2500,-1,500,-1!3000,-1,600,-1
+#    use                 default-service,srv-pnp
+#}
+
+#define service {
+#    service_description Check Rabbit audit_url PC1
+#    <%= @designation %> <%= @ip %>
+#    check_command       check_rabbit_queues!pc1.rabbitmq.tealiumiq.com!/pc1_sitemap_audit!audit_url!monitor!ifyouaremonitoringtheworld!2500,-1,500,-1!3000,-1,600,-1
+#    use                 default-service,srv-pnp
+#}
+
+#define service {
+#    service_description Check Rabbit tiq_verifier PC1
+#    <%= @designation %> <%= @ip %>
+#    check_command       check_rabbit_queues!pc1.rabbitmq.tealiumiq.com!/pc1_tiq_verifier!tiq_verifier!monitor!ifyouaremonitoringtheworld!2500,-1,500,-1!3000,-1,600,-1
+#    use                 default-service,srv-pnp
+#}
+
+#define service {
+#    service_description Check Rabbit http_requests_queue PC1
+#    <%= @designation %> <%= @ip %>
+#    check_command       check_rabbit_queues!pc1.rabbitmq.tealiumiq.com!/pc1_server2server!http_requests_queue!monitor!ifyouaremonitoringtheworld!2500,-1,500,-1!3000,-1,600,-1
+#    use                 default-service,srv-pnp
+#}
+
+#define service {
+#    service_description Check Rabbit tag_request_queue PC1
+#   <%= @designation %> <%= @ip %>
+#    check_command       check_rabbit_queues!pc1.rabbitmq.tealiumiq.com!/pc1_server2server!tag_request_queue!monitor!ifyouaremonitoringtheworld!200,-1,200,-1!300,-1,300,-1
+#    use                 default-service,srv-pnp
+#}
+
+#define service {
+#    service_description Check Rabbit http_response_task PC1
+#    <%= @designation %> <%= @ip %>
+#    check_command       check_rabbit_queues!pc1.rabbitmq.tealiumiq.com!/pc1_server2server!http_response_task!monitor!ifyouaremonitoringtheworld!200,-1,200,-1!300,-1,300,-1
+#    use                 default-service,srv-pnp
+#}
+
+define service {
+    service_description RabbitMQ vp_to_qp_partitionedqueryresult queue consumer count
+    <%= @designation %> <%= @ip %>
+    check_command       check_rabbitmq_queue_consumers_multi_pc1!pc1.rabbitmq.tealiumiq.com!/pc1_server2server!monitor!ifyouaremonitoringtheworld!us-east!vp_to_qp_partitionedqueryresult!1!99
+    use                 rappid-rabbit,srv-pnp
+}
+
+define service {
+    service_description RabbitMQ vp_to_au_expiredvisitor_queue backup
+    <%= @designation %> <%= @ip %>
+    check_command       check_rabbit_queues!pc1.rabbitmq.tealiumiq.com!/pc1_server2server!vp_to_au_expiredvisitor_queue!monitor!ifyouaremonitoringtheworld!2500,-1,500,-1!3000,-1,600,-1
+    use                 default-service,srv-pnp
+}
+
+define service {
+    service_description RabbitMQ esp_to_au queue availability
+    <%= @designation %> <%= @ip %>
+    check_command       check_rabbitmq_queue_availability_new_pc1!pc1.rabbitmq.tealiumiq.com!/pc1_server2server!monitor!ifyouaremonitoringtheworld!us-east!esp_to_au!<%= @au_pc1_id.count %>
+    use                 rappid-rabbit,srv-pnp
+}
+
+define service {
+    service_description RabbitMQ permission_cache queue backup
+    <%= @designation %> <%= @ip %>
+    check_command       check_rabbit_queues!pc1.rabbitmq.tealiumiq.com!/pc1_permission_cache!permission_cache!monitor!ifyouaremonitoringtheworld!1000,-1,1000,-1!1000,-1,1000,-1
+    use                 default-service,srv-pnp
+}
+
+define service {
+    service_description RabbitMQ vp_to_dd_visitor_action queue backup
+    <%= @designation %> <%= @ip %>
+    check_command       check_rabbit_queues!pc1.rabbitmq.tealiumiq.com!/pc1_server2server!vp_to_dd_visitor_action!monitor!ifyouaremonitoringtheworld!1000,-1,1000,-1!1000,-1,1000,-1
+    use                 default-service,srv-pnp
+}
+
+#define service {
+#    service_description Check Rabbit uconnector_queue
+#    <%= @designation %> <%= @ip %>
+#    check_command       check_rabbit_queues!pc1.rabbitmq.tealiumiq.com!/pc1_server2server!uconnector_queue!monitor!ifyouaremonitoringtheworld!20000,2000,1000,-1!20000,1000,500,-1
+#    use                 rappid-rabbit,srv-pnp
+#}
+
+define service {
+    service_description RabbitMQ mr_to_vp queue availability
+    <%= @designation %> <%= @ip %>
+    check_command       check_rabbitmq_queue_availability_pc1!pc1.rabbitmq.tealiumiq.com!/pc1_server2server!monitor!ifyouaremonitoringtheworld!us-west
+    use                 rappid-rabbit,srv-pnp
+}
+
+define service {
+    service_description RabbitMQ uc_to_esp queue availability
+    <%= @designation %> <%= @ip %>
+    check_command       check_rabbitmq_queue_availability_new_pc1!pc1.rabbitmq.tealiumiq.com!/pc1_server2server!monitor!ifyouaremonitoringtheworld!us-east!uc_to_esp!<%= @esp_pc1_id.count %>
+    use                 rappid-rabbit,srv-pnp
+}
+
+define service {
+    service_description RabbitMQ vp_to_dd_visitoraction consumer count
+    <%= @designation %> <%= @ip %>
+    check_command       check_rabbitmq_queue_consumers_pc1!pc1.rabbitmq.tealiumiq.com!/pc1_server2server!monitor!ifyouaremonitoringtheworld!us-east!vp_to_dd_visitor_action!<%= @dd_pc1_id.count %>
+    use                 rappid-rabbit,srv-pnp
+}
+
+define service {
+    service_description RabbitMQ mr_to_vp queue consumer count
+    <%= @designation %> <%= @ip %>
+    check_command       check_rabbitmq_queue_consumers_multi_pc1!pc1.rabbitmq.tealiumiq.com!/pc1_server2server!monitor!ifyouaremonitoringtheworld!us-east!mr_to_vp_partitionedevent!1!99
+    use                 rappid-rabbit,srv-pnp
+    event_handler       vp_handler!us-east-1
+}
+
+define service {
+    service_description RabbitMQ vp_to_vp_rebalancedvisitor queue consumer count
+    <%= @designation %> <%= @ip %>
+    check_command       check_rabbitmq_queue_consumers_multi_pc1!pc1.rabbitmq.tealiumiq.com!/pc1_server2server!monitor!ifyouaremonitoringtheworld!us-east!vp_to_vp_rebalancedvisitor!1!99
+    use                 rappid-rabbit,srv-pnp
+}
+
+
+#define service {
+#    service_description Check Rabbit record_requests_queue
 #    <%= @designation %> <%= @ip %>
 #    check_command       check_rabbit_queues!pc1.rabbitmq.tealiumiq.com!/server2server!record_requests_queue!monitor!ifyouaremonitoringtheworld!2500,-1,500,-1!3000,-1,600,-1
 #    use                 default-service,srv-pnp
@@ -451,7 +608,7 @@ define service {
 }
 
 define service {
-    service_description Check Rabbit UC_to_ESP queue availability us-east-1
+    service_description Check Rabbit uc_to_esp queue availability us-east-1
     <%= @designation %> <%= @ip %>
     check_command       check_rabbitmq_queue_availability_new!us-east-1.cluster.rabbitmq.tealiumiq.com!/server2server!monitor!ifyouaremonitoringtheworld!us-east!uc_to_esp!<%= @esp_us_east_id.count %>
     use                 rappid-rabbit,srv-pnp
@@ -791,12 +948,12 @@ define service {
 #    event_handler       dc_uconnect_restart
 #}
 
-define service {
-    service_description UTUI HTTP Auth
-    hostgroup_name      utui
-    check_command       check_utui_auth
-    use                 default-service,srv-pnp
-}
+#define service {
+#    service_description UTUI HTTP Auth
+#    hostgroup_name      utui
+#    check_command       check_utui_auth
+#    use                 default-service,srv-pnp
+#}
 
 define service {
     service_description Check Eventstream process
@@ -958,6 +1115,8 @@ define service {
     use                 as-low-urgency-service,srv-pnp
 }
 
+
+<% unless node[:domain] == "qa" -%>
 define service {
     service_description ESP TotalMessageReceived is greater than 1
     hostgroup_name      eventstream_processor
@@ -967,7 +1126,7 @@ define service {
     use                 jmx-service,srv-pnp
     #event_handler       esp-restart
 }
-
+<% end -%>
 #define service {
 #    service_description Check JMX DataCloud Threading
 #    hostgroup_name      dc_visitor_processor
@@ -1322,41 +1481,41 @@ define service {
     use                 default-service,srv-pnp
 }
 
-define service {
-  service_description   Check UTUI Logs CDN Login Error
-  hostgroup_name        utui
-  use                   ftp-error-service
-}
+#define service {
+#  service_description   Check UTUI Logs CDN Login Error
+#  hostgroup_name        utui
+#  use                   ftp-error-service
+#}
 
-define service {
-  service_description   Check UTUI Logs CDN Publish Error
-  hostgroup_name        utui
-  use                   ftp-error-service
-}
+#define service {
+#  service_description   Check UTUI Logs CDN Publish Error
+#  hostgroup_name        utui
+#  use                   ftp-error-service
+#}
 
-define service {
-  service_description   Check UTUI Logs CDN smartFTP Error
-  hostgroup_name        utui
-  use                   ftp-error-service
-}
+#define service {
+#  service_description   Check UTUI Logs CDN smartFTP Error
+#  hostgroup_name        utui
+#  use                   ftp-error-service
+#}
 
-define service {
-  service_description   Check UTUI Logs CDN FTP Upload Error
-  hostgroup_name        utui
-  use                   ftp-error-service
-}
+#define service {
+#  service_description   Check UTUI Logs CDN FTP Upload Error
+#  hostgroup_name        utui
+#  use                   ftp-error-service
+#}
 
-define service {
-  service_description   Check UTUI Logs Publish Insert
-  hostgroup_name        utui
-  use                   passive-service
-}
+#define service {
+#  service_description   Check UTUI Logs Publish Insert
+#  hostgroup_name        utui
+#  use                   passive-service
+#}
 
-define service {
-  service_description   Check Sitemap Logs SitemapURL
-  hostgroup_name        sitescan_sitemap
-  use                   passive-service
-}
+#define service {
+#  service_description   Check Sitemap Logs SitemapURL
+#  hostgroup_name        sitescan_sitemap
+#  use                   passive-service
+#}
 
 #define service {
 #  service_description   Check Sitemap Logs Non_Compiled
@@ -1364,11 +1523,11 @@ define service {
 #  use                   passive-service
 #}
 
-define service {
-  service_description   Check Sitemap Logs SitemapURL
-  hostgroup_name        sitescan_urls
-  use                   passive-service
-}
+#define service {
+#  service_description   Check Sitemap Logs SitemapURL
+#  hostgroup_name        sitescan_urls
+#  use                   passive-service
+#}
 
 #define service {
 #  service_description   Check Sitemap Logs Non_Compiled
@@ -1423,9 +1582,16 @@ define service {
 }
 
 define service {
-  service_description   Check mongodb_cluster 27017
+  service_description   Check MongoDB cluster port 27017
   hostgroup_name        mongodb_cluster
   check_command         check_tcp!27017
+  use                   default-service,srv-pnp
+}
+
+define service {
+  service_description   Check MongoDB cluster port 27017
+  hostgroup_name        mongodb_config
+  check_command         check_tcp_mongo!27017!900!900
   use                   default-service,srv-pnp
 }
 
