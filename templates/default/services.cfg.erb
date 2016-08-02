@@ -1053,6 +1053,13 @@ define service {
 }
 
 define service {
+    service_description Check Amazon Uploader process
+    hostgroup_name      dc_amazon_uploader
+    check_command       check_nrpe!check_dc_amazon_uploader
+    use                 default-service,srv-pnp
+}
+
+define service {
     service_description Check Eventstream Processor process
     hostgroup_name      eventstream_processor
     check_command       check_nrpe!check_eventstream_processor
