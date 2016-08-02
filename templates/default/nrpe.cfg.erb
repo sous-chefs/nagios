@@ -166,8 +166,8 @@ command[check_splunk_forwarder]=<%= node['nagios']['plugin_dir'] %>/check_procs 
 <% end %>
 
 <% if node.roles.include?("dc_amazon_uploader") %>
-#check DC Amazon Uploader process
-command[check_bulk_downloader]=<%= node['nagios']['plugin_dir'] %>/check_procs -a "visitor_profile_processor.one-jar.jar amazon_uploader" -c 2:2
+#check Amazon Uploader process
+command[check_dc_amazon_uploader]=<%= node['nagios']['plugin_dir'] %>/check_procs -a "amazon_uploader.jar amazon_uploader" -c 2:2
 
 #check_splunk_forwarder
 command[check_splunk_forwarder]=<%= node['nagios']['plugin_dir'] %>/check_procs -c 5:6 --argument-array=splunk
