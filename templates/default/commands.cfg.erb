@@ -37,8 +37,18 @@ define command{
 }
 
 define command{
+  command_name    check_rabbitmq_queue_availability_pc1
+  command_line    $USER1$/check_rabbitmq_queue_count_pc1.sh $ARG1$ $ARG2$ $ARG3$ $ARG4$ $ARG5$
+}
+
+define command{
   command_name    check_rabbitmq_queue_availability_new
   command_line    $USER1$/check_rabbitmq_queue_count_new.sh $ARG1$ $ARG2$ $ARG3$ $ARG4$ $ARG5$ $ARG6$ $ARG7$
+}
+
+define command{
+  command_name    check_rabbitmq_queue_availability_new_pc1
+  command_line    $USER1$/check_rabbitmq_queue_count_new_pc1.sh $ARG1$ $ARG2$ $ARG3$ $ARG4$ $ARG5$ $ARG6$ $ARG7$
 }
 
 define command{
@@ -52,8 +62,18 @@ define command{
 }
 
 define command{
+  command_name    check_rabbitmq_queue_consumers_pc1
+  command_line    $USER1$/check_rabbitmq_queue_consumers_pc1.sh $ARG1$ $ARG2$ $ARG3$ $ARG4$ $ARG5$ $ARG6$ $ARG7$
+}
+
+define command{
   command_name    check_rabbitmq_queue_consumers_multi
   command_line    $USER1$/check_rabbitmq_queue_consumers_multi.sh $ARG1$ $ARG2$ $ARG3$ $ARG4$ $ARG5$ $ARG6$ $ARG7$ $ARG8$
+}
+
+define command{
+  command_name    check_rabbitmq_queue_consumers_multi_pc1
+  command_line    $USER1$/check_rabbitmq_queue_consumers_multi_pc1.sh $ARG1$ $ARG2$ $ARG3$ $ARG4$ $ARG5$ $ARG6$ $ARG7$ $ARG8$
 }
 
 define command{
@@ -287,6 +307,11 @@ define command {
   command_name    check_jmx_dc_vs_total_visitors_request_received_count
   command_line    $USER1$/check_jmx -U service:jmx:rmi:///jndi/rmi://$HOSTADDRESS$:9005/jmxrmi -O "DataCloud:type=VisitorService" -A TotalVisitorsRequestReceivedCount
 }
+
+define command {
+  command_name    check_jmx_message_received
+  command_line    $USER1$/check_jmx -U service:jmx:rmi:///jndi/rmi://$HOSTADDRESS$:9001/jmxrmi -O "DataCloud-Metrics:name=MessageRouter-TotalMessageReceived" -A OneMinuteRate -c $ARG1$\:
+}
 <% else -%>
 
 define command {
@@ -300,10 +325,12 @@ define command {
   #command_line    $USER1$/check_jmx -U service:jmx:rmi:///jndi/rmi://$HOSTADDRESS$:9001/jmxrmi -O java.lang:type=Memory -A HeapMemoryUsage -K used -I HeapMemoryUsage -J used -vvvv
 }
 
+<% if @app_environment ==  -%>
 define command {
   command_name    check_jmx_message_received
   command_line    $USER1$/check_jmx -U service:jmx:rmi:///jndi/rmi://$HOSTADDRESS$:9001/jmxrmi -O "DataCloud-Metrics:name=MessageRouter-TotalMessageReceived" -A OneMinuteRate -c $ARG1$\:
 }
+<% end -%>
 
 define command {
   command_name    check_jmx_threads
@@ -685,6 +712,11 @@ define command {
 define command {
   command_name	  check_tcp
   command_line	  $USER1$/check_tcp -H $HOSTADDRESS$ -p $ARG1$
+}
+
+define command {
+  command_name    check_tcp_mongo
+  command_line    $USER1$/check_tcp -H $HOSTADDRESS$ -p $ARG1$ -w $ARG2$ -c $ARG3$
 }
 
 define command {
