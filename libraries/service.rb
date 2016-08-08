@@ -447,7 +447,11 @@ class Nagios
       obj.contacts.each { |m| push(m) }
       obj.host_name.each { |m| push(m) }
       obj.servicegroups.each { |m| push(m) }
-      obj.hostgroup_name.each { |m| push(m) }
+      obj.hostgroup_name.each { |m|
+        if not m.name.start_with?('!')
+          push(m)
+        end
+      }
       obj.contact_groups.each { |m| push(m) }
       obj.custom_options.each { |_, m| push(m) }
     end
