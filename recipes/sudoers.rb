@@ -17,32 +17,35 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-if node.roles.include?("hostname_eventstream")
+#if node.roles.include?("hostname_eventstream")
   sudo "nagios" do
     user "nagios"
     runas "ALL"
     commands ["/usr/lib/nagios/plugins/check_log3_passive.pl"]
     host "ALL"
     nopasswd true
+    only_if { node.roles.include?("hostname_eventstream") }
   end
-end
+#end
 
-if node.roles.include?("rabbitmq_server")
+#if node.roles.include?("rabbitmq_server")
   sudo "nagios" do
     user "nagios"
     runas "ALL"
     commands ["/usr/lib/nagios/plugins/check_rabbitmq_unackd.py"]
     host "ALL"
     nopasswd true
+    only_if { node.roles.include?("rabbitmq_server") }
   end
-end
+#end
 
-if node.roles.include?("utui")
+#if node.roles.include?("utui")
   sudo "nagios" do
     user "nagios"
     runas "ALL"
     commands ["/usr/lib/nagios/plugins/check_log3_passive.pl"]
     host "ALL"
     nopasswd true
+    only_if { node.roles.include?("utui") }
   end
-end
+#end

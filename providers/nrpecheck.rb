@@ -29,7 +29,7 @@ action :add do
     group "root"
     mode 00644
     content file_contents
-    notifies :restart, resources(:service => "nagios-nrpe-server")
+    notifies :restart, 'service[nagios-nrpe-server]'
   end
   new_resource.updated_by_last_action(true)
 end
@@ -39,7 +39,7 @@ action :remove do
     Chef::Log.info "Removing #{new_resource.command_name} from #{node['nagios']['nrpe']['conf_dir']}/nrpe.d/"
     file "#{node['nagios']['nrpe']['conf_dir']}/nrpe.d/#{new_resource.command_name}.cfg" do
       action :delete
-      notifies :restart, resources(:service => "nagios-nrpe-server")
+      notifies :restart, 'service[nagios-nrpe-server]'
     end
     new_resource.updated_by_last_action(true)
   end

@@ -92,6 +92,11 @@ define command{
 #}
 
 define command {
+  command_name    check_jmx_uconnect_messages_queued
+  command_line    $USER1$/check_jmx -U service:jmx:rmi:///jndi/rmi://$HOSTADDRESS$:9001/jmxrmi -O "DataCloud:type=EventQueue" -A MessagesQueued -c $ARG1$
+}
+
+define command {
   command_name    check_jmx_VP_node_status
   command_line    $USER1$/check_jmx -U service:jmx:rmi:///jndi/rmi://$HOSTADDRESS$:9001/jmxrmi -O "DataCloud:type=VisitorProcessorCluster" -A NodeStatus -w ^$ARG1$
 	}

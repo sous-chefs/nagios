@@ -46,7 +46,7 @@ directory "#{node['nagios']['nrpe']['conf_dir']}/nrpe.d" do
   mode 00755
 end
 
-region = node[:ec2][:placement_availability_zone].match(/^(\w{2}).+$/)[1]
+region = node['ec2']['placement_availability_zone'].match(/^(\w{2}).+$/)[1]
 
 case region
   when "us"
@@ -79,14 +79,14 @@ service "nagios-nrpe-server" do
 end
 
 # Use NRPE LWRP to define a few checks
-if node.roles.include?("mongodb_config")
+if node.roles.include?('mongodb_config')
   nagios_nrpecheck "check_load" do
     command "#{node['nagios']['plugin_dir']}/check_load"
     warning_condition "20,15,8"
     critical_condition node['nagios']['checks']['load']['critical']
     action :add
   end
-elsif node.recipes.include?("mongodb::mongos")
+elsif node.recipes.include?('mongodb::mongos')
   nagios_nrpecheck "check_load" do
     command "#{node['nagios']['plugin_dir']}/check_load"
     warning_condition "20,15,10"
@@ -102,7 +102,7 @@ else
   end
 end
 
-if node.roles.include?("server2server")
+if node.roles.include?('server2server')
   nagios_nrpecheck "check_all_disks" do
      command "#{node['nagios']['plugin_dir']}/check_disk"
      warning_condition "8%"
@@ -110,7 +110,7 @@ if node.roles.include?("server2server")
      parameters "-W 15 -K 8 -A -x /dev/shm -X nfs -i /boot"
      action :add
   end
-elsif node.roles.include?("mongodb_cluster")
+elsif node.roles.include?('mongodb_cluster')
   nagios_nrpecheck "check_all_disks" do
     command "#{node['nagios']['plugin_dir']}/check_disk"
     warning_condition "4%"
@@ -118,7 +118,7 @@ elsif node.roles.include?("mongodb_cluster")
     parameters "-W 15 -K 8 -A -x /dev/shm -X nfs -i /boot"
     action :add
   end
-elsif node.roles.include?("rabbitmq_server") || node.roles.include?("rabbitmq_server_cluster_disc") || node.roles.include?("rabbitmq_server_cluster_ram")
+elsif node.roles.include?('rabbitmq_server') || node.roles.include?('rabbitmq_server_cluster_disc') || node.roles.include?('rabbitmq_server_cluster_ram')
   nagios_nrpecheck "check_all_disks" do
     command "#{node['nagios']['plugin_dir']}/check_disk"
     warning_condition "15%"
@@ -145,6 +145,9 @@ end
 
 #get and set stunnel version
 version = `dpkg -s stunnel4 | grep Version | cut -d ' ' -f2 | cut -d : -f2 | cut -d - -f1`
+#version = Mixlib::ShellOut.new('dpkg -s stunnel4 | grep Version | cut -d ' ' -f2 | cut -d : -f2 | cut -d - -f1')
+#version.run_command
+#version.error!
 node.set['stunnel']['version'] = version.to_f
 
 include_recipe "nagios::passive_crons"
