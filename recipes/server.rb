@@ -563,7 +563,7 @@ Chef::Log.warn("**************************** EU Central AU Instance ID array is:
 if node[:ec2][:local_ipv4] == "10.1.2.7" or node[:app_environment].match(/^privatecloud\d/)
 ip = "#{node['hostname']} - #{node[:ipaddress]}"
 environment = "#{node[:app_environment]}"
-chef_env = "#{node[:chef_environment]}"
+chef_env = node.chef_environment
 Chef::Log.warn("Chef Env is: #{chef_env}")
 Chef::Log.warn("Nagios IP is: #{ip}")
 Chef::Log.warn("Second App_Environment is: #{environment}")

@@ -749,6 +749,7 @@ define service {
 #    use                 rappid-rabbit,srv-pnp
 #}
 
+##8-10 Temp off Next 2
 define service {
     service_description RabbitMQ mr_to_vp queue consumer count eu-central-1
     <%= @designation %> <%= @ip %>
@@ -773,6 +774,7 @@ define service {
     event_handler       vp_handler!us-west-1
 }
 
+#8-10 Temp off Next 1
 define service {
     service_description RabbitMQ mr_to_vp queue consumer count us-east-1
     <%= @designation %> <%= @ip %>
@@ -781,6 +783,7 @@ define service {
     event_handler       vp_handler!us-east-1
 }
 
+#8-10 Temp Off Next 1
 define service {
     service_description RabbitMQ vp_to_vp_rebalancedvisitor queue consumer count us-east-1
     <%= @designation %> <%= @ip %>
@@ -795,6 +798,7 @@ define service {
     use                 rappid-rabbit,srv-pnp
 }
 
+#8-10 Temp Off Next 2
 define service {
     service_description RabbitMQ vp_to_vp_rebalancedvisitor queue consumer count eu-west-1
     <%= @designation %> <%= @ip %>    
@@ -809,6 +813,7 @@ define service {
     use                 rappid-rabbit,srv-pnp
 }
 
+#8-10 Temp Off Next 3
 define service {
     service_description RabbitMQ vp_to_qp_partitionedqueryresult queue consumer count eu-central-1
     <%= @designation %> <%= @ip %>    
@@ -1161,6 +1166,13 @@ define service {
 #    check_command       check_jmx_threads!60!70
 #    use                 jmx-service,srv-pnp
 #}
+
+define service {
+    service_description Check JMX DataCloud Uconnect Messages Queued
+    hostgroup_name      dc_uconnect
+    check_command       check_jmx_uconnect_messages_queued!10000
+    use                 jmx-service,srv-pnp
+}
 
 define service {
     service_description Check JMX DataCloud VP Status
