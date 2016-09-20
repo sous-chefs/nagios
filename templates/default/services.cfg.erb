@@ -842,21 +842,21 @@ define service {
 #    use                 rappid-rabbit,srv-pnp
 #}
 
-#define service {
-#    service_description Check MongoDB Backup - Cluster 1
-#    <%= @designation %>	<%= @ip %>
-#    check_command       check_mongodb_backup!production_cluster_1
-#    use                 mongo-service,srv-pnp
-#    contact_groups      dbadmins
-#}
+define service {
+    service_description Check MongoDB Backup - Cluster 1
+    <%= @designation %>	<%= @ip %>
+    check_command       check_mongodb_backup!production_cluster_1
+    use                 mongo-service,srv-pnp
+    contact_groups      dbadmins
+}
 
-#define service {
-#    service_description Check MongoDB Backup - Cluster 2
-#    <%= @designation %>	<%= @ip %>
-#    check_command       check_mongodb_backup!production_cluster_2
-#    use                 mongo-service,srv-pnp
-#    contact_groups      dbadmins
-#}
+define service {
+    service_description Check MongoDB Backup - Cluster 2
+    <%= @designation %>	<%= @ip %>
+    check_command       check_mongodb_backup!production_cluster_2
+    use                 mongo-service,srv-pnp
+    contact_groups      dbadmins
+}
 
 #define service {
 #    service_description Check MongoDB Snapshots - Cluster 1
