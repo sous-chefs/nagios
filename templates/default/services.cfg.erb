@@ -1216,6 +1216,33 @@ define service {
     use                 default-service,srv-pnp
 }
 
+    service_description Check Publish Engine process
+    hostgroup_name      publish_engine
+    check_command       check_nrpe!check_publish_engine
+    use                 default-service,srv-pnp
+}
+
+define service {
+    service_description Check Publish Engine Port 8089
+    hostgroup_name      publish_engine
+    check_command       check_tcp!8089
+    use                 default-service,srv-pnp
+}
+
+define service {
+    service_description Check Resource Uploader process
+    hostgroup_name      resource_uploader
+    check_command       check_nrpe!check_resource_uploader
+    use                 default-service,srv-pnp
+}
+
+define service {
+    service_description Check Resource Uploader Port 8089
+    hostgroup_name      resource_uploader
+    check_command       check_tcp!8089
+    use                 default-service,srv-pnp
+}
+
 define service {
     service_description Check DC Visitor Processor process
     hostgroup_name      dc_visitor_processor
