@@ -40,6 +40,20 @@ define service {
     use                 default-service,srv-pnp
 }
 
+define service {
+    service_description Check RabbitMQ 5672
+    hostgroup_name      rabbitmq_server_cluster_disc
+    check_command       check_tcp!5672
+    use                 default-service,srv-pnp
+}
+
+
+define service {
+    service_description Check uRest 8085
+    hostgroup_name      urest
+    check_command       check_tcp!8085
+    use                 default-service,srv-pnp
+}
 #define service {
 #    service_description Check Rabbit VP Queue Availability  <%= @region %> CLUSTER
 #    hostgroup_name nagios
@@ -1216,6 +1230,7 @@ define service {
     use                 default-service,srv-pnp
 }
 
+define service {
     service_description Check Publish Engine process
     hostgroup_name      publish_engine
     check_command       check_nrpe!check_publish_engine

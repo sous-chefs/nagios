@@ -987,12 +987,12 @@ define command{
         #command_line    /usr/lib/nagios/plugins/event-handler.sh $SERVICESTATE$ $SERVICESTATETYPE$ $SERVICEATTEMPT$ $ARG1$ $ARG2$ $ARG3$ $ARG4$ $ARG5$ $ARG6$ $ARG7$ $ARG8$ $ARG9$
 }
 
-define command{
-        command_name    vp_restart
+#define command{
+#        command_name    vp_restart
         #command_line    /usr/lib/nagios/plugins/event-handler.sh $SERVICESTATE$ $SERVICESTATETYPE$ $SERVICEATTEMPT$
         #command_line    /usr/lib/nagios/plugins/event-handler_vp.sh $SERVICESTATE$ $SERVICESTATETYPE$ $SERVICEATTEMPT$ $ARG1$ $ARG2$ $ARG3$ $ARG4$ $ARG5$ $ARG6$ $ARG7$ $ARG8$ $ARG9$
-        $USER1$/check_nrpe -H $HOSTADDRESS$ -c vp_restart
-}
+        #$USER1$/check_nrpe -H $HOSTADDRESS$ -c vp_restart
+#}
 
 define command{
         command_name    do_something
