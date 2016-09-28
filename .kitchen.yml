@@ -102,5 +102,14 @@ suites:
          install_method: 'source'
        pagerduty:
          key: 'your_key_here_3eC2'
+ - name: allowed_ips
+   run_list:
+   - recipe[nagios::default]
+   - recipe[nrpe::default]
+   - recipe[nagios_test::default]
+   - role[monitoring]
+   attributes:
+     nagios:
+       allowed_ips: ['127.0.0.1', '::1']
 data_bags_path: test/data_bags
 roles_path: test/roles
