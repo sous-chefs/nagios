@@ -239,6 +239,34 @@ define service {
 #}
 
 define service {
+    service_description Check Rabbit Message Count US WEST CLUSTER
+    <%= @designation %> <%= @ip %>
+    check_command       check_rabbit_queue!us-west-1.cluster.rabbitmq.tealiumiq.com!monitor!ifyouaremonitoringtheworld!3000000!us-west-1
+    use                 default-service,srv-pnp
+}
+
+define service {
+    service_description Check Rabbit Message Count US EAST CLUSTER
+    <%= @designation %> <%= @ip %>
+    check_command       check_rabbit_queue!us-east-1.cluster.rabbitmq.tealiumiq.com!monitor!ifyouaremonitoringtheworld!300000!us-east-1
+    use                 default-service,srv-pnp
+}
+
+define service {
+    service_description Check Rabbit Message Count EU WEST CLUSTER
+    <%= @designation %> <%= @ip %>
+    check_command       check_rabbit_queue!eu-west-1.cluster.rabbitmq.tealiumiq.com!monitor!ifyouaremonitoringtheworld!300000!eu-west-1
+    use                 default-service,srv-pnp
+}
+
+define service {
+    service_description Check Rabbit Message Count EU CENTRAL CLUSTER
+    <%= @designation %> <%= @ip %>
+    check_command       check_rabbit_queue!eu-central-1.cluster.rabbitmq.tealiumiq.com!monitor!ifyouaremonitoringtheworld!300000!eu-central-1
+    use                 default-service,srv-pnp
+}
+
+define service {
     service_description Check Rabbit record_requests_queue US WEST CLUSTER
     <%= @designation %> <%= @ip %>
     check_command       check_rabbit_queues!us-west-1.cluster.rabbitmq.tealiumiq.com!/server2server!record_requests_queue!monitor!ifyouaremonitoringtheworld!2500,-1,500,-1!3000,-1,600,-1
