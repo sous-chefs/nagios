@@ -31,6 +31,11 @@ define command {
   command_line    $USER1$/check_rabbitmq_queue -H $ARG1$ --port 15672 --vhost $ARG2$ --queue $ARG3$ -u $ARG4$ -p $ARG5$ -w $ARG6$ -c $ARG7$
 }
 
+define command {
+  command_name    check_rabbit_queue
+  command_line    $USER1$/check_rabbitmq_queue_totals.sh $ARG1$ $ARG2$ $ARG3$ $ARG4$ $ARG5$
+}
+
 define command{
   command_name    check_rabbitmq_queue_availability
   command_line    $USER1$/check_rabbitmq_queue_count.sh $ARG1$ $ARG2$ $ARG3$ $ARG4$ $ARG5$

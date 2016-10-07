@@ -152,13 +152,13 @@ command[check_splunk_forwarder]=<%= node['nagios']['plugin_dir'] %>/check_procs 
 <% if node.roles.include?("publish_engine") %>
 #check publish engine
 #NOTE: The paramaters set below <2:10> is set that way because of a bug in this version of check_procs that sees itself when checking processes, thus we need to find at least 2
-command[check_publish_engine]=<%= node['nagios']['plugin_dir'] %>/check_procs -a "/var/lib/sources/publish_engine/publish_engine-jar-with-dependencies.jar" -c 1:1
+command[check_publish_engine]=<%= node['nagios']['plugin_dir'] %>/check_procs -a "/var/lib/sources/publish_engine/publish_engine-jar-with-dependencies.jar" -c 1:2
 <% end %>
 
 <% if node.roles.include?("resource_uploader") %>
 #check resource_uploader
 #NOTE: The paramaters set below <2:10> is set that way because of a bug in this version of check_procs that sees itself when checking processes, thus we need to find at least 2
-command[check_resource_uploader]=<%= node['nagios']['plugin_dir'] %>/check_procs -a "/var/lib/sources/resource_uploader/resource_uploader-jar-with-dependencies.jar" -c 1:1
+command[check_resource_uploader]=<%= node['nagios']['plugin_dir'] %>/check_procs -a "/var/lib/sources/resource_uploader/resource_uploader-jar-with-dependencies.jar" -c 1:2
 <% end %>
 
 <% if node.roles.include?("dc_uconnect") %>
