@@ -24,18 +24,16 @@ Chef::Log.info('Beginning search for nodes.  This may take some time depending o
 multi_env = node['nagios']['monitored_environments']
 multi_env_search = multi_env.empty? ? '' : ' AND (chef_environment:' + multi_env.join(' OR chef_environment:') + ')'
 
-if node['nagios']['multi_environment_monitoring']
-  search = "name:*#{multi_env_search}"
-else
-  search = "name:* AND chef_environment:#{node.chef_environment}"
-end
+search = if node['nagios']['multi_environment_monitoring']
+           "name:*#{multi_env_search}"
+         else
+           "name:* AND chef_environment:#{node.chef_environment}"
+         end
 
 aws_regions = node['nagios']['aws_regions']
 aws_region_search = aws_regions.empty? ? '' : ' AND (placement_availability_zone:' + aws_regions.join('* OR placement_availability_zone:') + '*)'
 
-if node['nagios']['aws_region_restrict']
-  search = search + aws_region_search
-end
+search += aws_region_search if node['nagios']['aws_region_restrict']
 
 nodes = search(:node, search)
 

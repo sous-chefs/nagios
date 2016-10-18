@@ -229,4 +229,4 @@ default['nagios']['allowed_ips'] = []
 
 # restrict to AWS region(s) ie 'us-west-2'
 default['nagios']['aws_region_restrict'] = false
-default['nagios']['aws_regions']         = [ ]
+default['nagios']['aws_regions']         = []
