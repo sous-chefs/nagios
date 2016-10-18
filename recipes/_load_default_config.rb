@@ -30,11 +30,11 @@ else
   search = "name:* AND chef_environment:#{node.chef_environment}"
 end
 
-aws_zones = node['nagios']['aws_zones']
-aws_zone_search = aws_zones.empty? ? '' : ' AND (placement_availability_zone:' + aws_zones.join('* OR placement_availability_zone:') + '*)'
+aws_regions = node['nagios']['aws_regions']
+aws_region_search = aws_regions.empty? ? '' : ' AND (placement_availability_zone:' + aws_regions.join('* OR placement_availability_zone:') + '*)'
 
-if node['nagios']['aws_zone_restrict']
-  search = search + aws_zone_search
+if node['nagios']['aws_region_restrict']
+  search = search + aws_region_search
 end
 
 nodes = search(:node, search)

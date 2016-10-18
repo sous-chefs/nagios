@@ -227,6 +227,6 @@ default['apache']['mpm'] = 'prefork'
 default['nagios']['source']['add_build_commands'] = ['make install-exfoliation']
 default['nagios']['allowed_ips'] = []
 
-# restrict to AWS AZ
-default['nagios']['aws_zone_restrict'] = false
-default['nagios']['aws_zones']         = [ ]
+# restrict to AWS region(s) ie 'us-west-2'
+default['nagios']['aws_region_restrict'] = false
+default['nagios']['aws_regions']         = [ ]
