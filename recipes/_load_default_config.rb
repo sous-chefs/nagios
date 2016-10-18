@@ -37,8 +37,6 @@ if node['nagios']['aws_zone_restrict']
   search = search + aws_zone_search
 end
 
-log("THIS IS THE SEARCH:\n"+search)
-
 nodes = search(:node, search)
 
 if nodes.empty?
