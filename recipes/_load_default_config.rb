@@ -24,11 +24,22 @@ Chef::Log.info('Beginning search for nodes.  This may take some time depending o
 multi_env = node['nagios']['monitored_environments']
 multi_env_search = multi_env.empty? ? '' : ' AND (chef_environment:' + multi_env.join(' OR chef_environment:') + ')'
 
-nodes = if node['nagios']['multi_environment_monitoring']
-          search(:node, "name:*#{multi_env_search}")
-        else
-          search(:node, "name:* AND chef_environment:#{node.chef_environment}")
-        end
+if node['nagios']['multi_environment_monitoring']
+  search = "name:*#{multi_env_search}"
+else
+  search = "name:* AND chef_environment:#{node.chef_environment}"
+end
+
+aws_zones = node['nagios']['aws_zones']
+aws_zone_search = aws_zones.empty? ? '' : ' AND (placement_availability_zone:' + aws_zones.join('* OR placement_availability_zone:') + '*)'
+
+if node['nagios']['aws_zone_restrict']
+  search = search + aws_zone_search
+end
+
+log("THIS IS THE SEARCH:\n"+search)
+
+nodes = search(:node, search)
 
 if nodes.empty?
   Chef::Log.info('No nodes returned from search, using this node so hosts.cfg has data')

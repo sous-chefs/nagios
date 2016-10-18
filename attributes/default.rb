@@ -226,3 +226,7 @@ default['apache']['mpm'] = 'prefork'
 # attribute to add commands to source build
 default['nagios']['source']['add_build_commands'] = ['make install-exfoliation']
 default['nagios']['allowed_ips'] = []
+
+# restrict to AWS AZ
+default['nagios']['aws_zone_restrict'] = false
+default['nagios']['aws_zones']         = [ ]
