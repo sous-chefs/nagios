@@ -109,9 +109,10 @@ Example: `default['nagios']['conf']['cfg_dir'] = [ '/etc/nagios/conf.d' , '/usr/
 * `node['nagios']['services_databag']` - the databag containing services to search for. defaults to nagios_services
 * `node['nagios']['servicegroups_databag']` - the databag containing servicegroups to search for. defaults to nagios_servicegroups
 * `node['nagios']['templates_databag']` - the databag containing templates to search for. defaults to nagios_templates
+* `node['nagios']['hostgroups_databag']` - the databag containing hostgroups to search for. defaults to nagios_hostgroups
 * `node['nagios']['hosttemplates_databag']` - the databag containing host templates to search for. defaults to nagios_hosttemplates
 * `node['nagios']['eventhandlers_databag']` - the databag containing eventhandlers to search for. defaults to nagios_eventhandlers
-* `node['nagios']['unmanaged_hosts_databag']` - the databag containing unmanagedhosts to search for. defaults to nagios_unmanagedhosts
+* `node['nagios']['unmanagedhosts_databag']` - the databag containing unmanagedhosts to search for. defaults to nagios_unmanagedhosts
 * `node['nagios']['serviceescalations_databag']` - the databag containing serviceescalations to search for. defaults to nagios_serviceescalations
 * `node['nagios']['hostescalations_databag']` - the databag containing hostescalations to search for. defaults to nagios_hostescalations
 * `node['nagios']['contacts_databag']` - the databag containing contacts to search for. defaults to nagios_contacts
