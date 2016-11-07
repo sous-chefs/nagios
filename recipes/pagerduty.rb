@@ -100,11 +100,11 @@ nagios_bags = NagiosDataBags.new
 pagerduty_contacts = nagios_bags.get('nagios_pagerduty')
 
 nagios_command 'notify-service-by-pagerduty' do
-  options 'command_line' => ::File.join(node['nagios']['plugin_dir'], 'notify_pagerduty.pl') + ' enqueue -f pd_nagios_object=service'
+  options 'command_line' => ::File.join(node['nagios']['plugin_dir'], 'notify_pagerduty.pl') + ' enqueue -f pd_nagios_object=service -f pd_description="$HOSTNAME$ : $SERVICEDESC$"'
 end
 
 nagios_command 'notify-host-by-pagerduty' do
-  options 'command_line' => ::File.join(node['nagios']['plugin_dir'], 'notify_pagerduty.pl') + ' enqueue -f pd_nagios_object=host'
+  options 'command_line' => ::File.join(node['nagios']['plugin_dir'], 'notify_pagerduty.pl') + ' enqueue -f pd_nagios_object=host -f pd_description="$HOSTNAME$ : $SERVICEDESC$"' 
 end
 
 unless node['nagios']['pagerduty']['key'].nil? || node['nagios']['pagerduty']['key'].empty?
