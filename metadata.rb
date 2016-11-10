@@ -14,8 +14,9 @@ recipe 'nagios::pagerduty', 'Integrates contacts w/ PagerDuty API'
 
 depends 'apache2', '>= 2.0'
 depends 'zap', '>= 0.6.0'
+depends 'chef-nginx'
 
-%w( build-essential php nginx nginx_simplecgi yum-epel nrpe ).each do |cb|
+%w( build-essential php nginx_simplecgi yum-epel nrpe ).each do |cb|
   depends cb
 end
 
