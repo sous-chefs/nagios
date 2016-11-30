@@ -32,7 +32,11 @@ define :nagios_conf, variables: {}, config_subdir: true, source: nil do
     source params[:source]
     mode '0644'
     variables params[:variables]
-    notifies :reload, 'service[nagios]'
+    if ::File.open('/proc/1/comm').gets.chomp == 'systemd'
+      notifies :restart, 'service[nagios]'
+    else
+      notifies :reload, 'service[nagios]'
+    end
     backup 0
   end
 end
