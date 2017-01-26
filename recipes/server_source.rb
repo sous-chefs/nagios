@@ -50,7 +50,7 @@ web_srv = node['nagios']['server']['web_server']
 group node['nagios']['group'] do
   members [
     node['nagios']['user'],
-    web_srv == 'nginx' ? node['nginx']['user'] : node['apache']['user']
+    web_srv == 'nginx' ? node['nginx']['user'] : node['apache']['user'],
   ]
   action :create
 end
@@ -132,8 +132,8 @@ directory node['nagios']['config_dir'] do
 end
 
 directory node['nagios']['conf']['check_result_path'] do
-  owner 'root'
-  group 'root'
+  owner node['nagios']['user']
+  group node['nagios']['group']
   mode '0755'
   recursive true
 end
