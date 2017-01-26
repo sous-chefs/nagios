@@ -128,10 +128,19 @@ directory node['nagios']['config_dir'] do
   owner 'root'
   group 'root'
   mode '0755'
+  recursive true
+end
+
+directory node['nagios']['conf']['check_result_path'] do
+  owner 'root'
+  group 'root'
+  mode '0755'
+  recursive true
 end
 
 %w( cache_dir log_dir run_dir ).each do |dir|
   directory node['nagios'][dir] do
+    recursive true
     owner node['nagios']['user']
     group node['nagios']['group']
     mode '0755'
