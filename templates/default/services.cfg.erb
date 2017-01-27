@@ -434,12 +434,12 @@ define service {
     use                 default-service,srv-pnp
 }
 
-define service {
-    service_description Check Rabbit vp_to_dd_visitor_action queue US WEST CLUSTER
-    <%= @designation %> <%= @ip %>
-    check_command       check_rabbit_queues!us-west-1.cluster.rabbitmq.tealiumiq.com!/server2server!vp_to_dd_visitor_action!monitor!ifyouaremonitoringtheworld!1000,-1,1000,-1!1000,-1,1000,-1
-    use                 default-service,srv-pnp
-}
+#define service {
+#    service_description Check Rabbit vp_to_dd_visitor_action queue US WEST CLUSTER
+#    <%= @designation %> <%= @ip %>
+#    check_command       check_rabbit_queues!us-west-1.cluster.rabbitmq.tealiumiq.com!/server2server!vp_to_dd_visitor_action!monitor!ifyouaremonitoringtheworld!1000,-1,1000,-1!1000,-1,1000,-1
+#    use                 default-service,srv-pnp
+#}
 
 define service {
     service_description Check Rabbit vp_to_dd_visitor_action queue US EAST CLUSTER
@@ -520,12 +520,12 @@ define service {
 
 
 #OLD WAY
-define service {
-    service_description Check Rabbit VP Queue Availability US WEST CLUSTER
-    <%= @designation %> <%= @ip %>
-    check_command       check_rabbitmq_queue_availability_west!us-west-1.cluster.rabbitmq.tealiumiq.com!/server2server!monitor!ifyouaremonitoringtheworld!us-west
-    use                 rappid-rabbit,srv-pnp
-}
+#define service {
+#    service_description Check Rabbit VP Queue Availability US WEST CLUSTER
+#    <%= @designation %> <%= @ip %>
+ #   check_command       check_rabbitmq_queue_availability_west!us-west-1.cluster.rabbitmq.tealiumiq.com!/server2server!monitor!ifyouaremonitoringtheworld!us-west
+#    use                 rappid-rabbit,srv-pnp
+#}
 
 #NEW WAY
 #define service {
@@ -628,6 +628,112 @@ define service {
 #}
 
 #NEW WAY
+
+define service {
+    service_description Check Rabbit mr_to_vp_partitionedevent exchange channel count eu-west-1
+    <%= @designation %> <%= @ip %>
+    check_command       check_rabbitmq_exchange_channel_count!eu-west-1.cluster.rabbitmq.tealiumiq.com!/server2server!monitor!ifyouaremonitoringtheworld!eu-west!mr_to_vp_partitionedevent!<%= @vp_and_esp_eu_west_count %>
+    use                 rappid-rabbit,srv-pnp
+}
+
+define service {
+    service_description Check Rabbit mr_to_vp_partitionedevent exchange channel count eu-central-1
+    <%= @designation %> <%= @ip %>
+    check_command       check_rabbitmq_exchange_channel_count!eu-central-1.cluster.rabbitmq.tealiumiq.com!/server2server!monitor!ifyouaremonitoringtheworld!eu-central!mr_to_vp_partitionedevent!<%= @vp_and_esp_eu_central_count %>
+    use                 rappid-rabbit,srv-pnp
+}
+
+define service {
+    service_description Check Rabbit mr_to_vp_partitionedevent exchange channel count us-east-1
+    <%= @designation %> <%= @ip %>
+    check_command       check_rabbitmq_exchange_channel_count!us-east-1.cluster.rabbitmq.tealiumiq.com!/server2server!monitor!ifyouaremonitoringtheworld!us-east!mr_to_vp_partitionedevent!<%= @vp_and_esp_us_east_count %>
+    use                 rappid-rabbit,srv-pnp
+}
+
+define service {
+    service_description Check Rabbit vp_to_dd_visitor_action exchange channel count eu-west-1
+    <%= @designation %> <%= @ip %>
+    check_command       check_rabbitmq_exchange_channel_count!eu-west-1.cluster.rabbitmq.tealiumiq.com!/server2server!monitor!ifyouaremonitoringtheworld!eu-west!vp_to_dd_visitor_action!<%= @vp_and_esp_eu_west_count %>
+    use                 rappid-rabbit,srv-pnp
+}
+
+define service {
+    service_description Check Rabbit vp_to_dd_visitor_action exchange channel count eu-central-1
+    <%= @designation %> <%= @ip %>
+    check_command       check_rabbitmq_exchange_channel_count!eu-central-1.cluster.rabbitmq.tealiumiq.com!/server2server!monitor!ifyouaremonitoringtheworld!eu-central!vp_to_dd_visitor_action!<%= @vp_and_esp_eu_central_count %>
+    use                 rappid-rabbit,srv-pnp
+}
+
+define service {
+    service_description Check Rabbit vp_to_dd_visitor_action exchange channel count us-east-1
+    <%= @designation %> <%= @ip %>
+    check_command       check_rabbitmq_exchange_channel_count!us-east-1.cluster.rabbitmq.tealiumiq.com!/server2server!monitor!ifyouaremonitoringtheworld!us-east!vp_to_dd_visitor_action!<%= @vp_and_esp_us_east_count %>
+    use                 rappid-rabbit,srv-pnp
+}
+
+#define service {
+#    service_description Check Rabbit dd_to_au_visitor exchange channel count eu-west-1
+#    <%= @designation %> <%= @ip %>
+#    check_command       check_rabbitmq_exchange_channel_count!eu-west-1.cluster.rabbitmq.tealiumiq.com!/server2server!monitor!ifyouaremonitoringtheworld!eu-west!dd_to_au_visitor!<%= @dd_eu_west_count %>
+#    use                 rappid-rabbit,srv-pnp
+#}
+
+#define service {
+#    service_description Check Rabbit dd_to_au_visitor exchange channel count eu-central-1
+#    <%= @designation %> <%= @ip %>
+#    check_command       check_rabbitmq_exchange_channel_count!eu-central-1.cluster.rabbitmq.tealiumiq.com!/server2server!monitor!ifyouaremonitoringtheworld!eu-central!dd_to_au_visitor!<%= @dd_eu_central_count %>
+#    use                 rappid-rabbit,srv-pnp
+#}
+
+define service {
+    service_description Check Rabbit dd_to_au_visitor exchange channel count us-east-1
+    <%= @designation %> <%= @ip %>
+    check_command       check_rabbitmq_exchange_channel_count!us-east-1.cluster.rabbitmq.tealiumiq.com!/server2server!monitor!ifyouaremonitoringtheworld!us-east!dd_to_au_visitor!<%= @dd_us_east_count_double %>
+    use                 rappid-rabbit,srv-pnp
+}
+
+define service {
+    service_description Check Rabbit visitor_service exchange channel count eu-west-1
+    <%= @designation %> <%= @ip %>
+    check_command       check_rabbitmq_exchange_channel_count!eu-west-1.cluster.rabbitmq.tealiumiq.com!/server2server!monitor!ifyouaremonitoringtheworld!eu-west!visitor_service!<%= @vp_all %>
+    use                 rappid-rabbit,srv-pnp
+}
+
+define service {
+    service_description Check Rabbit visitor_service exchange channel count eu-central-1
+    <%= @designation %> <%= @ip %>
+    check_command       check_rabbitmq_exchange_channel_count!eu-central-1.cluster.rabbitmq.tealiumiq.com!/server2server!monitor!ifyouaremonitoringtheworld!eu-central!visitor_service!<%= @vp_all %>
+    use                 rappid-rabbit,srv-pnp
+}
+
+define service {
+    service_description Check Rabbit visitor_service exchange channel count us-east-1
+    <%= @designation %> <%= @ip %>
+    check_command       check_rabbitmq_exchange_channel_count!us-east-1.cluster.rabbitmq.tealiumiq.com!/server2server!monitor!ifyouaremonitoringtheworld!us-east!visitor_service!<%= @vp_all %>
+    use                 rappid-rabbit,srv-pnp
+}
+
+define service {
+    service_description Check Rabbit vp_to_au_expiredvisitor exchange channel count eu-west-1
+    <%= @designation %> <%= @ip %>
+    check_command       check_rabbitmq_exchange_channel_count!eu-west-1.cluster.rabbitmq.tealiumiq.com!/server2server!monitor!ifyouaremonitoringtheworld!eu-west!vp_to_au_expiredvisitor!<%= @vp_eu_west_count %>
+    use                 rappid-rabbit,srv-pnp
+}
+
+define service {
+    service_description Check Rabbit vp_to_au_expiredvisitor exchange channel count eu-central-1
+    <%= @designation %> <%= @ip %>
+    check_command       check_rabbitmq_exchange_channel_count!eu-central-1.cluster.rabbitmq.tealiumiq.com!/server2server!monitor!ifyouaremonitoringtheworld!eu-central!vp_to_au_expiredvisitor!<%= @vp_eu_central_count %>
+    use                 rappid-rabbit,srv-pnp
+}
+
+define service {
+    service_description Check Rabbit vp_to_au_expiredvisitor exchange channel count us-east-1
+    <%= @designation %> <%= @ip %>    
+    check_command       check_rabbitmq_exchange_channel_count!us-east-1.cluster.rabbitmq.tealiumiq.com!/server2server!monitor!ifyouaremonitoringtheworld!us-east!vp_to_au_expiredvisitor!<%= @vp_us_east_count %>
+    use                 rappid-rabbit,srv-pnp
+} 
+
 define service {
     service_description Check Rabbit UC_to_ESP queue availability eu-central-1
     <%= @designation %> <%= @ip %>
@@ -713,12 +819,12 @@ define service {
 #    use                 rappid-rabbit,srv-pnp
 #}
 
-define service {
-    service_description Check Rabbit vp_to_dd_visitoraction consumer count us-west-1
-    <%= @designation %> <%= @ip %>
-    check_command       check_rabbitmq_queue_consumers!us-west-1.cluster.rabbitmq.tealiumiq.com!/server2server!monitor!ifyouaremonitoringtheworld!us-west!vp_to_dd_visitor_action!<%= @dd_us_west_id.count %>
-    use                 rappid-rabbit,srv-pnp
-}
+#define service {
+#    service_description Check Rabbit vp_to_dd_visitoraction consumer count us-west-1
+#    <%= @designation %> <%= @ip %>
+#    check_command       check_rabbitmq_queue_consumers!us-west-1.cluster.rabbitmq.tealiumiq.com!/server2server!monitor!ifyouaremonitoringtheworld!us-west!vp_to_dd_visitor_action!<%= @dd_us_west_id.count %>
+#    use                 rappid-rabbit,srv-pnp
+#}
 
 define service {
     service_description Check Rabbit vp_to_dd_visitoraction consumer count us-east-1
@@ -808,13 +914,13 @@ define service {
     event_handler       vp_handler!eu-west-1
 }
 
-define service {
-    service_description RabbitMQ mr_to_vp queue consumer count us-west-1
-    <%= @designation %> <%= @ip %>
-    check_command       check_rabbitmq_queue_consumers_multi!us-west-1.cluster.rabbitmq.tealiumiq.com!/server2server!monitor!ifyouaremonitoringtheworld!us-west!mr_to_vp_partitionedevent!1!99
-    use                 rappid-rabbit,srv-pnp
-    event_handler       vp_handler!us-west-1
-}
+#define service {
+#    service_description RabbitMQ mr_to_vp queue consumer count us-west-1
+#    <%= @designation %> <%= @ip %>
+#    check_command       check_rabbitmq_queue_consumers_multi!us-west-1.cluster.rabbitmq.tealiumiq.com!/server2server!monitor!ifyouaremonitoringtheworld!us-west!mr_to_vp_partitionedevent!1!99
+#    use                 rappid-rabbit,srv-pnp
+#    event_handler       vp_handler!us-west-1
+#}
 
 #8-10 Temp off Next 1
 define service {
@@ -833,12 +939,12 @@ define service {
     use                 rappid-rabbit,srv-pnp
 }
 
-define service {
-    service_description RabbitMQ vp_to_vp_rebalancedvisitor queue consumer count us-west-1
-    <%= @designation %> <%= @ip %>    
-    check_command       check_rabbitmq_queue_consumers_multi!us-west-1.cluster.rabbitmq.tealiumiq.com!/server2server!monitor!ifyouaremonitoringtheworld!us-west!vp_to_vp_rebalancedvisitor!1!99
-    use                 rappid-rabbit,srv-pnp
-}
+#define service {
+#    service_description RabbitMQ vp_to_vp_rebalancedvisitor queue consumer count us-west-1
+#    <%= @designation %> <%= @ip %>    
+#    check_command       check_rabbitmq_queue_consumers_multi!us-west-1.cluster.rabbitmq.tealiumiq.com!/server2server!monitor!ifyouaremonitoringtheworld!us-west!vp_to_vp_rebalancedvisitor!1!99
+#    use                 rappid-rabbit,srv-pnp
+#}
 
 #8-10 Temp Off Next 2
 define service {
@@ -1035,7 +1141,7 @@ define service {
 define service {
     service_description VISITOR PROCESSOR java heap at 90 percent
     hostgroup_name      dc_visitor_processor
-    check_command       check_jmx_heap!11700000000
+    check_command       check_jmx_heap!24300000000
     #check_command       check_jmx_heap
     #use                 jmx-service,srv-pnp
     use                 as-low-urgency-service,srv-pnp
@@ -1054,7 +1160,7 @@ define service {
 define service {
     service_description UCONNECT java heap at 90 percent
     hostgroup_name      dc_uconnect
-    check_command       check_jmx_heap!1800000000
+    check_command       check_jmx_heap!5798205850
     #check_command       check_jmx_heap
     #use                 jmx-service,srv-pnp
     use                 as-low-urgency-service,srv-pnp
@@ -1071,7 +1177,7 @@ define service {
 define service {
     service_description QUERY AGGREGATOR java heap is at 90 percent
     hostgroup_name      dc_query_aggregator
-    check_command       check_jmx_heap!2600000000
+    check_command       check_jmx_heap!5798205850
     #check_command       check_jmx_heap
     #use                 jmx-service,srv-pnp
     use                 as-low-urgency-service,srv-pnp
@@ -1088,7 +1194,7 @@ define service {
 define service {
     service_description DATA DISTRIBUTOR java heap is at 90 percent
     hostgroup_name      dc_data_distributor
-    check_command       check_jmx_heap!1800000000
+    check_command       check_jmx_heap!20250000000
     #check_command       check_jmx_heap
     #use                 jmx-service,srv-pnp
     use                 as-low-urgency-service,srv-pnp
@@ -1105,7 +1211,7 @@ define service {
 define service {
     service_description VISITOR SERVICE java heap is at 90 percent
     hostgroup_name      dc_visitor_service
-    check_command       check_jmx_heap!11700000000
+    check_command       check_jmx_heap!12375000000
     #check_command       check_jmx_heap
     #use                 jmx-service,srv-pnp
     use                 as-low-urgency-service,srv-pnp
@@ -1122,7 +1228,7 @@ define service {
 define service {
     service_description BULK DOWNLOADER java heap is at 90 percent
     hostgroup_name      dc_bulk_downloader
-    check_command       check_jmx_heap!4680000000
+    check_command       check_jmx_heap!2025000000
     #check_command       check_jmx_heap
     #use                 jmx-service,srv-pnp
     use                 as-low-urgency-service,srv-pnp
@@ -1139,7 +1245,16 @@ define service {
 define service {
     service_description AMAZON UPLOADER java heap is at 80 percent
     hostgroup_name      dc_amazon_uploader
-    check_command       check_jmx_heap!10000000000
+    check_command       check_jmx_heap!12150000000
+    #check_command       check_jmx_heap
+    #use                 jmx-service,srv-pnp
+    use                 as-low-urgency-service,srv-pnp
+}
+
+define service {
+    service_description AMAZON UPLOADER flushMeter less than 0
+    hostgroup_name      dc_amazon_uploader
+    check_command       check_jmx_flush!0.00
     #check_command       check_jmx_heap
     #use                 jmx-service,srv-pnp
     use                 as-low-urgency-service,srv-pnp
@@ -1154,9 +1269,17 @@ define service {
 #}
 
 define service {
+    service_description EVENTSTREAM PROCESSOR jmx events rejected
+    hostgroup_name      eventstream_processor
+    check_command       check_jmx_esp_events_rejected!100
+    #check_command       check_jmx_heap
+    use                 jmx-service,srv-pnp
+}
+
+define service {
     service_description EVENTSTREAM PROCESSOR java heap is at 90 percent
     hostgroup_name      eventstream_processor
-    check_command       check_jmx_heap!1800000000
+    check_command       check_jmx_heap!2025000000
     #check_command       check_jmx_heap
     #use                 jmx-service,srv-pnp
     use                 as-low-urgency-service,srv-pnp
@@ -1165,7 +1288,7 @@ define service {
 
 <% unless node[:domain] == "qa" -%>
 define service {
-    service_description ESP TotalMessageReceived is greater than 1
+    service_description ESP TotalMessageReceived is less than 1
     hostgroup_name      eventstream_processor
     check_command       check_jmx_message_received!1
     #check_command       check_jmx_message_received!1\:i
@@ -1210,9 +1333,37 @@ define service {
 #}
 
 define service {
+    service_description Check JMX DataCloud DD to ESP Cloud Delivery Publish Failures
+    hostgroup_name      eventstream_processor
+    check_command       check_jmx_esp_total_action_publish_failures!0
+    use                 jmx-service,srv-pnp
+}
+
+define service {
+    service_description Check JMX DataCloud Data Distributor Actions Processed
+    hostgroup_name      dc_data_distributor
+    check_command       check_jmx_data_distributor_actions_processed!2
+    use                 jmx-service,srv-pnp
+}
+
+define service {
+    service_description Check JMX DataCloud Data Distributor Invalid Message Size
+    hostgroup_name      dc_data_distributor
+    check_command       check_jmx_data_distributor_invalid_message_size!0
+    use                 jmx-service,srv-pnp
+}
+
+define service {
+    service_description Check JMX DataCloud Data Distributor Received Messages
+    hostgroup_name      dc_data_distributor
+    check_command       check_jmx_data_distributor_received_messages!2
+    use                 jmx-service,srv-pnp
+}
+
+define service {
     service_description Check JMX DataCloud Uconnect Messages Queued
     hostgroup_name      dc_uconnect
-    check_command       check_jmx_uconnect_messages_queued!10000
+    check_command       check_jmx_uconnect_messages_queued!30000
     use                 jmx-service,srv-pnp
 }
 
@@ -1519,6 +1670,13 @@ define service {
     check_command       check_nrpe!check_nullmailer
     use                 default-service,srv-pnp
 }
+
+#define service {
+#    service_description Check OSSEC Process
+#    hostgroup_name      nagios
+#    check_command       check_nrpe!check_ossec
+#    use                 default-service,srv-pnp
+#}
 
 define service {
     service_description Check dnsmasq Process

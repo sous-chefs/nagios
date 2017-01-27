@@ -35,6 +35,9 @@ command[check_stunnel]=<%= node['nagios']['plugin_dir'] %>/check_procs -c 1:1 -C
 #check nullmailer processes
 command[check_nullmailer]=<%= node['nagios']['plugin_dir'] %>/check_procs -c 1:1 -C nullmailer-send
 
+#check OSSEC processes
+command[check_ossec]=<%= node['nagios']['plugin_dir'] %>/check_procs -c 1:1 -C ossec-execd
+
 #check rsyslog processes
 #command[check_rsyslog]=<%= node['nagios']['plugin_dir'] %>/check_procs -c 1:1 -C rsyslogd
 
@@ -147,6 +150,9 @@ command[check_visitor_processor]=<%= node['nagios']['plugin_dir'] %>/check_procs
 
 #check_splunk_forwarder
 command[check_splunk_forwarder]=<%= node['nagios']['plugin_dir'] %>/check_procs -c 5:6 --argument-array=splunk
+
+command[vp_restart] = <%= node['nagios']['plugin_dir'] %>/vp_handler.sh
+
 <% end %>
 
 <% if node.roles.include?("publish_engine") %>

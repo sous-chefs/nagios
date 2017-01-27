@@ -180,7 +180,7 @@ define service{
 define service{
   use                             default-service
   name                            ntp-service
-  contact_groups                  ntp-admins
+#  contact_groups                  as_low_urgency
 }
 
 define host {
