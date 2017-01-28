@@ -47,6 +47,11 @@ define command{
 }
 
 define command{
+  command_name    check_rabbitmq_exchange_channel_count
+  command_line    $USER1$/check_rabbitmq_exchange_channel_count.sh $ARG1$ $ARG2$ $ARG3$ $ARG4$ $ARG5$ $ARG6$ $ARG7$
+}
+
+define command{
   command_name    check_rabbitmq_queue_availability_new
   command_line    $USER1$/check_rabbitmq_queue_count_new.sh $ARG1$ $ARG2$ $ARG3$ $ARG4$ $ARG5$ $ARG6$ $ARG7$
 }
@@ -97,19 +102,44 @@ define command{
 #}
 
 define command {
+  command_name    check_jmx_esp_events_rejected
+  command_line    $USER1$/check_jmx -U service:jmx:rmi:///jndi/rmi://$HOSTADDRESS$:9001/jmxrmi -O "DataCloud-Metrics:name=MessageRouter-TotalEventsRejectedMeter" -A MeanRate -c $ARG1$
+}
+
+define command {
   command_name    check_jmx_uconnect_messages_queued
   command_line    $USER1$/check_jmx -U service:jmx:rmi:///jndi/rmi://$HOSTADDRESS$:9001/jmxrmi -O "DataCloud:type=EventQueue" -A MessagesQueued -c $ARG1$
 }
 
 define command {
+  command_name    check_jmx_data_distributor_actions_processed
+  command_line    $USER1$/check_jmx -U service:jmx:rmi:///jndi/rmi://$HOSTADDRESS$:9001/jmxrmi -O "DataCloud-Metrics:name=DataDistributor.actions.processed.size" -A OneMinuteRate -c$ARG1$:
+}
+
+define command {
+  command_name    check_jmx_data_distributor_invalid_message_size
+  command_line    $USER1$/check_jmx -U service:jmx:rmi:///jndi/rmi://$HOSTADDRESS$:9001/jmxrmi -O "DataCloud-Metrics:name=DataDistributor.messages.invalid.size" -A OneMinuteRate -c $ARG1$
+}
+
+define command {
+  command_name    check_jmx_data_distributor_received_messages
+  command_line    $USER1$/check_jmx -U service:jmx:rmi:///jndi/rmi://$HOSTADDRESS$:9001/jmxrmi -O "DataCloud-Metrics:name=DataDistributor.messages.received.size" -A OneMinuteRate -c$ARG1$:
+} 
+
+define command {
+  command_name    check_jmx_esp_total_action_publish_failures
+  command_line    $USER1$/check_jmx -U service:jmx:rmi:///jndi/rmi://$HOSTADDRESS$:9001/jmxrmi -O "DataCloud:type=S2SFilteredStreamHandler" -A TotalActionPublishFailures -c $ARG1$
+}
+
+define command {
   command_name    check_jmx_VP_node_status
   command_line    $USER1$/check_jmx -U service:jmx:rmi:///jndi/rmi://$HOSTADDRESS$:9001/jmxrmi -O "DataCloud:type=VisitorProcessorCluster" -A NodeStatus -w ^$ARG1$
-	}
+}
 
 define command {  
   command_name    check_jmx_VP_ignored_visitors
   command_line    $USER1$/check_jmx -U service:jmx:rmi:///jndi/rmi://$HOSTADDRESS$:9001/jmxrmi -O "DataCloud-Metrics:name=VisitorProcessor-TotalEventsIgnoredDueToMaxVisitorsLimit" -A Count -w $ARG1$ -c $ARG2$
-	}
+}
 
 define command {
  command_name    check_jmx_VP_ignored_visitors_5_old
@@ -333,6 +363,11 @@ define command {
   command_name    check_jmx_heap
   command_line    $USER1$/check_jmx -U service:jmx:rmi:///jndi/rmi://$HOSTADDRESS$:9001/jmxrmi -O java.lang:type=Memory -A HeapMemoryUsage -K used -I HeapMemoryUsage -J used -vvvv -c $ARG1$
   #command_line    $USER1$/check_jmx -U service:jmx:rmi:///jndi/rmi://$HOSTADDRESS$:9001/jmxrmi -O java.lang:type=Memory -A HeapMemoryUsage -K used -I HeapMemoryUsage -J used -vvvv
+}
+
+define command {
+  command_name    check_jmx_flush
+  command_line    $USER1$/check_jmx -U service:jmx:rmi:///jndi/rmi://$HOSTADDRESS$:9001/jmxrmi -O "DataCloud-Metrics:name=AU-EventStore-FlushMeter" -A MeanRate -c$ARG1$:
 }
 
 <% if @app_environment ==  -%>
