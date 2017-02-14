@@ -591,6 +591,13 @@ vp_and_esp_eu_west_count = vp_eu_west.count + esp_eu_west.count
 vp_and_esp_eu_central_count = vp_eu_central.count + esp_eu_central.count
 vp_and_esp_us_east_count = vp_us_east.count + esp_us_east.count
 
+
+Chef::Log.warn("************%%%%%%%%%%%%%%%%%%%%%%%%%%**************** ESP US-EAST COUNT IS: #{esp_us_east.count} *********************%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%***************")
+Chef::Log.warn("************%%%%%%%%%%%%%%%%%%%%%%%%%%**************** VP US-EAST COUNT IS: #{vp_us_east.count} *********************%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%***************")
+Chef::Log.warn("************%%%%%%%%%%%%%%%%%%%%%%%%%%**************** VP AND ESP US-EAST COUNT IS: #{vp_and_esp_us_east_count} *********************%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%***************")
+
+
+
 #Chef::Log.warn("************%%%%%%%%%%%%%%%%%%%%%%%%%%**************** EU WEST vp_eu_west_count is: #{vp_eu_west_count} *********************%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%***************")
 
 vs_eu_west = search(:node, "chef_environment:production AND role:dc_visitor_service AND ec2_region:eu-west-1")
@@ -600,6 +607,11 @@ vs_us_east = search(:node, "chef_environment:production AND role:dc_visitor_serv
 vs_eu_west_count = vs_eu_west.count
 vs_eu_central_count = vs_eu_central.count
 vs_us_east_count = vs_us_east.count
+
+prod_mongo_search = search(:node, 'chef_environment:production AND run_list:recipe\[mongodb\:\:mongos\] AND recipes:set-hostname AND ec2_region:us-west-1')
+prod_mongo_ip = prod_mongo_search.first.ipaddress
+pc1_mongo_search = search(:node, 'chef_environment:pc1 AND run_list:recipe\[mongodb_tealium\:\:role_pc1_cluster1_mongos\]')
+pc1_mongo_ip = pc1_mongo_search.first.ipaddress
 
 if node[:ec2][:local_ipv4] == "10.1.2.7" or node[:app_environment].match(/^privatecloud\d/)
 ip = "#{node['hostname']} - #{node[:ipaddress]}"
@@ -658,8 +670,10 @@ Chef::Log.warn("Second App_Environment is: #{environment}")
       :vp_and_esp_eu_west_count => vp_and_esp_eu_west_count,
       :vp_and_esp_eu_central_count => vp_and_esp_eu_central_count,
       :vp_and_esp_us_east_count => vp_and_esp_us_east_count,
-      :dd_eu_east_count_double => dd_eu_east_count_double,
-      :vp_all => vp_all
+      :dd_us_east_count_double => dd_us_east_count_double,
+      :vp_all => vp_all,
+      :prod_mongo_ip => prod_mongo_ip, 
+      :pc1_mongo_ip => pc1_mongo_ip
     )
   end
 else

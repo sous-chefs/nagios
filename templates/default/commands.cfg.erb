@@ -107,8 +107,18 @@ define command {
 }
 
 define command {
-  command_name    check_jmx_uconnect_messages_queued
-  command_line    $USER1$/check_jmx -U service:jmx:rmi:///jndi/rmi://$HOSTADDRESS$:9001/jmxrmi -O "DataCloud:type=EventQueue" -A MessagesQueued -c $ARG1$
+  command_name    check_jmx_uconnect_messages_queued_local
+  command_line    $USER1$/check_jmx -U service:jmx:rmi:///jndi/rmi://$HOSTADDRESS$:9001/jmxrmi -O "DataCloud:type=EventQueue" -A MessagesQueuedLocalRegion -c $ARG1$
+}
+
+define command {
+  command_name    check_jmx_uconnect_messages_queued_cross_region
+  command_line    $USER1$/check_jmx -U service:jmx:rmi:///jndi/rmi://$HOSTADDRESS$:9001/jmxrmi -O "DataCloud:type=EventQueue" -A MessagesQueuedCrossRegion -c $ARG1$
+}
+
+define command {
+  command_name    check_jmx_uconnect_requests_received
+  command_line    $USER1$/check_jmx -U service:jmx:rmi:///jndi/rmi://$HOSTADDRESS$:9001/jmxrmi -O "DataCloud-Metrics:name=uConnect-AllRequestsProcessingTime" -A OneMinuteRate -c$ARG1$:
 }
 
 define command {
@@ -127,6 +137,11 @@ define command {
 } 
 
 define command {
+  command_name    check_jmx_esp_to_dd_failed_messages
+  command_line    $USER1$/check_jmx -U service:jmx:rmi:///jndi/rmi://$HOSTADDRESS$:9001/jmxrmi -O "DataCloud:type=DataDistributor" -A TotalMessagesFailed -c $ARG1$
+}
+
+define command {
   command_name    check_jmx_esp_total_action_publish_failures
   command_line    $USER1$/check_jmx -U service:jmx:rmi:///jndi/rmi://$HOSTADDRESS$:9001/jmxrmi -O "DataCloud:type=S2SFilteredStreamHandler" -A TotalActionPublishFailures -c $ARG1$
 }
@@ -139,6 +154,11 @@ define command {
 define command {  
   command_name    check_jmx_VP_ignored_visitors
   command_line    $USER1$/check_jmx -U service:jmx:rmi:///jndi/rmi://$HOSTADDRESS$:9001/jmxrmi -O "DataCloud-Metrics:name=VisitorProcessor-TotalEventsIgnoredDueToMaxVisitorsLimit" -A Count -w $ARG1$ -c $ARG2$
+}
+
+define command {
+  command_name    check_jmx_VP_max_visitor_count
+  command_line    $USER1$/check_jmx -U service:jmx:rmi:///jndi/rmi://$HOSTADDRESS$:9001/jmxrmi -O "DataCloud:type=VisitorManager" -A ActiveVisitorCount -c $ARG1$
 }
 
 define command {
@@ -1023,8 +1043,13 @@ define command{
 
 define command{
         command_name    vp_handler
-        command_line    /usr/lib/nagios/plugins/vp-handler.sh $SERVICESTATE$ $SERVICESTATETYPE$ $SERVICEATTEMPT$ $ARG1$
+        command_line    /usr/lib/nagios/plugins/vp-handler.sh $SERVICESTATE$ $SERVICESTATETYPE$ $SERVICEATTEMPT$ $ARG1$ $ARG2$ $ARG3$
         #command_line    /usr/lib/nagios/plugins/event-handler.sh $SERVICESTATE$ $SERVICESTATETYPE$ $SERVICEATTEMPT$ $ARG1$ $ARG2$ $ARG3$ $ARG4$ $ARG5$ $ARG6$ $ARG7$ $ARG8$ $ARG9$
+}
+
+define command{
+        command_name    dd_handler
+        command_line    /usr/lib/nagios/plugins/dd-handler.sh $SERVICESTATE$ $SERVICESTATETYPE$ $SERVICEATTEMPT$ $ARG1$ $ARG2$ $ARG3$
 }
 
 #define command{
