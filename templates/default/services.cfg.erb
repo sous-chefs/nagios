@@ -209,7 +209,7 @@ define service {
     <%= @designation %> <%= @ip %>
     check_command       check_rabbitmq_queue_consumers_multi_pc1!pc1.rabbitmq.tealiumiq.com!/pc1_server2server!monitor!ifyouaremonitoringtheworld!us-east!mr_to_vp_partitionedevent!1!99
     use                 rappid-rabbit,srv-pnp
-    event_handler       vp_handler!us-east-1
+    event_handler       vp_handler!us-east-1!<%= @pc1_mongo_ip %>!mr_to_vp_partitionedevent
 }
 
 define service {
@@ -671,19 +671,19 @@ define service {
     use                 rappid-rabbit,srv-pnp
 }
 
-#define service {
-#    service_description Check Rabbit dd_to_au_visitor exchange channel count eu-west-1
-#    <%= @designation %> <%= @ip %>
-#    check_command       check_rabbitmq_exchange_channel_count!eu-west-1.cluster.rabbitmq.tealiumiq.com!/server2server!monitor!ifyouaremonitoringtheworld!eu-west!dd_to_au_visitor!<%= @dd_eu_west_count %>
-#    use                 rappid-rabbit,srv-pnp
-#}
+define service {
+    service_description Check Rabbit dd_to_au_visitor exchange channel count eu-west-1
+    <%= @designation %> <%= @ip %>
+    check_command       check_rabbitmq_exchange_channel_count!eu-west-1.cluster.rabbitmq.tealiumiq.com!/server2server!monitor!ifyouaremonitoringtheworld!eu-west!dd_to_au_visitor!<%= @dd_eu_west_count %>
+    use                 rappid-rabbit,srv-pnp
+}
 
-#define service {
-#    service_description Check Rabbit dd_to_au_visitor exchange channel count eu-central-1
-#    <%= @designation %> <%= @ip %>
-#    check_command       check_rabbitmq_exchange_channel_count!eu-central-1.cluster.rabbitmq.tealiumiq.com!/server2server!monitor!ifyouaremonitoringtheworld!eu-central!dd_to_au_visitor!<%= @dd_eu_central_count %>
-#    use                 rappid-rabbit,srv-pnp
-#}
+define service {
+    service_description Check Rabbit dd_to_au_visitor exchange channel count eu-central-1
+    <%= @designation %> <%= @ip %>
+    check_command       check_rabbitmq_exchange_channel_count!eu-central-1.cluster.rabbitmq.tealiumiq.com!/server2server!monitor!ifyouaremonitoringtheworld!eu-central!dd_to_au_visitor!<%= @dd_eu_central_count %>
+    use                 rappid-rabbit,srv-pnp
+}
 
 define service {
     service_description Check Rabbit dd_to_au_visitor exchange channel count us-east-1
@@ -831,6 +831,7 @@ define service {
     <%= @designation %> <%= @ip %>
     check_command       check_rabbitmq_queue_consumers!us-east-1.cluster.rabbitmq.tealiumiq.com!/server2server!monitor!ifyouaremonitoringtheworld!us-east!vp_to_dd_visitor_action!<%= @dd_us_east_id.count %>
     use                 rappid-rabbit,srv-pnp
+#    event_handler       dd_handler!us-east-1!<%= @prod_mongo_ip %>!vp_to_dd_visitoraction
 }
 
 define service {
@@ -838,6 +839,7 @@ define service {
     <%= @designation %> <%= @ip %>
     check_command       check_rabbitmq_queue_consumers!eu-west-1.cluster.rabbitmq.tealiumiq.com!/server2server!monitor!ifyouaremonitoringtheworld!eu-west!vp_to_dd_visitor_action!<%= @dd_eu_west_id.count %>
     use                 rappid-rabbit,srv-pnp
+#    event_handler       dd_handler!eu-west-1!<%= @prod_mongo_ip %>!vp_to_dd_visitoraction
 }
 
 define service {
@@ -845,6 +847,7 @@ define service {
     <%= @designation %> <%= @ip %>
     check_command       check_rabbitmq_queue_consumers!eu-central-1.cluster.rabbitmq.tealiumiq.com!/server2server!monitor!ifyouaremonitoringtheworld!eu-central!vp_to_dd_visitor_action!<%= @dd_eu_central_id.count %>
     use                 rappid-rabbit,srv-pnp
+#    event_handler       dd_handler!eu-central-1!<%= @prod_mongo_ip %>!vp_to_dd_visitoraction
 }
 
 define service {
@@ -903,7 +906,7 @@ define service {
     <%= @designation %> <%= @ip %>
     check_command       check_rabbitmq_queue_consumers_multi!eu-central-1.cluster.rabbitmq.tealiumiq.com!/server2server!monitor!ifyouaremonitoringtheworld!eu-central!mr_to_vp_partitionedevent!1!99
     use                 rappid-rabbit,srv-pnp
-    event_handler       vp_handler!eu-central-1
+    event_handler       vp_handler!eu-central-1!<%= @prod_mongo_ip %>!mr_to_vp_partitionedevent
 }
 
 define service {
@@ -911,7 +914,7 @@ define service {
     <%= @designation %> <%= @ip %>
     check_command       check_rabbitmq_queue_consumers_multi!eu-west-1.cluster.rabbitmq.tealiumiq.com!/server2server!monitor!ifyouaremonitoringtheworld!eu-west!mr_to_vp_partitionedevent!1!99
     use                 rappid-rabbit,srv-pnp
-    event_handler       vp_handler!eu-west-1
+    event_handler       vp_handler!eu-west-1!<%= @prod_mongo_ip %>!mr_to_vp_partitionedevent
 }
 
 #define service {
@@ -928,7 +931,7 @@ define service {
     <%= @designation %> <%= @ip %>
     check_command       check_rabbitmq_queue_consumers_multi!us-east-1.cluster.rabbitmq.tealiumiq.com!/server2server!monitor!ifyouaremonitoringtheworld!us-east!mr_to_vp_partitionedevent!1!99
     use                 rappid-rabbit,srv-pnp
-    event_handler       vp_handler!us-east-1
+    event_handler       vp_handler!us-east-1!<%= @prod_mongo_ip %>!mr_to_vp_partitionedevent
 }
 
 #8-10 Temp Off Next 1
@@ -937,6 +940,7 @@ define service {
     <%= @designation %> <%= @ip %>
     check_command       check_rabbitmq_queue_consumers_multi!us-east-1.cluster.rabbitmq.tealiumiq.com!/server2server!monitor!ifyouaremonitoringtheworld!us-east!vp_to_vp_rebalancedvisitor!1!99
     use                 rappid-rabbit,srv-pnp
+    event_handler       vp_handler!us-east-1!<%= @prod_mongo_ip %>!vp_to_vp_rebalancedvisitor
 }
 
 #define service {
@@ -952,6 +956,7 @@ define service {
     <%= @designation %> <%= @ip %>    
     check_command       check_rabbitmq_queue_consumers_multi!eu-west-1.cluster.rabbitmq.tealiumiq.com!/server2server!monitor!ifyouaremonitoringtheworld!eu-west!vp_to_vp_rebalancedvisitor!1!99
     use                 rappid-rabbit,srv-pnp
+    event_handler       vp_handler!eu-west-1!<%= @prod_mongo_ip %>!vp_to_vp_rebalancedvisitor
 }
 
 define service {
@@ -959,6 +964,7 @@ define service {
     <%= @designation %> <%= @ip %>    
     check_command       check_rabbitmq_queue_consumers_multi!eu-central-1.cluster.rabbitmq.tealiumiq.com!/server2server!monitor!ifyouaremonitoringtheworld!eu-central!vp_to_vp_rebalancedvisitor!1!99
     use                 rappid-rabbit,srv-pnp
+    event_handler       vp_handler!eu-central-1!<%= @prod_mongo_ip %>!vp_to_vp_rebalancedvisitor
 }
 
 #8-10 Temp Off Next 3
@@ -1333,11 +1339,18 @@ define service {
 #}
 
 define service {
-    service_description Check JMX DataCloud DD to ESP Cloud Delivery Publish Failures
-    hostgroup_name      eventstream_processor
-    check_command       check_jmx_esp_total_action_publish_failures!0
+    service_description Check JMX DataCloud VP to DD Messages Failed
+    hostgroup_name      dc_data_distributor
+    check_command       check_jmx_esp_to_dd_failed_messages!0
     use                 jmx-service,srv-pnp
 }
+
+#define service {
+#    service_description Check JMX DataCloud DD to ESP Cloud Delivery Publish Failures
+#    hostgroup_name      dc_data_distributor
+#    check_command       check_jmx_esp_total_action_publish_failures!0
+#    use                 jmx-service,srv-pnp
+#}
 
 define service {
     service_description Check JMX DataCloud Data Distributor Actions Processed
@@ -1361,9 +1374,23 @@ define service {
 }
 
 define service {
-    service_description Check JMX DataCloud Uconnect Messages Queued
+    service_description Check JMX DataCloud Uconnect Messages Queued Local Region
     hostgroup_name      dc_uconnect
-    check_command       check_jmx_uconnect_messages_queued!30000
+    check_command       check_jmx_uconnect_messages_queued_local!10000
+    use                 jmx-service,srv-pnp
+}
+
+define service {
+    service_description Check JMX DataCloud Uconnect Messages Queued Cross Region
+    hostgroup_name      dc_uconnect
+    check_command       check_jmx_uconnect_messages_queued_cross_region!20000
+    use                 jmx-service,srv-pnp
+}
+
+define service {
+    service_description Check JMX DataCloud Uconnect Requests Received
+    hostgroup_name      dc_uconnect
+    check_command       check_jmx_uconnect_requests_received!10
     use                 jmx-service,srv-pnp
 }
 
@@ -1371,6 +1398,13 @@ define service {
     service_description Check JMX DataCloud VP Status
     hostgroup_name      dc_visitor_processor
     check_command       check_jmx_VP_node_status!ACTIVE
+    use                 jmx-service,srv-pnp
+}
+
+define service {
+    service_description Check JMX DataCloud VP Max Visitor Count
+    hostgroup_name      dc_visitor_processor
+    check_command       check_jmx_VP_max_visitor_count!28000
     use                 jmx-service,srv-pnp
 }
 
@@ -1388,19 +1422,12 @@ define service {
     use                 jmx-service,srv-pnp
 }
 
-#define service {
-#    service_description Check JMX DataCloud VP Expire Latency
-#    hostgroup_name      dc_visitor_processor
-#    check_command       check_jmx_VP_expire_latency!300000!480000
-#    use                 jmx-service,srv-pnp
-#}
-
-#define service {
-#    service_description Check JMX DataCloud VP Expire Latency
-#    hostgroup_name      dc_visitor_processor
-#    check_command       check_jmx_VP_expire_latency_east!600000!600000
-#    use                 jmx-service,srv-pnp
-#}
+define service {
+    service_description Check JMX DataCloud VP Expire Latency
+    hostgroup_name      dc_visitor_processor
+    check_command       check_jmx_VP_expire_latency_east!600000!600000
+    use                 jmx-service,srv-pnp
+}
 
 define service {
     service_description Check Permission Cache process
@@ -1655,6 +1682,7 @@ define service {
     use                 default-service,srv-pnp
 }
 
+# Jack 2-13
 define service {
     service_description Check STunnel Processes
     hostgroup_name      all

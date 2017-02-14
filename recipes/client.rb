@@ -61,6 +61,8 @@ else
     Chef::Log.warn("Cannot get country code for server")
 end
 
+platform_version = node["platform_version"]
+
 template "#{node['nagios']['nrpe']['conf_dir']}/nrpe.cfg" do
   source "nrpe.cfg.erb"
   owner "root"
@@ -68,7 +70,8 @@ template "#{node['nagios']['nrpe']['conf_dir']}/nrpe.cfg" do
   mode 00644
   variables(
     :nrpe_directory => "#{node['nagios']['nrpe']['conf_dir']}/nrpe.d",
-    :ntp_server => ntp_server
+    :ntp_server => ntp_server,
+    :platform_version => platform_version
   )
   notifies :restart, "service[nagios-nrpe-server]"
 end
