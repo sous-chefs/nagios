@@ -218,7 +218,7 @@ class Nagios
         'can_submit_commands'           => 'can_submit_commands',
         'retain_status_information'     => 'retain_status_information',
         'retain_nonstatus_information'  => 'retain_nonstatus_information',
-        'register'                      => 'register'
+        'register'                      => 'register',
       }
     end
 

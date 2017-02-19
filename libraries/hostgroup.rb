@@ -106,7 +106,7 @@ class Nagios
         'notes'                  => 'notes',
         'notes_url'              => 'notes_url',
         'action_url'             => 'action_url',
-        'register'               => 'register'
+        'register'               => 'register',
       }
     end
     # rubocop:enable MethodLength
