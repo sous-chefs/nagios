@@ -438,7 +438,7 @@ class Nagios
         'action_url'                   => 'action_url',
         'icon_image'                   => 'icon_image',
         'icon_image_alt'               => 'icon_image_alt',
-        'register'                     => 'register'
+        'register'                     => 'register',
       }
     end
     # rubocop:enable MethodLength

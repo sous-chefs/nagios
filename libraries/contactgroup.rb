@@ -100,7 +100,7 @@ class Nagios
         'members_list'              => 'members',
         'contactgroup_members_list' => 'contactgroup_members',
         'alias'                     => 'alias',
-        'register'                  => 'register'
+        'register'                  => 'register',
       }
     end
 

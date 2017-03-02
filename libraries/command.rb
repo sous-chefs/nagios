@@ -84,7 +84,7 @@ class Nagios
     def config_options
       {
         'command_name' => 'command_name',
-        'command_line' => 'command_line'
+        'command_line' => 'command_line',
       }
     end
   end

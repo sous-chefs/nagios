@@ -8,11 +8,11 @@ describe 'nagios::default' do
                               'groups' => ['sysadmin'],
                               'nagios' => {
                                 'pager' => 'nagiosadmin_pager@example.com',
-                                'email' => 'nagiosadmin@example.com'
-                              }
+                                'email' => 'nagiosadmin@example.com',
+                              },
                             },
                  'user2' => { 'id'     => 'bsmith',
-                              'groups' => ['users']
+                              'groups' => ['users'],
                             })
     end.converge(described_recipe)
   end

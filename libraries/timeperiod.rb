@@ -148,7 +148,7 @@ class Nagios
       {
         'timeperiod_name' => 'timeperiod_name',
         'alias'           => 'alias',
-        'exclude'         => 'exclude'
+        'exclude'         => 'exclude',
       }
     end
 

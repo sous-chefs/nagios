@@ -104,7 +104,7 @@ class Nagios
         'alias'                     => 'alias',
         'notes'                     => 'notes',
         'notes_url'                 => 'notes_url',
-        'action_url'                => 'action_url'
+        'action_url'                => 'action_url',
       }
     end
 

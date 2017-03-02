@@ -396,7 +396,7 @@ class Nagios
         'statusmap_image'              => 'statusmap_image',
         '_2d_coords'                   => '2d_coords',
         '_3d_coords'                   => '3d_coords',
-        'register'                     => 'register'
+        'register'                     => 'register',
       }
     end
     # rubocop:enable MethodLength
