@@ -19,24 +19,26 @@ The system running this cookbooks should have a role named 'monitoring' so that 
 The functionality that was previously in the nagios::client recipe has been moved to its own NRPE cookbook at <https://github.com/schubergphilis/nrpe>
 
 ### Platform
-* Debian 7+
-* Ubuntu 12.04+
-* Red Hat Enterprise Linux (CentOS/Amazon/Scientific/Oracle) 5.X, 6.X
+
+- Debian 7+
+- Ubuntu 12.04+
+- Red Hat Enterprise Linux (CentOS/Amazon/Scientific/Oracle) 5.X, 6.X
 
 **Notes**: This cookbook has been tested on the listed platforms. It may work on other platforms with or without modification.
 
 ### Cookbooks
-* apache2 2.0 or greater
-* build-essential
-* nginx
-* nginx_simplecgi
-* php
-* yum-epel (note: this requires yum cookbook v3.0, which breaks compatibility with many other cookbooks)
 
+- apache2 2.0 or greater
+- build-essential
+- chef_nginx
+- nginx_simplecgi
+- php
+- yum-epel
 
-Attributes
-----------
+## Attributes
+
 ### config
+
 [The config file](https://github.com/schubergphilis/nagios/blob/master/attributes/config.rb) contains the Nagios configuration options. Consult the [nagios documentation](http://nagios.sourceforge.net/docs/3_0/configmain.html) for available settings and allowed options. Configuration entries of which multiple entries are allowed, need to be specified as an Array.
 
 Example: `default['nagios']['conf']['cfg_dir'] = [ '/etc/nagios/conf.d' , '/usr/local/nagios/conf.d' ]`
@@ -164,7 +166,11 @@ Example: `default['nagios']['conf']['cfg_dir'] = [ '/etc/nagios/conf.d' , '/usr/
 
 Recipes
 -------
+
+## Recipes
+
 ### default
+
 Includes the correct client installation recipe based on platform, either `nagios::server_package` or `nagios::server_source`.
 
 The server recipe sets up Apache as the web front end by default. This recipe also does a number of searches to dynamically build the hostgroups to monitor, hosts that belong to them and admins to notify of events/alerts.
@@ -184,27 +190,27 @@ The recipe does the following:
 9. Enables the Nagios web UI.
 10. Starts the Nagios server service
 
+### server_package
 
-### server\_package
 Installs the Nagios server from packages. Default for Debian / Ubuntu systems.
 
-### server\_source
+### server_source
+
 Installs the Nagios server from source. Default for Red Hat / Fedora based systems as native packages for Nagios are not available in the default repositories.
 
 ### pagerduty
-Installs pagerduty plugin for nagios. If you only have a single pagerduty key, you can simply set a `node['nagios']['pagerduty_key']` attribute on your server.  For multiple pagerduty key configuration see Pager Duty under Data Bags.
+
+Installs pagerduty plugin for nagios. If you only have a single pagerduty key, you can simply set a `node['nagios']['pagerduty_key']` attribute on your server. For multiple pagerduty key configuration see Pager Duty under Data Bags.
 
 This recipe was written based on the [Nagios Integration Guide](http://www.pagerduty.com/docs/guides/nagios-integration-guide) from PagerDuty which explains how to get an API key for your Nagios server.
 
+## Data Bags
 
-Data Bags
----------
 [See Wiki for more databag information](https://github.com/schubergphilis/nagios/wiki/config)
 
 ### Pager Duty
-You can define pagerduty contacts and keys by creating nagios\_pagerduty data bags that contain the contact and
-the relevant key. Setting admin\_contactgroup to "true" will add this pagerduty contact to the admin contact group
-created by this cookbook.
+
+You can define pagerduty contacts and keys by creating nagios_pagerduty data bags that contain the contact and the relevant key. Setting admin_contactgroup to "true" will add this pagerduty contact to the admin contact group created by this cookbook.
 
 ```javascript
 {
@@ -216,8 +222,8 @@ created by this cookbook.
 
 You can add these contacts to any contactgroups you create.
 
-Monitoring Role
----------------
+## Monitoring Role
+
 Create a role to use for the monitoring server. The role name should match the value of the attribute "`node['nrpe']['server_role']`" on your clients. By default, this is '`monitoring`'. For example:
 
 ```ruby
@@ -239,25 +245,28 @@ default_attributes(
 $ knife role from file monitoring.rb
 ```
 
-Usage
------
+## Usage
+
 ### server setup
-Create a role named '`monitoring`', and add the nagios server recipe to the `run_list`. See __Monitoring Role__ above for an example.
+
+Create a role named '`monitoring`', and add the nagios server recipe to the `run_list`. See **Monitoring Role** above for an example.
 
 Apply the nrpe cookbook to nodes in order to install the NRPE client
 
-By default the Nagios server will only monitor systems in its same environment. To change this set the `multi_environment_monitoring` attribute. See __Attributes__
+By default the Nagios server will only monitor systems in its same environment. To change this set the `multi_environment_monitoring` attribute. See **Attributes**
 
-Create data bag items in the `users` data bag for each administer you would like to be able to login to the Nagios server UI. Pay special attention to the method you would like to use to authorization users (openid or htauth). See __Users__ and __Atttributes__
+Create data bag items in the `users` data bag for each administer you would like to be able to login to the Nagios server UI. Pay special attention to the method you would like to use to authorization users (openid or htauth). See **Users** and **Atttributes**
 
 At this point you now have a minimally functional Nagios server, however the server will lack any service checks outside of the single Nagios Server health check.
 
 ### defining checks
+
 NRPE commands are defined in recipes using the nrpe_check LWRP provider in the nrpe cookbooks. For base system monitoring such as load, ssh, memory, etc you may want to create a cookbook in your environment that defines each monitoring command via the LWRP.
 
-With NRPE commands created using the LWRP you will need to define Nagios services to use those commands. These services are defined using the `nagios_services` data bag and applied to roles and/or environments. See __Services__
+With NRPE commands created using the LWRP you will need to define Nagios services to use those commands. These services are defined using the `nagios_services` data bag and applied to roles and/or environments. See **Services**
 
 ### enabling notifications
+
 You need to set `default['nagios']['notifications_enabled'] = 1` attribute on your Nagios server to enable email notifications.
 
 For email notifications to work an appropriate mail program package and local MTA need to be installed so that /usr/bin/mail or /bin/mail is available on the system.
