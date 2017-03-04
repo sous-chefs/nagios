@@ -4,6 +4,5 @@ metadata
 
 group :integration do
   cookbook 'apt'
-  cookbook 'freebsd'
   cookbook 'nagios_test', path: './test/fixtures/cookbooks/nagios_test'
 end
