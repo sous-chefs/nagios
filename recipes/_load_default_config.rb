@@ -57,7 +57,7 @@ nagios_timeperiod '24x7' do
                        'wednesday' => '00:00-24:00',
                        'thursday'  => '00:00-24:00',
                        'friday'    => '00:00-24:00',
-                       'saturday'  => '00:00-24:00'
+                       'saturday'  => '00:00-24:00',
                      }
 end
 

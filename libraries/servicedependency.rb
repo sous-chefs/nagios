@@ -198,7 +198,7 @@ class Nagios
         'hostgroup_name_list'              => 'hostgroup_name',
         'inherits_parent'                  => 'inherits_parent',
         'execution_failure_criteria'       => 'execution_failure_criteria',
-        'notification_failure_criteria'    => 'notification_failure_criteria'
+        'notification_failure_criteria'    => 'notification_failure_criteria',
       }
     end
     # rubocop:enable MethodLength

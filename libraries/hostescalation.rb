@@ -157,7 +157,7 @@ class Nagios
         'first_notification'    => 'first_notification',
         'last_notification'     => 'last_notification',
         'notification_interval' => 'notification_interval',
-        'register'              => 'register'
+        'register'              => 'register',
       }
     end
     # rubocop:enable MethodLength

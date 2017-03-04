@@ -30,7 +30,7 @@ if platform_family?('rhel') || platform_family?('fedora')
   end
 end
 
-include_recipe 'nginx'
+include_recipe 'chef_nginx'
 
 %w(default 000-default).each do |disable_site|
   nginx_site disable_site do

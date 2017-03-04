@@ -1,25 +1,22 @@
-nagios cookbook
-===============
+# nagios cookbook
 
-[![Join the chat at https://gitter.im/schubergphilis/nagios](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/schubergphilis/nagios?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-[![Build Status](https://travis-ci.org/schubergphilis/nagios.svg)](https://travis-ci.org/schubergphilis/nagios)
-[![Cookbook Version](https://img.shields.io/cookbook/v/nagios.svg)](https://supermarket.chef.io/cookbooks/nagios)
+[![Join the chat at https://gitter.im/schubergphilis/nagios](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/schubergphilis/nagios?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) [![Build Status](https://travis-ci.org/schubergphilis/nagios.svg)](https://travis-ci.org/schubergphilis/nagios) [![Cookbook Version](https://img.shields.io/cookbook/v/nagios.svg)](https://supermarket.chef.io/cookbooks/nagios)
 
 Installs and configures Nagios server. Chef nodes are automatically discovered using search, and Nagios host groups are created based on Chef roles and optionally environments as well.
 
+## Requirements
 
-Requirements
-------------
 ### Chef
-Chef version 11+ is required
+
+Chef version 12.1+ is required
 
 Because of the heavy use of search, this recipe will not work with Chef Solo, as it cannot do any searches without a server.
 
-This cookbook relies heavily on multiple data bags. See __Data Bag__ below.
+This cookbook relies heavily on multiple data bags. See **Data Bag** below.
 
-The system running this cookbooks should have a role named 'monitoring' so that NRPE clients can authorize monitoring from that system. This role name is configurable via an attribute. See __Attributes__ below.
+The system running this cookbooks should have a role named 'monitoring' so that NRPE clients can authorize monitoring from that system. This role name is configurable via an attribute. See **Attributes** below.
 
-The functionality that was previously in the nagios::client recipe has been moved to its own NRPE cookbook at https://github.com/schubergphilis/nrpe
+The functionality that was previously in the nagios::client recipe has been moved to its own NRPE cookbook at <https://github.com/schubergphilis/nrpe>
 
 ### Platform
 * Debian 7+
@@ -294,18 +291,17 @@ default_attributes(
 $ knife role from file monitoring.rb
 ```
 
+## License & Authors
 
-License & Authors
------------------
-- Author:: Joshua Sierles <joshua@37signals.com>
-- Author:: Nathan Haneysmith <nathan@chef.io>
-- Author:: Joshua Timberman <joshua@chef.io>
-- Author:: Seth Chisamore <schisamo@chef.io>
-- Author:: Tim Smith <tsmith@chef.io>
+- Author:: Joshua Sierles [joshua@37signals.com](mailto:joshua@37signals.com)
+- Author:: Nathan Haneysmith [nathan@chef.io](mailto:nathan@chef.io)
+- Author:: Joshua Timberman [joshua@chef.io](mailto:joshua@chef.io)
+- Author:: Seth Chisamore [schisamo@chef.io](mailto:schisamo@chef.io)
+- Author:: Tim Smith [tsmith@chef.io](mailto:tsmith@chef.io)
 
 ```text
 Copyright 2009, 37signals
-Copyright 2009-2013, Chef Software, Inc
+Copyright 2009-2017, Chef Software, Inc
 Copyright 2012, Webtrends Inc.
 Copyright 2013-2014, Limelight Networks, Inc.
 
