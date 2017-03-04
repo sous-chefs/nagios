@@ -49,7 +49,7 @@ def nagios_action_delete?(action)
   elsif action.is_a?(Array)
     return true if action.include?(:delete) || action.include?(:remove)
   else
-    return false
+    false
   end
 end
 
@@ -59,7 +59,7 @@ def nagios_action_create?(action)
   elsif action.is_a?(Array)
     return true if action.include?(:create) || action.include?(:add)
   else
-    return false
+    false
   end
 end
 
