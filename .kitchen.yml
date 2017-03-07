@@ -5,12 +5,6 @@ provisioner:
   name: chef_zero
 
 platforms:
-  - name: ubuntu-12.04
-    driver_config:
-      network:
-        - ["forwarded_port", {guest: 80, host: 8080}]
-    run_list:
-    - recipe[apt::default]
   - name: ubuntu-14.04
     driver_config:
       network:
@@ -35,18 +29,14 @@ platforms:
         - ["forwarded_port", {guest: 80, host: 8084}]
     run_list:
     - recipe[apt::default]
-  - name: freebsd-9.3
-    driver_config:
-      network:
-        - ["forwarded_port", {guest: 80, host: 8085}]
-    run_list:
-    - recipe[freebsd::portsnap]
   - name: freebsd-10.3
     driver_config:
       network:
+        - ["forwarded_port", {guest: 80, host: 8085}]
+  - name: freebsd-11.0
+    driver_config:
+      network:
         - ["forwarded_port", {guest: 80, host: 8086}]
-    run_list:
-    - recipe[freebsd::portsnap]
   - name: centos-7.3
     driver_config:
       network:
