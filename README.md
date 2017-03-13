@@ -51,6 +51,8 @@ Example: `default['nagios']['conf']['cfg_dir'] = [ '/etc/nagios/conf.d' , '/usr/
 * `node['nagios']['monitored_environments']` - If multi_environment_monitoring is 'true' nagios will monitor nodes in all environments. If monitored_environments is defined then nagios will monitor only hosts in the list of environments defined. For ex: ['prod', 'beta'] will monitor only hosts in 'prod' and 'beta' chef_environments. Defaults to '[]' - and all chef environments will be monitored by default.
 * `node['nagios']['monitoring_interface']` - If set, will use the specified interface for all nagios monitoring network traffic. Defaults to `nil`
 * `node['nagios']['exclude_tag_host']` - If set, hosts tagged with this value will be excluded from nagios monitoring.  Defaults to ''
+* `node['nagios']['aws_region_restrict']` - If set, host list will be restricted hosts in availability zones from the defined regions ('aws_regions' attribute).  Defaults to false 
+* `node['nagios']['aws_regions']` - If 'aws_region_restrict' attribute is set to true, only hosts from the defined regions will be monitored.  Defaults to '[]'
 
 * `node['nagios']['server']['install_method']` - whether to install from package or source. Default chosen by platform based on known packages available for Nagios: debian/ubuntu 'package', redhat/centos/fedora/scientific: source
 * `node['nagios']['server']['install_yum-epel']` - whether to install the EPEL repo or not (only applies to RHEL platform family). The default value is `true`. Set this to `false` if you do not wish to install the EPEL RPM; in this scenario you will need to make the relevant packages available via another method e.g. local repo, or install from source.
