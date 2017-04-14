@@ -51,7 +51,7 @@ python_pip "nagiosplugin" do
    version "1.2.4"
 end
 
-python_pip "dateutil"
+python_pip "python-dateutil"
 
 web_srv = node['nagios']['server']['web_server'].to_sym
 
