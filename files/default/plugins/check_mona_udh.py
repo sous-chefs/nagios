@@ -45,10 +45,9 @@ class UDH(nagiosplugin.Resource):
 	 start = end - relativedelta(minutes=self.cw)
 
 	 # Double query... yep, I'm lazy.
-	 events_sent = eventdb.find({"test_id" : self.test, "time_sent" : {"$gte" : start }, "time_sent" : {"$lt" : end }})
+	 events_sent = eventdb.find({"test_id" : self.test, "time_sent" : {"$gte" : start, "$lt" : end }})
 	 events_recv = eventdb.find({"test_id" : self.test,
-	                             "time_sent" : {"$gte" : start },
-	                             "time_sent" : {"$lt" : end },
+	                             "time_sent" : {"$gte" : start, "$lt" : end },
 				     "time_recv" : {"$exists" : 1}})
 
 	 total_sent = events_sent.count()
