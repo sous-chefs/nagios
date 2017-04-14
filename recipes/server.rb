@@ -24,6 +24,7 @@
 include_recipe "java"
 
 include_recipe "perl"
+include_recipe "python"
 include_recipe "zookeeper_tealium::client_python"
 include_recipe "tealium_bongo::packages"
 include_recipe "pnp4nagios_tealium"
@@ -40,6 +41,19 @@ end
 ].each { |package|
     cpan_module package
 }
+
+# Install pkgs required for check_mona_udh.py
+python_pip "pymongo" do
+   version "3.4.0"
+end
+
+python_pip "nagiosplugin" do
+   version "1.2.4"
+end
+
+python_pip "dateutil" do
+   version "2.2"
+end
 
 web_srv = node['nagios']['server']['web_server'].to_sym
 
