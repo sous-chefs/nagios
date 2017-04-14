@@ -202,11 +202,16 @@ else
   
     nodes = []
     nodes1 = nodes1.concat(nagiosnodes)
+
+    #Chef::Log.warn("nodes1 is: #{nodes1}")
+
     nodes1.each do |n|
-        if n.roles.include?("base")
+     #   if n.roles.include?("base")
             nodes << n
-        end
+            
+     #   end
     end
+    #Chef::Log.warn("nodes are #{nodes}.")
 end
 
 if domain.match(/^privatecloud\d/) or domain.match(/^pc\d/)
@@ -604,14 +609,29 @@ vs_eu_west = search(:node, "chef_environment:production AND role:dc_visitor_serv
 vs_eu_central = search(:node, "chef_environment:production AND role:dc_visitor_service AND ec2_region:eu-central-1")
 vs_us_east = search(:node, "chef_environment:production AND role:dc_visitor_service AND ec2_region:us-east-1")
 
+hvp_eu_west = search(:node, "chef_environment:production AND role:dc_historic_visitor_processor AND ec2_region:eu-west-1")
+hvp_eu_central = search(:node, "chef_environment:production AND role:dc_historic_visitor_processor AND ec2_region:eu-central-1")
+hvp_us_east = search(:node, "chef_environment:production AND role:dc_historic_visitor_processor AND ec2_region:us-east-1")
+
 vs_eu_west_count = vs_eu_west.count
 vs_eu_central_count = vs_eu_central.count
 vs_us_east_count = vs_us_east.count
 
-prod_mongo_search = search(:node, 'chef_environment:production AND run_list:recipe\[mongodb\:\:mongos\] AND recipes:set-hostname AND ec2_region:us-west-1')
+qa_eu_west = search(:node, "chef_environment:production AND role:dc_query_aggregator AND ec2_region:eu-west-1")
+qa_eu_central = search(:node, "chef_environment:production AND role:dc_query_aggregator AND ec2_region:eu-central-1")
+qa_us_east = search(:node, "chef_environment:production AND role:dc_query_aggregator AND ec2_region:us-east-1")
+
+prod_mongo_search = search(:node, 'chef_environment:production AND run_list:recipe\[mongodb_tealium\:\:role_prod_cluster2_mongos\] AND ec2_region:us-west-1')
 prod_mongo_ip = prod_mongo_search.first.ipaddress
 pc1_mongo_search = search(:node, 'chef_environment:pc1 AND run_list:recipe\[mongodb_tealium\:\:role_pc1_cluster1_mongos\]')
 pc1_mongo_ip = pc1_mongo_search.first.ipaddress
+
+ip = "#{node['hostname']} - #{node[:ipaddress]}"
+environment = "#{node[:app_environment]}"
+chef_env = node.chef_environment
+Chef::Log.warn("Chef Env is: #{chef_env}")
+Chef::Log.warn("Nagios IP is: #{ip}")
+Chef::Log.warn("Second App_Environment is: #{environment}")
 
 if node[:ec2][:local_ipv4] == "10.1.2.7" or node[:app_environment].match(/^privatecloud\d/)
 ip = "#{node['hostname']} - #{node[:ipaddress]}"
@@ -673,7 +693,16 @@ Chef::Log.warn("Second App_Environment is: #{environment}")
       :dd_us_east_count_double => dd_us_east_count_double,
       :vp_all => vp_all,
       :prod_mongo_ip => prod_mongo_ip, 
-      :pc1_mongo_ip => pc1_mongo_ip
+      :pc1_mongo_ip => pc1_mongo_ip,
+      :hvp_eu_west => hvp_eu_west,
+      :hvp_eu_central => hvp_eu_central,
+      :hvp_us_east => hvp_us_east,
+      :esp_eu_west => esp_eu_west,
+      :esp_eu_central => esp_eu_central,
+      :esp_us_east => esp_us_east,
+      :qa_eu_west => qa_eu_west,
+      :qa_eu_central => qa_eu_central,
+      :qa_us_east => qa_us_east
     )
   end
 else

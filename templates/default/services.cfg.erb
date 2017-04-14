@@ -6,7 +6,7 @@ define service {
     use                 default-service,srv-pnp
     host_name           *
     service_description ping
-    check_command       check_ping!500.0,40%!1000.0,50%
+    check_command       check_ping!200.0,2%!300.0,3%
 }
 
 # monitoring service checks
@@ -735,49 +735,219 @@ define service {
 } 
 
 define service {
-    service_description Check Rabbit UC_to_ESP queue availability eu-central-1
+    service_description Check Rabbit uc_to_esp queue count eu-central-1
     <%= @designation %> <%= @ip %>
     check_command       check_rabbitmq_queue_availability_new!eu-central-1.cluster.rabbitmq.tealiumiq.com!/server2server!monitor!ifyouaremonitoringtheworld!eu-central!uc_to_esp!<%= @esp_eu_central_id.count %>
     use                 rappid-rabbit,srv-pnp
 }
 
 define service {
-    service_description Check Rabbit UC_to_ESP queue availability eu-west-1
+    service_description Check Rabbit qp_to_qps_rebalancecomplete_query_aggregator queue count eu-west-1
+    <%= @designation %> <%= @ip %>
+    check_command       check_rabbitmq_queue_availability_new!eu-west-1.cluster.rabbitmq.tealiumiq.com!/server2server!monitor!ifyouaremonitoringtheworld!eu-west!qp_to_qps_rebalancecomplete_query_aggregator!<%= @qa_eu_west.count %>           
+    use                 default-service,srv-pnp
+}
+
+define service {
+    service_description Check Rabbit qp_to_qps_rebalancecomplete_query_aggregator queue count eu-central-1
+    <%= @designation %> <%= @ip %>    
+    check_command       check_rabbitmq_queue_availability_new!eu-central-1.cluster.rabbitmq.tealiumiq.com!/server2server!monitor!ifyouaremonitoringtheworld!eu-central!qp_to_qps_rebalancecomplete_query_aggregator!<%= @qa_eu_central.count %>
+    use                 default-service,srv-pnp
+}
+
+define service {
+    service_description Check Rabbit qp_to_qps_rebalancecomplete_query_aggregator queue count us-east-1
+    <%= @designation %> <%= @ip %>    
+    check_command       check_rabbitmq_queue_availability_new!us-east-1.cluster.rabbitmq.tealiumiq.com!/server2server!monitor!ifyouaremonitoringtheworld!us-east!qp_to_qps_rebalancecomplete_query_aggregator!<%= @qa_us_east.count %>
+    use                 default-service,srv-pnp
+}
+
+define service {
+    service_description Check Rabbit mr_to_mrs_banned_visitors_visitor_processor queue count eu-west-1
+    <%= @designation %> <%= @ip %>
+    check_command       check_rabbitmq_queue_availability_new!eu-west-1.cluster.rabbitmq.tealiumiq.com!/server2server!monitor!ifyouaremonitoringtheworld!eu-west!mr_to_mrs_banned_visitors_visitor_processor!<%= @vp_eu_west_count %>
+    use                 default-service,srv-pnp
+}
+
+define service {
+    service_description Check Rabbit mr_to_mrs_banned_visitors_visitor_processor queue count eu-central-1
+    <%= @designation %> <%= @ip %>
+    check_command       check_rabbitmq_queue_availability_new!eu-central-1.cluster.rabbitmq.tealiumiq.com!/server2server!monitor!ifyouaremonitoringtheworld!eu-central!mr_to_mrs_banned_visitors_visitor_processor!<%= @vp_eu_central_count %>
+    use                 default-service,srv-pnp
+}
+
+define service {
+    service_description Check Rabbit mr_to_mrs_banned_visitors_visitor_processor queue count us-east-1
+    <%= @designation %> <%= @ip %>
+    check_command       check_rabbitmq_queue_availability_new!us-east-1.cluster.rabbitmq.tealiumiq.com!/server2server!monitor!ifyouaremonitoringtheworld!us-east!mr_to_mrs_banned_visitors_visitor_processor!<%= @vp_us_east_count %>
+    use                 default-service,srv-pnp
+}
+
+define service {
+    service_description Check Rabbit mr_to_mrs_banned_visitors_eventstream_processor queue count eu-west-1
+    <%= @designation %> <%= @ip %>
+    check_command       check_rabbitmq_queue_availability_new!eu-west-1.cluster.rabbitmq.tealiumiq.com!/server2server!monitor!ifyouaremonitoringtheworld!eu-west!mr_to_mrs_banned_visitors_eventstream_processor!<%= @esp_eu_west.count %>
+    use                 default-service,srv-pnp
+}
+
+define service {
+    service_description Check Rabbit mr_to_mrs_banned_visitors_eventstream_processor queue count eu-central-1
+    <%= @designation %> <%= @ip %>
+    check_command       check_rabbitmq_queue_availability_new!eu-central-1.cluster.rabbitmq.tealiumiq.com!/server2server!monitor!ifyouaremonitoringtheworld!eu-central!mr_to_mrs_banned_visitors_eventstream_processor!<%= @esp_eu_central.count %>
+    use                 default-service,srv-pnp
+}
+
+define service {
+    service_description Check Rabbit mr_to_mrs_banned_visitors_eventstream_processor queue count us-east-1
+    <%= @designation %> <%= @ip %>
+    check_command       check_rabbitmq_queue_availability_new!us-east-1.cluster.rabbitmq.tealiumiq.com!/server2server!monitor!ifyouaremonitoringtheworld!us-east!mr_to_mrs_banned_visitors_eventstream_processor!<%= @esp_us_east.count %>
+    use                 default-service,srv-pnp
+}
+
+define service {
+    service_description Check Rabbit vp_to_vps_rebalancerequest_visitor_processor queue count eu-west-1
+    <%= @designation %> <%= @ip %>
+    check_command       check_rabbitmq_queue_availability_new!eu-west-1.cluster.rabbitmq.tealiumiq.com!/server2server!monitor!ifyouaremonitoringtheworld!eu-west!vp_to_vps_rebalancerequest_visitor_processor!<%= @vp_eu_west_count %>
+    use                 default-service,srv-pnp
+}
+
+define service {
+    service_description Check Rabbit vp_to_vps_rebalancerequest_visitor_processor queue count eu-central-1
+    <%= @designation %> <%= @ip %>
+    check_command       check_rabbitmq_queue_availability_new!eu-central-1.cluster.rabbitmq.tealiumiq.com!/server2server!monitor!ifyouaremonitoringtheworld!eu-central!vp_to_vps_rebalancerequest_visitor_processor!<%= @vp_eu_central_count %>
+    use                 default-service,srv-pnp
+}
+
+define service {
+    service_description Check Rabbit vp_to_vps_rebalancerequest_visitor_processor queue count us-east-1
+    <%= @designation %> <%= @ip %>
+    check_command       check_rabbitmq_queue_availability_new!us-east-1.cluster.rabbitmq.tealiumiq.com!/server2server!monitor!ifyouaremonitoringtheworld!us-east!vp_to_vps_rebalancerequest_visitor_processor!<%= @vp_us_east_count %>
+    use                 default-service,srv-pnp
+}
+
+define service {
+    service_description Check Rabbit vp_to_vps_rebalancecomplete_visitor_processor queue count eu-west-1
+    <%= @designation %> <%= @ip %>
+    check_command       check_rabbitmq_queue_availability_new!eu-west-1.cluster.rabbitmq.tealiumiq.com!/server2server!monitor!ifyouaremonitoringtheworld!eu-west!vp_to_vps_rebalancecomplete_visitor_processor!<%= @vp_eu_west_count %>
+    use                 default-service,srv-pnp
+}
+
+define service {
+    service_description Check Rabbit vp_to_vps_rebalancecomplete_visitor_processor queue count eu-central-1
+    <%= @designation %> <%= @ip %>
+    check_command       check_rabbitmq_queue_availability_new!eu-central-1.cluster.rabbitmq.tealiumiq.com!/server2server!monitor!ifyouaremonitoringtheworld!eu-central!vp_to_vps_rebalancecomplete_visitor_processor!<%= @vp_eu_central_count %>
+    use                 default-service,srv-pnp
+}
+
+define service {
+    service_description Check Rabbit vp_to_vps_rebalancecomplete_visitor_processor queue count us-east-1
+    <%= @designation %> <%= @ip %>
+    check_command       check_rabbitmq_queue_availability_new!us-east-1.cluster.rabbitmq.tealiumiq.com!/server2server!monitor!ifyouaremonitoringtheworld!us-east!vp_to_vps_rebalancecomplete_visitor_processor!<%= @vp_us_east_count %>
+    use                 default-service,srv-pnp
+}
+
+define service {
+    service_description Check Rabbit hvp_to_hvps_rebalancecomplete_historic_visitor_processor queue count eu-west-1
+    <%= @designation %> <%= @ip %>
+    check_command       check_rabbitmq_queue_availability_new!eu-west-1.cluster.rabbitmq.tealiumiq.com!/server2server!monitor!ifyouaremonitoringtheworld!eu-west!hvp_to_hvps_rebalancecomplete_historic_visitor_processor!<%= @hvp_eu_west.count %>
+    use                 default-service,srv-pnp
+}
+
+define service {
+    service_description Check Rabbit hvp_to_hvps_rebalancerequest_historic_visitor_processor queue count eu-west-1
+    <%= @designation %> <%= @ip %>    
+    check_command       check_rabbitmq_queue_availability_new!eu-west-1.cluster.rabbitmq.tealiumiq.com!/server2server!monitor!ifyouaremonitoringtheworld!eu-west!hvp_to_hvps_rebalancerequest_historic_visitor_processor!<%= @hvp_eu_west.count %>
+    use                 default-service,srv-pnp
+}
+
+define service {
+    service_description Check Rabbit hvp_to_hvps_rebalancecomplete_historic_visitor_processor queue count eu-central-1
+    <%= @designation %> <%= @ip %>
+    check_command       check_rabbitmq_queue_availability_new!eu-central-1.cluster.rabbitmq.tealiumiq.com!/server2server!monitor!ifyouaremonitoringtheworld!eu-central!hvp_to_hvps_rebalancecomplete_historic_visitor_processor!<%= @hvp_eu_central.count %>
+    use                 default-service,srv-pnp
+}
+
+define service {
+    service_description Check Rabbit hvp_to_hvps_rebalancerequest_historic_visitor_processor queue count eu-central-1
+    <%= @designation %> <%= @ip %>
+    check_command       check_rabbitmq_queue_availability_new!eu-central-1.cluster.rabbitmq.tealiumiq.com!/server2server!monitor!ifyouaremonitoringtheworld!eu-central!hvp_to_hvps_rebalancerequest_historic_visitor_processor!<%= @hvp_eu_central.count %>
+    use                 default-service,srv-pnp
+}
+
+define service {
+    service_description Check Rabbit hvp_to_hvps_rebalancecomplete_historic_visitor_processor queue count us-east-1
+    <%= @designation %> <%= @ip %>
+    check_command       check_rabbitmq_queue_availability_new!us-east-1.cluster.rabbitmq.tealiumiq.com!/server2server!monitor!ifyouaremonitoringtheworld!us-east!hvp_to_hvps_rebalancecomplete_historic_visitor_processor!<%= @hvp_us_east.count %>
+    use                 default-service,srv-pnp
+}
+
+define service {
+    service_description Check Rabbit hvp_to_hvps_rebalancerequest_historic_visitor_processor queue count us-east-1
+    <%= @designation %> <%= @ip %>
+    check_command       check_rabbitmq_queue_availability_new!us-east-1.cluster.rabbitmq.tealiumiq.com!/server2server!monitor!ifyouaremonitoringtheworld!us-east!hvp_to_hvps_rebalancerequest_historic_visitor_processor!<%= @hvp_us_east.count %>
+    use                 default-service,srv-pnp
+}
+
+
+
+define service {
+    service_description Check Rabbit VS queue count eu-west-1
+    <%= @designation %> <%= @ip %>
+    check_command       check_rabbitmq_queue_availability_new!eu-west-1.cluster.rabbitmq.tealiumiq.com!/server2server!monitor!ifyouaremonitoringtheworld!eu-west!visitor_service!<%= @vs_eu_west_count %>
+    use                 rappid-rabbit,srv-pnp
+}
+
+define service {
+    service_description Check Rabbit VS queue count us-east-1
+    <%= @designation %> <%= @ip %>
+    check_command       check_rabbitmq_queue_availability_new!us-east-1.cluster.rabbitmq.tealiumiq.com!/server2server!monitor!ifyouaremonitoringtheworld!us-east!visitor_service!<%= @vs_us_east_count %>
+    use                 rappid-rabbit,srv-pnp
+}
+
+define service {
+    service_description Check Rabbit VS queue count eu-central-1
+    <%= @designation %> <%= @ip %>
+    check_command       check_rabbitmq_queue_availability_new!eu-central-1.cluster.rabbitmq.tealiumiq.com!/server2server!monitor!ifyouaremonitoringtheworld!eu-central!visitor_service!<%= @vs_eu_central_count %>
+    use                 rappid-rabbit,srv-pnp
+}
+
+define service {
+    service_description Check Rabbit uc_to_esp queue count eu-west-1
     <%= @designation %> <%= @ip %>
     check_command       check_rabbitmq_queue_availability_new!eu-west-1.cluster.rabbitmq.tealiumiq.com!/server2server!monitor!ifyouaremonitoringtheworld!eu-west!uc_to_esp!<%= @esp_eu_west_id.count %>
     use                 rappid-rabbit,srv-pnp
 }
 
-define service {
-    service_description Check Rabbit UC_to_ESP queue availability us-west-1
-    <%= @designation %> <%= @ip %>
-    check_command       check_rabbitmq_queue_availability_new!us-west-1.cluster.rabbitmq.tealiumiq.com!/server2server!monitor!ifyouaremonitoringtheworld!us-west!uc_to_esp!<%= @esp_us_west_id.count %>
-    use                 rappid-rabbit,srv-pnp
-}
+#define service {
+#    service_description Check Rabbit uc_to_esp queue availability us-west-1
+#    <%= @designation %> <%= @ip %>
+#    check_command       check_rabbitmq_queue_availability_new!us-west-1.cluster.rabbitmq.tealiumiq.com!/server2server!monitor!ifyouaremonitoringtheworld!us-west!uc_to_esp!<%= @esp_us_west_id.count %>
+#    use                 rappid-rabbit,srv-pnp
+#}
 
 define service {
-    service_description Check Rabbit uc_to_esp queue availability us-east-1
+    service_description Check Rabbit uc_to_esp queue count us-east-1
     <%= @designation %> <%= @ip %>
     check_command       check_rabbitmq_queue_availability_new!us-east-1.cluster.rabbitmq.tealiumiq.com!/server2server!monitor!ifyouaremonitoringtheworld!us-east!uc_to_esp!<%= @esp_us_east_id.count %>
     use                 rappid-rabbit,srv-pnp
 }
 
 define service {
-    service_description Rabbit ESP_to_AU queue availability us-east-1
+    service_description Rabbit esp_to_au queue availability us-east-1
     <%= @designation %> <%= @ip %>
     check_command       check_rabbitmq_queue_availability_new!us-east-1.cluster.rabbitmq.tealiumiq.com!/server2server!monitor!ifyouaremonitoringtheworld!us-east!esp_to_au!<%= @au_east_id.count %>
     use                 rappid-rabbit,srv-pnp
 }
 
 define service {
-    service_description Rabbit ESP_to_AU queue availability eu-west-1
+    service_description Rabbit esp_to_au queue availability eu-west-1
     <%= @designation %> <%= @ip %>
     check_command       check_rabbitmq_queue_availability_new!eu-west-1.cluster.rabbitmq.tealiumiq.com!/server2server!monitor!ifyouaremonitoringtheworld!eu-west!esp_to_au!<%= @au_eu_west_id.count %>
     use                 rappid-rabbit,srv-pnp
 }
 
 define service {
-    service_description Rabbit ESP_to_AU queue availability eu-central-1
+    service_description Rabbit esp_to_au queue availability eu-central-1
     <%= @designation %> <%= @ip %>
     check_command       check_rabbitmq_queue_availability_new!eu-central-1.cluster.rabbitmq.tealiumiq.com!/server2server!monitor!ifyouaremonitoringtheworld!eu-central!esp_to_au!<%= @au_eu_central_id.count %>
     use                 rappid-rabbit,srv-pnp
@@ -901,6 +1071,7 @@ define service {
 #}
 
 ##8-10 Temp off Next 2
+#3-9-Jack
 define service {
     service_description RabbitMQ mr_to_vp queue consumer count eu-central-1
     <%= @designation %> <%= @ip %>
@@ -925,7 +1096,6 @@ define service {
 #    event_handler       vp_handler!us-west-1
 #}
 
-#8-10 Temp off Next 1
 define service {
     service_description RabbitMQ mr_to_vp queue consumer count us-east-1
     <%= @designation %> <%= @ip %>
