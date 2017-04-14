@@ -108,17 +108,17 @@ define command {
 
 define command {
   command_name    check_jmx_uconnect_messages_queued_local
-  command_line    $USER1$/check_jmx -U service:jmx:rmi:///jndi/rmi://$HOSTADDRESS$:9001/jmxrmi -O "DataCloud:type=EventQueue" -A MessagesQueuedLocalRegion -c $ARG1$
+  command_line    $USER1$/check_jmx -U service:jmx:rmi:///jndi/rmi://$HOSTADDRESS$:9001/jmxrmi -O "DataCloud:type=RemoteSenderService" -A QueueSize -c $ARG1$
 }
 
 define command {
   command_name    check_jmx_uconnect_messages_queued_cross_region
-  command_line    $USER1$/check_jmx -U service:jmx:rmi:///jndi/rmi://$HOSTADDRESS$:9001/jmxrmi -O "DataCloud:type=EventQueue" -A MessagesQueuedCrossRegion -c $ARG1$
+  command_line    $USER1$/check_jmx -U service:jmx:rmi:///jndi/rmi://$HOSTADDRESS$:9001/jmxrmi -O "DataCloud:type=LocalSenderService" -A QueueSize -c $ARG1$
 }
 
 define command {
   command_name    check_jmx_uconnect_requests_received
-  command_line    $USER1$/check_jmx -U service:jmx:rmi:///jndi/rmi://$HOSTADDRESS$:9001/jmxrmi -O "DataCloud-Metrics:name=uConnect-AllRequestsProcessingTime" -A OneMinuteRate -c$ARG1$:
+  command_line    $USER1$/check_jmx -U service:jmx:rmi:///jndi/rmi://$HOSTADDRESS$:9001/jmxrmi -O "DataCloud-Metrics:name=Handler-Jetty-ProcessingTime" -A OneMinuteRate -c$ARG1$:
 }
 
 define command {
