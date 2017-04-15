@@ -989,7 +989,7 @@ define command {
 
 define command{
         command_name    check_mona_udh_service
-        command_line    $USER1$/check_mona_udh.py -t $ARG1$
+        command_line    $USER1$/check_mona_udh.py -t $ARG1$ -w 5 -c 10 -W 8 -C 10
 }
 
 # Notification
