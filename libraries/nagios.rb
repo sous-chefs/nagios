@@ -45,7 +45,8 @@ class Nagios
                 :default_host,
                 :default_servicegroup,
                 :default_service,
-                :default_timeperiod
+                :default_timeperiod,
+                :server_node
 
   def initialize
     @commands            = {}
@@ -263,8 +264,7 @@ class Nagios
     return nil if hostname.nil?
 
     host = find(Nagios::Host.new(hostname))
-    # TODO: merge the ip_to_monitor funtion into this logic here
-    host.address = obj['ipaddress']
+    host.address = ip_to_monitor(obj, @server_node)
     host.import(obj['nagios']) unless obj['nagios'].nil?
 
     groups.each do |r|
