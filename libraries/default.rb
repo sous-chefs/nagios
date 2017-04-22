@@ -23,9 +23,7 @@ def nagios_boolean(true_or_false)
 end
 
 def nagios_interval(seconds)
-  if seconds.to_i == 0
-    raise ArgumentError, 'Specified nagios interval of 0 seconds is not allowed'
-  end
+  raise ArgumentError, 'Specified nagios interval of 0 seconds is not allowed' if seconds.to_i.zero?
   interval = seconds
   if node['nagios']['conf']['interval_length'].to_i != 1
     interval = seconds.to_f / node['nagios']['conf']['interval_length']
@@ -45,9 +43,9 @@ end
 
 def nagios_action_delete?(action)
   if action.is_a?(Symbol)
-    return true if action == :delete || action == :remove
+    action == :delete || action == :remove
   elsif action.is_a?(Array)
-    return true if action.include?(:delete) || action.include?(:remove)
+    action.include?(:delete) || action.include?(:remove)
   else
     false
   end
@@ -55,9 +53,9 @@ end
 
 def nagios_action_create?(action)
   if action.is_a?(Symbol)
-    return true if action == :create || action == :add
+    action == :create || action == :add
   elsif action.is_a?(Array)
-    return true if action.include?(:create) || action.include?(:add)
+    action.include?(:create) || action.include?(:add)
   else
     false
   end
