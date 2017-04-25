@@ -146,10 +146,10 @@ command[check_sitemap_audit_complete_perl]=<%= node['nagios']['plugin_dir'] %>/c
 <% if node.roles.include?("dc_visitor_processor") %>
 #check DC VP processes
 <% if @platform_version == "14.04" %>
-command[check_visitor_processor]=<%= node['nagios']['plugin_dir'] %>/check_procs -a "/var/lib/sources/data_cloud/visitor_profile_processor.one-jar.jar visitor_processor" -c 1:1
+command[check_visitor_processor]=<%= node['nagios']['plugin_dir'] %>/check_procs -a "/var/lib/sources/data_cloud/visitor_processor.jar" -c 1:1
 <% else %>
 #NOTE: The paramaters set below <2:2> is set that way because of a bug in this version of check_procs that sees itself when checking processes, thus we need to find at least 2
-command[check_visitor_processor]=<%= node['nagios']['plugin_dir'] %>/check_procs -a "/var/lib/sources/data_cloud/visitor_profile_processor.one-jar.jar visitor_processor" -c 2:2
+command[check_visitor_processor]=<%= node['nagios']['plugin_dir'] %>/check_procs -a "/var/lib/sources/data_cloud/visitor_processor.jar" -c 2:2
 #check_splunk_forwarder
 command[check_splunk_forwarder]=<%= node['nagios']['plugin_dir'] %>/check_procs -c 5:6 --argument-array=splunk
 command[vp_restart] = <%= node['nagios']['plugin_dir'] %>/vp_handler.sh
@@ -170,7 +170,7 @@ command[check_resource_uploader]=<%= node['nagios']['plugin_dir'] %>/check_procs
 
 <% if node.roles.include?("dc_uconnect") %>
 #check DC Uconnect process
-command[check_uconnect]=<%= node['nagios']['plugin_dir'] %>/check_procs -a "/usr/share/tealium/datacloud/uconnect.jar uconnect" -c 1:2
+command[check_uconnect]=<%= node['nagios']['plugin_dir'] %>/check_procs -a "/var/lib/sources/data_cloud/uconnect.jar" -c 1:2
 
 #check_splunk_forwarder
 command[check_splunk_forwarder]=<%= node['nagios']['plugin_dir'] %>/check_procs -c 5:6 --argument-array=splunk
@@ -178,7 +178,7 @@ command[check_splunk_forwarder]=<%= node['nagios']['plugin_dir'] %>/check_procs 
 
 <% if node.roles.include?("dc_bulk_downloader") %>
 #check DC Bulk Downloader process
-command[check_bulk_downloader]=<%= node['nagios']['plugin_dir'] %>/check_procs -a "visitor_profile_processor.one-jar.jar bulk_downloader" -c 2:2
+command[check_bulk_downloader]=<%= node['nagios']['plugin_dir'] %>/check_procs -a "/var/lib/sources/data_cloud/bulk_downloader.jar" -c 2:2
 
 #check_splunk_forwarder
 command[check_splunk_forwarder]=<%= node['nagios']['plugin_dir'] %>/check_procs -c 5:6 --argument-array=splunk
@@ -186,7 +186,7 @@ command[check_splunk_forwarder]=<%= node['nagios']['plugin_dir'] %>/check_procs 
 
 <% if node.roles.include?("dc_amazon_uploader") %>
 #check Amazon Uploader process
-command[check_dc_amazon_uploader]=<%= node['nagios']['plugin_dir'] %>/check_procs -a "amazon_uploader.jar amazon_uploader" -c 2:2
+command[check_dc_amazon_uploader]=<%= node['nagios']['plugin_dir'] %>/check_procs -a "/var/lib/sources/data_cloud/amazon_uploader.jar" -c 2:2
 
 #check_splunk_forwarder
 command[check_splunk_forwarder]=<%= node['nagios']['plugin_dir'] %>/check_procs -c 5:6 --argument-array=splunk
@@ -194,7 +194,7 @@ command[check_splunk_forwarder]=<%= node['nagios']['plugin_dir'] %>/check_procs 
 
 <% if node.roles.include?("dc_query_aggregator") %>
 #check DC QA processes
-command[check_query_aggregator]=<%= node['nagios']['plugin_dir'] %>/check_procs -a "visitor_profile_processor.one-jar.jar query_aggregator" -c 2:2
+command[check_query_aggregator]=<%= node['nagios']['plugin_dir'] %>/check_procs -a "/var/lib/sources/data_cloud/query_aggregator.jar" -c 2:2
 
 #check_splunk_forwarder
 command[check_splunk_forwarder]=<%= node['nagios']['plugin_dir'] %>/check_procs -c 5:6 --argument-array=splunk
@@ -210,7 +210,7 @@ command[check_splunk_forwarder]=<%= node['nagios']['plugin_dir'] %>/check_procs 
 
 <% if node.roles.include?("dc_data_distributor") %>
 #check DC DD process
-command[check_data_distributor]=<%= node['nagios']['plugin_dir'] %>/check_procs -a "visitor_profile_processor.one-jar.jar data_distributor" -c 2:2
+command[check_data_distributor]=<%= node['nagios']['plugin_dir'] %>/check_procs -a "/var/lib/sources/data_cloud/data_distributor.jar" -c 2:2
 
 #check_splunk_forwarder
 command[check_splunk_forwarder]=<%= node['nagios']['plugin_dir'] %>/check_procs -c 5:6 --argument-array=splunk
@@ -218,7 +218,7 @@ command[check_splunk_forwarder]=<%= node['nagios']['plugin_dir'] %>/check_procs 
 
 <% if node.roles.include?("dc_visitor_service") %>
 #check DC VS process
-command[check_visitor_service]=<%= node['nagios']['plugin_dir'] %>/check_procs -a "visitor_profile_processor.one-jar.jar visitor_service" -c 2:3
+command[check_visitor_service]=<%= node['nagios']['plugin_dir'] %>/check_procs -a "/var/lib/sources/data_cloud/visitor_service.jar" -c 2:3
 
 #check_splunk_forwarder
 command[check_splunk_forwarder]=<%= node['nagios']['plugin_dir'] %>/check_procs -c 5:6 --argument-array=splunk
