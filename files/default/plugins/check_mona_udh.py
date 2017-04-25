@@ -15,6 +15,14 @@ from dateutil.relativedelta import *
 from pymongo import MongoClient
 from pymongo.errors import PyMongoError
 
+import requests
+from requests.exceptions import RequestException
+
+import json
+
+slack_default_url = 'https://hooks.slack.com/services/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'
+#slack_default_channel = '#status_udh_webhook'
+
 class UDH(nagiosplugin.Resource):
 
    def __init__(self, mona_test_id, rate_context, time_context, check_window_size, check_window_offset):
@@ -34,6 +42,10 @@ class UDH(nagiosplugin.Resource):
       cfg = cfgdb.find_one({"_id" : self.test})
 
       if cfg:
+	 if 'region' in cfg:
+	    region = cfg['region']
+	 else:
+	    region = 'Yonder'
 
 	 if 'batchsize' in cfg:
 	    batchsize = cfg['batchsize']
@@ -44,11 +56,17 @@ class UDH(nagiosplugin.Resource):
 	 end = end - relativedelta(minutes=self.cwo)
 	 start = end - relativedelta(minutes=self.cw)
 
-	 # Double query... yep, I'm lazy.
+	 # Triple query where one would do... yep, I'm lazy.
 	 events_sent = eventdb.find({"test_id" : self.test, "time_sent" : {"$gte" : start, "$lt" : end }})
 	 events_recv = eventdb.find({"test_id" : self.test,
 	                             "time_sent" : {"$gte" : start, "$lt" : end },
 				     "time_recv" : {"$exists" : 1}})
+	 event_errors = eventdb.find({"test_id" : self.test,
+	                              "time_sent" : {"$gte" : start, "$lt" : end },
+				      "error" : {"$exists" : 1}})
+
+	 total_errors = event_errors.count()
+	 logging.debug("total_errors %d" % total_errors)
 
 	 total_sent = events_sent.count()
 	 logging.debug("total_sent = %d" % total_sent)
@@ -76,11 +94,13 @@ class UDH(nagiosplugin.Resource):
 
 	 yield nagiosplugin.Metric(self.rc, failure_rate, uom='%')
 	 yield nagiosplugin.Metric(self.tc, "%.2f" % avg_flight_time, uom='s')
+	 yield nagiosplugin.Metric("event errors", total_errors)
 	 yield nagiosplugin.Metric("events sent", total_sent)
 	 yield nagiosplugin.Metric("events recv", total_recv)
 	 yield nagiosplugin.Metric("test batchsize", batchsize)
 	 yield nagiosplugin.Metric("check window start", start.strftime('%c UTC'))
 	 yield nagiosplugin.Metric("check window end", end.strftime('%c UTC'))
+	 yield nagiosplugin.Metric("region", region)
 
       else:
 
@@ -111,14 +131,101 @@ class MonaContext(nagiosplugin.ScalarContext):
 
 class MonaSummary(nagiosplugin.Summary):
 
-   def __init__(self):
+   class Ok:
+      name = 'OK'
+      icon = ':white_check_mark:'
+      color = '#36a64f'
+
+   class Warn:
+      name = 'WARNING'
+      icon = ':warning:'
+      color = '#f3d442'
+
+   class Critical:
+      name = 'CRITICAL'
+      icon = ':rotating_light:'
+      color = '#dd2b19'
+
+   def __init__(self, slack_update=False, slack_url='', slack_channel=''):
+      self.slack_update = slack_update
+      self.slack_url = slack_url
+      #self.slack_channel = slack_channel
       super(MonaSummary, self).__init__()
+
+   def __stats(self, results):
+      perfs = ""
+      for result in results:
+	 perf = result.metric.performance()
+	 if perf:
+	    perfs += "%s\n" % str(perf)
+      return "```%s%s```" % (perfs, self.verbose(results))
+
+   def __slack(self, state, region, metric_desc, stats):
+      if (self.slack_update):
+	 headers = { 'Content-type': 'application/json' }
+	 data = {
+	    "link_names": 1,
+	    "username": "Mona",
+	    "icon_emoji": state.icon,
+	    "attachments" : [
+	       {
+		  "fallback" : metric_desc,
+		  "color": state.color,
+		  "pretext" : "Webhook Connector Status",
+		  "mrkdwn_in": ["text", "pretext", "fields"],
+		  "fields": [
+		     {
+			"title": "Region",
+			"value": region,
+			"short": False
+		     },
+		     {
+			"title": "Metric",
+			"value": metric_desc,
+			"short": False
+		     },
+		     {
+			"title": "Status",
+			"value": state.name,
+			"short": False
+		     },
+		     {
+			"title": "Stats",
+			"value": stats,
+			"short": False
+		     }
+		  ]
+	       }
+	    ]
+	 }
+
+	 try:
+	    r = requests.post(self.slack_url, headers=headers, data=json.dumps(data), timeout=10)
+	    print(r)
+	 except RequestException as e:
+	    logging.error("error: slack update failed: %s" % e)
+
+   def ok(self,results):
+      self.__slack(self.Ok, results['region'].metric.value, str(results.first_significant), self.__stats(results))
+      return super(MonaSummary, self).ok(results)
+
+   def problem(self,results):
+      if results.most_significant_state == nagiosplugin.state.Critical:
+	 state = self.Critical
+      elif results.most_significant_state == nagiosplugin.state.Warn:
+	 state = self.Warn
+      else:
+	 state = None
+      if state:
+	 self.__slack(state, results['region'].metric.value, str(results.first_significant), self.__stats(results))
+      return super(MonaSummary, self).problem(results)
 
    def verbose(self, results):
       msg = "check window start time: %s\n" % results['check window start'].metric.value
       msg += "check window end time: %s\n" % results['check window end'].metric.value
       msg += "events sent during check window: %d\n" % results['events sent'].metric.value
       msg += "events recv during check window: %d\n" % results['events recv'].metric.value
+      msg += "event errors during check window: %d\n" % results['event errors'].metric.value
       msg += "configured test batchsize: %d\n" % results['test batchsize'].metric.value
       return msg
       
@@ -139,6 +246,9 @@ def main():
 	             help='size of time window (in MINUTES) to check for test events')
    argp.add_argument('--check_window_offset', default=1,
 	             help='number of MINUTES before current time to end the check window')
+   argp.add_argument('--slack_update', action='store_true', default=False)
+   argp.add_argument('--slack_url', metavar='SLACK URL', default=slack_default_url)
+   #argp.add_argument('--slack_channel', metavar='SLACK CHANNEL NAME', default=slack_default_channel)
    argp.add_argument('-v', '--verbose', action='count', default=0)
    argp.add_argument('-d', '--debug', action='store_true', default=False)
    args = argp.parse_args()
@@ -157,10 +267,14 @@ def main():
                               MonaContext(time_context, args.WARNING, args.CRITICAL),
 			      nagiosplugin.Context('events sent'),
 			      nagiosplugin.Context('events recv'),
+			      nagiosplugin.Context('event errors'),
 			      nagiosplugin.Context('test batchsize'),
 			      nagiosplugin.Context('check window start'),
 			      nagiosplugin.Context('check window end'),
-			      MonaSummary())
+			      nagiosplugin.Context('region'),
+			      MonaSummary(slack_update=args.slack_update,
+				          slack_url=args.slack_url))
+
    check.main(verbose=args.verbose)
 
 if __name__ == '__main__':
