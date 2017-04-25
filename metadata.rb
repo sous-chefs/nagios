@@ -10,6 +10,7 @@ recipe "nagios", "Includes the client recipe."
 recipe "nagios::client", "Installs and configures a nagios client with nrpe"
 recipe "nagios::server", "Installs and configures a nagios server"
 recipe "nagios::pagerduty", "Integrates contacts w/ PagerDuty API"
+recipe "nagios::cron", "Sets up cron for chef-client"
 
 depends "zookeeper_tealium"
 depends "tealium_bongo"
