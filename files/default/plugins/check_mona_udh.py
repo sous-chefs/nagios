@@ -8,6 +8,7 @@ from nagiosplugin.state import Unknown
 
 import argparse
 import logging
+import re
 
 from datetime import datetime
 from dateutil.relativedelta import *
@@ -64,6 +65,9 @@ class UDH(nagiosplugin.Resource):
 	 event_errors = eventdb.find({"test_id" : self.test,
 	                              "time_sent" : {"$gte" : start, "$lt" : end },
 				      "error" : {"$exists" : 1}})
+	 event_http_ok = eventdb.find({"test_id" : self.test,
+	                              "time_sent" : {"$gte" : start, "$lt" : end },
+				      "uconnect_status_code" : 200})
 
 	 total_errors = event_errors.count()
 	 logging.debug("total_errors %d" % total_errors)
@@ -74,6 +78,9 @@ class UDH(nagiosplugin.Resource):
 	 total_recv = events_recv.count()
 	 logging.debug("total_recv = %d" % total_recv)
 
+	 total_http_ok = event_http_ok.count()
+	 logging.debug("total_http_ok = %d" % total_http_ok)
+
 	 if total_sent == 0:
 	    raise Exception("no test events found for time range %s to %s" % (start.strftime('%c'), end.strftime('%c')))
 
@@ -81,6 +88,7 @@ class UDH(nagiosplugin.Resource):
 	    raise Exception("no test events received for time range %s to %s" % (start.strftime('%c'), end.strftime('%c')))
 
 	 failure_rate = 100 - (float(total_recv)/total_sent * 100)
+	 http_ok_rate = (float(total_http_ok)/total_sent * 100)
 
          elapsed = 0
 	 for event in events_recv:
@@ -97,6 +105,7 @@ class UDH(nagiosplugin.Resource):
 	 yield nagiosplugin.Metric("event errors", total_errors)
 	 yield nagiosplugin.Metric("events sent", total_sent)
 	 yield nagiosplugin.Metric("events recv", total_recv)
+	 yield nagiosplugin.Metric("http ok rate", http_ok_rate, uom='%') 
 	 yield nagiosplugin.Metric("test batchsize", batchsize)
 	 yield nagiosplugin.Metric("check window start", start.strftime('%c UTC'))
 	 yield nagiosplugin.Metric("check window end", end.strftime('%c UTC'))
@@ -157,6 +166,12 @@ class MonaSummary(nagiosplugin.Summary):
       for result in results:
 	 perf = result.metric.performance()
 	 if perf:
+	    perf = str(perf)
+	    r = re.compile("'.*: ")
+	    m = r.match(perf)
+	    perf = perf[m.end():]
+	    perf = perf.translate(None, "'")
+	    perf = perf.replace("=", " = ")
 	    perfs += "%s\n" % str(perf)
       return "```%s%s```" % (perfs, self.verbose(results))
 
@@ -225,6 +240,7 @@ class MonaSummary(nagiosplugin.Summary):
       msg += "events sent during check window: %d\n" % results['events sent'].metric.value
       msg += "events recv during check window: %d\n" % results['events recv'].metric.value
       msg += "event errors during check window: %d\n" % results['event errors'].metric.value
+      msg += "uconnect http ok rate: %.2f%%\n" % results['http ok rate'].metric.value
       msg += "configured test batchsize: %d\n" % results['test batchsize'].metric.value
       return msg
       
@@ -267,6 +283,7 @@ def main():
 			      nagiosplugin.Context('events sent'),
 			      nagiosplugin.Context('events recv'),
 			      nagiosplugin.Context('event errors'),
+			      nagiosplugin.Context('http ok rate'),
 			      nagiosplugin.Context('test batchsize'),
 			      nagiosplugin.Context('check window start'),
 			      nagiosplugin.Context('check window end'),
