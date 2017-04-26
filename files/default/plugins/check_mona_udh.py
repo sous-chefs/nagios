@@ -201,7 +201,6 @@ class MonaSummary(nagiosplugin.Summary):
 
 	 try:
 	    r = requests.post(self.slack_url, headers=headers, data=json.dumps(data), timeout=10)
-	    print(r)
 	 except RequestException as e:
 	    logging.error("error: slack update failed: %s" % e)
 
@@ -256,7 +255,7 @@ def main():
    if args.debug:
       logging.basicConfig(level=logging.DEBUG)
    else:
-      logging.basicConfig(level=logging.INFO)
+      logging.basicConfig(level=logging.ERROR)
 
 
    rate_context = "%s : failure rate" % args.test
