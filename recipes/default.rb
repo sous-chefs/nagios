@@ -21,4 +21,3 @@
 #
 
 include_recipe "nagios::client"
-include_recipe "nagios::cron"

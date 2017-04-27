@@ -57,6 +57,11 @@ define command{
 }
 
 define command{
+  command_name    check_rabbitmq_queue_availability_new_DD
+  command_line    $USER1$/check_rabbitmq_queue_count_new_DD.sh $ARG1$ $ARG2$ $ARG3$ $ARG4$ $ARG5$ $ARG6$ $ARG7$
+}
+
+define command{
   command_name    check_rabbitmq_queue_availability_new_pc1
   command_line    $USER1$/check_rabbitmq_queue_count_new_pc1.sh $ARG1$ $ARG2$ $ARG3$ $ARG4$ $ARG5$ $ARG6$ $ARG7$
 }

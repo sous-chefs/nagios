@@ -926,6 +926,27 @@ define service {
 #}
 
 define service {
+    service_description Check Rabbit DataDistributor queue count us-east-1
+    <%= @designation %> <%= @ip %>
+    check_command       check_rabbitmq_queue_availability_new_DD!us-east-1.cluster.rabbitmq.tealiumiq.com!/server2server!monitor!ifyouaremonitoringtheworld!us-east!data_distributor!<%= @dd_us_east_id.count %>
+    use                 rappid-rabbit,srv-pnp
+}
+
+define service {
+    service_description Check Rabbit DataDistributor queue count eu-west-1
+    <%= @designation %> <%= @ip %>
+    check_command       check_rabbitmq_queue_availability_new_DD!eu-west-1.cluster.rabbitmq.tealiumiq.com!/server2server!monitor!ifyouaremonitoringtheworld!eu-west!data_distributor!<%= @dd_eu_west_id.count %>
+    use                 rappid-rabbit,srv-pnp
+}
+
+define service {
+    service_description Check Rabbit DataDistributor queue count eu-central-1
+    <%= @designation %> <%= @ip %>
+    check_command       check_rabbitmq_queue_availability_new_DD!eu-central-1.cluster.rabbitmq.tealiumiq.com!/server2server!monitor!ifyouaremonitoringtheworld!eu-central!data_distributor!<%= @dd_eu_central_id.count %>
+    use                 rappid-rabbit,srv-pnp
+}
+
+define service {
     service_description Check Rabbit uc_to_esp queue count us-east-1
     <%= @designation %> <%= @ip %>
     check_command       check_rabbitmq_queue_availability_new!us-east-1.cluster.rabbitmq.tealiumiq.com!/server2server!monitor!ifyouaremonitoringtheworld!us-east!uc_to_esp!<%= @esp_us_east_id.count %>
@@ -996,29 +1017,29 @@ define service {
 #    use                 rappid-rabbit,srv-pnp
 #}
 
-define service {
-    service_description Check Rabbit vp_to_dd_visitoraction consumer count us-east-1
-    <%= @designation %> <%= @ip %>
-    check_command       check_rabbitmq_queue_consumers!us-east-1.cluster.rabbitmq.tealiumiq.com!/server2server!monitor!ifyouaremonitoringtheworld!us-east!vp_to_dd_visitor_action!<%= @dd_us_east_id.count %>
-    use                 rappid-rabbit,srv-pnp
+#define service {
+#    service_description Check Rabbit vp_to_dd_visitoraction consumer count us-east-1
+#    <%= @designation %> <%= @ip %>
+#    check_command       check_rabbitmq_queue_consumers!us-east-1.cluster.rabbitmq.tealiumiq.com!/server2server!monitor!ifyouaremonitoringtheworld!us-east!vp_to_dd_visitor_action!<%= @dd_us_east_id.count %>
+#    use                 rappid-rabbit,srv-pnp
 #    event_handler       dd_handler!us-east-1!<%= @prod_mongo_ip %>!vp_to_dd_visitoraction
-}
+#}
 
-define service {
-    service_description Check Rabbit vp_to_dd_visitoraction consumer count eu-west-1
-    <%= @designation %> <%= @ip %>
-    check_command       check_rabbitmq_queue_consumers!eu-west-1.cluster.rabbitmq.tealiumiq.com!/server2server!monitor!ifyouaremonitoringtheworld!eu-west!vp_to_dd_visitor_action!<%= @dd_eu_west_id.count %>
-    use                 rappid-rabbit,srv-pnp
+#define service {
+#    service_description Check Rabbit vp_to_dd_visitoraction consumer count eu-west-1
+#    <%= @designation %> <%= @ip %>
+#    check_command       check_rabbitmq_queue_consumers!eu-west-1.cluster.rabbitmq.tealiumiq.com!/server2server!monitor!ifyouaremonitoringtheworld!eu-west!vp_to_dd_visitor_action!<%= @dd_eu_west_id.count %>
+#    use                 rappid-rabbit,srv-pnp
 #    event_handler       dd_handler!eu-west-1!<%= @prod_mongo_ip %>!vp_to_dd_visitoraction
-}
+#}
 
-define service {
-    service_description Check Rabbit vp_to_dd_visitoraction consumer count eu-central-1
-    <%= @designation %> <%= @ip %>
-    check_command       check_rabbitmq_queue_consumers!eu-central-1.cluster.rabbitmq.tealiumiq.com!/server2server!monitor!ifyouaremonitoringtheworld!eu-central!vp_to_dd_visitor_action!<%= @dd_eu_central_id.count %>
-    use                 rappid-rabbit,srv-pnp
+#define service {
+#    service_description Check Rabbit vp_to_dd_visitoraction consumer count eu-central-1
+#    <%= @designation %> <%= @ip %>
+#    check_command       check_rabbitmq_queue_consumers!eu-central-1.cluster.rabbitmq.tealiumiq.com!/server2server!monitor!ifyouaremonitoringtheworld!eu-central!vp_to_dd_visitor_action!<%= @dd_eu_central_id.count %>
+#    use                 rappid-rabbit,srv-pnp
 #    event_handler       dd_handler!eu-central-1!<%= @prod_mongo_ip %>!vp_to_dd_visitoraction
-}
+#
 
 define service {
     service_description Check Rabbit ESP_to_AU consumer count eu-central-1
