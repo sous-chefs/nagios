@@ -29,6 +29,7 @@ include_recipe "zookeeper_tealium::client_python"
 include_recipe "tealium_bongo::packages"
 include_recipe "pnp4nagios_tealium"
 include_recipe "nagios::nsca_server"
+include_recipe "chef-client::cron"
 
 %w{make libnet-nslookup-perl libmodule-install-perl libyaml-perl libyaml-syck-perl libwww-perl libnagios-plugin-perl java-jmxterm}.each do |pkg|    
     package pkg do
