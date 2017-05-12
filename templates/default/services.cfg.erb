@@ -1098,7 +1098,7 @@ define service {
     <%= @designation %> <%= @ip %>
     check_command       check_rabbitmq_queue_consumers_multi!eu-central-1.cluster.rabbitmq.tealiumiq.com!/server2server!monitor!ifyouaremonitoringtheworld!eu-central!mr_to_vp_partitionedevent!1!99
     use                 rappid-rabbit,srv-pnp
-#    event_handler       vp_handler!eu-central-1!<%= @prod_mongo_ip %>!mr_to_vp_partitionedevent
+    event_handler       vp_handler!eu-central-1!<%= @prod_mongo_ip %>!mr_to_vp_partitionedevent
 }
 
 define service {
@@ -1106,7 +1106,7 @@ define service {
     <%= @designation %> <%= @ip %>
     check_command       check_rabbitmq_queue_consumers_multi!eu-west-1.cluster.rabbitmq.tealiumiq.com!/server2server!monitor!ifyouaremonitoringtheworld!eu-west!mr_to_vp_partitionedevent!1!99
     use                 rappid-rabbit,srv-pnp
-#    event_handler       vp_handler!eu-west-1!<%= @prod_mongo_ip %>!mr_to_vp_partitionedevent
+    event_handler       vp_handler!eu-west-1!<%= @prod_mongo_ip %>!mr_to_vp_partitionedevent
 }
 
 #define service {
@@ -1122,7 +1122,7 @@ define service {
     <%= @designation %> <%= @ip %>
     check_command       check_rabbitmq_queue_consumers_multi!us-east-1.cluster.rabbitmq.tealiumiq.com!/server2server!monitor!ifyouaremonitoringtheworld!us-east!mr_to_vp_partitionedevent!1!99
     use                 rappid-rabbit,srv-pnp
-#    event_handler       vp_handler!us-east-1!<%= @prod_mongo_ip %>!mr_to_vp_partitionedevent
+    event_handler       vp_handler!us-east-1!<%= @prod_mongo_ip %>!mr_to_vp_partitionedevent
 }
 
 #8-10 Temp Off Next 1
@@ -1131,7 +1131,7 @@ define service {
     <%= @designation %> <%= @ip %>
     check_command       check_rabbitmq_queue_consumers_multi!us-east-1.cluster.rabbitmq.tealiumiq.com!/server2server!monitor!ifyouaremonitoringtheworld!us-east!vp_to_vp_rebalancedvisitor!1!99
     use                 rappid-rabbit,srv-pnp
-#    event_handler       vp_handler!us-east-1!<%= @prod_mongo_ip %>!vp_to_vp_rebalancedvisitor
+    event_handler       vp_handler!us-east-1!<%= @prod_mongo_ip %>!vp_to_vp_rebalancedvisitor
 }
 
 #define service {
@@ -1147,7 +1147,7 @@ define service {
     <%= @designation %> <%= @ip %>    
     check_command       check_rabbitmq_queue_consumers_multi!eu-west-1.cluster.rabbitmq.tealiumiq.com!/server2server!monitor!ifyouaremonitoringtheworld!eu-west!vp_to_vp_rebalancedvisitor!1!99
     use                 rappid-rabbit,srv-pnp
-#    event_handler       vp_handler!eu-west-1!<%= @prod_mongo_ip %>!vp_to_vp_rebalancedvisitor
+    event_handler       vp_handler!eu-west-1!<%= @prod_mongo_ip %>!vp_to_vp_rebalancedvisitor
 }
 
 define service {
@@ -1155,7 +1155,7 @@ define service {
     <%= @designation %> <%= @ip %>    
     check_command       check_rabbitmq_queue_consumers_multi!eu-central-1.cluster.rabbitmq.tealiumiq.com!/server2server!monitor!ifyouaremonitoringtheworld!eu-central!vp_to_vp_rebalancedvisitor!1!99
     use                 rappid-rabbit,srv-pnp
-#    event_handler       vp_handler!eu-central-1!<%= @prod_mongo_ip %>!vp_to_vp_rebalancedvisitor
+    event_handler       vp_handler!eu-central-1!<%= @prod_mongo_ip %>!vp_to_vp_rebalancedvisitor
 }
 
 #8-10 Temp Off Next 3
@@ -1697,12 +1697,12 @@ define service {
     use                 default-service,srv-pnp
 }
 
-define service {
-    service_description Check Chef process
-    hostgroup_name      nagios
-    check_command       check_nrpe!check_chef
-    use                 default-service,srv-pnp
-}
+#define service {
+#    service_description Check Chef process
+#    hostgroup_name      nagios
+#    check_command       check_nrpe!check_chef
+#    use                 default-service,srv-pnp
+#}
 
 define service {
     service_description Check DC Uconnect process
