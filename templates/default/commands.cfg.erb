@@ -994,7 +994,7 @@ define command {
 
 define command{
         command_name    check_mona_udh_service
-        command_line    $USER1$/check_mona_udh.py -t $ARG1$ -w 5 -c 10 -W 30 -C 60 --slack_update
+        command_line    $USER1$/check_mona_udh.py -t $ARG1$ -w 5 -c 10 -W 30 -C 60 --slack_update --datadog_update
 }
 
 # Notification
