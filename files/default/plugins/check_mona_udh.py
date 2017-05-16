@@ -18,11 +18,19 @@ from pymongo.errors import PyMongoError
 
 import requests
 from requests.exceptions import RequestException
+requests.packages.urllib3.disable_warnings()
 
 import json
 
 slack_default_url = 'https://hooks.slack.com/services/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'
 #slack_default_channel = '#status_udh_webhook'
+
+from datadog import initialize, api
+
+datadog_keys = {
+   'api_key' : '566aaf588c171e448cdbe840f52b56f0',
+   'app_key' : '33ebcd86deb18334bacd2d68bcc9e9ceea07b90c'
+}
 
 class UDH(nagiosplugin.Resource):
 
@@ -57,7 +65,9 @@ class UDH(nagiosplugin.Resource):
 	 end = end - relativedelta(minutes=self.cwo)
 	 start = end - relativedelta(minutes=self.cw)
 
-	 # Triple query where one would do... yep, I'm lazy.
+	 logging.debug("start time: %s" % start)
+	 logging.debug("end time: %s" % end)
+
 	 events_sent = eventdb.find({"test_id" : self.test, "time_sent" : {"$gte" : start, "$lt" : end }})
 	 events_recv = eventdb.find({"test_id" : self.test,
 	                             "time_sent" : {"$gte" : start, "$lt" : end },
@@ -98,10 +108,12 @@ class UDH(nagiosplugin.Resource):
 	 avg_flight_time = elapsed / total_recv
 
 	 logging.debug("elapsed = %d" % elapsed)
-	 logging.debug("avg = %d" % avg_flight_time)
+	 logging.debug("avg = %f" % avg_flight_time)
 
-	 yield nagiosplugin.Metric(self.rc, failure_rate, uom='%')
-	 yield nagiosplugin.Metric(self.tc, "%.2f" % avg_flight_time, uom='s')
+	 #yield nagiosplugin.Metric(self.rc, failure_rate, uom='%')
+	 #yield nagiosplugin.Metric(self.tc, "%.2f" % avg_flight_time, uom='s')
+	 yield nagiosplugin.Metric("failure rate", failure_rate, uom='%')
+	 yield nagiosplugin.Metric("average flight time", "%.2f" % avg_flight_time, uom='s')
 	 yield nagiosplugin.Metric("event errors", total_errors)
 	 yield nagiosplugin.Metric("events sent", total_sent)
 	 yield nagiosplugin.Metric("events recv", total_recv)
@@ -155,24 +167,29 @@ class MonaSummary(nagiosplugin.Summary):
       icon = ':rotating_light:'
       color = '#dd2b19'
 
-   def __init__(self, slack_update=False, slack_url='', slack_channel=''):
+   def __init__(self, test_id, slack_update=False, slack_url='', slack_channel='', datadog=False):
+      self.test_id = test_id
       self.slack_update = slack_update
       self.slack_url = slack_url
       #self.slack_channel = slack_channel
+      self.datadog = datadog
       super(MonaSummary, self).__init__()
 
-   def __stats(self, results):
+   def __perf_format(self, perf):
+      perf = str(perf)
+      #r = re.compile("'.*: ")
+      #m = r.match(perf)
+      #perf = perf[m.end():]
+      perf = perf.translate(None, "'")
+      perf = perf.replace("=", " = ")
+      return perf
+
+   def __stats_verbose(self, results):
       perfs = ""
       for result in results:
 	 perf = result.metric.performance()
 	 if perf:
-	    perf = str(perf)
-	    r = re.compile("'.*: ")
-	    m = r.match(perf)
-	    perf = perf[m.end():]
-	    perf = perf.translate(None, "'")
-	    perf = perf.replace("=", " = ")
-	    perfs += "%s\n" % str(perf)
+	    perfs += "%s\n" % self.__perf_format(perf)
       return "```%s%s```" % (perfs, self.verbose(results))
 
    def __slack(self, state, region, metric_desc, stats):
@@ -219,8 +236,29 @@ class MonaSummary(nagiosplugin.Summary):
 	 except RequestException as e:
 	    logging.error("error: slack update failed: %s" % e)
 
+   def __datadog(self, results):
+
+      if (self.datadog):
+
+	 try: 
+	    initialize(**datadog_keys)
+	     
+	    metrics = []
+	    metrics.append({'metric':"mona.%s.failure_rate" % self.test_id,
+			    'points':int(results['failure rate'].metric.value),
+			    'host':"mona"})
+	    metrics.append({'metric':"mona.%s.avg_flight_time" % self.test_id,
+			    'points':float(results['average flight time'].metric.value),
+			    'host':"mona"})
+	    logging.debug("datadog metrics:  %s" % str(metrics))
+	    api.Metric.send(metrics)
+	 except Exception as e:
+	    logging.error("error: datadog submission failed: %s" % e)
+
+
    def ok(self,results):
-      self.__slack(self.Ok, results['region'].metric.value, str(results.first_significant), self.__stats(results))
+      self.__slack(self.Ok, results['region'].metric.value, str(results.first_significant), self.__stats_verbose(results))
+      self.__datadog(results)
       return super(MonaSummary, self).ok(results)
 
    def problem(self,results):
@@ -231,7 +269,8 @@ class MonaSummary(nagiosplugin.Summary):
       else:
 	 state = None
       if state:
-	 self.__slack(state, results['region'].metric.value, str(results.first_significant), self.__stats(results))
+	 self.__slack(state, results['region'].metric.value, str(results.first_significant), self.__stats_verbose(results))
+	 self.__datadog(results)
       return super(MonaSummary, self).problem(results)
 
    def verbose(self, results):
@@ -248,22 +287,25 @@ class MonaSummary(nagiosplugin.Summary):
 @nagiosplugin.guarded()
 def main():
    argp = argparse.ArgumentParser(description=__doc__)
-   argp.add_argument('-w', '--warning', metavar='RATE', default=5,
+   argp.add_argument('-w', '--warning', metavar='RATE', default=5, type=float,
                      help='return warning if failure percentage is higher than RATE')
-   argp.add_argument('-c', '--critical', metavar='RATE', default=10,
+   argp.add_argument('-c', '--critical', metavar='RATE', default=10, type=float,
                      help='return critical if failure percentage is higher than RATE')
-   argp.add_argument('-W', '--WARNING', metavar='SECONDS', default=2,
+   argp.add_argument('-W', '--WARNING', metavar='SECONDS', default=30, type=int,
                      help='return warning if flight time is higher than SECONDS')
-   argp.add_argument('-C', '--CRITICAL', metavar='SECONDS', default=4,
+   argp.add_argument('-C', '--CRITICAL', metavar='SECONDS', default=60, type=int,
                      help='return critical if flight time is higher than SECONDS')
    argp.add_argument('-t', '--test', default='test_webhook_us_east_1')
-   argp.add_argument('--check_window_size', default=10,
+   argp.add_argument('--check_window_size', default=10, type=int,
 	             help='size of time window (in MINUTES) to check for test events')
-   argp.add_argument('--check_window_offset', default=1,
+   argp.add_argument('--check_window_offset', default=1, type=int,
 	             help='number of MINUTES before current time to end the check window')
-   argp.add_argument('--slack_update', action='store_true', default=False)
+   argp.add_argument('--slack_update', action='store_true', default=False,
+	             help='enable Slack-channel updates')
    argp.add_argument('--slack_url', metavar='SLACK URL', default=slack_default_url)
    #argp.add_argument('--slack_channel', metavar='SLACK CHANNEL NAME', default=slack_default_channel)
+   argp.add_argument('--datadog_update', action='store_true', default=False,
+	             help='enable Datadog metric submissions')
    argp.add_argument('-v', '--verbose', action='count', default=0)
    argp.add_argument('-d', '--debug', action='store_true', default=False)
    args = argp.parse_args()
@@ -278,8 +320,8 @@ def main():
    time_context = "%s : average flight time" % args.test
 
    check = nagiosplugin.Check(UDH(args.test, rate_context, time_context, args.check_window_size, args.check_window_offset),
-                              nagiosplugin.ScalarContext(rate_context, args.warning, args.critical),
-                              MonaContext(time_context, args.WARNING, args.CRITICAL),
+                              nagiosplugin.ScalarContext("failure rate", args.warning, args.critical),
+                              MonaContext("average flight time", args.WARNING, args.CRITICAL),
 			      nagiosplugin.Context('events sent'),
 			      nagiosplugin.Context('events recv'),
 			      nagiosplugin.Context('event errors'),
@@ -288,8 +330,9 @@ def main():
 			      nagiosplugin.Context('check window start'),
 			      nagiosplugin.Context('check window end'),
 			      nagiosplugin.Context('region'),
-			      MonaSummary(slack_update=args.slack_update,
-				          slack_url=args.slack_url))
+			      MonaSummary(args.test, slack_update=args.slack_update,
+				          slack_url=args.slack_url,
+					  datadog=args.datadog_update))
 
    check.main(verbose=args.verbose)
 
