@@ -22,12 +22,8 @@ if node['nagios']['server']['stop_apache']
   end
 end
 
-# This doesn't use value_for_platform_family so that it can specify version ranges - COOK-2891
-if platform_family?('rhel') || platform_family?('fedora')
+if platform_family?('rhel', 'fedora', 'amazon')
   node.normal['nagios']['server']['nginx_dispatch'] = 'both'
-  if node['platform_version'].to_f < 6
-    node.normal['nginx']['install_method'] = 'source'
-  end
 end
 
 include_recipe 'chef_nginx'

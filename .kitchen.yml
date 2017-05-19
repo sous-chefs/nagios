@@ -45,14 +45,10 @@ platforms:
     driver_config:
       network:
         - ["forwarded_port", {guest: 80, host: 8088}]
-  - name: centos-5.11
-    driver_config:
-      network:
-        - ["forwarded_port", {guest: 80, host: 8089}]
   - name: fedora-25
     driver_config:
       network:
-        - ["forwarded_port", {guest: 80, host: 8090}]
+        - ["forwarded_port", {guest: 80, host: 8089}]
 suites:
  - name: server_package
    run_list:

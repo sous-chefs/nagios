@@ -74,9 +74,7 @@ when 'debian'
   default['nagios']['cgi-path'] = "/cgi-bin/#{node['nagios']['server']['service_name']}"
 when 'rhel', 'fedora', 'amazon'
   default['nagios']['cgi-path'] = '/nagios/cgi-bin/'
-  # install via source on RHEL releases less than 6, otherwise use packages
-  method = node['platform_family'] == 'rhel' && node['platform_version'].to_i < 6 ? 'source' : 'package'
-  default['nagios']['server']['install_method'] = method
+  default['nagios']['server']['install_method'] = 'package'
   default['nagios']['server']['service_name']   = 'nagios'
   default['nagios']['server']['mail_command']   = '/bin/mail'
 else
