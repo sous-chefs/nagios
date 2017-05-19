@@ -23,7 +23,7 @@ platforms:
         - ["forwarded_port", {guest: 80, host: 8083}]
     run_list:
     - recipe[apt::default]
-  - name: debian-8.6
+  - name: debian-8.7
     driver_config:
       network:
         - ["forwarded_port", {guest: 80, host: 8084}]
@@ -41,7 +41,7 @@ platforms:
     driver_config:
       network:
         - ["forwarded_port", {guest: 80, host: 8087}]
-  - name: centos-6.8
+  - name: centos-6.9
     driver_config:
       network:
         - ["forwarded_port", {guest: 80, host: 8088}]
