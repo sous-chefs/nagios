@@ -1,5 +1,5 @@
 #
-# Author:: Seth Chisamore <schisamo@getchef.com>
+# Author:: Seth Chisamore <schisamo@chef.io>
 # Author:: Tim Smith <tsmith@chef.io>
 # Cookbook Name:: nagios
 # Recipe:: server_package
