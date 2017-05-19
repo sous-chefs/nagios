@@ -49,6 +49,12 @@ platforms:
     driver_config:
       network:
         - ["forwarded_port", {guest: 80, host: 8089}]
+  - name: amazon-linux
+    driver_config:
+      box: mvbcoding/awslinux
+      network:
+        - ["forwarded_port", {guest: 80, host: 8090}]
+
 suites:
  - name: server_package
    run_list:
