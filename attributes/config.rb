@@ -164,7 +164,7 @@ end
 case node['platform_family']
 when 'debian'
   default['nagios']['conf']['p1_file'] = "#{node['nagios']['home']}/p1.pl"
-when 'rhel', 'fedora'
+when 'rhel', 'fedora', 'amazon'
   default['nagios']['conf']['p1_file'] = '/usr/sbin/p1.pl'
 else
   default['nagios']['conf']['p1_file'] = "#{node['nagios']['home']}/p1.pl"

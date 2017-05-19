@@ -168,7 +168,7 @@ nagios_conf 'cgi' do
 end
 
 # resource.cfg differs on RPM and tarball based systems
-if node['platform_family'] == 'rhel' || node['platform_family'] == 'fedora'
+if platform_family?('rhel', 'fedora', 'amazon')
   template "#{node['nagios']['resource_dir']}/resource.cfg" do
     source 'resource.cfg.erb'
     owner node['nagios']['user']
