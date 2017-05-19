@@ -1,7 +1,7 @@
 name              'nagios'
 maintainer        'Tim Smith'
 maintainer_email  'tsmith@chef.io'
-license           'Apache 2.0'
+license           'Apache-2.0'
 description       'Installs and configures Nagios server'
 long_description  IO.read(File.join(File.dirname(__FILE__), 'README.md'))
 version           '7.2.7'

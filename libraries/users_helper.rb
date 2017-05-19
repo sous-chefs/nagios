@@ -36,8 +36,8 @@ class NagiosUsers
   end
 
   def load_encrypted_databag(user_databag)
-    Chef::DataBag.load(user_databag).each do |u, _|
-      d = Chef::EncryptedDataBagItem.load(user_databag, u)
+    data_bag(user_databag).each do |u, _|
+      d = data_bag_item(user_databag, u)
       @users << d unless d['nagios'].nil? || d['nagios']['email'].nil?
     end
   rescue Net::HTTPServerException
