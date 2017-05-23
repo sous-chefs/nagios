@@ -2125,6 +2125,13 @@ define service {
 }
 
 define service {
+   service_description Check UDH webhook connector AP-NORTHEAST-1
+   <%= @designation %>  <%= @ip %>
+   check_command       check_mona_udh_service!test_webhook_ap_northeast_1
+   use                 default-service,srv-pnp
+}
+
+define service {
    service_description Check UDH webhook connector US-EAST-1 to EU-WEST-1
    <%= @designation %>	<%= @ip %>
    check_command       check_mona_udh_service!test_webhook_us_east_1_to_eu_west_1
@@ -2142,6 +2149,13 @@ define service {
    service_description Check UDH webhook connector US-EAST-1 to AP-SOUTHEAST-2
    <%= @designation %>	<%= @ip %>
    check_command       check_mona_udh_service!test_webhook_us_east_1_to_ap_southeast_2
+   use                 default-service,srv-pnp
+}
+
+define service {
+   service_description Check UDH webhook connector US-EAST-1 to AP-NORTHEAST-1
+   <%= @designation %>	<%= @ip %>
+   check_command       check_mona_udh_service!test_webhook_us_east_1_to_ap_northeast_1
    use                 default-service,srv-pnp
 }
 
