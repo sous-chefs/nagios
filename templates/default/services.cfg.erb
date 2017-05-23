@@ -1180,27 +1180,6 @@ define service {
     use                 rappid-rabbit,srv-pnp
 }
 
-define service {
-   service_description Check UDH webhook connector US-EAST-1
-   <%= @designation %>  <%= @ip %>
-   check_command       check_mona_udh_service!test_webhook_us_east_1
-   use                 default-service,srv-pnp
-}
-
-define service {
-   service_description Check UDH webhook connector EU-WEST-1
-   <%= @designation %>  <%= @ip %>
-   check_command       check_mona_udh_service!test_webhook_eu_west_1
-   use                 default-service,srv-pnp
-}
-
-define service {
-   service_description Check UDH webhook connector EU-CENTRAL-1
-   <%= @designation %>  <%= @ip %>
-   check_command       check_mona_udh_service!test_webhook_eu_central_1
-   use                 default-service,srv-pnp
-}
-
 #define service {
 #    service_description TEST NON EXISTANT QUEUE Check Rabbit VP_to_DD VIsitor Action Consumer Count EU CENTRAL CLUSTER
 #    <%= @designation %> <%= @ip %>
@@ -2117,29 +2096,33 @@ define service {
   use                   default-service,srv-pnp
 }
 
-#define service {
-#   service_description Check UDH webhook connector US-EAST-1
-#   <%= @designation %>	<%= @ip %>
-#   hostgroup_name      dc_mona_udh_service
-#   check_command       check_mona_udh_service!test_webhook_us_east_1
-#   use                 default-service,srv-pnp
-#}
+define service {
+   service_description Check UDH webhook connector US-EAST-1
+   <%= @designation %>  <%= @ip %>
+   check_command       check_mona_udh_service!test_webhook_us_east_1
+   use                 default-service,srv-pnp
+}
 
-#define service {
-#   service_description Check UDH webhook connector EU-WEST-1
-#   <%= @designation %>	<%= @ip %>
-#   hostgroup_name      dc_mona_udh_service
-#   check_command       check_mona_udh_service!test_webhook_eu_west_1
-#   use                 default-service,srv-pnp
-#}
+define service {
+   service_description Check UDH webhook connector EU-WEST-1
+   <%= @designation %>  <%= @ip %>
+   check_command       check_mona_udh_service!test_webhook_eu_west_1
+   use                 default-service,srv-pnp
+}
 
-#define service {
-#   service_description Check UDH webhook connector EU-CENTRAL-1
-#   <%= @designation %>	<%= @ip %>
-#   hostgroup_name      dc_mona_udh_service
-#   check_command       check_mona_udh_service!test_webhook_eu_central_1
-#   use                 default-service,srv-pnp
-#}
+define service {
+   service_description Check UDH webhook connector EU-CENTRAL-1
+   <%= @designation %>  <%= @ip %>
+   check_command       check_mona_udh_service!test_webhook_eu_central_1
+   use                 default-service,srv-pnp
+}
+
+define service {
+   service_description Check UDH webhook connector AP-SOUTHEAST-2
+   <%= @designation %>  <%= @ip %>
+   check_command       check_mona_udh_service!test_webhook_ap_southeast_2
+   use                 default-service,srv-pnp
+}
 
 define service {
    service_description Check UDH webhook connector US-EAST-1 to EU-WEST-1
@@ -2152,6 +2135,13 @@ define service {
    service_description Check UDH webhook connector US-EAST-1 to EU-CENTRAL-1
    <%= @designation %>	<%= @ip %>
    check_command       check_mona_udh_service!test_webhook_us_east_1_to_eu_central_1
+   use                 default-service,srv-pnp
+}
+
+define service {
+   service_description Check UDH webhook connector US-EAST-1 to AP-SOUTHEAST-2
+   <%= @designation %>	<%= @ip %>
+   check_command       check_mona_udh_service!test_webhook_us_east_1_to_ap_southeast_2
    use                 default-service,srv-pnp
 }
 
