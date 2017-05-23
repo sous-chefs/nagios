@@ -1,6 +1,6 @@
 #!/bin/bash 
 
-jmx_rate="$(/usr/lib/nagios/plugins/check_jmx -U service:jmx:rmi:///jndi/rmi://$1:9001/jmxrmi -O "DataCloud-Metrics:name=VisitorProcessor-TotalEventsIgnoredDueToMaxVisitorsLimit" -A FiveMinuteRate)"
+jmx_rate="$(/usr/lib/nagios/plugins/check_jmx -U service:jmx:rmi:///jndi/rmi://$1:9001/jmxrmi -O "DataCloud-Metrics:name=VisitorProcessor-TotalEventsIgnoredDueToMaxVisitorsLimit" -A OneMinuteRate)"
 #echo $rate
 cut_rate="$(cut -d "=" -f 2 <<< "$jmx_rate")"
 #echo $cut_rate
