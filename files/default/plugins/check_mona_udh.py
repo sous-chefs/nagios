@@ -5,11 +5,6 @@ from nagiosplugin.state import Ok
 from nagiosplugin.state import Warn
 from nagiosplugin.state import Critical
 from nagiosplugin.state import Unknown
-from nagiosplugin.context import Context
-from nagiosplugin.context import ScalarContext
-from nagiosplugin.result import Result
-from nagiosplugin.metric import Metric
-from nagiosplugin import Check
 
 import argparse
 import logging
@@ -39,80 +34,104 @@ datadog_keys = {
 
 class UDH(nagiosplugin.Resource):
 
-   def __init__(self, mona_test_id, eventdb, start, end, target, batchsize, region, check_window_size, check_window_offset):
+   def __init__(self, mona_test_id, rate_context, time_context, check_window_size, check_window_offset):
       self.test = mona_test_id
-      self.eventdb = eventdb
-      self.start = start
-      self.end = end
-      self.target = target
-      self.batchsize = batchsize
-      self.region = region
+      self.rc = rate_context
+      self.tc = time_context
       self.cw = check_window_size
       self.cwo = check_window_offset
 
+   # and here's the always funny...
    def probe(self):
+      
+      mongo = MongoClient('mongos-cluster-1.prod1.us-w1.int.ops.tlium.com',27017)
+      cfgdb = mongo['ops']['mona_config']
+      eventdb = mongo['ops']['mona_events']
 
-      events_sent = self.eventdb.find({"test_id" : self.test, "test_target" : self.target,
-					    "time_sent" : {"$gte" : self.start, "$lt" : self.end }})
-      events_recv = self.eventdb.find({"test_id" : self.test, "test_target" : self.target,
-					    "time_sent" : {"$gte" : self.start, "$lt" : self.end },
-					    "time_recv" : {"$exists" : 1}})
-      event_errors = self.eventdb.find({"test_id" : self.test, "test_target" : self.target,
-					     "time_sent" : {"$gte" : self.start, "$lt" : self.end },
-					     "error" : {"$exists" : 1}})
-      event_http_ok = self.eventdb.find({"test_id" : self.test, "test_target" : self.target,
-					      "time_sent" : {"$gte" : self.start, "$lt" : self.end },
-					      "uconnect_status_code" : 200})
+      cfg = cfgdb.find_one({"_id" : self.test})
 
-      total_errors = event_errors.count()
-      logging.debug("total_errors-%s %d" % (self.target, total_errors))
+      if cfg:
+	 if 'region' in cfg:
+	    region = cfg['region']
+	 else:
+	    region = 'Yonder'
 
-      total_sent = events_sent.count()
-      logging.debug("total_sent-%s = %d" % (self.target, total_sent))
+	 if 'batchsize' in cfg:
+	    batchsize = cfg['batchsize']
+	 else:
+	    batchsize = 'N/A'
 
-      total_recv = events_recv.count()
-      logging.debug("total_recv-%s = %d" % (self.target, total_recv))
+	 end = datetime.utcnow()
+	 end = end - relativedelta(minutes=self.cwo)
+	 start = end - relativedelta(minutes=self.cw)
 
-      total_http_ok = event_http_ok.count()
-      logging.debug("total_http_ok-%s = %d" % (self.target, total_http_ok))
+	 logging.debug("start time: %s" % start)
+	 logging.debug("end time: %s" % end)
 
-      if total_sent == 0:
-	 raise Exception("no test events found for test \"%s\" with target \"%s\" during time range %s to %s" %
-			 (self.test, self.target, self.start.strftime('%c'), self.end.strftime('%c')))
+	 events_sent = eventdb.find({"test_id" : self.test, "time_sent" : {"$gte" : start, "$lt" : end }})
+	 events_recv = eventdb.find({"test_id" : self.test,
+	                             "time_sent" : {"$gte" : start, "$lt" : end },
+				     "time_recv" : {"$exists" : 1}})
+	 event_errors = eventdb.find({"test_id" : self.test,
+	                              "time_sent" : {"$gte" : start, "$lt" : end },
+				      "error" : {"$exists" : 1}})
+	 event_http_ok = eventdb.find({"test_id" : self.test,
+	                              "time_sent" : {"$gte" : start, "$lt" : end },
+				      "uconnect_status_code" : 200})
 
-      if total_recv == 0:
-	 raise Exception("no test events received for test \"%s\" with target \"%s\" during time range %s to %s" %
-		 (self.test, self.target, self.start.strftime('%c'), self.end.strftime('%c')))
+	 total_errors = event_errors.count()
+	 logging.debug("total_errors %d" % total_errors)
 
-      failure_rate = 100 - (float(total_recv)/total_sent * 100)
-      http_ok_rate = (float(total_http_ok)/total_sent * 100)
+	 total_sent = events_sent.count()
+	 logging.debug("total_sent = %d" % total_sent)
 
-      elapsed = 0
-      for event in events_recv:
-	 delta = event['time_recv'] - event['time_sent']
-	 elapsed += delta.total_seconds()
+	 total_recv = events_recv.count()
+	 logging.debug("total_recv = %d" % total_recv)
 
-      avg_flight_time = elapsed / total_recv
+	 total_http_ok = event_http_ok.count()
+	 logging.debug("total_http_ok = %d" % total_http_ok)
 
-      logging.debug("elapsed-%s = %d" % (self.target, elapsed))
-      logging.debug("avg-%s = %f" % (self.target, avg_flight_time))
+	 if total_sent == 0:
+	    raise Exception("no test events found for time range %s to %s" % (start.strftime('%c'), end.strftime('%c')))
 
-      yield Metric("failure rate (%s)" % self.target, failure_rate, uom='%')
-      yield Metric("average flight time (%s)" % self.target, "%.2f" % avg_flight_time, uom='s')
-      yield Metric("event errors (%s)" % self.target, total_errors)
-      yield Metric("events sent (%s)" % self.target, total_sent)
-      yield Metric("events recv (%s)" % self.target, total_recv)
-      yield Metric("http ok rate (%s)" % self.target, http_ok_rate, uom='%') 
-      yield Metric("test batchsize", self.batchsize)
-      yield Metric("check window start", self.start.strftime('%c UTC'))
-      yield Metric("check window end", self.end.strftime('%c UTC'))
-      yield Metric("region", self.region)
+	 if total_recv == 0:
+	    raise Exception("no test events received for time range %s to %s" % (start.strftime('%c'), end.strftime('%c')))
+
+	 failure_rate = 100 - (float(total_recv)/total_sent * 100)
+	 http_ok_rate = (float(total_http_ok)/total_sent * 100)
+
+         elapsed = 0
+	 for event in events_recv:
+	    delta = event['time_recv'] - event['time_sent']
+	    elapsed += delta.total_seconds()
+
+	 avg_flight_time = elapsed / total_recv
+
+	 logging.debug("elapsed = %d" % elapsed)
+	 logging.debug("avg = %f" % avg_flight_time)
+
+	 #yield nagiosplugin.Metric(self.rc, failure_rate, uom='%')
+	 #yield nagiosplugin.Metric(self.tc, "%.2f" % avg_flight_time, uom='s')
+	 yield nagiosplugin.Metric("failure rate", failure_rate, uom='%')
+	 yield nagiosplugin.Metric("average flight time", "%.2f" % avg_flight_time, uom='s')
+	 yield nagiosplugin.Metric("event errors", total_errors)
+	 yield nagiosplugin.Metric("events sent", total_sent)
+	 yield nagiosplugin.Metric("events recv", total_recv)
+	 yield nagiosplugin.Metric("http ok rate", http_ok_rate, uom='%') 
+	 yield nagiosplugin.Metric("test batchsize", batchsize)
+	 yield nagiosplugin.Metric("check window start", start.strftime('%c UTC'))
+	 yield nagiosplugin.Metric("check window end", end.strftime('%c UTC'))
+	 yield nagiosplugin.Metric("region", region)
+
+      else:
+
+	 raise Exception("unknown test identifier: %s" % self.test)
 
 
-class MonaContext(ScalarContext):
+class MonaContext(nagiosplugin.ScalarContext):
 
    def __init__(self, name, warning=None, critical=None,
-                fmt_metric='{name} is {valueunit}', result_cls=Result):
+                fmt_metric='{name} is {valueunit}', result_cls=nagiosplugin.Result):
 
       super(MonaContext, self).__init__(name, warning, critical, fmt_metric, result_cls)
       self.warning = float(warning)
@@ -148,9 +167,8 @@ class MonaSummary(nagiosplugin.Summary):
       icon = ':rotating_light:'
       color = '#dd2b19'
 
-   def __init__(self, test_id, targets, slack_update=False, slack_url='', slack_channel='', datadog=False):
+   def __init__(self, test_id, slack_update=False, slack_url='', slack_channel='', datadog=False):
       self.test_id = test_id
-      self.targets = targets
       self.slack_update = slack_update
       self.slack_url = slack_url
       #self.slack_channel = slack_channel
@@ -226,15 +244,12 @@ class MonaSummary(nagiosplugin.Summary):
 	    initialize(**datadog_keys)
 	     
 	    metrics = []
-	    for target in self.targets:
-	       metrics.append({'metric' : "udb_webhook.%s.failure_rate" % self.test_id,
-			       'points' : int(results['failure rate (%s)' % target].metric.value),
-			       'tags' : ["region:%s" % results['region'].metric.value,
-				         "target:%s" % target]})
-	       metrics.append({'metric' : "udb_webhook.%s.avg_flight_time" % self.test_id,
-			       'points' : float(results['average flight time (%s)' % target].metric.value),
-			       'tags' : ["region:%s" % results['region'].metric.value,
-				         "target:%s" % target]})
+	    metrics.append({'metric':"mona.%s.failure_rate" % self.test_id,
+			    'points':int(results['failure rate'].metric.value),
+			    'host':"mona"})
+	    metrics.append({'metric':"mona.%s.avg_flight_time" % self.test_id,
+			    'points':float(results['average flight time'].metric.value),
+			    'host':"mona"})
 	    logging.debug("datadog metrics:  %s" % str(metrics))
 	    api.Metric.send(metrics)
 	 except Exception as e:
@@ -247,9 +262,9 @@ class MonaSummary(nagiosplugin.Summary):
       return super(MonaSummary, self).ok(results)
 
    def problem(self,results):
-      if results.most_significant_state == Critical:
+      if results.most_significant_state == nagiosplugin.state.Critical:
 	 state = self.Critical
-      elif results.most_significant_state == Warn:
+      elif results.most_significant_state == nagiosplugin.state.Warn:
 	 state = self.Warn
       else:
 	 state = None
@@ -259,15 +274,13 @@ class MonaSummary(nagiosplugin.Summary):
       return super(MonaSummary, self).problem(results)
 
    def verbose(self, results):
-      msg = "\ncheck window start time: %s\n" % results['check window start'].metric.value
+      msg = "check window start time: %s\n" % results['check window start'].metric.value
       msg += "check window end time: %s\n" % results['check window end'].metric.value
+      msg += "events sent during check window: %d\n" % results['events sent'].metric.value
+      msg += "events recv during check window: %d\n" % results['events recv'].metric.value
+      msg += "event errors during check window: %d\n" % results['event errors'].metric.value
+      msg += "uconnect http ok rate: %.2f%%\n" % results['http ok rate'].metric.value
       msg += "configured test batchsize: %d\n" % results['test batchsize'].metric.value
-      for target in self.targets:
-	 msg += "\nTarget \"%s\":\n" % target
-	 msg += "   events sent during check window: %d\n" % results['events sent (%s)' % target].metric.value
-	 msg += "   events recv during check window: %d\n" % results['events recv (%s)' % target].metric.value
-	 msg += "   event errors during check window: %d\n" % results['event errors (%s)' % target].metric.value
-	 msg += "   uconnect http ok rate: %.2f%%\n" % results['http ok rate (%s)' % target].metric.value
       return msg
       
 
@@ -302,54 +315,24 @@ def main():
    else:
       logging.basicConfig(level=logging.ERROR)
 
-   mongo = MongoClient('mongos-cluster-1.prod1.us-w1.int.ops.tlium.com',27017)
-   cfgdb = mongo['ops']['mona_config']
-   eventdb = mongo['ops']['mona_events']
 
-   cfg = cfgdb.find_one({"_id" : args.test})
+   rate_context = "%s : failure rate" % args.test
+   time_context = "%s : average flight time" % args.test
 
-   if not cfg:
-      raise Exception("unknown test identifier: %s" % args.test)
-
-   if 'region' in cfg:
-      region = cfg['region']
-   else:
-      region = 'Yonder'
-
-   if 'batchsize' in cfg:
-      batchsize = cfg['batchsize']
-   else:
-      batchsize = 'N/A'
-
-   end = datetime.utcnow()
-   end = end - relativedelta(minutes=args.check_window_offset)
-   start = end - relativedelta(minutes=args.check_window_size)
-
-   logging.debug("start time: %s" % start)
-   logging.debug("end time: %s" % end)
-
-   check = nagiosplugin.Check()
-
-   for target in cfg['targets']:
-
-      udh = UDH(args.test, eventdb, start, end, target, batchsize, region, args.check_window_size, args.check_window_offset)
-
-      check.add(udh)
-      check.add(ScalarContext("failure rate (%s)" % target, args.warning, args.critical),
-		MonaContext("average flight time (%s)" % target, args.WARNING, args.CRITICAL),
-		Context("events sent (%s)" % target),
-		Context("events recv (%s)" % target),
-		Context("event errors (%s)" % target),
-		Context("http ok rate (%s)" % target))
-
-   check.add(Context("test batchsize"),
-	     Context("check window start"),
-	     Context("check window end"),
-	     Context("region"),
-	     MonaSummary(args.test, targets=cfg['targets'],
-		         slack_update=args.slack_update,
-			 slack_url=args.slack_url,
-			 datadog=args.datadog_update))
+   check = nagiosplugin.Check(UDH(args.test, rate_context, time_context, args.check_window_size, args.check_window_offset),
+                              nagiosplugin.ScalarContext("failure rate", args.warning, args.critical),
+                              MonaContext("average flight time", args.WARNING, args.CRITICAL),
+			      nagiosplugin.Context('events sent'),
+			      nagiosplugin.Context('events recv'),
+			      nagiosplugin.Context('event errors'),
+			      nagiosplugin.Context('http ok rate'),
+			      nagiosplugin.Context('test batchsize'),
+			      nagiosplugin.Context('check window start'),
+			      nagiosplugin.Context('check window end'),
+			      nagiosplugin.Context('region'),
+			      MonaSummary(args.test, slack_update=args.slack_update,
+				          slack_url=args.slack_url,
+					  datadog=args.datadog_update))
 
    check.main(verbose=args.verbose)
 
