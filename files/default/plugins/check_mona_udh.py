@@ -227,11 +227,11 @@ class MonaSummary(nagiosplugin.Summary):
 	     
 	    metrics = []
 	    for target in self.targets:
-	       metrics.append({'metric' : "udb_webhook.%s.failure_rate" % self.test_id,
+	       metrics.append({'metric' : "udh_webhook.%s.failure_rate" % self.test_id,
 			       'points' : int(results['failure rate (%s)' % target].metric.value),
 			       'tags' : ["region:%s" % results['region'].metric.value,
 				         "target:%s" % target]})
-	       metrics.append({'metric' : "udb_webhook.%s.avg_flight_time" % self.test_id,
+	       metrics.append({'metric' : "udh_webhook.%s.avg_flight_time" % self.test_id,
 			       'points' : float(results['average flight time (%s)' % target].metric.value),
 			       'tags' : ["region:%s" % results['region'].metric.value,
 				         "target:%s" % target]})
