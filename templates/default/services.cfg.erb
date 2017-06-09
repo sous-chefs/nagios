@@ -486,6 +486,13 @@ define service {
 }
 
 define service {
+    service_description Check Rabbit vp_to_au_expiredvisitor_queue EU CENTRAL CLUSTER
+    <%= @designation %> <%= @ip %>
+    check_command       check_rabbit_queues!eu-central-1.cluster.rabbitmq.tealiumiq.com!/server2server!vp_to_au_expiredvisitor_queue!monitor!ifyouaremonitoringtheworld!2500,-1,500,-1!3000,-1,600,-1
+    use                 default-service,srv-pnp
+}
+
+define service {
     service_description Check Rabbit request_tracers_queue EU WEST CLUSTER
     <%= @designation %> <%= @ip %>
     check_command       check_rabbit_queues!eu-west-1.cluster.rabbitmq.tealiumiq.com!/server2server!request_tracers_queue!monitor!ifyouaremonitoringtheworld!2500,-1,500,-1!3000,-1,600,-1
@@ -541,6 +548,12 @@ define service {
     use                 default-service,srv-pnp
 }
 
+define service {
+    service_description Check Rabbit vp_to_dd_visitor_action queue EU CENTRAL CLUSTER
+    <%= @designation %> <%= @ip %>
+    check_command       check_rabbit_queues!eu-central-1.cluster.rabbitmq.tealiumiq.com!/server2server!vp_to_dd_visitor_action!monitor!ifyouaremonitoringtheworld!1000,-1,1000,-1!1000,-1,1000,-1
+    use                 default-service,srv-pnp
+}
 #define service {
 #    service_description Check Rabbit shared_events_workqueue VPC WTF US WEST CLUSTER
 #    <%= @designation %> <%= @ip %>
@@ -1995,14 +2008,14 @@ define service {
 }
 
 define service {
-    service_description Check Sitescan Audit-Complete Process
+    service_description Check Sitescan Audit-Complete Analyzer Process
     hostgroup_name      sitescan_analyzer
     check_command       check_nrpe!check_sitemap_audit_complete_perl
     use                 default-service,srv-pnp
 }
 
 define service {
-    service_description Check Sitescan Audit-URLs Process
+    service_description Check Sitescan Audit-URLs Analyzer Process
     hostgroup_name      sitescan_analyzer
     check_command       check_nrpe!check_sitemap_audit_urls_perl
     use                 default-service,srv-pnp
@@ -2016,7 +2029,7 @@ define service {
 }
 
 define service {
-    service_description Check Sitescan Audit-Complete Process
+    service_description Check Sitescan Audit-Complete URLs Process
     hostgroup_name      sitescan_urls
     check_command       check_nrpe!check_sitemap_audit_complete_perl
     use                 default-service,srv-pnp
