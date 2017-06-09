@@ -31,5 +31,5 @@ elif (($vp_to_vp_queue_count < 100)); then
   exit 2
 fi
 
-echo "OK - queue count is correct for $6 queues."
+echo "OK - queue count is correct for $5 queues."
 exit 0
