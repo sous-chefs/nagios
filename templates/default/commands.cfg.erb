@@ -33,12 +33,12 @@ define command {
 
 define command {
   command_name    check_rabbit_queue
-  command_line    $USER1$/check_rabbitmq_queue_totals.sh $ARG1$ $ARG2$ $ARG3$ $ARG4$ $ARG5$
+  command_line    $USER1$/check_rabbitmq_queue_totals.sh $ARG1$ $ARG2$ $ARG3$ $ARG4$ $ARG5$ $ARG6$
 }
 
 define command{
   command_name    check_rabbitmq_queue_availability
-  command_line    $USER1$/check_rabbitmq_queue_count.sh $ARG1$ $ARG2$ $ARG3$ $ARG4$ $ARG5$
+  command_line    $USER1$/check_rabbitmq_queue_count.sh $ARG1$ $ARG2$ $ARG3$ $ARG4$ $ARG5$ $ARG6$
 }
 
 define command{
@@ -53,12 +53,12 @@ define command{
 
 define command{
   command_name    check_rabbitmq_queue_availability_new
-  command_line    $USER1$/check_rabbitmq_queue_count_new.sh $ARG1$ $ARG2$ $ARG3$ $ARG4$ $ARG5$ $ARG6$ $ARG7$
+  command_line    $USER1$/check_rabbitmq_queue_count_new.sh $ARG1$ $ARG2$ $ARG3$ $ARG4$ $ARG5$ $ARG6$ $ARG7$ $ARG8$
 }
 
 define command{
   command_name    check_rabbitmq_queue_availability_new_DD
-  command_line    $USER1$/check_rabbitmq_queue_count_new_DD.sh $ARG1$ $ARG2$ $ARG3$ $ARG4$ $ARG5$ $ARG6$ $ARG7$
+  command_line    $USER1$/check_rabbitmq_queue_count_new_DD.sh $ARG1$ $ARG2$ $ARG3$ $ARG4$ $ARG5$ $ARG6$ $ARG7$ $ARG8$
 }
 
 define command{
@@ -98,7 +98,7 @@ define command{
 
 define command{
   command_name    check_rabbitmq_queue_consumers_lookup
-  command_line    $USER1$/check_rabbitmq_queue_consumers_lookup.sh $ARG1$ $ARG2$ $ARG3$ $ARG4$ $ARG5$ $ARG6$ $ARG7$ $ARG8$
+  command_line    $USER1$/check_rabbitmq_queue_consumers_lookup.sh $ARG1$ $ARG2$ $ARG3$ $ARG4$ $ARG5$ $ARG6$ $ARG7$ $ARG8$ $ARG9$
 }
 
 #define command{
@@ -139,7 +139,7 @@ define command {
 define command {
   command_name    check_jmx_data_distributor_received_messages
   command_line    $USER1$/check_jmx -U service:jmx:rmi:///jndi/rmi://$HOSTADDRESS$:9001/jmxrmi -O "DataCloud-Metrics:name=DataDistributor.messages.received.size" -A OneMinuteRate -c$ARG1$:
-} 
+}
 
 define command {
   command_name    check_jmx_esp_to_dd_failed_messages
@@ -156,7 +156,7 @@ define command {
   command_line    $USER1$/check_jmx -U service:jmx:rmi:///jndi/rmi://$HOSTADDRESS$:9001/jmxrmi -O "DataCloud:type=VisitorProcessorCluster" -A NodeStatus -w ^$ARG1$
 }
 
-define command {  
+define command {
   command_name    check_jmx_VP_ignored_visitors
   command_line    $USER1$/check_jmx -U service:jmx:rmi:///jndi/rmi://$HOSTADDRESS$:9001/jmxrmi -O "DataCloud-Metrics:name=VisitorProcessor-TotalEventsIgnoredDueToMaxVisitorsLimit" -A Count -w $ARG1$ -c $ARG2$
 }
@@ -404,7 +404,7 @@ define command {
 
 define command {
   command_name    check_jmx_threads
-  command_line    $USER1$/check_jmx -U service:jmx:rmi:///jndi/rmi://$HOSTADDRESS$:9001/jmxrmi -O "java.lang:type=Threading" -A ThreadCount -w $ARG1$ -c $ARG2$ 
+  command_line    $USER1$/check_jmx -U service:jmx:rmi:///jndi/rmi://$HOSTADDRESS$:9001/jmxrmi -O "java.lang:type=Threading" -A ThreadCount -w $ARG1$ -c $ARG2$
 }
 
 define command {
@@ -419,7 +419,7 @@ define command {
 
 define command {
   command_name	  check_jmx_dc_vp_visitors_streamed
-  command_line    $USER1$/check_jmx -U service:jmx:rmi:///jndi/rmi://$HOSTADDRESS$:9001/jmxrmi -O "DataCloud:type=QueryEngine" -A TotalVisitorsStreamed    
+  command_line    $USER1$/check_jmx -U service:jmx:rmi:///jndi/rmi://$HOSTADDRESS$:9001/jmxrmi -O "DataCloud:type=QueryEngine" -A TotalVisitorsStreamed
 }
 
 define command {
@@ -565,7 +565,7 @@ define command {
 define command {
   command_name    check_jmx_dc_vs_total_visitors_request_received_count
   command_line    $USER1$/check_jmx -U service:jmx:rmi:///jndi/rmi://$HOSTADDRESS$:9001/jmxrmi -O "DataCloud:type=VisitorService" -A TotalVisitorsRequestReceivedCount
-} 
+}
 <% end -%>
 
 
@@ -894,9 +894,9 @@ define command {
 
 # dummy commands for passive checks
 
-define command{ 
-        command_name check_dummy 
-        command_line $USER1$/check_dummy $ARG1$ 
+define command{
+        command_name check_dummy
+        command_line $USER1$/check_dummy $ARG1$
  }
 
 define command {
