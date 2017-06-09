@@ -158,7 +158,7 @@ define service {
 define service {
     service_description RabbitMQ esp_to_au queue availability
     <%= @designation %> <%= @ip %>
-    check_command       check_rabbitmq_queue_availability_new_pc1!pc1.rabbitmq.tealiumiq.com!/pc1_server2server!monitor!ifyouaremonitoringtheworld!us-east!esp_to_au!<%= @au_pc1_id.count %>!15672
+    check_command       check_rabbitmq_queue_availability_new_pc1!pc1.rabbitmq.tealiumiq.com!/pc1_server2server!monitor!ifyouaremonitoringtheworld!us-east!esp_to_au!<%= @au_pc1_id.count %>
     use                 rappid-rabbit,srv-pnp
 }
 
@@ -341,14 +341,14 @@ define service {
 define service {
     service_description Check Rabbit Message Count AP SOUTHEAST2 CLUSTER
     <%= @designation %> <%= @ip %>
-    check_command       check_rabbit_queue!rabbitmq.ap.se2.int.ops.tlium.com!monitor!ifyouaremonitoringtheworld!300000!ap-southeast-2:80
+    check_command       check_rabbit_queue!rabbitmq.ap.se2.int.ops.tlium.com!monitor!ifyouaremonitoringtheworld!300000!ap-southeast-2!80
     use                 default-service,srv-pnp
 }
 
 define service {
     service_description Check Rabbit Message Count AP NORTHEAST1 CLUSTER
     <%= @designation %> <%= @ip %>
-    check_command       check_rabbit_queue!rabbitmq.ap.ne1.int.ops.tlium.com!monitor!ifyouaremonitoringtheworld!300000!ap-northeast-2:80
+    check_command       check_rabbit_queue!rabbitmq.ap.ne1.int.ops.tlium.com!monitor!ifyouaremonitoringtheworld!300000!ap-northeast-2!80
     use                 default-service,srv-pnp
 }
 
@@ -609,7 +609,7 @@ define service {
 #define service {
 #    service_description Check Rabbit VP Queue Availability US WEST CLUSTER
 #    <%= @designation %> <%= @ip %>
- #   check_command       check_rabbitmq_queue_availability_west!us-west-1.cluster.rabbitmq.tealiumiq.com!/server2server!monitor!ifyouaremonitoringtheworld!us-west!15672
+ #   check_command       check_rabbitmq_queue_availability_west!us-west-1.cluster.rabbitmq.tealiumiq.com!/server2server!monitor!ifyouaremonitoringtheworld!us-west
 #    use                 rappid-rabbit,srv-pnp
 #}
 
