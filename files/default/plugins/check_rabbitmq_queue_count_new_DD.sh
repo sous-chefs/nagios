@@ -9,11 +9,11 @@
 #$7 = count 
 #$8 = port
 
-tmp_file=/tmp/queues-$5-$6.json
+tmp_file=/tmp/queues-$5-$6-DD.json
 
 curl -i -u $3:$4 http://$1:$8/api/queues/%2fserver2server | tail -n+9 > $tmp_file
 
-python /usr/lib/nagios/plugins/check_rabbitmq_queue_count.py /tmp/queues-$5-$6.json 2> /tmp/count-$5-$6.log
+python /usr/lib/nagios/plugins/check_rabbitmq_queue_count.py /tmp/queues-$5-$6-DD.json 2> /tmp/count-$5-$6-DD.log
 
 queue_count=`cat $tmp_file | grep $6 | wc -l`
 

@@ -5,9 +5,10 @@
 #$3 = pass
 #$4 = count
 #$5 = region
+#$6 = port
 
 tmp_file=/tmp/queue-totals-$5.json
-curl -i -u $2:$3 http://$1:15672/api/overview | tail -n+9 > $tmp_file
+curl -i -u $2:$3 http://$1:$6/api/overview | tail -n+9 > $tmp_file
 
 if [[ ! -s $tmp_file ]]; then
   echo "Not OK - Error, 0 byte or unaccessable tmp_file at /tmp/queue-totals.json"
