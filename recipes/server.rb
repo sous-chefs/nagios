@@ -31,7 +31,7 @@ include_recipe "pnp4nagios_tealium"
 include_recipe "nagios::nsca_server"
 include_recipe "chef-client::cron"
 
-%w{make libnet-nslookup-perl libmodule-install-perl libyaml-perl libyaml-syck-perl libwww-perl libnagios-plugin-perl java-jmxterm}.each do |pkg|    
+%w{make libnet-nslookup-perl libmodule-install-perl libyaml-perl libyaml-syck-perl libwww-perl libnagios-plugin-perl java-jmxterm}.each do |pkg|
     package pkg do
         action :install
     end
@@ -214,9 +214,9 @@ else
             raise err
         end
     end
-  
+
     Chef::Log.warn("Nagios Nodes are #{nagiosnodes}.")
-  
+
     nodes = []
     nodes1 = nodes1.concat(nagiosnodes)
 
@@ -225,7 +225,7 @@ else
     nodes1.each do |n|
      #   if n.roles.include?("base")
             nodes << n
-            
+
      #   end
     end
     #Chef::Log.warn("nodes are #{nodes}.")
@@ -474,10 +474,16 @@ au_pc1 = search(:node, "chef_environment:privatecloud1 AND role:dc_amazon_upload
 au_east = search(:node, "chef_environment:production AND role:dc_amazon_uploader AND ec2_region:us-east-1")
 au_eu_west = search(:node, "chef_environment:production AND role:dc_amazon_uploader AND ec2_region:eu-west-1")
 au_eu_central = search(:node, "chef_environment:production AND role:dc_amazon_uploader AND ec2_region:eu-central-1")
+au_ap_northeast = search(:node, "chef_environment:production AND role:dc_amazon_uploader AND ec2_region:ap-northeast-1")
+au_ap_southeast = search(:node, "chef_environment:production AND role:dc_amazon_uploader AND ec2_region:ap-southeast-2")
+
+
 
 au_us_east_count = au_east.count
 au_eu_west_count = au_eu_west.count
 au_eu_central_count = au_eu_central.count
+au_ap_northeast_count = au_ap_northeast.count
+au_ap_southeast_count = au_ap_southeast.count
 
 
 Chef::Log.warn("%%%%%%%%%%%%%%%%%%%%***************$$$$$$$$$$$$$$$$$ AU EU CENTRAL COUNT IS %%%%%%%%%%%%%%*************************** is: #{au_eu_central_count}")
@@ -501,6 +507,8 @@ dd_us_east = search(:node, "chef_environment:production AND role:dc_data_distrib
 dd_us_west = search(:node, "chef_environment:production AND role:dc_data_distributor AND ec2_region:us-west-1")
 dd_eu_west = search(:node, "chef_environment:production AND role:dc_data_distributor AND ec2_region:eu-west-1")
 dd_eu_central = search(:node, "chef_environment:production AND role:dc_data_distributor AND ec2_region:eu-central-1")
+dd_ap_northeast = search(:node, "chef_environment:production AND role:dc_data_distributor AND ec2_region:ap-northeast-1")
+dd_ap_southeast = search(:node, "chef_environment:production AND role:dc_data_distributor AND ec2_region:ap-southeast-2")
 
 dd_us_east_count = dd_us_east.count
 dd_eu_west_count = dd_eu_west.count
@@ -534,6 +542,18 @@ au_eu_central_id = []
 au_eu_central.each do |n|
   #Chef::Log.warn("**************************** This AU: #{n} has instance ID : #{n[:ec2][:instance_id]} ***********************************")
   au_eu_central_id << n[:ec2][:instance_id]
+end
+
+au_ap_northeast_id = []
+au_ap_northeast.each do |n|
+  #Chef::Log.warn("**************************** This AU: #{n} has instance ID : #{n[:ec2][:instance_id]} ***********************************")
+  au_ap_northeast_id << n[:ec2][:instance_id]
+end
+
+au_ap_southeast_id = []
+au_ap_southeast.each do |n|
+  #Chef::Log.warn("**************************** This AU: #{n} has instance ID : #{n[:ec2][:instance_id]} ***********************************")
+  au_ap_southeast_id << n[:ec2][:instance_id]
 end
 
 esp_pc1_id = []
@@ -596,6 +616,19 @@ dd_eu_central.each do |n|
   dd_eu_central_id << n[:ec2][:instance_id]
 end
 
+dd_ap_northeast_id = []
+dd_ap_northeast.each do |n|
+ # Chef::Log.warn("**************************** This DD: #{n} has instance ID : #{n[:ec2][:instance_id]} ***********************************")
+  dd_ap_northeast_id << n[:ec2][:instance_id]
+end
+
+dd_ap_southeast_id = []
+dd_ap_southeast.each do |n|
+ # Chef::Log.warn("**************************** This DD: #{n} has instance ID : #{n[:ec2][:instance_id]} ***********************************")
+  dd_ap_southeast_id << n[:ec2][:instance_id]
+end
+
+
 #Chef::Log.warn("**************************** East AU Instance ID array is: #{au_east_id} ************************************")
 #Chef::Log.warn("**************************** EU West AU Instance ID array is: #{au_eu_west_id} ************************************")
 #Chef::Log.warn("**************************** EU Central AU Instance ID array is: #{au_eu_central_id} ************************************")
@@ -603,11 +636,15 @@ end
 vp_eu_west = search(:node, "chef_environment:production AND role:dc_visitor_processor AND ec2_region:eu-west-1")
 vp_eu_central = search(:node, "chef_environment:production AND role:dc_visitor_processor AND ec2_region:eu-central-1")
 vp_us_east = search(:node, "chef_environment:production AND role:dc_visitor_processor AND ec2_region:us-east-1")
-vp_all = vp_eu_west.count + vp_eu_central.count + vp_us_east.count
+vp_ap_northeast = search(:node, "chef_environment:production AND role:dc_visitor_processor AND ec2_region:ap-northeast-1")
+vp_ap_southeast = search(:node, "chef_environment:production AND role:dc_visitor_processor AND ec2_region:ap-southeast-2")
+vp_all = vp_eu_west.count + vp_eu_central.count + vp_us_east.count + vp_ap_northeast.count + vp_ap_southeast.count
 
 vp_eu_west_count = vp_eu_west.count
 vp_eu_central_count = vp_eu_central.count
 vp_us_east_count = vp_us_east.count
+vp_ap_northeast_count = vp_ap_northeast.count
+vp_ap_southeast_count = vp_ap_southeast.count
 
 vp_and_esp_eu_west_count = vp_eu_west.count + esp_eu_west.count
 vp_and_esp_eu_central_count = vp_eu_central.count + esp_eu_central.count
@@ -626,6 +663,8 @@ vs_eu_west = search(:node, "chef_environment:production AND role:dc_visitor_serv
 vs_eu_central = search(:node, "chef_environment:production AND role:dc_visitor_service AND ec2_region:eu-central-1")
 vs_us_east = search(:node, "chef_environment:production AND role:dc_visitor_service AND ec2_region:us-east-1")
 
+hvp_ap_northeast = search(:node, "chef_environment:production AND role:dc_historic_visitor_processor AND ec2_region:ap-northeast-1")
+hvp_ap_southeast = search(:node, "chef_environment:production AND role:dc_historic_visitor_processor AND ec2_region:ap-southeast-2")
 hvp_eu_west = search(:node, "chef_environment:production AND role:dc_historic_visitor_processor AND ec2_region:eu-west-1")
 hvp_eu_central = search(:node, "chef_environment:production AND role:dc_historic_visitor_processor AND ec2_region:eu-central-1")
 hvp_us_east = search(:node, "chef_environment:production AND role:dc_historic_visitor_processor AND ec2_region:us-east-1")
@@ -667,7 +706,7 @@ Chef::Log.warn("Second App_Environment is: #{environment}")
 
   if ::File.exists?('/home/ubuntu/nagios')
     FileUtils.cp('/home/ubuntu/nagios', '/etc/sudoers.d/nagios')
-  end  
+  end
 
   nagios_conf "services" do
     variables(
@@ -681,7 +720,9 @@ Chef::Log.warn("Second App_Environment is: #{environment}")
       :au_pc1_id => au_pc1_id,
       :au_east_id => au_east_id,
       :au_eu_west_id => au_eu_west_id,
-      :au_eu_central_id =>au_eu_central_id,
+      :au_eu_central_id => au_eu_central_id,
+      :au_ap_northeast_id => au_ap_northeast_id,
+      :au_ap_southeast_id => au_ap_southeast_id,
       :esp_pc1_id => esp_pc1_id,
       :esp_us_east_id => esp_us_east_id,
       :esp_us_west_id => esp_us_west_id,
@@ -691,6 +732,8 @@ Chef::Log.warn("Second App_Environment is: #{environment}")
       :dd_us_east_id => dd_us_east_id,
       :dd_us_west_id => dd_us_west_id,
       :dd_eu_west_id => dd_eu_west_id,
+      :dd_ap_northeast_id => dd_ap_northeast_id,
+      :dd_ap_southeast_id => dd_ap_southeast_id,
       :dd_eu_central_id => dd_eu_central_id,
       :vp_eu_west_count => vp_eu_west_count,
       :vp_eu_central_count => vp_eu_central_count,
@@ -698,6 +741,8 @@ Chef::Log.warn("Second App_Environment is: #{environment}")
       :vs_eu_west_count => vs_eu_west_count,
       :vs_eu_central_count => vs_eu_central_count,
       :vs_us_east_count => vs_us_east_count,
+      :vs_ap_northeast_count => vs_ap_northeast_count,
+      :vs_ap_southeast_count => vs_ap_southeast_count,
       :dd_us_east_count => dd_us_east_count,
       :dd_eu_west_count => dd_eu_west_count,
       :dd_eu_central_count => dd_eu_central_count,
@@ -709,8 +754,10 @@ Chef::Log.warn("Second App_Environment is: #{environment}")
       :vp_and_esp_us_east_count => vp_and_esp_us_east_count,
       :dd_us_east_count_double => dd_us_east_count_double,
       :vp_all => vp_all,
-      :prod_mongo_ip => prod_mongo_ip, 
+      :prod_mongo_ip => prod_mongo_ip,
       :pc1_mongo_ip => pc1_mongo_ip,
+      :hvp_ap_northeast => hvp_ap_northeast,
+      :hvp_ap_southeast => hvp_ap_southeast,
       :hvp_eu_west => hvp_eu_west,
       :hvp_eu_central => hvp_eu_central,
       :hvp_us_east => hvp_us_east,
@@ -748,7 +795,7 @@ nagios_conf "hostgroups" do
 end
 
 nagios_conf "hosts" do
-  variables( 
+  variables(
   :nodes => nodes
   )
 end
