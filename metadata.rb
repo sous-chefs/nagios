@@ -1,12 +1,12 @@
-name              'nagios'
-maintainer        'Tim Smith'
-maintainer_email  'tsmith@chef.io'
-license           'Apache-2.0'
-description       'Installs and configures Nagios server'
-long_description  IO.read(File.join(File.dirname(__FILE__), 'README.md'))
-version           '7.2.7'
-issues_url       'https://github.com/schubergphilis/nagios/issues'
-source_url       'https://github.com/schubergphilis/nagios'
+name             'nagios'
+maintainer       'Sous Chefs'
+maintainer_email 'help@sous-chefs.org'
+license          'Apache-2.0'
+description      'Installs and configures Nagios server'
+long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
+version          '7.2.7'
+issues_url       'https://github.com/sous-chefs/nagios/issues'
+source_url       'https://github.com/sous-chefs/nagios'
 chef_version     '>= 12.1' if respond_to?(:chef_version)
 
 recipe 'default', 'Installs Nagios server.'
