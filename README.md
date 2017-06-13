@@ -21,8 +21,8 @@ The functionality that was previously in the nagios::client recipe has been move
 ### Platform
 
 - Debian 7+
-- Ubuntu 12.04+
-- Red Hat Enterprise Linux (CentOS/Amazon/Scientific/Oracle) 5.X, 6.X
+- Ubuntu 14.04+
+- Red Hat Enterprise Linux (CentOS/Amazon/Scientific/Oracle) 6+
 
 **Notes**: This cookbook has been tested on the listed platforms. It may work on other platforms with or without modification.
 

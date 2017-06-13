@@ -1,8 +1,8 @@
 #
 # Author:: Joshua Sierles <joshua@37signals.com>
-# Author:: Joshua Timberman <joshua@getchef.com>
-# Author:: Nathan Haneysmith <nathan@getchef.com>
-# Author:: Seth Chisamore <schisamo@getchef.com>
+# Author:: Joshua Timberman <joshua@chef.io>
+# Author:: Nathan Haneysmith <nathan@chef.io>
+# Author:: Seth Chisamore <schisamo@chef.io>
 # Cookbook Name:: nagios
 # Definition:: nagios_conf
 #

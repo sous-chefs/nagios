@@ -1,8 +1,8 @@
 #
 # Author:: Joshua Sierles <joshua@37signals.com>
-# Author:: Joshua Timberman <joshua@getchef.com>
-# Author:: Nathan Haneysmith <nathan@getchef.com>
-# Author:: Seth Chisamore <schisamo@getchef.com>
+# Author:: Joshua Timberman <joshua@chef.io>
+# Author:: Nathan Haneysmith <nathan@chef.io>
+# Author:: Seth Chisamore <schisamo@chef.io>
 # Author:: Tim Smith <tsmith@chef.io>
 # Cookbook Name:: nagios
 # Recipe:: default
@@ -168,7 +168,7 @@ nagios_conf 'cgi' do
 end
 
 # resource.cfg differs on RPM and tarball based systems
-if node['platform_family'] == 'rhel' || node['platform_family'] == 'fedora'
+if platform_family?('rhel', 'fedora', 'amazon')
   template "#{node['nagios']['resource_dir']}/resource.cfg" do
     source 'resource.cfg.erb'
     owner node['nagios']['user']

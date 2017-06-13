@@ -18,7 +18,7 @@
   CustomLog       <%= node['apache']['log_dir'] %>/nagios_access.log combined
   ErrorLog        <%= node['apache']['log_dir'] %>/nagios_error.log
 
-<% if node.platform_family == 'debian' && node['nagios']['server']['install_method'] == 'package'-%>
+<% if node['platform_family'] == 'debian' && node['nagios']['server']['install_method'] == 'package'-%>
   Alias /stylesheets /etc/<%= node['nagios']['server']['vname'] %>/stylesheets
   Alias /nagios3/stylesheets /etc/<%= node['nagios']['server']['vname'] %>/stylesheets
 <% end -%>

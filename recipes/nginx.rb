@@ -22,12 +22,8 @@ if node['nagios']['server']['stop_apache']
   end
 end
 
-# This doesn't use value_for_platform_family so that it can specify version ranges - COOK-2891
-if platform_family?('rhel') || platform_family?('fedora')
-  node.set['nagios']['server']['nginx_dispatch'] = 'both'
-  if node['platform_version'].to_f < 6
-    node.set['nginx']['install_method'] = 'source'
-  end
+if platform_family?('rhel', 'fedora', 'amazon')
+  node.normal['nagios']['server']['nginx_dispatch'] = 'both'
 end
 
 include_recipe 'chef_nginx'
@@ -41,14 +37,14 @@ end
 
 case dispatch_type = node['nagios']['server']['nginx_dispatch']
 when 'cgi'
-  node.set['nginx_simplecgi']['cgi'] = true
+  node.normal['nginx_simplecgi']['cgi'] = true
   include_recipe 'nginx_simplecgi::setup'
 when 'php'
-  node.set['nginx_simplecgi']['php'] = true
+  node.normal['nginx_simplecgi']['php'] = true
   include_recipe 'nginx_simplecgi::setup'
 when 'both'
-  node.set['nginx_simplecgi']['php'] = true
-  node.set['nginx_simplecgi']['cgi'] = true
+  node.normal['nginx_simplecgi']['php'] = true
+  node.normal['nginx_simplecgi']['cgi'] = true
   include_recipe 'nginx_simplecgi::setup'
 else
   Chef::Log.warn 'NAGIOS: NGINX setup does not have a dispatcher provided'
