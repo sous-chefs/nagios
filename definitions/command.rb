@@ -17,17 +17,3 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-
-define :nagios_command do
-  params[:action] ||= :create
-  params[:options] ||= {}
-
-  if nagios_action_create?(params[:action])
-    o = Nagios::Command.create(params[:name])
-    o.import(params[:options])
-  end
-
-  if nagios_action_delete?(params[:action])
-    Nagios.instance.delete('command', params[:name])
-  end
-end
