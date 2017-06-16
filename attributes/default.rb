@@ -24,8 +24,6 @@
 default['nagios']['multi_environment_monitoring'] = false
 default['nagios']['monitored_environments'] = []
 
-default['nagios']['user']  = 'nagios'
-default['nagios']['group'] = 'nagios'
 
 # Allow specifying which interface on clients to monitor (which IP address to monitor)
 default['nagios']['monitoring_interface'] = nil
@@ -93,30 +91,11 @@ default['nagios']['ssl_cert_key']  = "#{node['nagios']['conf_dir']}/certificates
 default['nagios']['ssl_req']       = '/C=US/ST=Several/L=Locality/O=Example/OU=Operations/' \
   "CN=#{node['nagios']['server_name']}/emailAddress=ops@#{node['nagios']['server_name']}"
 
-# nagios server name and webserver vname.  this can be changed to allow for the installation of icinga
-default['nagios']['server']['name'] = 'nagios'
-case node['platform_family']
-when 'rhel', 'fedora', 'amazon'
-  default['nagios']['server']['vname'] = 'nagios'
-else
-  default['nagios']['server']['vname'] = 'nagios3'
-end
+
 
 # for server from source installation
-default['nagios']['server']['url']       = 'https://assets.nagios.com/downloads/nagioscore/releases/nagios-4.2.4.tar.gz'
-default['nagios']['server']['checksum']  = 'b0055c475683ce50d77b1536ff0cec9abf89139adecf771601fa021ef9a20b70'
-default['nagios']['server']['src_dir']   = node['nagios']['server']['url'].split('/')[-1].chomp('.tar.gz')
-default['nagios']['server']['patches']   = []
-default['nagios']['server']['patch_url'] = nil
 
-# for server from packages installation
-case node['platform_family']
-when 'rhel', 'fedora', 'amazon'
-  default['nagios']['server']['packages'] = %w(nagios nagios-plugins-nrpe)
-  default['nagios']['server']['install_yum-epel'] = true
-else
-  default['nagios']['server']['packages'] = %w(nagios3 nagios-nrpe-plugin nagios-images)
-end
+
 
 default['nagios']['check_external_commands']     = true
 default['nagios']['default_contact_groups']      = %w(admins)
