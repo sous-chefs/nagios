@@ -35,7 +35,10 @@
 
 <% if @https -%>
   SSLEngine On
-  SSLProtocol all -SSLv3 -SSLv2
+  SSLProtocol <%= node['nagios']['ssl_protocols'] %>
+<% if node['nagios']['ssl_ciphers'] != nil -%>
+  SSLCipherSuite <%= node['nagios']['ssl_ciphers'] %>
+<% end -%>
   SSLCertificateFile <%= @ssl_cert_file %>
 <% if node['nagios']['ssl_cert_chain_file'] %>
   SSLCertificateChainFile <%= node['nagios']['ssl_cert_chain_file'] %>
