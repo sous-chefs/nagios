@@ -68,6 +68,8 @@ Example: `default['nagios']['conf']['cfg_dir'] = [ '/etc/nagios/conf.d' , '/usr/
 * `node['nagios']['ssl_cert_file']` = Location of SSL Certificate File. default "/etc/nagios3/certificates/nagios-server.pem"
 * `node['nagios']['ssl_cert_chain_file']` = Optional location of SSL Intermediate Certificate File. No default.
 * `node['nagios']['ssl_cert_key']`  = Location of SSL Certificate Key. default "/etc/nagios3/certificates/nagios-server.pem"
+* `node['nagios']['ssl_protocols']` = The SSLProtocol string to pass to apache, defaults to "all -SSL3 -SSL2"
+* `node['nagios']['ssl_ciphers']` = The SSLCipherSuite string to pass to apache, defaults to empty (which will result in this setting not being included in the apache config)
 * `node['nagios']['http_port']` - port that the Apache/Nginx virtual site should listen on, determined whether ssl is enabled (443 if so, otherwise 80). Note:  You will also need to configure the listening port for either NGINX or Apache within those cookbooks.
 * `node['nagios']['server_name']` - common name to use in a server cert, default "nagios"
 * `node['nagios']['server']['server_alias']` - alias name for the webserver for use with Apache.  Defaults to nil
