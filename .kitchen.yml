@@ -1,7 +1,7 @@
 driver:
   name: vagrant
-  network:
-    - ["forwarded_port", {guest: 80, host: 8080}]
+  customize:
+    cableconnected1: 'on'
 
 provisioner:
   name: chef_zero
