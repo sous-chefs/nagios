@@ -58,5 +58,15 @@ suites:
    attributes:
      nagios:
        allowed_ips: ['127.0.0.1', '::1']
+ - name: nginx
+   run_list:
+   - recipe[nagios::nginx]
+   - recipe[nrpe::default]
+   - recipe[nagios_test::default]
+   - role[monitoring]
+   attributes:
+     nagios:
+       monitored_environments:
+         - '_default'
 data_bags_path: test/data_bags
 roles_path: test/roles

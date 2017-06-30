@@ -22,21 +22,7 @@ if node['nagios']['server']['stop_apache']
   end
 end
 
-pkgs = value_for_platform(
-  %w(redhat centos fedora scientific) => {
-    %w(5.0 5.1 5.2 5.3 5.4 5.5 5.6 5.7 5.8) => %w(php53),
-    'default' => %w(php)
-  },
-  %w(debian ubuntu) => {
-    %w(14.04) => %w(php5-cgi php5-fpm fcgiwrap),
-    'default' => %w(php-cgi php-fpm fcgiwrap)
-  },
-  'default' => %w(php5-cgi php5-fpm fcgiwrap)
-)
-
-pkgs.each do |package_name|
-  package package_name
-end
+package node['nagios']['server']['nginx_dispatch']['packages']
 
 if platform_family?('rhel', 'fedora', 'amazon')
   node.normal['nagios']['server']['nginx_dispatch']['type'] = 'both'
