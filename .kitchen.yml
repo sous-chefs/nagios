@@ -1,5 +1,7 @@
 driver:
   name: vagrant
+  customize:
+    cableconnected1: 'on'
 
 provisioner:
   name: chef_zero
