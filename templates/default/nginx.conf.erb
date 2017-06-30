@@ -28,35 +28,47 @@ server {
 <% end %>
 
 <% if @cgi %>
-<%=
-nginx_dispatch(:cgi,
-  :custom => %q(
+  location ~ ^/cgi-bin/.*\.cgi$ {
+    gzip off;
+    fastcgi_pass <%= node['nagios']['server']['nginx_dispatch']['cgi_url'].to_s %>;
+    fastcgi_index index.cgi;
+    fastcgi_param SCRIPT_FILENAME /usr/lib$fastcgi_script_name;
+
+    include /etc/nginx/fastcgi_params;
+
     fastcgi_param AUTH_USER $remote_user;
     fastcgi_param REMOTE_USER $remote_user;
-  )
-)
-%>
+
+  }
 <% end %>
 
 <% if @php %>
-<%=
-nginx_dispatch(:php,
-  :docroot => @docroot,
-  :custom => %q(
+  location ~ .php$ {
+    gzip off;
+    fastcgi_pass <%= node['nagios']['server']['nginx_dispatch']['php_url'].to_s %>;
+    fastcgi_index index.php;
+    fastcgi_param SCRIPT_FILENAME /usr/share/nagios3/htdocs$fastcgi_script_name;
+
+    include /etc/nginx/fastcgi_params;
+
     fastcgi_param AUTH_USER $remote_user;
     fastcgi_param REMOTE_USER $remote_user;
-  )
-)
-%>
+
+  }
 <% end %>
 
 <% if node.platform_family == 'debian' && node['nagios']['server']['install_method'] == 'package'-%>
-  location /stylesheets {
+  location /<%= node['nagios']['server']['vname'] %>/stylesheets {
     alias /etc/<%= node['nagios']['server']['vname'] %>/stylesheets;
   }
 <% end -%>
+
   location / {
-    root <%= @docroot %>;
+    try_files $uri $uri/ index.php /nagios3;
+  }
+
+  location /<%= node['nagios']['server']['vname'] %> {
+    alias <%= @docroot %>;
   }
 
 }

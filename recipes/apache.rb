@@ -45,3 +45,22 @@ file "#{node['apache']['dir']}/conf.d/#{node['nagios']['server']['vname']}.conf"
 end
 
 apache_site node['nagios']['server']['vname']
+
+node.default['nagios']['web_user'] = node['apache']['user']
+node.default['nagios']['web_group'] = node['apache']['group'] || node['apache']['user']
+
+# configure the appropriate authentication method for the web server
+case node['nagios']['server_auth_method']
+when 'openid'
+  include_recipe 'apache2::mod_auth_openid'
+when 'cas'
+  include_recipe 'apache2::mod_auth_cas'
+when 'ldap'
+  include_recipe 'apache2::mod_authnz_ldap'
+when 'htauth'
+  Chef::Log.info('Authenticaion method htauth configured in server.rb')
+else
+  Chef::Log.info('Default method htauth configured in server.rb')
+end
+
+include_recipe 'nagios::server'

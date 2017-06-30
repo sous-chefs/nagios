@@ -22,11 +22,29 @@ if node['nagios']['server']['stop_apache']
   end
 end
 
-if platform_family?('rhel', 'amazon')
-  node.normal['nagios']['server']['nginx_dispatch'] = 'both'
+pkgs = value_for_platform(
+  %w(redhat centos fedora scientific) => {
+    %w(5.0 5.1 5.2 5.3 5.4 5.5 5.6 5.7 5.8) => %w(php53),
+    'default' => %w(php)
+  },
+  %w(debian ubuntu) => {
+    %w(14.04) => %w(php5-cgi php5-fpm fcgiwrap),
+    'default' => %w(php-cgi php-fpm fcgiwrap)
+  },
+  'default' => %w(php5-cgi php5-fpm fcgiwrap)
+)
+
+pkgs.each do |package_name|
+  package package_name
+end
+
+if platform_family?('rhel', 'fedora', 'amazon')
+  node.normal['nagios']['server']['nginx_dispatch']['type'] = 'both'
 end
 
 include_recipe 'chef_nginx'
+
+dispatch_type = node['nagios']['server']['nginx_dispatch']['type']
 
 %w(default 000-default).each do |disable_site|
   nginx_site disable_site do
@@ -35,19 +53,9 @@ include_recipe 'chef_nginx'
   end
 end
 
-case dispatch_type = node['nagios']['server']['nginx_dispatch']
-when 'cgi'
-  node.normal['nginx_simplecgi']['cgi'] = true
-  include_recipe 'nginx_simplecgi::setup'
-when 'php'
-  node.normal['nginx_simplecgi']['php'] = true
-  include_recipe 'nginx_simplecgi::setup'
-when 'both'
-  node.normal['nginx_simplecgi']['php'] = true
-  node.normal['nginx_simplecgi']['cgi'] = true
-  include_recipe 'nginx_simplecgi::setup'
-else
-  Chef::Log.warn 'NAGIOS: NGINX setup does not have a dispatcher provided'
+file File.join(node['nginx']['dir'], 'conf.d', 'default.conf') do
+  action :delete
+  notifies :reload, 'service[nginx]', :immediate
 end
 
 template File.join(node['nginx']['dir'], 'sites-available', 'nagios3.conf') do
@@ -76,3 +84,27 @@ end
 nginx_site 'nagios3.conf' do
   notifies :reload, 'service[nginx]'
 end
+
+node.default['nagios']['web_user'] = node['nginx']['user']
+node.default['nagios']['web_group'] = node['nginx']['group'] || node['nginx']['user']
+
+# configure the appropriate authentication method for the web server
+case node['nagios']['server_auth_method']
+when 'openid'
+  Chef::Log.fatal('OpenID authentication for Nagios is not supported on NGINX')
+  Chef::Log.fatal("Set node['nagios']['server_auth_method'] attribute in your Nagios role")
+  raise 'OpenID authentication not supported on NGINX'
+when 'cas'
+  Chef::Log.fatal('CAS authentication for Nagios is not supported on NGINX')
+  Chef::Log.fatal("Set node['nagios']['server_auth_method'] attribute in your Nagios role")
+  raise 'CAS authentivation not supported on NGINX'
+when 'ldap'
+  Chef::Log.fatal('LDAP authentication for Nagios is not supported on NGINX')
+  Chef::Log.fatal("Set node['nagios']['server_auth_method'] attribute in your Nagios role")
+  raise 'LDAP authentication not supported on NGINX'
+else
+  # setup htpasswd auth
+  Chef::Log.info('Default method htauth configured in server.rb')
+end
+
+include_recipe 'nagios::server'

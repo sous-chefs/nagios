@@ -27,6 +27,10 @@ default['nagios']['monitored_environments'] = []
 default['nagios']['user']  = 'nagios'
 default['nagios']['group'] = 'nagios'
 
+# Default vaules guarantee to exist, override in webserer recipe
+default['nagios']['web_user']  = 'nagios'
+default['nagios']['web_group'] = 'nagios'
+
 # Allow specifying which interface on clients to monitor (which IP address to monitor)
 default['nagios']['monitoring_interface'] = nil
 
@@ -188,7 +192,24 @@ default['nagios']['default_service']['flap_detection']        = true
 default['nagios']['default_service']['action_url']            = nil
 
 default['nagios']['server']['web_server']              = 'apache'
-default['nagios']['server']['nginx_dispatch']          = 'cgi'
+default['nagios']['server']['nginx_dispatch']['type']  = 'both'
+default['nagios']['server']['nginx_dispatch']['cgi_url']  =
+  'unix:/var/run/fcgiwrap.socket'
+default['nagios']['server']['nginx_dispatch']['php_url']  =
+  case node['platform']
+  when 'debian'
+    'unix:/var/run/php5-fpm.sock'
+  when 'rhel', 'fedora', 'amazon'
+    'unix:/var/run/php5-fpm.sock'
+  when 'ubuntu'
+    if node['platform_version'] == '14.04'
+      'unix:/var/run/php5-fpm.sock'
+    else
+      'unix:/var/run/php/php7.0-fpm.sock'
+    end
+  else
+    'unix:/var/run/php5-fpm.sock'
+  end
 default['nagios']['server']['stop_apache']             = false
 default['nagios']['server']['normalize_hostname']      = false
 default['nagios']['server']['load_default_config']     = true
