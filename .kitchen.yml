@@ -5,10 +5,7 @@ driver:
 
 provisioner:
   name: chef_zero
-  require_chef_omnibus: <%= ENV['CHEF_VERSION'] || 'latest' %>
-
-verifier:
-  name: inspec
+  require_chef_omnibus: 12
 
 platforms:
   - name: amazon-linux
@@ -20,48 +17,47 @@ platforms:
   - name: ubuntu-16.04
 
 suites:
-  - name: server_package
-    run_list:
-    - recipe[nagios::default]
-    - recipe[nrpe::default]
-    - recipe[nagios_test::default]
-    - role[monitoring]
-    verifier:
-      inspec_tests:
-        - test/smoke/server_package
-    attributes:
-      nagios:
-        monitored_environments: [ '_default' ]
-
-  - name: server_source
-    run_list:
-    - recipe[nagios::default]
-    - recipe[nrpe::default]
-    - recipe[nagios_test::default]
-    - role[monitoring]
-    verifier:
-      inspec_tests:
-        - test/smoke/server_source
-    attributes:
-      nagios:
-        monitored_environments: [ '_default' ]
-        server:
-          install_method: 'source'
-
-  - name: pagerduty
-    run_list:
-    - recipe[nagios::default]
-    - recipe[nagios::pagerduty]
-    - recipe[nrpe::default]
-    - recipe[nagios_test::default]
-    - role[monitoring]
-    verifier:
-      inspec_tests:
-        - test/smoke/pagerduty
-    attributes:
-      nagios:
-        monitored_environments: [ '_default' ]
-        server:
-          install_method: 'source'
-        pagerduty:
-          key: 'your_key_here_3eC2'
+ - name: server_package
+   run_list:
+   - recipe[nagios::default]
+   - recipe[nrpe::default]
+   - recipe[nagios_test::default]
+   - role[monitoring]
+   attributes:
+     nagios:
+       monitored_environments:
+         - '_default'
+ - name: server_source
+   run_list:
+   - recipe[nagios::default]
+   - recipe[nrpe::default]
+   - recipe[nagios_test::default]
+   - role[monitoring]
+   attributes:
+     nagios:
+       server:
+         install_method: 'source'
+ - name: pagerduty
+   run_list:
+   - recipe[nagios::default]
+   - recipe[nagios::pagerduty]
+   - recipe[nrpe::default]
+   - recipe[nagios_test::default]
+   - role[monitoring]
+   attributes:
+     nagios:
+       server:
+         install_method: 'source'
+       pagerduty:
+         key: 'your_key_here_3eC2'
+ - name: allowed_ips
+   run_list:
+   - recipe[nagios::default]
+   - recipe[nrpe::default]
+   - recipe[nagios_test::default]
+   - role[monitoring]
+   attributes:
+     nagios:
+       allowed_ips: ['127.0.0.1', '::1']
+data_bags_path: test/data_bags
+roles_path: test/roles
