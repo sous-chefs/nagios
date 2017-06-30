@@ -24,21 +24,24 @@ if node['nagios']['server']['stop_apache']
   end
 end
 
-include_recipe 'chef_nginx'
+pkgs = value_for_platform(
+  %w(redhat centos fedora scientific) => {
+    %w(5.0 5.1 5.2 5.3 5.4 5.5 5.6 5.7 5.8) => %w(php53),
+    'default' => %w(php)
+  },
+  %w(debian ubuntu) => {
+    %w(14.04) => %w(php5-cgi php5-fpm fcgiwrap),
+    'default' => %w(php-cgi php-fpm fcgiwrap)
+  },
+  'default' => %w(php5-cgi php5-fpm fcgiwrap)
+)
 
-node.default['php-fpm']['pools']['www']['user'] = node['nginx']['user']
-node.default['php-fpm']['pools']['www']['group'] = node['nginx']['group']
-node.default['php-fpm']['user'] = node['nginx']['user']
-node.default['php-fpm']['group'] = node['nginx']['group']
-include_recipe 'php-fpm'
+pkgs.each do |package_name|
+  package package_name
+end
 
-package node['nagios']['server']['nginx_dispatch']['packages']
-
-if %w(rhel).include?(node['platform_family'])
-  template '/etc/sysconfig/spawn-fcgi' do
-    source 'spawn-fcgi.erb'
-    notifies :restart, 'service[spawn-fcgi]', :delayed
-  end
+if platform_family?('rhel', 'fedora', 'amazon')
+  node.normal['nagios']['server']['nginx_dispatch']['type'] = 'both'
 end
 
 node['nagios']['server']['nginx_dispatch']['services'].each do |svc|
@@ -52,6 +55,8 @@ node['nagios']['server']['nginx_dispatch']['services'].each do |svc|
     action [:enable, :start]
   end
 end
+
+dispatch_type = node['nagios']['server']['nginx_dispatch']['type']
 
 dispatch_type = node['nagios']['server']['nginx_dispatch']['type']
 
@@ -91,7 +96,7 @@ nginx_site 'nagios3.conf' do
 end
 
 node.default['nagios']['web_user'] = node['nginx']['user']
-node.default['nagios']['web_group'] = node['nginx']['group']
+node.default['nagios']['web_group'] = node['nginx']['group'] || node['nginx']['user']
 
 # configure the appropriate authentication method for the web server
 case node['nagios']['server_auth_method']
@@ -113,16 +118,3 @@ else
 end
 
 include_recipe 'nagios::server'
-
-execute 'fix_docroot_perms' do
-  command "chgrp -R #{node['nagios']['web_group']} #{node['nagios']['docroot']}"
-  action :nothing
-end
-
-if platform_family?('rhel', 'fedora', 'amazon')
-  directory node['nagios']['docroot'] do
-    group node['nginx']['group']
-    notifies :run, 'execute[fix_docroot_perms]', :before
-    action :create
-  end
-end

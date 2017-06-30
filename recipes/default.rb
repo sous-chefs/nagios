@@ -34,5 +34,7 @@ when 'apache'
 else
   Chef::Log.info('Unknown web server option provided for Nagios server: ' \
                   "#{node['nagios']['server']['web_server']} provided. Allowed: 'nginx' or 'apache'")
+  ## raise 'Unknown web server option provided for Nagios server'
   include_recipe 'nagios::server'
 end
+

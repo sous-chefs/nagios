@@ -28,12 +28,11 @@ server {
 <% end %>
 
 <% if @cgi %>
-  location ~ \.cgi$ {
-    root <%= node['nagios']['cgi-bin'] %>;
+  location ~ ^/cgi-bin/.*\.cgi$ {
     gzip off;
-    fastcgi_pass <%= @nginx_dispatch_cgi_url.to_s %>;
+    fastcgi_pass <%= node['nagios']['server']['nginx_dispatch']['cgi_url'].to_s %>;
     fastcgi_index index.cgi;
-    fastcgi_param SCRIPT_FILENAME <%= @cgi_bin_dir %>$fastcgi_script_name;
+    fastcgi_param SCRIPT_FILENAME /usr/lib$fastcgi_script_name;
 
     include /etc/nginx/fastcgi_params;
 
@@ -46,9 +45,9 @@ server {
 <% if @php %>
   location ~ .php$ {
     gzip off;
-    fastcgi_pass <%= @nginx_dispatch_php_url.to_s %>;
+    fastcgi_pass <%= node['nagios']['server']['nginx_dispatch']['php_url'].to_s %>;
     fastcgi_index index.php;
-    fastcgi_param SCRIPT_FILENAME <%= @docroot %>$fastcgi_script_name;
+    fastcgi_param SCRIPT_FILENAME /usr/share/nagios3/htdocs$fastcgi_script_name;
 
     include /etc/nginx/fastcgi_params;
 
@@ -58,8 +57,8 @@ server {
   }
 <% end %>
 
-<% if node['platform_family'] == 'debian' && node['nagios']['server']['install_method'] == 'package'-%>
-  location /stylesheets {
+<% if node.platform_family == 'debian' && node['nagios']['server']['install_method'] == 'package'-%>
+  location /<%= node['nagios']['server']['vname'] %>/stylesheets {
     alias /etc/<%= node['nagios']['server']['vname'] %>/stylesheets;
   }
 
@@ -69,11 +68,10 @@ server {
 <% end -%>
 
   location / {
-    root <%= @docroot %>;
-    try_files $uri $uri/ index.php /<%= node['nagios']['server']['vname'] %>;
+    try_files $uri $uri/ index.php /nagios3;
   }
 
-  location /<%= @server_vname %> {
+  location /<%= node['nagios']['server']['vname'] %> {
     alias <%= @docroot %>;
   }
 
