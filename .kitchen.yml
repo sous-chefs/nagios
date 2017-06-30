@@ -3,10 +3,7 @@ driver:
 
 provisioner:
   name: chef_zero
-  require_chef_omnibus: <%= ENV['CHEF_VERSION'] || 'latest' %>
-
-verifier:
-  name: inspec
+  require_chef_omnibus: 12
 
 platforms:
   - name: ubuntu-14.04
@@ -70,11 +67,8 @@ suites:
    - role[monitoring]
    attributes:
      nagios:
-   verifier:
-     inspec_tests:
-       - test/smoke/default/server.rb
-       - test/smoke/default/apache.rb
-       - test/smoke/default/nagios_website.rb
+       monitored_environments:
+         - '_default'
  - name: server_source
    run_list:
    - recipe[nagios::default]

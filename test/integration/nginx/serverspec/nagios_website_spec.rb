@@ -29,6 +29,6 @@ describe 'Nagios Website Host Configuration' do
   end
 
   it 'should contain eventhandler for bighost2' do
-    expect { system("wget -qO- --user=admin --password=admin \"#{cgi_url}?type=hosts&expand=bighost2\" | grep my-event-handler-command") }.to output(/.*type=command.*my-event-handler-command.*/i).to_stdout_from_any_process
+    expect { system('wget -qO- --user=admin --password=admin "http://localhost/cgi-bin/nagios3/config.cgi?type=hosts&expand=bighost2" | grep my-event-handler-command') }.to output(/.*type=command.*my-event-handler-command.*/i).to_stdout_from_any_process
   end
 end
