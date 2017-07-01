@@ -5,8 +5,55 @@ driver:
 
 provisioner:
   name: chef_zero
+  require_chef_omnibus: 12
 
 platforms:
+  - name: ubuntu-14.04
+    driver_config:
+      network:
+        - ["forwarded_port", {guest: 80, host: 8081}]
+    run_list:
+    - recipe[apt::default]
+  - name: ubuntu-16.04
+    driver_config:
+      network:
+        - ["forwarded_port", {guest: 80, host: 8082}]
+    run_list:
+    - recipe[apt::default]
+  - name: debian-7.11
+    driver_config:
+      network:
+        - ["forwarded_port", {guest: 80, host: 8083}]
+    provisioner:
+      require_chef_omnibus: 13
+    run_list:
+    - recipe[apt::default]
+  - name: debian-8.7
+    driver_config:
+      network:
+        - ["forwarded_port", {guest: 80, host: 8084}]
+    run_list:
+    - recipe[apt::default]
+  - name: freebsd-10.3
+    driver_config:
+      network:
+        - ["forwarded_port", {guest: 80, host: 8085}]
+  - name: freebsd-11.0
+    driver_config:
+      network:
+        - ["forwarded_port", {guest: 80, host: 8086}]
+  - name: centos-7.3
+    driver_config:
+      network:
+        - ["forwarded_port", {guest: 80, host: 8087}]
+  - name: centos-6.9
+    driver_config:
+      network:
+        - ["forwarded_port", {guest: 80, host: 8088}]
+  - name: fedora-25
+    driver_config:
+      network:
+        - ["forwarded_port", {guest: 80, host: 8089}]
   - name: amazon-linux
     driver_config:
       box: mvbcoding/awslinux

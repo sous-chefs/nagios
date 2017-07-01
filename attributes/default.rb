@@ -53,7 +53,11 @@ when 'rhel', 'amazon'
   default['nagios']['log_dir']       = '/var/log/nagios'
   default['nagios']['cache_dir']     = '/var/log/nagios'
   default['nagios']['state_dir']     = '/var/log/nagios'
-  default['nagios']['run_dir']       = '/var/run/nagios'
+  if node['platform'] == 'centos' && node['platform_version'].to_i < 7
+    default['nagios']['run_dir']       = '/var/run'
+  else
+    default['nagios']['run_dir']       = '/var/run/nagios'
+  end
   default['nagios']['docroot']       = '/usr/share/nagios/html'
   default['nagios']['cgi-bin']       = '/usr/lib64/nagios/cgi-bin/'
 else
@@ -207,8 +211,17 @@ default['nagios']['server']['nginx_dispatch']['packages']  =
     else
       %w(php-cgi php-fpm fcgiwrap)
     end
+  when 'freebsd'
+      %w(php56)
   else
     %w(php5-cgi php5-fpm fcgiwrap)
+  end
+default['nagios']['server']['nginx_dispatch']['services']  =
+  case node['platform']
+  when 'rhel','centos','fedora','amazon','scientific'
+    %w(php-fpm spawn-fcgi)
+  else
+    []
   end
 default['nagios']['server']['nginx_dispatch']['cgi_url']  =
   'unix:/var/run/fcgiwrap.socket'

@@ -16,6 +16,8 @@
 # limitations under the License.
 #
 
+node.normal['nagios']['server']['web_server'] = 'apache'
+
 include_recipe 'apache2'
 include_recipe 'apache2::mod_cgi'
 include_recipe 'apache2::mod_rewrite'

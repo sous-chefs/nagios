@@ -57,7 +57,7 @@ server {
   }
 <% end %>
 
-<% if node.platform_family == 'debian' && node['nagios']['server']['install_method'] == 'package'-%>
+<% if node['platform_family'] == 'debian' && node['nagios']['server']['install_method'] == 'package'-%>
   location /<%= node['nagios']['server']['vname'] %>/stylesheets {
     alias /etc/<%= node['nagios']['server']['vname'] %>/stylesheets;
   }
