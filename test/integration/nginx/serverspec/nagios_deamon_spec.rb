@@ -3,7 +3,11 @@ require 'serverspec'
 # Required by serverspec
 set :backend, :exec
 
-svc='nagios3'
+if %w( redhat fedora ).include?(os[:family])
+  svc='nagios'
+else
+  svc='nagios3'
+end
 
 describe 'Nagios Daemon' do
   it 'has a running service of nagios' do

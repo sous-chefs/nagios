@@ -16,7 +16,7 @@
 # limitations under the License.
 #
 
-node.default['nagios']['server']['web_server'] = 'nginx'
+node.normal['nagios']['server']['web_server'] = 'nginx'
 
 if node['nagios']['server']['stop_apache']
   service 'apache2' do
@@ -25,6 +25,12 @@ if node['nagios']['server']['stop_apache']
 end
 
 package node['nagios']['server']['nginx_dispatch']['packages']
+
+node['nagios']['server']['nginx_dispatch']['services'].each do |svc|
+  service svc do
+    action [ :enable, :start ]
+  end
+end
 
 if platform_family?('rhel', 'fedora', 'amazon')
   node.normal['nagios']['server']['nginx_dispatch']['type'] = 'both'
@@ -82,7 +88,7 @@ nginx_site 'nagios3.conf' do
 end
 
 node.default['nagios']['web_user'] = node['nginx']['user']
-node.default['nagios']['web_group'] = node['nginx']['group'] || node['nginx']['user']
+node.default['nagios']['web_group'] = node['nginx']['group']
 
 # configure the appropriate authentication method for the web server
 case node['nagios']['server_auth_method']
