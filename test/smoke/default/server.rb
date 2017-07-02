@@ -10,11 +10,11 @@ title 'Nagios Server Checks'
 if %w( redhat fedora ).include?(os[:family])
   path_config_dir    = '/etc/nagios/conf.d'
   path_conf_dir      = '/etc/nagios'
-  svc='nagios'
+  svc = 'nagios'
 else
   path_config_dir    = '/etc/nagios3/conf.d'
   path_conf_dir      = '/etc/nagios3'
-  svc='nagios3'
+  svc = 'nagios3'
 end
 
 control 'nagios-deamon-01' do

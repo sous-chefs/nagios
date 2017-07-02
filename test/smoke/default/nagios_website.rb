@@ -2,12 +2,10 @@
 
 title 'Nagios Website Checks'
 
-wget_cmd = 'wget -qO- --user=admin --password=admin http://localhost'
-
-cgi_cmd = if %w(redhat fedora).include?(os[:family])
-            "#{wget_cmd}/nagios/cgi-bin"
+cgi_url = if %w( redhat fedora ).include?(os[:family])
+            'http://localhost/nagios/cgi-bin'
           else
-            "#{wget_cmd}/cgi-bin/nagios3"
+            'http://localhost/cgi-bin/nagios3'
           end
 
 control 'nagios-website-01' do
@@ -25,7 +23,8 @@ control 'nagios-website-02' do
   title
   desc 'should be listening on port 80'
 
-  describe command(wget_cmd) do
+  describe command('wget -qO- --user=admin --password=admin localhost') do
+    its('stdout') { should match %r{<title>Nagios Core</title>} }
     its('exit_status') { should eq 0 }
     its('stdout') do
       should
@@ -39,7 +38,8 @@ control 'nagios-website-03' do
   title 'should have a CGI (sub) page'
   desc 'should have a CGI (sub) page'
 
-  describe command("#{cgi_cmd}/tac.cgi") do
+  describe command("wget -qO- --user=admin --password=admin #{cgi_url}/tac.cgi") do
+    its('stdout') { should match %r{<TITLE>\s*Nagios Tactical Monitoring Overview\s*</TITLE>} }
     its('exit_status') { should eq 0 }
     its('stdout') do
       should

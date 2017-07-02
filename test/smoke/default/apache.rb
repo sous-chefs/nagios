@@ -7,7 +7,7 @@
 
 title 'Apache Checks'
 
-svc = if %w(redhat fedora).include?(os[:family])
+svc = if %w( redhat fedora ).include?(os[:family])
         'httpd'
       else
         'apache2'
