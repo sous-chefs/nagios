@@ -199,11 +199,11 @@ default['nagios']['server']['web_server']              = 'apache'
 default['nagios']['server']['nginx_dispatch']['type']  = 'both'
 default['nagios']['server']['nginx_dispatch']['packages']  =
   case node['platform']
-  when %w(redhat centos fedora amazon scientific)
+  when 'rhel','centos','fedora','amazon','scientific'
     if %w(5.0 5.1 5.2 5.3 5.4 5.5 5.6 5.7 5.8).include?(node['platform_version'])
-      %w(php53)
+      %w(php53 php-fpm spawn-fcgi)
     else
-      %w(php)
+      %w(php php-fpm php-fpm spawn-fcgi)
     end
   when 'ubuntu'
     if %w(14.04).include?(node['platform_version'])

@@ -7,7 +7,7 @@
 
 title 'Nginx Checks'
 
-svc = 'nginx'
+svc='nginx'
 
 control 'nginx-deamon-01' do
   impact 1.0
@@ -20,5 +20,6 @@ control 'nginx-deamon-01' do
 
   describe port(80) do
     it { should be_listening }
+    its('processes') { should include svc }
   end
 end

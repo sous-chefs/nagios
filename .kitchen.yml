@@ -7,6 +7,9 @@ provisioner:
   name: chef_zero
   require_chef_omnibus: 12
 
+verifier:
+  name: inspec
+
 platforms:
   - name: ubuntu-14.04
     driver_config:
@@ -73,6 +76,11 @@ suites:
      nagios:
        monitored_environments:
          - '_default'
+   verifier:
+     inspec_tests:
+       - test/smoke/default/server.rb
+       - test/smoke/default/apache.rb
+       - test/smoke/default/nagios_website.rb
  - name: server_source
    run_list:
    - recipe[nagios::default]
@@ -115,5 +123,14 @@ suites:
      nagios:
        monitored_environments:
          - '_default'
+   verifier:
+     inspec_tests:
+       - test/smoke/default/server.rb
+       - test/smoke/default/nginx.rb
+       - test/smoke/default/nagios_website.rb
+   excludes:
+   <% %w(freebsd-10.3 freebsd-11.0 centos-7.3 centos-6.9).each do |exclude_platform| %>
+     - <%= exclude_platform %>
+   <% end %>
 data_bags_path: test/data_bags
 roles_path: test/roles

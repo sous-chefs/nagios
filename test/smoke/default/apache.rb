@@ -7,11 +7,11 @@
 
 title 'Apache Checks'
 
-svc = if %w( redhat fedora ).include?(os[:family])
-        'httpd'
-      else
-        'apache2'
-      end
+if %w( redhat fedora ).include?(os[:family])
+  svc='httpd'
+else
+  svc='apache2'
+end
 
 control 'apache-deamon-01' do
   impact 1.0
