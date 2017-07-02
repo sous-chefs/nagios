@@ -28,7 +28,7 @@ package node['nagios']['server']['nginx_dispatch']['packages']
 
 node['nagios']['server']['nginx_dispatch']['services'].each do |svc|
   service svc do
-    action [ :enable, :start ]
+    action [:enable, :start]
   end
 end
 

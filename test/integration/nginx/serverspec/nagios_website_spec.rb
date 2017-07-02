@@ -17,11 +17,11 @@ describe 'Nagios Website' do
   end
 end
 
-if %w( redhat fedora ).include?(os[:family])
-  cgi_url='http://localhost/cgi-bin/nagios/config.cgi'
-else
-  cgi_url='http://localhost/cgi-bin/nagios3/config.cgi'
-end
+cgi_url = if %w( redhat fedora ).include?(os[:family])
+            'http://localhost/cgi-bin/nagios/config.cgi'
+          else
+            'http://localhost/cgi-bin/nagios3/config.cgi'
+          end
 
 describe 'Nagios Website Host Configuration' do
   it 'should not contain eventhandler for bighost1' do
@@ -29,6 +29,6 @@ describe 'Nagios Website Host Configuration' do
   end
 
   it 'should contain eventhandler for bighost2' do
-    expect { system('wget -qO- --user=admin --password=admin "#{cgi_url}?type=hosts&expand=bighost2" | grep my-event-handler-command') }.to output(/.*type=command.*my-event-handler-command.*/i).to_stdout_from_any_process
+    expect { system("wget -qO- --user=admin --password=admin \"#{cgi_url}?type=hosts&expand=bighost2\" | grep my-event-handler-command") }.to output(/.*type=command.*my-event-handler-command.*/i).to_stdout_from_any_process
   end
 end

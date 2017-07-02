@@ -36,4 +36,3 @@ else
                   "#{node['nagios']['server']['web_server']} provided. Allowed: 'nginx' or 'apache'")
   include_recipe 'nagios::server'
 end
-
