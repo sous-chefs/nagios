@@ -7,7 +7,7 @@
 
 title 'Nginx Checks'
 
-svc='nginx'
+svc = 'nginx'
 
 control 'nginx-deamon-01' do
   impact 1.0
