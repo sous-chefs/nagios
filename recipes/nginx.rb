@@ -16,7 +16,7 @@
 # limitations under the License.
 #
 
-node.normal['nagios']['server']['web_server'] = 'nginx'
+node.default['nagios']['server']['web_server'] = 'nginx'
 
 if node['nagios']['server']['stop_apache']
   service 'apache2' do
@@ -33,7 +33,7 @@ node['nagios']['server']['nginx_dispatch']['services'].each do |svc|
 end
 
 if platform_family?('rhel', 'fedora', 'amazon')
-  node.normal['nagios']['server']['nginx_dispatch']['type'] = 'both'
+  node.default['nagios']['server']['nginx_dispatch']['type'] = 'both'
 end
 
 include_recipe 'chef_nginx'
