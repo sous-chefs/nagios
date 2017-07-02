@@ -74,9 +74,18 @@ template File.join(node['nginx']['dir'], 'sites-available', 'nagios3.conf') do
     docroot: node['nagios']['docroot'],
     fqdn: node['fqdn'],
     htpasswd_file: File.join(node['nagios']['conf_dir'], 'htpasswd.users'),
-    cgi: %w(cgi both).include?(dispatch_type),
-    cgi_bin_dir: %w(rhel fedora amazon).include?(node['platform_family']) ? '/usr/lib64' : '/usr/lib',
-    php: %w(php both).include?(dispatch_type)
+    https: node['nagios']['enable_ssl'],
+    listen_port: node['nagios']['http_port'],
+    log_dir: node['nagios']['log_dir'],
+    nagios_url: node['nagios']['url'],
+    nginx_dispatch_cgi_url: node['nagios']['server']['nginx_dispatch']['cgi_url'],
+    nginx_dispatch_php_url: node['nagios']['server']['nginx_dispatch']['php_url'],
+    php: %w(php both).include?(dispatch_type),
+    public_domain: node['public_domain'] || node['domain'],
+    server_name: node['nagios']['server']['name'],
+    server_vname: node['nagios']['server']['vname'],
+    ssl_cert_file: node['nagios']['ssl_cert_file'],
+    ssl_cert_key: node['nagios']['ssl_cert_key'],
   )
   if File.symlink?(File.join(node['nginx']['dir'], 'sites-enabled', 'nagios3.conf'))
     notifies :reload, 'service[nginx]', :immediately
