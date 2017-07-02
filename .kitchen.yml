@@ -1,11 +1,9 @@
 driver:
   name: vagrant
-  customize:
-    cableconnected1: 'on'
 
 provisioner:
   name: chef_zero
-  require_chef_omnibus: 12
+  require_chef_omnibus: <%= ENV['CHEF_VERSION'] || 'latest' %>
 
 verifier:
   name: inspec
@@ -27,8 +25,6 @@ platforms:
     driver_config:
       network:
         - ["forwarded_port", {guest: 80, host: 8083}]
-    provisioner:
-      require_chef_omnibus: 13
     run_list:
     - recipe[apt::default]
   - name: debian-8.7
