@@ -20,15 +20,7 @@ node.default['nagios']['server']['web_server'] = 'nginx'
 
 if node['nagios']['server']['stop_apache']
   service 'apache2' do
-    action :stop
-  end
-end
-
-package node['nagios']['server']['nginx_dispatch']['packages']
-
-node['nagios']['server']['nginx_dispatch']['services'].each do |svc|
-  service svc do
-    action [:enable, :start]
+    action [:disable, :stop]
   end
 end
 
@@ -37,6 +29,27 @@ if platform_family?('rhel', 'fedora', 'amazon')
 end
 
 include_recipe 'chef_nginx'
+
+node.default['php-fpm']['pools']['www']['user'] = node['nginx']['user']
+node.default['php-fpm']['pools']['www']['group'] = node['nginx']['group']
+node.default['php-fpm']['user'] = node['nginx']['user']
+node.default['php-fpm']['group'] = node['nginx']['group']
+include_recipe 'php-fpm'
+
+package node['nagios']['server']['nginx_dispatch']['packages']
+
+if %w(rhel).include?(node['platform_family'])
+  template '/etc/sysconfig/spawn-fcgi' do
+    source 'spawn-fcgi.erb'
+    notifies :restart, 'service[spawn-fcgi]', :delayed
+  end
+end
+
+node['nagios']['server']['nginx_dispatch']['services'].each do |svc|
+  service svc do
+    action [:enable, :start]
+  end
+end
 
 dispatch_type = node['nagios']['server']['nginx_dispatch']['type']
 
@@ -52,6 +65,10 @@ file File.join(node['nginx']['dir'], 'conf.d', 'default.conf') do
   notifies :reload, 'service[nginx]', :immediate
 end
 
+if platform_family?('rhel', 'fedora', 'amazon')
+  node.default['nagios']['server']['nginx_dispatch']['type'] = 'both'
+end
+
 template File.join(node['nginx']['dir'], 'sites-available', 'nagios3.conf') do
   source 'nginx.conf.erb'
   mode '0644'
@@ -62,18 +79,9 @@ template File.join(node['nginx']['dir'], 'sites-available', 'nagios3.conf') do
     docroot: node['nagios']['docroot'],
     fqdn: node['fqdn'],
     htpasswd_file: File.join(node['nagios']['conf_dir'], 'htpasswd.users'),
-    https: node['nagios']['enable_ssl'],
-    listen_port: node['nagios']['http_port'],
-    log_dir: node['nagios']['log_dir'],
-    nagios_url: node['nagios']['url'],
-    nginx_dispatch_cgi_url: node['nagios']['server']['nginx_dispatch']['cgi_url'],
-    nginx_dispatch_php_url: node['nagios']['server']['nginx_dispatch']['php_url'],
-    php: %w(php both).include?(dispatch_type),
-    public_domain: node['public_domain'] || node['domain'],
-    server_name: node['nagios']['server']['name'],
-    server_vname: node['nagios']['server']['vname'],
-    ssl_cert_file: node['nagios']['ssl_cert_file'],
-    ssl_cert_key: node['nagios']['ssl_cert_key'],
+    cgi: %w(cgi both).include?(dispatch_type),
+    cgi_bin_dir: %w(rhel fedora amazon).include?(node['platform_family']) ? '/usr/lib64' : '/usr/lib',
+    php: %w(php both).include?(dispatch_type)
   )
   if File.symlink?(File.join(node['nginx']['dir'], 'sites-enabled', 'nagios3.conf'))
     notifies :reload, 'service[nginx]', :immediately
@@ -107,3 +115,16 @@ else
 end
 
 include_recipe 'nagios::server'
+
+execute 'fix_docroot_perms' do
+  command "chgrp -R #{node['nagios']['web_group']} #{node['nagios']['docroot']}"
+  action :nothing
+end
+
+if platform_family?('rhel', 'fedora', 'amazon')
+  directory node['nagios']['docroot'] do
+    group node['nginx']['group']
+    notifies :run, 'execute[fix_docroot_perms]', :before
+    action :create
+  end
+end

@@ -70,8 +70,6 @@ suites:
    - role[monitoring]
    attributes:
      nagios:
-       monitored_environments:
-         - '_default'
    verifier:
      inspec_tests:
        - test/smoke/default/server.rb
@@ -111,21 +109,20 @@ suites:
        allowed_ips: ['127.0.0.1', '::1']
  - name: nginx
    run_list:
+   - recipe[nagios_test::fcgiwrap_rpm]
    - recipe[nagios::nginx]
    - recipe[nrpe::default]
    - recipe[nagios_test::default]
    - role[monitoring]
    attributes:
      nagios:
-       monitored_environments:
-         - '_default'
    verifier:
      inspec_tests:
        - test/smoke/default/server.rb
        - test/smoke/default/nginx.rb
        - test/smoke/default/nagios_website.rb
    excludes:
-   <% %w(freebsd-10.3 freebsd-11.0 centos-7.3 centos-6.9).each do |exclude_platform| %>
+   <% %w(freebsd-10.3 freebsd-11.0).each do |exclude_platform| %>
      - <%= exclude_platform %>
    <% end %>
 data_bags_path: test/data_bags

@@ -66,7 +66,11 @@ default['nagios']['conf']['service_interleave_factor']                   = 's'
 default['nagios']['conf']['max_concurrent_checks']                       = '0'
 default['nagios']['conf']['check_result_reaper_frequency']               = '10'
 default['nagios']['conf']['max_check_result_reaper_time']                = '30'
-default['nagios']['conf']['check_result_path']                           = "#{node['nagios']['state_dir']}/spool/checkresults"
+if node['platform'] == 'centos' && node['platform_version'].to_i >= 7
+  default['nagios']['conf']['check_result_path']                         = "#{node['nagios']['home']}/checkresults"
+else
+  default['nagios']['conf']['check_result_path']                         = "#{node['nagios']['state_dir']}/spool/checkresults"
+end
 default['nagios']['conf']['max_check_result_file_age']                   = '3600'
 default['nagios']['conf']['host_inter_check_delay_method']               = 's'
 default['nagios']['conf']['max_host_check_spread']                       = '5'

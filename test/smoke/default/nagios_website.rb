@@ -27,8 +27,7 @@ control 'nagios-website-02' do
     its('stdout') { should match %r{<title>Nagios Core</title>} }
     its('exit_status') { should eq 0 }
     its('stdout') do
-      should
-      match(%r{<title>Nagios Core<\/title>})
+      should match(%r{<title>Nagios Core(.*)?<\/title>})
     end
   end
 end
@@ -42,8 +41,7 @@ control 'nagios-website-03' do
     its('stdout') { should match %r{<TITLE>\s*Nagios Tactical Monitoring Overview\s*</TITLE>} }
     its('exit_status') { should eq 0 }
     its('stdout') do
-      should
-      match(%r{<TITLE>\s*Nagios Tactical Monitoring Overview\s*</TITLE>})
+      should match(%r{<TITLE>\s*Nagios Tactical Monitoring Overview\s*</TITLE>})
     end
   end
 end

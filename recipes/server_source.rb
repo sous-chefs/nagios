@@ -30,10 +30,9 @@ include_recipe 'php::module_gd'
 node.default['nagios']['conf']['p1_file'] = nil
 
 pkgs = value_for_platform_family(
-  'debian' => %w( libssl-dev libgd2-xpm-dev bsd-mailx tar ),
-  'rhel' => %w( openssl-devel gd-devel tar ),
-  'suse' => %w( libopenssl-devel gd-devel tar ),
-  'default' => %w( libssl-dev libgd2-xpm-dev bsd-mailx tar )
+  %w(rhel fedora) => %w(openssl-devel gd-devel tar),
+  'debian' => %w(libssl-dev libgd2-xpm-dev bsd-mailx tar),
+  'default' => %w(libssl-dev libgd2-xpm-dev bsd-mailx tar)
 )
 
 pkgs.each do |pkg|
@@ -51,7 +50,7 @@ web_srv = node['nagios']['server']['web_server']
 group node['nagios']['group'] do
   members [
     node['nagios']['user'],
-    web_srv == 'nginx' ? node['nginx']['user'] : node['apache']['user'],
+    web_srv == 'nginx' ? node['nginx']['user'] : node['apache']['user']
   ]
   action :create
 end
@@ -139,7 +138,7 @@ directory node['nagios']['conf']['check_result_path'] do
   recursive true
 end
 
-%w( cache_dir log_dir run_dir ).each do |dir|
+%w(cache_dir log_dir run_dir).each do |dir|
   directory node['nagios'][dir] do
     recursive true
     owner node['nagios']['user']

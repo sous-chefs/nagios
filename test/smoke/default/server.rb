@@ -7,7 +7,7 @@
 
 title 'Nagios Server Checks'
 
-if %w( redhat fedora ).include?(os[:family])
+if %w(redhat fedora).include?(os[:family])
   path_config_dir    = '/etc/nagios/conf.d'
   path_conf_dir      = '/etc/nagios'
   svc = 'nagios'
@@ -29,8 +29,8 @@ end
 
 control 'nagios-config-01' do
   impact 1.0
-  title 'nagios is enabled and running'
-  desc 'Validate the nagios configuration is consistent with data from data bags'
+  title 'commands.cfg'
+  desc 'Validate commands.cfg file'
 
   %w(check_all_hostgroup_service
      check_host_alive
@@ -48,6 +48,12 @@ control 'nagios-config-01' do
       its('content') { should match line }
     end
   end
+end
+
+control 'nagios-config-02' do
+  impact 1.0
+  title 'nagios.cfg'
+  desc 'Validate nagios.cfg file'
 
   file_nagios_config = []
   file_nagios_config << 'host_perfdata_command=command_a'
@@ -59,6 +65,12 @@ control 'nagios-config-01' do
       its('content') { should match line }
     end
   end
+end
+
+control 'nagios-config-03' do
+  impact 1.0
+  title 'nagios.cfg'
+  desc 'Validate nagios.cfg file'
 
   file_nagios_config = []
   file_nagios_config << 'query_socket='
@@ -68,6 +80,12 @@ control 'nagios-config-01' do
       its('content') { should_not match line }
     end
   end
+end
+
+control 'nagios-config-04' do
+  impact 1.0
+  title 'service.cfg'
+  desc 'Validate service.cfg file'
 
   file_services = []
   file_services << 'service_description.*all_hostgroup_service'
@@ -85,6 +103,12 @@ control 'nagios-config-01' do
       its('content') { should match line }
     end
   end
+end
+
+control 'nagios-config-05' do
+  impact 1.0
+  title 'hosts.cfg'
+  desc 'Validate hosts.cfg file'
 
   file_hosts = []
   file_hosts << 'host_name[ \t]+host_a_alt'
@@ -102,6 +126,12 @@ control 'nagios-config-01' do
       its('content') { should match line }
     end
   end
+end
+
+control 'nagios-config-06' do
+  impact 1.0
+  title 'hosts.cfg exclude'
+  desc 'Validate hosts.cfg file'
 
   file_hosts_exclude = []
   file_hosts_exclude << 'chefnode_exclude_arr'
@@ -113,6 +143,12 @@ control 'nagios-config-01' do
       its('content') { should_not match line }
     end
   end
+end
+
+control 'nagios-config-07' do
+  impact 1.0
+  title 'contacts.cfg'
+  desc 'Validate contacts.cfg file'
 
   file_contacts = []
   file_contacts << 'contact.*devs'
@@ -126,6 +162,12 @@ control 'nagios-config-01' do
       its('content') { should match line }
     end
   end
+end
+
+control 'nagios-config-07' do
+  impact 1.0
+  title 'contacts.cfg exclude'
+  desc 'Validate contacts.cfg file'
 
   file_contacts_exclude = []
   file_contacts_exclude << 'contact_group.*\+non_admins'
@@ -136,6 +178,12 @@ control 'nagios-config-01' do
       its('content') { should_not match line }
     end
   end
+end
+
+control 'nagios-config-08' do
+  impact 1.0
+  title 'hostgroups.cfg'
+  desc 'Validate hostgroups.cfg file'
 
   file_hostgroups = []
   file_hostgroups << 'all'
@@ -151,17 +199,33 @@ control 'nagios-config-01' do
       its('content') { should match line }
     end
   end
+end
+
+control 'nagios-config-09' do
+  impact 1.0
+  title 'servicegroups.cfg'
+  desc 'Validate servicegroups.cfg file'
 
   file_servicegroups = []
-  file_servicegroups << 'servicegroup_name.*servicegroup_a\n\s*members.*host_a_alt,service_a,host_a_alt,service_b,host_b,service_b,host_b,service_c'
-  file_servicegroups << 'servicegroup_name.*servicegroup_b\n\s*members.*host_b,service_c'
-  file_servicegroups << 'servicegroup_name.*selective_services\n\s*members\s*host_b,selective_service'
+  file_servicegroups << 'servicegroup_name.*servicegroup_a\n\s*members.*' \
+    'host_a_alt,service_a,host_a_alt,service_b,host_b,service_b,host_b,' \
+    'service_c'
+  file_servicegroups << 'servicegroup_name.*servicegroup_b\n\s*members.*' \
+    'host_b,service_c'
+  file_servicegroups << 'servicegroup_name.*selective_services\n\s*members\s*' \
+    'host_b,selective_service'
 
   file_servicegroups.each do |line|
     describe file("#{path_config_dir}/servicegroups.cfg") do
       its('content') { should match line }
     end
   end
+end
+
+control 'nagios-config-10' do
+  impact 1.0
+  title 'templates.cfg'
+  desc 'Validate templates.cfg file'
 
   file_templates = []
   file_templates << 'define contact {\n\s*name\s*default-contact'
@@ -176,6 +240,12 @@ control 'nagios-config-01' do
       its('content') { should match line }
     end
   end
+end
+
+control 'nagios-config-11' do
+  impact 1.0
+  title 'timeperiods.cfg'
+  desc 'Validate timeperiods.cfg file'
 
   file_timeperiods = []
   file_timeperiods << 'define timeperiod {\n\s*timeperiod_name\s*24x7'

@@ -32,7 +32,7 @@ define :nagios_conf, variables: {}, config_subdir: true, source: nil do
     source params[:source]
     mode '0644'
     variables params[:variables]
-    notifies :restart, 'service[nagios]'
+    notifies :restart, 'service[nagios]', :delayed
     backup 0
   end
 end

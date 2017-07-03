@@ -20,6 +20,5 @@ control 'nginx-deamon-01' do
 
   describe port(80) do
     it { should be_listening }
-    its('processes') { should include "#{svc}.conf" }
   end
 end
