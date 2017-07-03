@@ -35,6 +35,9 @@ suites:
     - recipe[nrpe::default]
     - recipe[nagios_test::default]
     - role[monitoring]
+    attributes:
+      nagios:
+        monitored_environments: [ '_default' ]
 
   - name: server_source
     run_list:
@@ -44,6 +47,7 @@ suites:
     - role[monitoring]
     attributes:
       nagios:
+        monitored_environments: [ '_default' ]
         server:
           install_method: 'source'
 
@@ -56,6 +60,7 @@ suites:
     - role[monitoring]
     attributes:
       nagios:
+        monitored_environments: [ '_default' ]
         server:
           install_method: 'source'
         pagerduty:
