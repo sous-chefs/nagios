@@ -60,6 +60,7 @@ suites:
    - role[monitoring]
    attributes:
      nagios:
+       monitored_environments: [ '_default' ]
  - name: server_source
    run_list:
    - recipe[nagios::default]
@@ -68,6 +69,7 @@ suites:
    - role[monitoring]
    attributes:
      nagios:
+       monitored_environments: [ '_default' ]
        server:
          install_method: 'source'
  - name: pagerduty
@@ -79,6 +81,7 @@ suites:
    - role[monitoring]
    attributes:
      nagios:
+       monitored_environments: [ '_default' ]
        server:
          install_method: 'source'
        pagerduty:
@@ -91,6 +94,7 @@ suites:
    - role[monitoring]
    attributes:
      nagios:
+       monitored_environments: [ '_default' ]
        allowed_ips: ['127.0.0.1', '::1']
 data_bags_path: test/data_bags
 roles_path: test/roles
