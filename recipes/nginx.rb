@@ -24,10 +24,6 @@ if node['nagios']['server']['stop_apache']
   end
 end
 
-if platform_family?('rhel', 'fedora', 'amazon')
-  node.default['nagios']['server']['nginx_dispatch']['type'] = 'both'
-end
-
 include_recipe 'chef_nginx'
 
 node.default['php-fpm']['pools']['www']['user'] = node['nginx']['user']
@@ -51,6 +47,12 @@ node['nagios']['server']['nginx_dispatch']['services'].each do |svc|
   end
 end
 
+node['nagios']['server']['nginx_dispatch']['services'].each do |svc|
+  service svc do
+    action [:enable, :start]
+  end
+end
+
 dispatch_type = node['nagios']['server']['nginx_dispatch']['type']
 
 %w(default 000-default).each do |disable_site|
@@ -63,10 +65,6 @@ end
 file File.join(node['nginx']['dir'], 'conf.d', 'default.conf') do
   action :delete
   notifies :reload, 'service[nginx]', :immediate
-end
-
-if platform_family?('rhel', 'fedora', 'amazon')
-  node.default['nagios']['server']['nginx_dispatch']['type'] = 'both'
 end
 
 template File.join(node['nginx']['dir'], 'sites-available', 'nagios3.conf') do
