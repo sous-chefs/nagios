@@ -23,7 +23,6 @@ env:
   - INSTANCE=server-package-centos-7
   - INSTANCE=server-package-debian-7
   - INSTANCE=server-package-debian-8
-  - INSTANCE=server-package-fedora-latest
   - INSTANCE=server-package-opensuse-leap
   - INSTANCE=server-package-ubuntu-1404
   - INSTANCE=server-package-ubuntu-1604

@@ -33,7 +33,7 @@ default['nagios']['monitoring_interface'] = nil
 case node['platform_family']
 when 'debian'
   default['nagios']['plugin_dir'] = '/usr/lib/nagios/plugins'
-when 'rhel', 'fedora', 'amazon'
+when 'rhel', 'amazon'
   default['nagios']['plugin_dir'] = node['kernel']['machine'] == 'i686' ? '/usr/lib/nagios/plugins' : '/usr/lib64/nagios/plugins'
 else
   default['nagios']['plugin_dir'] = '/usr/lib/nagios/plugins'
@@ -41,7 +41,7 @@ end
 
 # platform specific directories
 case node['platform_family']
-when 'rhel', 'fedora', 'amazon'
+when 'rhel', 'amazon'
   default['nagios']['home']          = '/var/spool/nagios'
   default['nagios']['conf_dir']      = '/etc/nagios'
   default['nagios']['resource_dir']  = '/etc/nagios'
@@ -72,7 +72,7 @@ when 'debian'
   default['nagios']['server']['service_name']   = 'nagios3'
   default['nagios']['server']['mail_command']   = '/usr/bin/mail'
   default['nagios']['cgi-path'] = "/cgi-bin/#{node['nagios']['server']['service_name']}"
-when 'rhel', 'fedora', 'amazon'
+when 'rhel', 'amazon'
   default['nagios']['cgi-path'] = '/nagios/cgi-bin/'
   default['nagios']['server']['install_method'] = 'package'
   default['nagios']['server']['service_name']   = 'nagios'
@@ -96,7 +96,7 @@ default['nagios']['ssl_req']       = '/C=US/ST=Several/L=Locality/O=Example/OU=O
 # nagios server name and webserver vname.  this can be changed to allow for the installation of icinga
 default['nagios']['server']['name'] = 'nagios'
 case node['platform_family']
-when 'rhel', 'fedora', 'amazon'
+when 'rhel', 'amazon'
   default['nagios']['server']['vname'] = 'nagios'
 else
   default['nagios']['server']['vname'] = 'nagios3'
@@ -111,7 +111,7 @@ default['nagios']['server']['patch_url'] = nil
 
 # for server from packages installation
 case node['platform_family']
-when 'rhel', 'fedora', 'amazon'
+when 'rhel', 'amazon'
   default['nagios']['server']['packages'] = %w(nagios nagios-plugins-nrpe)
   default['nagios']['server']['install_yum-epel'] = true
 else
