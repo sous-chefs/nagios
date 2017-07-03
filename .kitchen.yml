@@ -116,6 +116,8 @@ suites:
    - role[monitoring]
    attributes:
      nagios:
+       server:
+         stop_apache: true
    verifier:
      inspec_tests:
        - test/smoke/default/server.rb
