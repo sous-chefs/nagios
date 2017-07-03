@@ -45,10 +45,6 @@ platforms:
     driver_config:
       network:
         - ["forwarded_port", {guest: 80, host: 8088}]
-  - name: fedora-25
-    driver_config:
-      network:
-        - ["forwarded_port", {guest: 80, host: 8089}]
   - name: amazon-linux
     driver_config:
       box: mvbcoding/awslinux

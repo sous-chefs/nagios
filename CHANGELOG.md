@@ -1,6 +1,12 @@
 nagios Cookbook CHANGELOG
 =========================
 This file is used to list changes made in each version of the nagios cookbook.
+
+Unreleased
+----------
+### Improvement
+- Drop support for Fedora OS
+
 7.2.6
 -----
 ### Bug

@@ -22,7 +22,7 @@ if node['nagios']['server']['stop_apache']
   end
 end
 
-if platform_family?('rhel', 'fedora', 'amazon')
+if platform_family?('rhel', 'amazon')
   node.normal['nagios']['server']['nginx_dispatch'] = 'both'
 end
 

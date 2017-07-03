@@ -3,7 +3,7 @@ require 'serverspec'
 # Required by serverspec
 set :backend, :exec
 
-path_config_dir = if %w( redhat fedora ).include?(os[:family])
+path_config_dir = if %w( redhat ).include?(os[:family])
                     '/etc/nagios/conf.d'
                   else
                     '/etc/nagios3/conf.d'
@@ -27,7 +27,7 @@ describe 'Pagerduty Configuration' do
   end
 end
 
-if %w( redhat fedora ).include?(os[:family])
+if %w( redhat ).include?(os[:family])
   perl_cgi_package = 'perl-CGI'
   command_file = '/var/log/nagios/rw/nagios.cmd'
 else
@@ -39,7 +39,7 @@ describe package(perl_cgi_package) do
   it { should be_installed }
 end
 
-pagerduty_cgi_dir = if %w( redhat fedora ).include?(os[:family])
+pagerduty_cgi_dir = if %w( redhat ).include?(os[:family])
                       '/usr/lib64/nagios/cgi-bin'
                     else
                       '/usr/lib/cgi-bin/nagios3'

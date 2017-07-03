@@ -19,6 +19,14 @@ depends 'zap', '>= 0.6.0'
   depends cb
 end
 
-%w( debian ubuntu redhat centos fedora scientific amazon oracle).each do |os|
+%w(
+  amazon
+  centos
+  debian
+  oracle
+  redhat
+  scientific
+  ubuntu
+).each do |os|
   supports os
 end

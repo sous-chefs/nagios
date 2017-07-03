@@ -32,7 +32,7 @@ end
 
 package 'perl-CGI' do
   case node['platform_family']
-  when 'rhel', 'fedora', 'amazon'
+  when 'rhel', 'amazon'
     package_name 'perl-CGI'
   when 'debian'
     package_name 'libcgi-pm-perl'
@@ -44,7 +44,7 @@ end
 
 package 'perl-JSON' do
   case node['platform_family']
-  when 'rhel', 'fedora', 'amazon'
+  when 'rhel', 'amazon'
     package_name 'perl-JSON'
   when 'debian'
     package_name 'libjson-perl'
@@ -56,7 +56,7 @@ end
 
 package 'libwww-perl' do
   case node['platform_family']
-  when 'rhel', 'fedora', 'amazon'
+  when 'rhel', 'amazon'
     package_name 'perl-libwww-perl'
   when 'debian'
     package_name 'libwww-perl'
@@ -68,7 +68,7 @@ end
 
 package 'libcrypt-ssleay-perl' do
   case node['platform_family']
-  when 'rhel', 'fedora', 'amazon'
+  when 'rhel', 'amazon'
     package_name 'perl-Crypt-SSLeay'
   when 'debian'
     package_name 'libcrypt-ssleay-perl'
