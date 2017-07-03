@@ -24,10 +24,6 @@ if node['nagios']['server']['stop_apache']
   end
 end
 
-if platform_family?('rhel', 'fedora', 'amazon')
-  node.default['nagios']['server']['nginx_dispatch']['type'] = 'both'
-end
-
 include_recipe 'chef_nginx'
 
 node.default['php-fpm']['pools']['www']['user'] = node['nginx']['user']
@@ -65,21 +61,17 @@ file File.join(node['nginx']['dir'], 'conf.d', 'default.conf') do
   notifies :reload, 'service[nginx]', :immediate
 end
 
-if platform_family?('rhel', 'fedora', 'amazon')
-  node.default['nagios']['server']['nginx_dispatch']['type'] = 'both'
-end
-
 template File.join(node['nginx']['dir'], 'sites-available', 'nagios3.conf') do
   source 'nginx.conf.erb'
   mode '0644'
   variables(
     allowed_ips: node['nagios']['allowed_ips'],
     cgi: %w(cgi both).include?(dispatch_type),
+    cgi_bin_dir: %w(rhel fedora amazon).include?(node['platform_family']) ? '/usr/lib64' : '/usr/lib',
     chef_env: node.chef_environment == '_default' ? 'default' : node.chef_environment,
     docroot: node['nagios']['docroot'],
     fqdn: node['fqdn'],
     htpasswd_file: File.join(node['nagios']['conf_dir'], 'htpasswd.users'),
-<<<<<<< 197eb49e7114fa11c6fa62ff064526696f1a79e4
     https: node['nagios']['enable_ssl'],
     listen_port: node['nagios']['http_port'],
     log_dir: node['nagios']['log_dir'],
@@ -92,11 +84,6 @@ template File.join(node['nginx']['dir'], 'sites-available', 'nagios3.conf') do
     server_vname: node['nagios']['server']['vname'],
     ssl_cert_file: node['nagios']['ssl_cert_file'],
     ssl_cert_key: node['nagios']['ssl_cert_key'],
-=======
-    cgi: %w(cgi both).include?(dispatch_type),
-    cgi_bin_dir: %w(rhel fedora amazon).include?(node['platform_family']) ? '/usr/lib64' : '/usr/lib',
-    php: %w(php both).include?(dispatch_type)
->>>>>>> working Centos nginx configurations
   )
   if File.symlink?(File.join(node['nginx']['dir'], 'sites-enabled', 'nagios3.conf'))
     notifies :reload, 'service[nginx]', :immediately
