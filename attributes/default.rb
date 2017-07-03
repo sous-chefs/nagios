@@ -197,49 +197,25 @@ default['nagios']['default_service']['action_url']            = nil
 
 default['nagios']['server']['web_server']              = 'apache'
 default['nagios']['server']['nginx_dispatch']['type']  = 'both'
+default['nagios']['server']['nginx_dispatch']['type']  = 'both'
 default['nagios']['server']['nginx_dispatch']['packages']  =
   case node['platform_family']
-  when 'debian'
-    if %w(14.04).include?(node['platform_version'])
-      %w(php5-cgi php5-fpm fcgiwrap)
-    else
-      %w(php-cgi php-fpm fcgiwrap)
-    end
-  when 'freebsd'
-    %w(php56)
   when 'rhel'
-    if node['platform_version'].to_i == 5
-      %w(php53 php-fpm spawn-fcgi)
-    else
-      %w(php php-fpm php-fpm spawn-fcgi)
-    end
+    %w(spawn-fcgi fcgiwrap)
   else
-    %w(php5-cgi php5-fpm fcgiwrap)
+    %w(fcgiwrap)
   end
 default['nagios']['server']['nginx_dispatch']['services']  =
   case node['platform_family']
   when 'rhel'
-    %w(php-fpm spawn-fcgi)
+    %w(spawn-fcgi)
   else
     []
   end
 default['nagios']['server']['nginx_dispatch']['cgi_url']  =
   'unix:/var/run/fcgiwrap.socket'
 default['nagios']['server']['nginx_dispatch']['php_url']  =
-  case node['platform']
-  when 'debian'
-    'unix:/var/run/php5-fpm.sock'
-  when 'rhel', 'fedora', 'amazon'
-    'unix:/var/run/php5-fpm.sock'
-  when 'ubuntu'
-    if node['platform_version'] == '14.04'
-      'unix:/var/run/php5-fpm.sock'
-    else
-      'unix:/var/run/php/php7.0-fpm.sock'
-    end
-  else
-    'unix:/var/run/php5-fpm.sock'
-  end
+    'unix:/var/run/php-fpm-www.sock'
 default['nagios']['server']['stop_apache']             = false
 default['nagios']['server']['normalize_hostname']      = false
 default['nagios']['server']['load_default_config']     = true

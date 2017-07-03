@@ -23,8 +23,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# workaround to allow for a nagios server install from source using the override attribute on debian/ubuntu (COOK-2350)
-nagios_service_name = if platform_family?('debian') && node['nagios']['server']['install_method'] == 'source'
+# (COOK-2350) workaround to allow for a nagios server install from source using
+# (COOK-2350) the override attribute on debian/ubuntu
+nagios_service_name = if platform_family?('debian') &&
+                         node['nagios']['server']['install_method'] == 'source'
                         node['nagios']['server']['name']
                       else
                         node['nagios']['server']['service_name']
@@ -36,9 +38,14 @@ include_recipe "nagios::server_#{node['nagios']['server']['install_method']}"
 # use the users_helper.rb library to build arrays of users and contacts
 nagios_users = NagiosUsers.new(node)
 
-Chef::Log.fatal("Could not find users in the \"#{node['nagios']['users_databag']}\" databag with the \"#{node['nagios']['users_databag_group']}\"" \
-                ' group. Users must be defined to allow for logins to the UI. Make sure the databag exists and, if you have set the ' \
-                '"users_databag_group", that users in that group exist.') if nagios_users.users.empty?
+if nagios_users.users.empty?
+  Chef::Log.fatal('Could not find users in the ' \
+    "\"#{node['nagios']['users_databag']}\"" \
+    "databag with the \"#{node['nagios']['users_databag_group']}\"" \
+    ' group. Users must be defined to allow for logins to the UI. ' \
+    'Make sure the databag exists and, if you have set the ' \
+    '"users_databag_group", that users in that group exist.')
+end
 
 if node['nagios']['server_auth_method'] == 'htauth'
   # setup htpasswd auth
@@ -56,7 +63,8 @@ end
 # Setting all general options
 unless node['nagios'].nil?
   unless node['nagios']['server'].nil?
-    Nagios.instance.normalize_hostname = node['nagios']['server']['normalize_hostname']
+    Nagios.instance.normalize_hostname =
+      node['nagios']['server']['normalize_hostname']
   end
 end
 
@@ -90,9 +98,11 @@ directory "#{node['nagios']['state_dir']}/rw" do
   mode '2710'
 end
 
+cfg_files =
+  "#{node['nagios']['config_dir']}/*_#{node['nagios']['server']['name']}*.cfg"
 execute 'archive-default-nagios-object-definitions' do
-  command "mv #{node['nagios']['config_dir']}/*_#{node['nagios']['server']['name']}*.cfg #{node['nagios']['conf_dir']}/dist"
-  not_if { Dir.glob("#{node['nagios']['config_dir']}/*_#{node['nagios']['server']['name']}*.cfg").empty? }
+  command "mv #{cfg_files} #{node['nagios']['conf_dir']}/dist"
+  not_if { Dir.glob(cfg_files).empty? }
 end
 
 directory "#{node['nagios']['conf_dir']}/certificates" do
@@ -103,7 +113,8 @@ end
 
 ssl_code = "umask 077
 openssl genrsa 2048 > nagios-server.key
-openssl req -subj #{node['nagios']['ssl_req']} -new -x509 -nodes -sha1 -days 3650 -key nagios-server.key > nagios-server.crt
+openssl req -subj #{node['nagios']['ssl_req']} -new -x509 -nodes -sha1 \
+  -days 3650 -key nagios-server.key > nagios-server.crt
 cat nagios-server.key nagios-server.crt > nagios-server.pem"
 
 bash 'Create SSL Certificates' do
@@ -155,6 +166,5 @@ end
 
 service 'nagios' do
   service_name nagios_service_name
-  supports status: true, restart: true, reload: true
   action [:enable, :start]
 end
