@@ -1,6 +1,6 @@
 # nagios cookbook
 
-[![Join the chat at https://gitter.im/schubergphilis/nagios](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/schubergphilis/nagios?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) [![Build Status](https://travis-ci.org/schubergphilis/nagios.svg)](https://travis-ci.org/schubergphilis/nagios) [![Cookbook Version](https://img.shields.io/cookbook/v/nagios.svg)](https://supermarket.chef.io/cookbooks/nagios)
+[![Join the chat at https://gitter.im/sous-chefs/nagios](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/sous-chefs/nagios?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) [![Build Status](https://travis-ci.org/sous-chefs/nagios.svg)](https://travis-ci.org/sous-chefs/nagios) [![Cookbook Version](https://img.shields.io/cookbook/v/nagios.svg)](https://supermarket.chef.io/cookbooks/nagios)
 
 Installs and configures Nagios server. Chef nodes are automatically discovered using search, and Nagios host groups are created based on Chef roles and optionally environments as well.
 
@@ -16,7 +16,7 @@ This cookbook relies heavily on multiple data bags. See **Data Bag** below.
 
 The system running this cookbooks should have a role named 'monitoring' so that NRPE clients can authorize monitoring from that system. This role name is configurable via an attribute. See **Attributes** below.
 
-The functionality that was previously in the nagios::client recipe has been moved to its own NRPE cookbook at <https://github.com/schubergphilis/nrpe>
+The functionality that was previously in the nagios::client recipe has been moved to its own NRPE cookbook at <https://github.com/sous-chefs/nrpe>
 
 ### Platform
 
@@ -39,7 +39,7 @@ The functionality that was previously in the nagios::client recipe has been move
 
 ### config
 
-[The config file](https://github.com/schubergphilis/nagios/blob/master/attributes/config.rb) contains the Nagios configuration options. Consult the [nagios documentation](http://nagios.sourceforge.net/docs/3_0/configmain.html) for available settings and allowed options. Configuration entries of which multiple entries are allowed, need to be specified as an Array.
+[The config file](https://github.com/sous-chefs/nagios/blob/master/attributes/config.rb) contains the Nagios configuration options. Consult the [nagios documentation](http://nagios.sourceforge.net/docs/3_0/configmain.html) for available settings and allowed options. Configuration entries of which multiple entries are allowed, need to be specified as an Array.
 
 Example: `default['nagios']['conf']['cfg_dir'] = [ '/etc/nagios/conf.d' , '/usr/local/nagios/conf.d' ]`
 
@@ -206,7 +206,7 @@ This recipe was written based on the [Nagios Integration Guide](http://www.pager
 
 ## Data Bags
 
-[See Wiki for more databag information](https://github.com/schubergphilis/nagios/wiki/config)
+[See Wiki for more databag information](https://github.com/sous-chefs/nagios/wiki/config)
 
 ### Pager Duty
 
