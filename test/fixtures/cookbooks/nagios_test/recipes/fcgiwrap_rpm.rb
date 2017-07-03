@@ -17,8 +17,17 @@ if %w(rhel).include?(node['platform_family'])
     action :nothing
   end
 
-  cookbook_file '/etc/yum.repos.d/local.repo' do
+  yum_repository 'local_fcgiwrap' do
+    description 'Local repo for fcgiwarp RPM'
+    baseurl 'file:///home/vagrant/rpmbuild/RPMS/$basearch/'
+    enabled true
+    gpgcheck false
+    action :create
     notifies :run, 'execute[create_repo]', :before
+  end
+
+  package 'fcgiwrap' do
+    flush_cache :before
   end
 
 else

@@ -1,6 +1,0 @@
-[local]
-name=CentOS-$releasever - local packages for $basearch
-baseurl=file:///home/vagrant/rpmbuild/RPMS/$basearch
-enabled=1
-gpgcheck=0
-protect=1
