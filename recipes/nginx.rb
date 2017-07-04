@@ -18,16 +18,6 @@
 
 node.default['nagios']['server']['web_server'] = 'nginx'
 
-if node['nagios']['server']['stop_apache']
-  service node['apache']['service_name'] do
-    action [:disable, :stop]
-  end
-end
-
-package node['apache']['package'] do
-  action :remove
-end
-
 include_recipe 'chef_nginx'
 
 node.default['php-fpm']['pools']['www']['user'] = node['nginx']['user']
@@ -41,7 +31,7 @@ package node['nagios']['server']['nginx_dispatch']['packages']
 if %w(rhel).include?(node['platform_family'])
   template '/etc/sysconfig/spawn-fcgi' do
     source 'spawn-fcgi.erb'
-    notifies :restart, 'service[spawn-fcgi]', :delayed
+    notifies :start, 'service[spawn-fcgi]', :delayed
   end
 end
 
@@ -121,6 +111,13 @@ else
 end
 
 include_recipe 'nagios::server'
+
+## Some post nagios install cleanup
+
+service node['apache']['service_name'] do
+  action [:disable, :stop]
+  notifies :start, 'service[nginx]', :delayed
+end
 
 execute 'fix_docroot_perms' do
   command "chgrp -R #{node['nagios']['web_group']} #{node['nagios']['docroot']}"
