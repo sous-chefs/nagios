@@ -28,7 +28,7 @@ control 'nagios-website-02' do
   describe command(wget_cmd) do
     its('exit_status') { should eq 0 }
     its('stdout') do
-      should match(%r{<title>Nagios Core.+<\/title>})
+      should match(%r{<title>Nagios Core.*<\/title>})
     end
   end
 end
