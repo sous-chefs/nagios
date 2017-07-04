@@ -30,7 +30,7 @@ control 'apache-deamon-02' do
   impact 1.0
   title 'apache is enabled'
   desc 'Verify that the apache service is enabled'
-  only_if { %w(redhat ubuntu).include?(os[:family]) }
+  only_if { %w(redhat).include?(os[:family]) }
   describe service(svc) do
     it { should be_enabled }
   end
