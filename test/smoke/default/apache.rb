@@ -15,15 +15,23 @@ svc = if %w(redhat fedora).include?(os[:family])
 
 control 'apache-deamon-01' do
   impact 1.0
-  title 'apache is enabled and running'
-  desc 'Verify that the apache service is enabled and running'
+  title 'apache is running'
+  desc 'Verify that the apache service is running'
   describe service(svc) do
-    it { should be_enabled }
     it { should be_running }
   end
-
   describe port(80) do
     it { should be_listening }
     its('processes') { should include svc }
+  end
+end
+
+control 'apache-deamon-02' do
+  impact 1.0
+  title 'apache is enabled'
+  desc 'Verify that the apache service is enabled'
+  only_if { %w(redhat ubuntu).include?(os[:family]) }
+  describe service(svc) do
+    it { should be_enabled }
   end
 end

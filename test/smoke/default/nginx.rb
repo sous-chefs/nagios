@@ -11,14 +11,22 @@ svc = 'nginx'
 
 control 'nginx-deamon-01' do
   impact 1.0
-  title 'nginx is enabled and running'
-  desc 'Verify that the nginx service is enabled and running'
+  title 'nginx is running'
+  desc 'Verify that the nginx service is running'
   describe service(svc) do
-    it { should be_enabled }
     it { should be_running }
   end
-
   describe port(80) do
     it { should be_listening }
+  end
+end
+
+control 'nginx-deamon-02' do
+  impact 1.0
+  title 'nginx is enabled'
+  desc 'Verify that the nginx service is enabled'
+  only_if { %w(redhat ubuntu).include?(os[:family]) }
+  describe service(svc) do
+    it { should be_enabled }
   end
 end

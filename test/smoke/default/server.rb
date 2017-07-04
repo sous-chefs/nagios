@@ -19,11 +19,20 @@ end
 
 control 'nagios-deamon-01' do
   impact 1.0
-  title 'nagios is enabled and running'
-  desc 'Verify that the nagios service is enabled and running'
+  title 'nagios is running'
+  desc 'Verify that the nagios service is running'
+  describe service(svc) do
+    it { should be_running }
+  end
+end
+
+control 'nagios-deamon-02' do
+  impact 1.0
+  title 'nagios is enabled'
+  desc 'Verify that the nagios service is enabled'
+  only_if { %w(redhat ubuntu).include?(os[:family]) }
   describe service(svc) do
     it { should be_enabled }
-    it { should be_running }
   end
 end
 
@@ -164,7 +173,7 @@ control 'nagios-config-07' do
   end
 end
 
-control 'nagios-config-07' do
+control 'nagios-config-08' do
   impact 1.0
   title 'contacts.cfg exclude'
   desc 'Validate contacts.cfg file'
@@ -180,7 +189,7 @@ control 'nagios-config-07' do
   end
 end
 
-control 'nagios-config-08' do
+control 'nagios-config-09' do
   impact 1.0
   title 'hostgroups.cfg'
   desc 'Validate hostgroups.cfg file'
@@ -201,7 +210,7 @@ control 'nagios-config-08' do
   end
 end
 
-control 'nagios-config-09' do
+control 'nagios-config-10' do
   impact 1.0
   title 'servicegroups.cfg'
   desc 'Validate servicegroups.cfg file'
@@ -222,7 +231,7 @@ control 'nagios-config-09' do
   end
 end
 
-control 'nagios-config-10' do
+control 'nagios-config-11' do
   impact 1.0
   title 'templates.cfg'
   desc 'Validate templates.cfg file'
@@ -242,7 +251,7 @@ control 'nagios-config-10' do
   end
 end
 
-control 'nagios-config-11' do
+control 'nagios-config-12' do
   impact 1.0
   title 'timeperiods.cfg'
   desc 'Validate timeperiods.cfg file'
