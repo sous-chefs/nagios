@@ -127,5 +127,3 @@ suites:
    <% %w(freebsd-10.3 freebsd-11.0).each do |exclude_platform| %>
      - <%= exclude_platform %>
    <% end %>
-data_bags_path: test/data_bags
-roles_path: test/roles

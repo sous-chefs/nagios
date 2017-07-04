@@ -19,9 +19,13 @@
 node.default['nagios']['server']['web_server'] = 'nginx'
 
 if node['nagios']['server']['stop_apache']
-  service 'apache2' do
+  service node['apache']['service_name'] do
     action [:disable, :stop]
   end
+end
+
+package node['apache']['package'] do
+  action :remove
 end
 
 include_recipe 'chef_nginx'
