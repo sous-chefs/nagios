@@ -117,6 +117,7 @@ include_recipe 'nagios::server'
 service node['apache']['service_name'] do
   action [:disable, :stop]
   notifies :start, 'service[nginx]', :delayed
+  notifies :restart, 'service[nagios]', :delayed
 end
 
 execute 'fix_docroot_perms' do
