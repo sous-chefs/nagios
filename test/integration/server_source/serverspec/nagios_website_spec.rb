@@ -1,1 +1,0 @@
-../../server/serverspec/nagios_website_spec.rb

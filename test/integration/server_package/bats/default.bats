@@ -1,1 +1,0 @@
-../../server/bats/default.bats

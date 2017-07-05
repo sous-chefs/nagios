@@ -7,26 +7,26 @@ provisioner:
   name: chef_zero
   require_chef_omnibus: <%= ENV['CHEF_VERSION'] || 'latest' %>
 
-data_bags_path: test/fixtures/data_bags
-roles_path: test/fixtures/roles
+verifier:
+  name: inspec
 
 platforms:
-  - name: ubuntu-14.04
-    run_list:
-    - recipe[apt::default]
-  - name: ubuntu-16.04
-    run_list:
-    - recipe[apt::default]
+  - name: amazon-linux
+    driver_config:
+      box: mvbcoding/awslinux
+  - name: centos-7.3
   - name: debian-7.11
     run_list:
     - recipe[apt::default]
   - name: debian-8.7
     run_list:
     - recipe[apt::default]
-  - name: centos-7.3
-  - name: amazon-linux
-    driver_config:
-      box: mvbcoding/awslinux
+  - name: ubuntu-14.04
+    run_list:
+    - recipe[apt::default]
+  - name: ubuntu-16.04
+    run_list:
+    - recipe[apt::default]
 
 suites:
   - name: server_package
@@ -35,6 +35,9 @@ suites:
     - recipe[nrpe::default]
     - recipe[nagios_test::default]
     - role[monitoring]
+    verifier:
+      inspec_tests:
+        - test/smoke/server_package
     attributes:
       nagios:
         monitored_environments: [ '_default' ]
@@ -45,6 +48,9 @@ suites:
     - recipe[nrpe::default]
     - recipe[nagios_test::default]
     - role[monitoring]
+    verifier:
+      inspec_tests:
+        - test/smoke/server_source
     attributes:
       nagios:
         monitored_environments: [ '_default' ]
@@ -58,6 +64,9 @@ suites:
     - recipe[nrpe::default]
     - recipe[nagios_test::default]
     - role[monitoring]
+    verifier:
+      inspec_tests:
+        - test/smoke/pagerduty
     attributes:
       nagios:
         monitored_environments: [ '_default' ]

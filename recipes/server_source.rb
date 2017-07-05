@@ -30,8 +30,9 @@ include_recipe 'php::module_gd'
 node.default['nagios']['conf']['p1_file'] = nil
 
 pkgs = value_for_platform_family(
-  'rhel' => %w( openssl-devel gd-devel tar ),
   'debian' => %w( libssl-dev libgd2-xpm-dev bsd-mailx tar ),
+  'rhel' => %w( openssl-devel gd-devel tar ),
+  'suse' => %w( libopenssl-devel gd-devel tar ),
   'default' => %w( libssl-dev libgd2-xpm-dev bsd-mailx tar )
 )
 

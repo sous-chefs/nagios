@@ -31,7 +31,7 @@ platforms:
       pid_one_command: /sbin/init
       intermediate_instructions:
         - RUN /usr/bin/apt-get update
-        - RUN /usr/bin/apt-get install -y apt-transport-https lsb-release procps net-tools
+        - RUN /usr/bin/apt-get install -y apt-transport-https lsb-release procps net-tools wget
 
   - name: debian-8
     driver:
@@ -39,14 +39,14 @@ platforms:
       pid_one_command: /bin/systemd
       intermediate_instructions:
         - RUN /usr/bin/apt-get update
-        - RUN /usr/bin/apt-get install -y apt-transport-https lsb-release procps net-tools
+        - RUN /usr/bin/apt-get install -y apt-transport-https lsb-release procps net-tools wget
 
   - name: opensuse-leap
     driver:
       image: opensuse:leap
       pid_one_command: /bin/systemd
       intermediate_instructions:
-        - RUN zypper --non-interactive install aaa_base perl-Getopt-Long-Descriptive which net-tools
+        - RUN zypper --non-interactive install aaa_base perl-Getopt-Long-Descriptive which net-tools wget
 
   - name: ubuntu-14.04
     driver:
@@ -54,7 +54,7 @@ platforms:
       pid_one_command: /sbin/init
       intermediate_instructions:
         - RUN /usr/bin/apt-get update
-        - RUN /usr/bin/apt-get install -y apt-transport-https lsb-release procps net-tools
+        - RUN /usr/bin/apt-get install -y apt-transport-https lsb-release procps net-tools wget
 
   - name: ubuntu-16.04
     driver:
@@ -62,4 +62,4 @@ platforms:
       pid_one_command: /bin/systemd
       intermediate_instructions:
         - RUN /usr/bin/apt-get update
-        - RUN /usr/bin/apt-get install -y apt-transport-https lsb-release procps net-tools
+        - RUN /usr/bin/apt-get install -y apt-transport-https lsb-release procps net-tools wget
