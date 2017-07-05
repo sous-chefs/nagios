@@ -4,7 +4,7 @@
 #
 # Copyright:: 2017, The Authors, All Rights Reserved.
 
-if platform_family?(rhel, fedora, amazon)
+if platform_family?('rhel', 'fedora', 'amazon')
   Chef::Log.info 'Build and install custom fcgiwrap RPM'
 
   include_recipe 'build-essential'
