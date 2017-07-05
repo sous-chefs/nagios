@@ -60,7 +60,7 @@ when 'cas'
 when 'ldap'
   include_recipe 'apache2::mod_authnz_ldap'
 when 'htauth'
-  Chef::Log.info('Authenticaion method htauth configured in server.rb')
+  Chef::Log.info('Authentication method htauth configured in server.rb')
 else
   Chef::Log.info('Default method htauth configured in server.rb')
 end

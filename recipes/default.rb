@@ -31,8 +31,11 @@ when 'nginx'
 when 'apache'
   Chef::Log.info 'Setting up Nagios server via Apache2'
   include_recipe 'nagios::apache'
-else
-  Chef::Log.info('Unknown web server option provided for Nagios server: ' \
-                  "#{node['nagios']['server']['web_server']} provided. Allowed: 'nginx' or 'apache'")
+when 'none'
+  Chef::Log.info 'Setting up Nagios server without web server'
   include_recipe 'nagios::server'
+else
+  Chef::Log.fatal('Unknown web server option provided for Nagios server: ' \
+                  "#{node['nagios']['server']['web_server']} provided. Allowed:" \
+                  "'nginx', 'apache', or 'none'")
 end

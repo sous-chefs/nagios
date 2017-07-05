@@ -28,7 +28,7 @@ include_recipe 'php-fpm'
 
 package node['nagios']['server']['nginx_dispatch']['packages']
 
-if %w(rhel).include?(node['platform_family'])
+if platform_family?('rhel')
   template '/etc/sysconfig/spawn-fcgi' do
     source 'spawn-fcgi.erb'
     notifies :start, 'service[spawn-fcgi]', :delayed
