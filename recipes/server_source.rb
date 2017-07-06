@@ -50,7 +50,7 @@ web_srv = node['nagios']['server']['web_server']
 group node['nagios']['group'] do
   members [
     node['nagios']['user'],
-    web_srv == 'nginx' ? node['nginx']['user'] : node['apache']['user']
+    web_srv == 'nginx' ? node['nginx']['user'] : node['apache']['user'],
   ]
   action :create
 end
