@@ -215,7 +215,7 @@ default['nagios']['server']['nginx_dispatch']['services']  =
 default['nagios']['server']['nginx_dispatch']['cgi_url']  =
   'unix:/var/run/fcgiwrap.socket'
 default['nagios']['server']['nginx_dispatch']['php_url']  =
-    'unix:/var/run/php-fpm-www.sock'
+  'unix:/var/run/php-fpm-www.sock'
 default['nagios']['server']['stop_apache']             = false
 default['nagios']['server']['normalize_hostname']      = false
 default['nagios']['server']['load_default_config']     = true

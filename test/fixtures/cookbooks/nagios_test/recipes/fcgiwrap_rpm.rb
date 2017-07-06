@@ -11,7 +11,7 @@ if platform_family?('rhel', 'amazon')
   include_recipe 'yum-epel'
   include_recipe 'fcgiwrap_rpm::default'
 
-  package %w(createrepo) 
+  package %w(createrepo)
 
   execute 'create_repo' do
     command 'createrepo .'

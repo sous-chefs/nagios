@@ -77,7 +77,7 @@ template File.join(node['nginx']['dir'], 'sites-available', 'nagios3.conf') do
     server_name: node['nagios']['server']['name'],
     server_vname: node['nagios']['server']['vname'],
     ssl_cert_file: node['nagios']['ssl_cert_file'],
-    ssl_cert_key: node['nagios']['ssl_cert_key'],
+    ssl_cert_key: node['nagios']['ssl_cert_key']
   )
   if File.symlink?(File.join(node['nginx']['dir'], 'sites-enabled', 'nagios3.conf'))
     notifies :reload, 'service[nginx]', :immediately

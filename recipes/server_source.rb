@@ -30,7 +30,7 @@ include_recipe 'php::module_gd'
 node.default['nagios']['conf']['p1_file'] = nil
 
 pkgs = value_for_platform_family(
-  %w(rhel fedora) => %w(openssl-devel gd-devel tar),
+  'rhel' => %w(openssl-devel gd-devel tar),
   'debian' => %w(libssl-dev libgd2-xpm-dev bsd-mailx tar),
   'default' => %w(libssl-dev libgd2-xpm-dev bsd-mailx tar)
 )
