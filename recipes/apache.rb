@@ -38,7 +38,7 @@ template "#{node['apache']['dir']}/sites-available/#{node['nagios']['server']['v
     ssl_cert_key: node['nagios']['ssl_cert_key']
   )
   if File.symlink?("#{node['apache']['dir']}/sites-enabled/#{node['nagios']['server']['vname']}.conf")
-    notifies :reload, 'service[apache2]'
+    notifies :restart, 'service[apache2]'
   end
 end
 
