@@ -4,7 +4,7 @@ title 'Nagios Website Checks'
 
 wget_cmd = 'wget -qO- --user=admin --password=admin http://localhost'
 
-cgi_cmd = if %w(redhat fedora).include?(os[:family])
+cgi_cmd = if %w(redhat).include?(os[:family])
             "#{wget_cmd}/nagios/cgi-bin"
           else
             "#{wget_cmd}/cgi-bin/nagios3"

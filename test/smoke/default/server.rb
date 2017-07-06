@@ -7,7 +7,7 @@
 
 title 'Nagios Server Checks'
 
-if %w(redhat fedora).include?(os[:family])
+if %w(redhat).include?(os[:family])
   path_config_dir    = '/etc/nagios/conf.d'
   path_conf_dir      = '/etc/nagios'
   svc = 'nagios'
