@@ -46,7 +46,9 @@ file "#{node['apache']['dir']}/conf.d/#{node['nagios']['server']['vname']}.conf"
   action :delete
 end
 
-apache_site node['nagios']['server']['vname']
+apache_site node['nagios']['server']['vname'] do
+  notifies :restart, 'service[apache2]'
+end
 
 node.default['nagios']['web_user'] = node['apache']['user']
 node.default['nagios']['web_group'] = node['apache']['group'] || node['apache']['user']
