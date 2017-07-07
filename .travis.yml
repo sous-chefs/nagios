@@ -23,9 +23,6 @@ env:
   - INSTANCE=server-package-centos-7
   - INSTANCE=server-package-debian-8 CHEF_VERSION=12.19.36
   - INSTANCE=server-package-debian-8
-  - INSTANCE=server-package-opensuse-leap CHEF_VERSION=12.19.36
-  - INSTANCE=server-package-opensuse-leap
-  - INSTANCE=server-package-ubuntu-1404 CHEF_VERSION=12.19.36
   - INSTANCE=server-package-ubuntu-1404
   - INSTANCE=server-package-ubuntu-1604 CHEF_VERSION=12.19.36
   - INSTANCE=server-package-ubuntu-1604
