@@ -59,7 +59,7 @@ when 'rhel', 'amazon'
                                    '/var/run/nagios'
                                  end
   default['nagios']['docroot']       = '/usr/share/nagios/html'
-  default['nagios']['cgi-bin']       = '/usr/lib64/nagios/cgi-bin'
+  default['nagios']['cgi-bin']       = '/usr/lib64/nagios/cgi-bin/'
 else
   default['nagios']['home']          = '/usr/lib/nagios3'
   default['nagios']['conf_dir']      = '/etc/nagios3'
