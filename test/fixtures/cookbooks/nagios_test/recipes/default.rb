@@ -17,6 +17,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+package 'wget'
+
 nagios_command 'system-load' do
   options 'command_line' => '$USER1$/check_load -w $ARG1$ -c $ARG2$'
 end
