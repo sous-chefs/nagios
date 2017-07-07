@@ -7,6 +7,10 @@
 if platform_family?('rhel', 'amazon')
   Chef::Log.info 'Build and install custom fcgiwrap RPM'
 
+  user 'vagrant' do
+    home '/home/vagrant'
+  end
+
   include_recipe 'build-essential'
   include_recipe 'yum-epel'
   include_recipe 'fcgiwrap_rpm::default'
