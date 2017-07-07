@@ -210,7 +210,7 @@ default['nagios']['server']['nginx_dispatch']['services']  =
   when 'rhel'
     %w(spawn-fcgi)
   else
-    []
+    %w(fcgiwrap)
   end
 default['nagios']['server']['nginx_dispatch']['cgi_url']  =
   'unix:/var/run/fcgiwrap.socket'
