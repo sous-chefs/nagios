@@ -144,7 +144,6 @@ default['nagios']['servicedependencies_databag'] = 'nagios_servicedependencies'
 default['nagios']['timeperiods_databag']         = 'nagios_timeperiods'
 default['nagios']['host_name_attribute']         = 'hostname'
 default['nagios']['regexp_matching']             = 0
-default['nagios']['large_installation_tweaks']   = 0
 default['nagios']['host_template'] = 'server'
 
 # for cas authentication
