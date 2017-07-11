@@ -31,7 +31,6 @@ The functionality that was previously in the nagios::client recipe has been move
 - apache2 2.0 or greater
 - build-essential
 - chef_nginx
-- nginx_simplecgi
 - php
 - yum-epel
 
