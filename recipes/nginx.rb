@@ -26,7 +26,7 @@ node.default['php-fpm']['user'] = node['nginx']['user']
 node.default['php-fpm']['group'] = node['nginx']['group']
 include_recipe 'php-fpm'
 
-package node['nagios']['server']['nginx_dispatch']['packages']
+package nagios_array(node['nagios']['server']['nginx_dispatch']['packages'])
 
 if platform_family?('rhel')
   template '/etc/sysconfig/spawn-fcgi' do
@@ -35,7 +35,7 @@ if platform_family?('rhel')
   end
 end
 
-node['nagios']['server']['nginx_dispatch']['services'].each do |svc|
+nagios_array(node['nagios']['server']['nginx_dispatch']['services']).each do |svc|
   service svc do
     action [:enable, :start]
   end
