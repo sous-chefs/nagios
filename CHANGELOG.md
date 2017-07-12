@@ -5,7 +5,10 @@ This file is used to list changes made in each version of the nagios cookbook.
 Unreleased
 ----------
 ### Improvement
-- Drop support for Fedora OS
+- Drop support/testing for CentOS 6, Fedora OS, FreeBSD
+- Drop test suite for allowed_ips - no functional tests
+- Clean up kitchen config
+- Test Chef 12 and Chef 13 but allow Chef 13 to fail until it's properly supported
 
 7.2.6
 -----
