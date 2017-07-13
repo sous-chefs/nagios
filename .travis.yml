@@ -25,9 +25,8 @@ env:
   - INSTANCE=server-package-debian-7
   - INSTANCE=server-package-debian-8 CHEF_VERSION=12.19.36
   - INSTANCE=server-package-debian-8
-# We can test opensuse again when we get apache2 working on opensuse
-# - INSTANCE=server-package-opensuse-leap CHEF_VERSION=12.19.36
-# - INSTANCE=server-package-opensuse-leap
+  - INSTANCE=server-package-opensuse-leap CHEF_VERSION=12.19.36
+  - INSTANCE=server-package-opensuse-leap
   - INSTANCE=server-package-ubuntu-1404 CHEF_VERSION=12.19.36
   - INSTANCE=server-package-ubuntu-1404
   - INSTANCE=server-package-ubuntu-1604 CHEF_VERSION=12.19.36

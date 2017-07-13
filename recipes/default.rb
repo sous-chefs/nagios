@@ -197,6 +197,34 @@ zap_directory node['nagios']['config_dir'] do
   pattern '*.cfg'
 end
 
+# This needs fixing, putting in some temp hacks to make suse work
+
+if platform_family?('suse')
+  systemd_unit 'nagios.service' do
+    content <<-EOU.gsub(/^\s+/, '')
+      [Unit]
+      Description=Nagios Network Monitoring
+      After=network.target
+      Documentation=https://www.nagios.org/documentation/
+
+      [Service]
+      Type=forking
+      User=nagios
+      Group=nagios
+      PIDFile=/var/run/nagios3/nagios3.pid
+      # Verify Nagios config before start as upstream suggested
+      ExecStartPre=/usr/sbin/nagios -v /etc/nagios3/nagios.cfg
+      ExecStart=/usr/sbin/nagios -d /etc/nagios3/nagios.cfg
+      ExecStopPost=/usr/bin/rm -f /var/spool/nagios/cmd/nagios.cmd
+
+      [Install]
+      WantedBy=multi-user.target
+    EOU
+
+    action [:create]
+  end
+end
+
 service 'nagios' do
   service_name nagios_service_name
   supports status: true, restart: true, reload: true
