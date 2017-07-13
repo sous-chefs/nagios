@@ -1,6 +1,6 @@
 #
 # Author:: Tim Smith <tsmith@chef.io>
-# Cookbook Name:: nagios
+# Cookbook:: nagios
 # Recipe:: apache
 #
 # Licensed under the Apache License, Version 2.0 (the "License");

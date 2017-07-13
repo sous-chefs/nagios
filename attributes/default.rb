@@ -1,7 +1,7 @@
 #
 # Author:: Seth Chisamore <schisamo@chef.io>
 # Author:: Tim Smith <tsmith@chef.io>
-# Cookbook Name:: nagios
+# Cookbook:: nagios
 # Attributes:: default
 #
 # Copyright 2011-2016, Chef Software, Inc.
@@ -92,7 +92,7 @@ default['nagios']['ssl_cert_file'] = "#{node['nagios']['conf_dir']}/certificates
 default['nagios']['ssl_cert_key']  = "#{node['nagios']['conf_dir']}/certificates/nagios-server.pem"
 default['nagios']['ssl_req']       = '/C=US/ST=Several/L=Locality/O=Example/OU=Operations/' \
   "CN=#{node['nagios']['server_name']}/emailAddress=ops@#{node['nagios']['server_name']}"
-default['nagios']['ssl_protocols'] = "all -SSLv3 -SSLv2"
+default['nagios']['ssl_protocols'] = 'all -SSLv3 -SSLv2'
 default['nagios']['ssl_ciphers']   = nil
 
 # nagios server name and webserver vname.  this can be changed to allow for the installation of icinga
