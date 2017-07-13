@@ -1,6 +1,6 @@
 #
 # Author:: Sander Botman <sbotman@schubergphilis.com>
-# Cookbook Name:: nagios_test
+# Cookbook:: nagios_test
 # Recipe:: default
 #
 # Copyright (C) 2015 Schuberg Philis.

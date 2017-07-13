@@ -1,7 +1,7 @@
 #
 # Author:: Seth Chisamore <schisamo@chef.io>
 # Author:: Tim Smith <tsmith@chef.io>
-# Cookbook Name:: nagios
+# Cookbook:: nagios
 # Attributes:: default
 #
 # Copyright 2011-2016, Chef Software, Inc.

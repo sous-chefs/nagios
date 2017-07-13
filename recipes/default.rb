@@ -4,7 +4,7 @@
 # Author:: Nathan Haneysmith <nathan@chef.io>
 # Author:: Seth Chisamore <schisamo@chef.io>
 # Author:: Tim Smith <tsmith@chef.io>
-# Cookbook Name:: nagios
+# Cookbook:: nagios
 # Recipe:: default
 #
 # Copyright 2009, 37signals

@@ -3,7 +3,7 @@
 # Author:: Joshua Timberman <joshua@chef.io>
 # Author:: Nathan Haneysmith <nathan@chef.io>
 # Author:: Seth Chisamore <schisamo@chef.io>
-# Cookbook Name:: nagios
+# Cookbook:: nagios
 # Definition:: nagios_conf
 #
 # Copyright 2009, 37signals
