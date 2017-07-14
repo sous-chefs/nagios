@@ -4,6 +4,12 @@ if os.redhat?
   path_config_dir = '/etc/nagios/conf.d'
   path_conf_dir   = '/etc/nagios'
   service_name    = 'nagios'
+elsif os.suse?
+  apache_bin      = 'httpd-prefork'
+  config_cgi_path = 'cgi-bin/nagios3/config.cgi'
+  path_config_dir = '/etc/nagios3/conf.d'
+  path_conf_dir   = '/etc/nagios3'
+  service_name    = 'nagios'
 else
   apache_bin      = 'apache2'
   config_cgi_path = 'cgi-bin/nagios3/config.cgi'

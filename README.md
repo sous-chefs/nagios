@@ -8,7 +8,7 @@ Installs and configures Nagios server. Chef nodes are automatically discovered u
 
 ### Chef
 
-Chef version 12.1+ is required
+Chef version 12.9+ is required
 
 Because of the heavy use of search, this recipe will not work with Chef Solo, as it cannot do any searches without a server.
 
@@ -20,7 +20,7 @@ The functionality that was previously in the nagios::client recipe has been move
 
 ### Platform
 
-- Debian 7+
+- Debian 8+
 - Ubuntu 14.04+
 - Red Hat Enterprise Linux (CentOS/Amazon/Scientific/Oracle) 6+
 

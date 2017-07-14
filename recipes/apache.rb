@@ -17,6 +17,7 @@
 #
 
 include_recipe 'apache2'
+include_recipe 'apache2::mod_cgi'
 include_recipe 'apache2::mod_rewrite'
 include_recipe 'apache2::mod_php'
 include_recipe 'apache2::mod_ssl' if node['nagios']['enable_ssl']
@@ -24,8 +25,6 @@ include_recipe 'apache2::mod_ssl' if node['nagios']['enable_ssl']
 apache_site '000-default' do
   enable false
 end
-
-apache_module 'cgi'
 
 template "#{node['apache']['dir']}/sites-available/#{node['nagios']['server']['vname']}.conf" do
   source 'apache2.conf.erb'

@@ -78,6 +78,7 @@ when 'rhel', 'amazon'
   default['nagios']['server']['service_name']   = 'nagios'
   default['nagios']['server']['mail_command']   = '/bin/mail'
 else
+  default['nagios']['cgi-path'] = '/cgi-bin/nagios3'
   default['nagios']['server']['install_method'] = 'source'
   default['nagios']['server']['service_name']   = 'nagios'
   default['nagios']['server']['mail_command']   = '/bin/mail'

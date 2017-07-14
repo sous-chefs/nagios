@@ -7,7 +7,7 @@ long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
 version          '7.2.7'
 issues_url       'https://github.com/sous-chefs/nagios/issues'
 source_url       'https://github.com/sous-chefs/nagios'
-chef_version     '>= 12.1' if respond_to?(:chef_version)
+chef_version     '>= 12.9' if respond_to?(:chef_version)
 
 recipe 'default', 'Installs Nagios server.'
 recipe 'nagios::pagerduty', 'Integrates contacts w/ PagerDuty API'
