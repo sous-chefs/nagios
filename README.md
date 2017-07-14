@@ -20,7 +20,7 @@ The functionality that was previously in the nagios::client recipe has been move
 
 ### Platform
 
-- Debian 7+
+- Debian 8+
 - Ubuntu 14.04+
 - Red Hat Enterprise Linux (CentOS/Amazon/Scientific/Oracle) 6+
 

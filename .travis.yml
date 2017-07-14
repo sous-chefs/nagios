@@ -21,8 +21,6 @@ env:
   matrix:
   - INSTANCE=server-package-centos-7 CHEF_VERSION=12.19.36
   - INSTANCE=server-package-centos-7
-  - INSTANCE=server-package-debian-7 CHEF_VERSION=12.19.36
-  - INSTANCE=server-package-debian-7
   - INSTANCE=server-package-debian-8 CHEF_VERSION=12.19.36
   - INSTANCE=server-package-debian-8
   - INSTANCE=server-package-opensuse-leap CHEF_VERSION=12.19.36
@@ -44,7 +42,6 @@ script: KITCHEN_LOCAL_YAML=.kitchen.dokken.yml kitchen verify ${INSTANCE}
 matrix:
   allow_failures:
     - env: INSTANCE=server-package-centos-7
-    - env: INSTANCE=server-package-debian-7
     - env: INSTANCE=server-package-debian-8
     - env: INSTANCE=server-package-opensuse-leap
     - env: INSTANCE=server-package-ubuntu-1404
