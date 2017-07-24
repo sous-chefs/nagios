@@ -222,7 +222,7 @@ control 'nagios-config-10' do
   file_servicegroups << 'servicegroup_name.*servicegroup_b\n\s*members.*' \
     'host_b,service_c'
   file_servicegroups << 'servicegroup_name.*selective_services\n\s*members\s*' \
-    'host_b,selective_service'
+    '.*host_b,selective_service'
 
   file_servicegroups.each do |line|
     describe file("#{path_config_dir}/servicegroups.cfg") do
