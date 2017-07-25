@@ -27,6 +27,10 @@ default['nagios']['monitored_environments'] = []
 default['nagios']['user']  = 'nagios'
 default['nagios']['group'] = 'nagios'
 
+# Default vaules guarantee to exist, override in webserer recipe
+default['nagios']['web_user']  = 'nagios'
+default['nagios']['web_group'] = 'nagios'
+
 # Allow specifying which interface on clients to monitor (which IP address to monitor)
 default['nagios']['monitoring_interface'] = nil
 
@@ -49,7 +53,11 @@ when 'rhel', 'amazon'
   default['nagios']['log_dir']       = '/var/log/nagios'
   default['nagios']['cache_dir']     = '/var/log/nagios'
   default['nagios']['state_dir']     = '/var/log/nagios'
-  default['nagios']['run_dir']       = '/var/run/nagios'
+  default['nagios']['run_dir'] = if node['platform'] == 'centos' && node['platform_version'].to_i < 7
+                                   '/var/run'
+                                 else
+                                   '/var/run/nagios'
+                                 end
   default['nagios']['docroot']       = '/usr/share/nagios/html'
   default['nagios']['cgi-bin']       = '/usr/lib64/nagios/cgi-bin/'
 else
@@ -188,7 +196,26 @@ default['nagios']['default_service']['flap_detection']        = true
 default['nagios']['default_service']['action_url']            = nil
 
 default['nagios']['server']['web_server']              = 'apache'
-default['nagios']['server']['nginx_dispatch']          = 'cgi'
+default['nagios']['server']['nginx_dispatch']['type']  = 'both'
+default['nagios']['server']['nginx_dispatch']['type']  = 'both'
+default['nagios']['server']['nginx_dispatch']['packages']  =
+  case node['platform_family']
+  when 'rhel'
+    %w(spawn-fcgi fcgiwrap)
+  else
+    %w(fcgiwrap)
+  end
+default['nagios']['server']['nginx_dispatch']['services']  =
+  case node['platform_family']
+  when 'rhel'
+    %w(spawn-fcgi)
+  else
+    %w(fcgiwrap)
+  end
+default['nagios']['server']['nginx_dispatch']['cgi_url']  =
+  'unix:/var/run/fcgiwrap.socket'
+default['nagios']['server']['nginx_dispatch']['php_url']  =
+  'unix:/var/run/php-fpm-www.sock'
 default['nagios']['server']['stop_apache']             = false
 default['nagios']['server']['normalize_hostname']      = false
 default['nagios']['server']['load_default_config']     = true

@@ -33,6 +33,10 @@
      <% end -%>
   </Directory>
 
+  <FilesMatch ".+\.ph(p[345]?|t|tml)$">
+     SetHandler application/x-httpd-php
+  </FilesMatch>
+
 <% if @https -%>
   SSLEngine On
   SSLProtocol <%= node['nagios']['ssl_protocols'] %>

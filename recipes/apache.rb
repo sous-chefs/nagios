@@ -16,6 +16,8 @@
 # limitations under the License.
 #
 
+node.default['nagios']['server']['web_server'] = 'apache'
+
 include_recipe 'apache2'
 include_recipe 'apache2::mod_cgi'
 include_recipe 'apache2::mod_rewrite'
@@ -36,7 +38,7 @@ template "#{node['apache']['dir']}/sites-available/#{node['nagios']['server']['v
     ssl_cert_key: node['nagios']['ssl_cert_key']
   )
   if File.symlink?("#{node['apache']['dir']}/sites-enabled/#{node['nagios']['server']['vname']}.conf")
-    notifies :reload, 'service[apache2]'
+    notifies :restart, 'service[apache2]'
   end
 end
 
@@ -44,4 +46,25 @@ file "#{node['apache']['dir']}/conf.d/#{node['nagios']['server']['vname']}.conf"
   action :delete
 end
 
-apache_site node['nagios']['server']['vname']
+apache_site node['nagios']['server']['vname'] do
+  notifies :restart, 'service[apache2]'
+end
+
+node.default['nagios']['web_user'] = node['apache']['user']
+node.default['nagios']['web_group'] = node['apache']['group'] || node['apache']['user']
+
+# configure the appropriate authentication method for the web server
+case node['nagios']['server_auth_method']
+when 'openid'
+  include_recipe 'apache2::mod_auth_openid'
+when 'cas'
+  include_recipe 'apache2::mod_auth_cas'
+when 'ldap'
+  include_recipe 'apache2::mod_authnz_ldap'
+when 'htauth'
+  Chef::Log.info('Authentication method htauth configured in server.rb')
+else
+  Chef::Log.info('Default method htauth configured in server.rb')
+end
+
+include_recipe 'nagios::server'

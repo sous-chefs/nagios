@@ -19,16 +19,19 @@ services: docker
 
 env:
   matrix:
-  - INSTANCE=server-package-centos-7 CHEF_VERSION=12.19.36
+  ## - INSTANCE=server-package-centos-6
   - INSTANCE=server-package-centos-7
   - INSTANCE=server-package-debian-8 CHEF_VERSION=12.19.36
   - INSTANCE=server-package-debian-8
-  - INSTANCE=server-package-opensuse-leap CHEF_VERSION=12.19.36
-  - INSTANCE=server-package-opensuse-leap
-  - INSTANCE=server-package-ubuntu-1404 CHEF_VERSION=12.19.36
   - INSTANCE=server-package-ubuntu-1404
   - INSTANCE=server-package-ubuntu-1604 CHEF_VERSION=12.19.36
   - INSTANCE=server-package-ubuntu-1604
+  - INSTANCE=nginx-debian-7
+  - INSTANCE=nginx-debian-8
+  - INSTANCE=nginx-centos-6
+  - INSTANCE=nginx-centos-7
+  - INSTANCE=nginx-ubuntu-1404
+  - INSTANCE=nginx-ubuntu-1604
 
 before_script:
   - sudo iptables -L DOCKER || ( echo "DOCKER iptables chain missing" ; sudo iptables -N DOCKER )
