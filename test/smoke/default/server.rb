@@ -24,7 +24,7 @@ control 'nagios-deamon-01' do
   describe service(svc) do
     it { should be_running }
   end
-  only_if { not ( os.redhat? && os[:release].start_with?('6') ) }
+  only_if { !(os.redhat? && os[:release].start_with?('6')) }
 end
 
 control 'nagios-deamon-02' do
