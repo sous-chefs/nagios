@@ -4,7 +4,7 @@ dist: trusty
 addons:
   apt:
     sources:
-      - chef-stable-trusty
+      - chef-current-trusty
     packages:
       - chefdk
 
@@ -19,25 +19,37 @@ services: docker
 
 env:
   matrix:
-  - INSTANCE=server-package-centos-6
+  ## - INSTANCE=server-package-centos-6
   - INSTANCE=server-package-centos-7
-  - INSTANCE=server-package-debian-7
+  - INSTANCE=server-package-debian-8 CHEF_VERSION=12.19.36
   - INSTANCE=server-package-debian-8
-  - INSTANCE=server-package-opensuse-leap
   - INSTANCE=server-package-ubuntu-1404
+  - INSTANCE=server-package-ubuntu-1604 CHEF_VERSION=12.19.36
   - INSTANCE=server-package-ubuntu-1604
+  - INSTANCE=nginx-debian-7
+  - INSTANCE=nginx-debian-8
+  - INSTANCE=nginx-centos-6
+  - INSTANCE=nginx-centos-7
+  - INSTANCE=nginx-ubuntu-1404
+  - INSTANCE=nginx-ubuntu-1604
 
 before_script:
   - sudo iptables -L DOCKER || ( echo "DOCKER iptables chain missing" ; sudo iptables -N DOCKER )
-  - eval "$(/opt/chefdk/bin/chef shell-init bash)"
-  - /opt/chefdk/embedded/bin/chef --version
-  - /opt/chefdk/embedded/bin/cookstyle --version
-  - /opt/chefdk/embedded/bin/foodcritic --version
+  - eval "$(chef shell-init bash)"
+  - chef --version
+  - cookstyle --version
+  - foodcritic --version
 
-script: KITCHEN_LOCAL_YAML=.kitchen.dokken.yml /opt/chefdk/embedded/bin/kitchen verify ${INSTANCE}
+script: KITCHEN_LOCAL_YAML=.kitchen.dokken.yml kitchen verify ${INSTANCE}
 
 matrix:
+  allow_failures:
+    - env: INSTANCE=server-package-centos-7
+    - env: INSTANCE=server-package-debian-8
+    - env: INSTANCE=server-package-opensuse-leap
+    - env: INSTANCE=server-package-ubuntu-1404
+    - env: INSTANCE=server-package-ubuntu-1604
   include:
     - script:
-      - /opt/chefdk/bin/chef exec delivery local all
+      - chef exec delivery local all
       env: UNIT_AND_LINT=1

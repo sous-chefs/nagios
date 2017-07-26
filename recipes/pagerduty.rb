@@ -1,7 +1,7 @@
 #
 # Author:: Jake Vanderdray <jvanderdray@customink.com>
 # Author:: Tim Smith <tsmith@chef.io>
-# Cookbook Name:: nagios
+# Cookbook:: nagios
 # Recipe:: pagerduty
 #
 # Copyright 2011, CustomInk LLC

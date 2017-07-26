@@ -5,6 +5,7 @@
     "nagios": {
       "exclude_tag_host": [ "foo" ],
       "host_name_attribute": "custom_host_name_attribute",
+      "monitored_environments": [ "_default" ],
       "conf": {
         "use_syslog": 0,
         "host_perfdata_command": [ "command_a", "command_b" ],

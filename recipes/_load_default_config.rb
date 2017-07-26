@@ -1,6 +1,6 @@
 #
 # Author:: Sander Botman <sbotman@schubergphilis.com>
-# Cookbook Name:: nagios
+# Cookbook:: nagios
 # Recipe:: _load_default_config
 #
 # Copyright 2014, Sander Botman
@@ -57,8 +57,7 @@ nagios_timeperiod '24x7' do
                        'wednesday' => '00:00-24:00',
                        'thursday'  => '00:00-24:00',
                        'friday'    => '00:00-24:00',
-                       'saturday'  => '00:00-24:00',
-                     }
+                       'saturday'  => '00:00-24:00' }
 end
 
 # Host checks

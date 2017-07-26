@@ -1,6 +1,6 @@
 #
 # Author:: Sander Botman <sbotman@schubergphilis.com>
-# Cookbook Name:: nagios
+# Cookbook:: nagios
 # Library:: base
 #
 # Copyright 2014, Sander Botman

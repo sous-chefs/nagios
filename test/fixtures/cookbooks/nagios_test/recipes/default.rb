@@ -1,6 +1,6 @@
 #
 # Author:: Sander Botman <sbotman@schubergphilis.com>
-# Cookbook Name:: nagios_test
+# Cookbook:: nagios_test
 # Recipe:: default
 #
 # Copyright (C) 2015 Schuberg Philis.
@@ -16,6 +16,8 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+
+package 'wget'
 
 nagios_command 'system-load' do
   options 'command_line' => '$USER1$/check_load -w $ARG1$ -c $ARG2$'

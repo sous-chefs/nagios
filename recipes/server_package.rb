@@ -1,7 +1,7 @@
 #
 # Author:: Seth Chisamore <schisamo@chef.io>
 # Author:: Tim Smith <tsmith@chef.io>
-# Cookbook Name:: nagios
+# Cookbook:: nagios
 # Recipe:: server_package
 #
 # Copyright 2011-2016, Chef Software, Inc.
@@ -37,4 +37,39 @@ end
 
 node['nagios']['server']['packages'].each do |pkg|
   package pkg
+end
+
+directory node['nagios']['config_dir'] do
+  owner 'root'
+  group 'root'
+  mode '0755'
+  recursive true
+end
+
+directory node['nagios']['conf']['check_result_path'] do
+  owner node['nagios']['user']
+  group node['nagios']['group']
+  mode '0755'
+  recursive true
+end
+
+%w( cache_dir log_dir run_dir ).each do |dir|
+  directory node['nagios'][dir] do
+    recursive true
+    owner node['nagios']['user']
+    group node['nagios']['group']
+    mode '0755'
+  end
+end
+
+directory ::File.join(node['nagios']['log_dir'], 'archives') do
+  owner node['nagios']['user']
+  group node['nagios']['group']
+  mode '0755'
+end
+
+directory "/usr/lib/#{node['nagios']['server']['vname']}" do
+  owner node['nagios']['user']
+  group node['nagios']['group']
+  mode '0755'
 end

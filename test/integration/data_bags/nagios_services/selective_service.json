@@ -1,6 +1,6 @@
 {
   "id": "selective_service",
-  "hostgroup_name": ["both_hosts", "!hostgroup_a"],
+  "hostgroup_name": ["both_hosts"],
   "command_line": "$USER1$/dodge",
   "servicegroups": "selective_services"
 }

@@ -1,6 +1,6 @@
 # nagios cookbook
 
-[![Join the chat at https://gitter.im/sous-chefs/nagios](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/sous-chefs/nagios?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) [![Build Status](https://travis-ci.org/sous-chefs/nagios.svg)](https://travis-ci.org/sous-chefs/nagios) [![Cookbook Version](https://img.shields.io/cookbook/v/nagios.svg)](https://supermarket.chef.io/cookbooks/nagios)
+[![Build Status](https://travis-ci.org/sous-chefs/nagios.svg)](https://travis-ci.org/sous-chefs/nagios) [![Cookbook Version](https://img.shields.io/cookbook/v/nagios.svg)](https://supermarket.chef.io/cookbooks/nagios)
 
 Installs and configures Nagios server. Chef nodes are automatically discovered using search, and Nagios host groups are created based on Chef roles and optionally environments as well.
 
@@ -8,7 +8,7 @@ Installs and configures Nagios server. Chef nodes are automatically discovered u
 
 ### Chef
 
-Chef version 12.1+ is required
+Chef version 12.9+ is required
 
 Because of the heavy use of search, this recipe will not work with Chef Solo, as it cannot do any searches without a server.
 
@@ -20,7 +20,7 @@ The functionality that was previously in the nagios::client recipe has been move
 
 ### Platform
 
-- Debian 7+
+- Debian 8+
 - Ubuntu 14.04+
 - Red Hat Enterprise Linux (CentOS/Amazon/Scientific/Oracle) 6+
 
@@ -28,10 +28,9 @@ The functionality that was previously in the nagios::client recipe has been move
 
 ### Cookbooks
 
-- apache2 2.0 or greater
+- apache2 4.0 or greater
 - build-essential
 - chef_nginx
-- nginx_simplecgi
 - php
 - yum-epel
 

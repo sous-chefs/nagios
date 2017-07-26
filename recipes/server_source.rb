@@ -1,7 +1,7 @@
 #
 # Author:: Seth Chisamore <schisamo@chef.io>
 # Author:: Tim Smith <tsmith@chef.io>
-# Cookbook Name:: nagios
+# Cookbook:: nagios
 # Recipe:: server_source
 #
 # Copyright 2011-2016, Chef Software, Inc.
@@ -30,9 +30,9 @@ include_recipe 'php::module_gd'
 node.default['nagios']['conf']['p1_file'] = nil
 
 pkgs = value_for_platform_family(
-  'rhel' => %w( openssl-devel gd-devel tar ),
-  'debian' => %w( libssl-dev libgd2-xpm-dev bsd-mailx tar ),
-  'default' => %w( libssl-dev libgd2-xpm-dev bsd-mailx tar )
+  'rhel' => %w(openssl-devel gd-devel tar),
+  'debian' => %w(libssl-dev libgd2-xpm-dev bsd-mailx tar),
+  'default' => %w(libssl-dev libgd2-xpm-dev bsd-mailx tar)
 )
 
 pkgs.each do |pkg|
@@ -138,7 +138,7 @@ directory node['nagios']['conf']['check_result_path'] do
   recursive true
 end
 
-%w( cache_dir log_dir run_dir ).each do |dir|
+%w(cache_dir log_dir run_dir).each do |dir|
   directory node['nagios'][dir] do
     recursive true
     owner node['nagios']['user']

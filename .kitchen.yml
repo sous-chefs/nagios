@@ -3,6 +3,11 @@ driver:
 
 provisioner:
   name: chef_zero
+  deprecations_as_errors: true
+  require_chef_omnibus: <%= ENV['CHEF_VERSION'] || 'latest' %>
+
+verifier:
+  name: inspec
 
 platforms:
   - name: ubuntu-14.04
@@ -45,11 +50,17 @@ platforms:
     driver_config:
       network:
         - ["forwarded_port", {guest: 80, host: 8088}]
+  - name: fedora-25
+    driver_config:
+      network:
+        - ["forwarded_port", {guest: 80, host: 8089}]
   - name: amazon-linux
     driver_config:
       box: mvbcoding/awslinux
-      network:
-        - ["forwarded_port", {guest: 80, host: 8090}]
+  - name: centos-7.3
+  - name: debian-8.8
+  - name: ubuntu-14.04
+  - name: ubuntu-16.04
 
 suites:
  - name: server_package
@@ -60,6 +71,11 @@ suites:
    - role[monitoring]
    attributes:
      nagios:
+   verifier:
+     inspec_tests:
+       - test/smoke/default/server.rb
+       - test/smoke/default/apache.rb
+       - test/smoke/default/nagios_website.rb
  - name: server_source
    run_list:
    - recipe[nagios::default]
@@ -92,5 +108,23 @@ suites:
    attributes:
      nagios:
        allowed_ips: ['127.0.0.1', '::1']
-data_bags_path: test/data_bags
-roles_path: test/roles
+ - name: nginx
+   run_list:
+   - recipe[nagios_test::fcgiwrap_rpm]
+   - recipe[nagios::nginx]
+   - recipe[nrpe::default]
+   - recipe[nagios_test::default]
+   - role[monitoring]
+   attributes:
+     nagios:
+       server:
+         stop_apache: true
+   verifier:
+     inspec_tests:
+       - test/smoke/default/server.rb
+       - test/smoke/default/nginx.rb
+       - test/smoke/default/nagios_website.rb
+   excludes:
+   <% %w(freebsd-10.3 freebsd-11.0).each do |exclude_platform| %>
+     - <%= exclude_platform %>
+   <% end %>
