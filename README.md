@@ -28,7 +28,7 @@ The functionality that was previously in the nagios::client recipe has been move
 
 ### Cookbooks
 
-- apache2 2.0 or greater
+- apache2 4.0 or greater
 - build-essential
 - chef_nginx
 - php
