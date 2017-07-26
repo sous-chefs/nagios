@@ -12,7 +12,7 @@ chef_version     '>= 12.9' if respond_to?(:chef_version)
 recipe 'default', 'Installs Nagios server.'
 recipe 'nagios::pagerduty', 'Integrates contacts w/ PagerDuty API'
 
-depends 'apache2', '>= 2.0'
+depends 'apache2', '>= 4.0'
 depends 'php-fpm', '>= 0.7.9'
 depends 'zap', '>= 0.6.0'
 
