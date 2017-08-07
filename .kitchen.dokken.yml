@@ -52,11 +52,6 @@ platforms:
     platform: rhel
     pid_one_command: /usr/lib/systemd/systemd
 
-- name: fedora-latest
-  driver:
-    image: dokken/fedora-latest
-    pid_one_command: /usr/lib/systemd/systemd
-
 - name: ubuntu-14.04
   driver:
     image: dokken/ubuntu-14.04
@@ -70,11 +65,6 @@ platforms:
     pid_one_command: /bin/systemd
     intermediate_instructions:
       - RUN /usr/bin/apt-get update
-
-- name: opensuse-leap
-  driver:
-    image: dokken/opensuse-leap
-    pid_one_command: /bin/systemd
 
 suites:
  - name: server_package
