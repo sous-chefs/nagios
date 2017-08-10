@@ -28,20 +28,12 @@ platforms:
         - ["forwarded_port", {guest: 80, host: 8083}]
     run_list:
     - recipe[apt::default]
-  - name: debian-8.7
+  - name: debian-8.8
     driver_config:
       network:
         - ["forwarded_port", {guest: 80, host: 8084}]
     run_list:
     - recipe[apt::default]
-  - name: freebsd-10.3
-    driver_config:
-      network:
-        - ["forwarded_port", {guest: 80, host: 8085}]
-  - name: freebsd-11.0
-    driver_config:
-      network:
-        - ["forwarded_port", {guest: 80, host: 8086}]
   - name: centos-7.3
     driver_config:
       network:
@@ -50,17 +42,9 @@ platforms:
     driver_config:
       network:
         - ["forwarded_port", {guest: 80, host: 8088}]
-  - name: fedora-25
-    driver_config:
-      network:
-        - ["forwarded_port", {guest: 80, host: 8089}]
   - name: amazon-linux
     driver_config:
       box: mvbcoding/awslinux
-  - name: centos-7.3
-  - name: debian-8.8
-  - name: ubuntu-14.04
-  - name: ubuntu-16.04
 
 suites:
  - name: server_package
@@ -124,7 +108,3 @@ suites:
        - test/smoke/default/server.rb
        - test/smoke/default/nginx.rb
        - test/smoke/default/nagios_website.rb
-   excludes:
-   <% %w(freebsd-10.3 freebsd-11.0).each do |exclude_platform| %>
-     - <%= exclude_platform %>
-   <% end %>
