@@ -8,123 +8,49 @@ transport:
 
 provisioner:
   name: dokken
-  deprecations_as_errors: true
-
-verifier:
-  name: inspec
 
 platforms:
-- name: amazonlinux
-  driver:
-    image: dokken/amazonlinux
-    pid_one_command: /sbin/init
-
-- name: debian-7
-  driver:
-    image: dokken/debian-7
-    pid_one_command: /sbin/init
-    intermediate_instructions:
-      - RUN /usr/bin/apt-get update
-
-- name: debian-8
-  driver:
-    image: dokken/debian-8
-    pid_one_command: /bin/systemd
-    intermediate_instructions:
-      - RUN /usr/bin/apt-get update
-
-- name: debian-9
-  driver:
-    image: dokken/debian-9
-    pid_one_command: /bin/systemd
-    intermediate_instructions:
-      - RUN /usr/bin/apt-get update
-
-- name: centos-6
-  driver:
-    image: dokken/centos-6
-    platform: rhel
-    pid_one_command: /sbin/init
-
-- name: centos-7
-  driver:
-    image: dokken/centos-7
-    platform: rhel
-    pid_one_command: /usr/lib/systemd/systemd
-
-- name: ubuntu-14.04
-  driver:
-    image: dokken/ubuntu-14.04
-    pid_one_command: /sbin/init
-    intermediate_instructions:
-      - RUN /usr/bin/apt-get update
-
-- name: ubuntu-16.04
-  driver:
-    image: dokken/ubuntu-16.04
-    pid_one_command: /bin/systemd
-    intermediate_instructions:
-      - RUN /usr/bin/apt-get update
-
-suites:
- - name: server_package
-   run_list:
-   - recipe[nagios::default]
-   - recipe[nrpe::default]
-   - recipe[nagios_test::default]
-   - role[monitoring]
-   attributes:
-     nagios:
-   verifier:
-     inspec_tests:
-       - test/smoke/default/server.rb
-       - test/smoke/default/nagios_website.rb
-       - test/smoke/default/apache.rb
- - name: server_source
-   run_list:
-   - recipe[nagios::default]
-   - recipe[nrpe::default]
-   - recipe[nagios_test::default]
-   - role[monitoring]
-   attributes:
-     nagios:
-       server:
-         install_method: 'source'
- - name: pagerduty
-   run_list:
-   - recipe[nagios::default]
-   - recipe[nagios::pagerduty]
-   - recipe[nrpe::default]
-   - recipe[nagios_test::default]
-   - role[monitoring]
-   attributes:
-     nagios:
-       server:
-         install_method: 'source'
-       pagerduty:
-         key: 'your_key_here_3eC2'
- - name: allowed_ips
-   run_list:
-   - recipe[nagios::default]
-   - recipe[nrpe::default]
-   - recipe[nagios_test::default]
-   - role[monitoring]
-   attributes:
-     nagios:
-       allowed_ips: ['127.0.0.1', '::1']
- - name: nginx
-   run_list:
-   - recipe[nagios_test::fcgiwrap_rpm]
-   - recipe[nagios::nginx]
-   - recipe[nrpe::default]
-   - recipe[nagios_test::default]
-   - role[monitoring]
-   attributes:
-     nagios:
-       server:
-         stop_apache: true
-   verifier:
-     inspec_tests:
-       - test/smoke/default/server.rb
-       - test/smoke/default/nagios_website.rb
-       - test/smoke/default/nginx.rb
+  - name: amazonlinux
+    driver:
+      image: dokken/amazonlinux
+      pid_one_command: /sbin/init
+  - name: debian-7
+    driver:
+      image: dokken/debian-7
+      pid_one_command: /sbin/init
+      intermediate_instructions:
+        - RUN /usr/bin/apt-get update
+  - name: debian-8
+    driver:
+      image: dokken/debian-8
+      pid_one_command: /bin/systemd
+      intermediate_instructions:
+        - RUN /usr/bin/apt-get update
+  - name: debian-9
+    driver:
+      image: dokken/debian-9
+      pid_one_command: /bin/systemd
+      intermediate_instructions:
+        - RUN /usr/bin/apt-get update
+  - name: centos-6
+    driver:
+      image: dokken/centos-6
+      platform: rhel
+      pid_one_command: /sbin/init
+  - name: centos-7
+    driver:
+      image: dokken/centos-7
+      platform: rhel
+      pid_one_command: /usr/lib/systemd/systemd
+  - name: ubuntu-14.04
+    driver:
+      image: dokken/ubuntu-14.04
+      pid_one_command: /sbin/init
+      intermediate_instructions:
+        - RUN /usr/bin/apt-get update
+  - name: ubuntu-16.04
+    driver:
+      image: dokken/ubuntu-16.04
+      pid_one_command: /bin/systemd
+      intermediate_instructions:
+        - RUN /usr/bin/apt-get update
