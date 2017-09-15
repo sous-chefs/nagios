@@ -1,9 +1,10 @@
 driver:
   name: vagrant
+  network:
+    - ["forwarded_port", {guest: 80, host: 8080}]
 
 provisioner:
   name: chef_zero
-  deprecations_as_errors: true
   require_chef_omnibus: <%= ENV['CHEF_VERSION'] || 'latest' %>
 
 verifier:
@@ -11,100 +12,80 @@ verifier:
 
 platforms:
   - name: ubuntu-14.04
-    driver_config:
-      network:
-        - ["forwarded_port", {guest: 80, host: 8081}]
     run_list:
-    - recipe[apt::default]
+      - recipe[apt::default]
   - name: ubuntu-16.04
-    driver_config:
-      network:
-        - ["forwarded_port", {guest: 80, host: 8082}]
     run_list:
-    - recipe[apt::default]
+      - recipe[apt::default]
   - name: debian-7.11
-    driver_config:
-      network:
-        - ["forwarded_port", {guest: 80, host: 8083}]
     run_list:
-    - recipe[apt::default]
+      - recipe[apt::default]
   - name: debian-8.8
-    driver_config:
-      network:
-        - ["forwarded_port", {guest: 80, host: 8084}]
     run_list:
-    - recipe[apt::default]
+      - recipe[apt::default]
   - name: centos-7.3
-    driver_config:
-      network:
-        - ["forwarded_port", {guest: 80, host: 8087}]
   - name: centos-6.9
-    driver_config:
-      network:
-        - ["forwarded_port", {guest: 80, host: 8088}]
   - name: amazon-linux
     driver_config:
       box: mvbcoding/awslinux
 
 suites:
- - name: server_package
-   run_list:
-   - recipe[nagios::default]
-   - recipe[nrpe::default]
-   - recipe[nagios_test::default]
-   - role[monitoring]
-   attributes:
-     nagios:
-   verifier:
-     inspec_tests:
-       - test/smoke/default/server.rb
-       - test/smoke/default/apache.rb
-       - test/smoke/default/nagios_website.rb
- - name: server_source
-   run_list:
-   - recipe[nagios::default]
-   - recipe[nrpe::default]
-   - recipe[nagios_test::default]
-   - role[monitoring]
-   attributes:
-     nagios:
-       server:
-         install_method: 'source'
- - name: pagerduty
-   run_list:
-   - recipe[nagios::default]
-   - recipe[nagios::pagerduty]
-   - recipe[nrpe::default]
-   - recipe[nagios_test::default]
-   - role[monitoring]
-   attributes:
-     nagios:
-       server:
-         install_method: 'source'
-       pagerduty:
-         key: 'your_key_here_3eC2'
- - name: allowed_ips
-   run_list:
-   - recipe[nagios::default]
-   - recipe[nrpe::default]
-   - recipe[nagios_test::default]
-   - role[monitoring]
-   attributes:
-     nagios:
-       allowed_ips: ['127.0.0.1', '::1']
- - name: nginx
-   run_list:
-   - recipe[nagios_test::fcgiwrap_rpm]
-   - recipe[nagios::nginx]
-   - recipe[nrpe::default]
-   - recipe[nagios_test::default]
-   - role[monitoring]
-   attributes:
-     nagios:
-       server:
-         stop_apache: true
-   verifier:
-     inspec_tests:
-       - test/smoke/default/server.rb
-       - test/smoke/default/nginx.rb
-       - test/smoke/default/nagios_website.rb
+  - name: server_package
+    run_list:
+      - recipe[nagios::default]
+      - recipe[nrpe::default]
+      - recipe[nagios_test::default]
+      - role[monitoring]
+    attributes:
+      nagios:
+    verifier:
+      inspec_tests:
+        - test/smoke/default/server.rb
+        - test/smoke/default/nagios_website.rb
+  - name: server_source
+    run_list:
+      - recipe[nagios::default]
+      - recipe[nrpe::default]
+      - recipe[nagios_test::default]
+      - role[monitoring]
+    attributes:
+      nagios:
+        server:
+          install_method: 'source'
+  - name: pagerduty
+    run_list:
+      - recipe[nagios::default]
+      - recipe[nagios::pagerduty]
+      - recipe[nrpe::default]
+      - recipe[nagios_test::default]
+      - role[monitoring]
+    attributes:
+      nagios:
+        server:
+          install_method: 'source'
+        pagerduty:
+          key: 'your_key_here_3eC2'
+  - name: allowed_ips
+    run_list:
+      - recipe[nagios::default]
+      - recipe[nrpe::default]
+      - recipe[nagios_test::default]
+      - role[monitoring]
+    attributes:
+      nagios:
+        allowed_ips: ['127.0.0.1', '::1']
+  - name: nginx
+    run_list:
+      - recipe[nagios_test::fcgiwrap_rpm]
+      - recipe[nagios::nginx]
+      - recipe[nrpe::default]
+      - recipe[nagios_test::default]
+      - role[monitoring]
+    attributes:
+      nagios:
+        server:
+          stop_apache: true
+    verifier:
+      inspec_tests:
+        - test/smoke/default/server.rb
+        - test/smoke/default/nagios_website.rb
