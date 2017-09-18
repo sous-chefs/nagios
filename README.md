@@ -30,7 +30,7 @@ The functionality that was previously in the nagios::client recipe has been move
 
 - apache2 4.0 or greater
 - build-essential
-- chef_nginx
+- nginx
 - php
 - yum-epel
 
