@@ -2,13 +2,50 @@ nagios Cookbook CHANGELOG
 =========================
 This file is used to list changes made in each version of the nagios cookbook.
 
-Unreleased
-----------
+8.0.0 (19-09-2017)
+------------------
+### Breaking Changes
+- #522 Drop support for RHEL 5
+- #531 Drop support for Fedora OSes
+- #534 Drop support for CentOS 6, Fedora OS, FreeBSD
+- #541 Require Chef 12.9+
+
+### Bug
+- #538 Update documentation for large installation tweaks and remove old attribute
+
 ### Improvement
-- Drop support/testing for CentOS 6, Fedora OS, FreeBSD
-- Drop test suite for allowed_ips - no functional tests
-- Clean up kitchen config
-- Test Chef 12 and Chef 13 but allow Chef 13 to fail until it's properly supported
+- #522 Resolve Foodcritic warnings, Chef 13 failures
+- #524 Update metadata maintainer and repo urls (moved to Sous Chefs)
+- #529 Allow SSL settings overrides
+- #530 Nginx refactor
+- #532 Update links to refer to Sous-Chefs org
+- #534 Multiple testing related improvements (Clean up kitchen config; Test Chef 12 and Chef 13 but allow Chef 13 to fail until it's properly supported)
+- #537 Update recipe name change in apache2 4.0 cookbook (`apache2::mod_php5` becomes `apache2::mod_php`)
+- #539 Remove chat page
+- #540 Misc clean up and CookStyle fixes
+- #541 Fix OpenSuse support
+- #542 Test Kitchen config updates
+- #544 Require apache2 cookbook >= 4.0
+- #549 Yank old bats/ServerSpec tests and unsupported platform testing
+- #550 Fix tests to allow Chef 12 and Chef 13 to pass for now
+- #552 Switch from `chef_nginx` back to `nginx`
+
+7.2.7
+-----
+### Bug
+- #479 Fix bug preventing Nagios upgrade from source
+- #484 Fix #483, eventhandlers are now loaded before contacts
+
+### Improvement
+- #475 Make service groups do negation for removed hostgroups
+- #481 Update lock file location for CentOS/Fedora
+- #488 Fix rubocop warnings
+- #497 Allow base authentication for listed IPs to be disabled
+- #507 Minor fixes for README
+- #508 Add descriptions to Pager Duty commands
+- #510 Switch from nginx cookbook to chef_nginx cookbook
+- #513 Fix rubocop warnings
+- #516 Multiple improvements to align with other community cookbooks (Add delivery config; Add GitHub issue templates; Fix suite names for Test Kitchen in Travis; Fix CookStyle warnings; Update README content; Update kitchen-dokken config and use delivery local instead of rake)
 
 7.2.6
 -----
