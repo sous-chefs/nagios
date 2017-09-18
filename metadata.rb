@@ -13,10 +13,11 @@ recipe 'default', 'Installs Nagios server.'
 recipe 'nagios::pagerduty', 'Integrates contacts w/ PagerDuty API'
 
 depends 'apache2', '>= 4.0'
+depends 'nginx', '>= 7.0'
 depends 'php-fpm', '>= 0.7.9'
 depends 'zap', '>= 0.6.0'
 
-%w( build-essential php nginx yum-epel nrpe ).each do |cb|
+%w( build-essential php yum-epel nrpe ).each do |cb|
   depends cb
 end
 
