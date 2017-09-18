@@ -18,7 +18,7 @@
 
 node.default['nagios']['server']['web_server'] = 'nginx'
 
-include_recipe 'chef_nginx'
+include_recipe 'nginx'
 
 node.default['php-fpm']['pools']['www']['user'] = node['nginx']['user']
 node.default['php-fpm']['pools']['www']['group'] = node['nginx']['group']
