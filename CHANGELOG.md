@@ -10,6 +10,23 @@ Unreleased
 - Clean up kitchen config
 - Test Chef 12 and Chef 13 but allow Chef 13 to fail until it's properly supported
 
+7.2.7
+-----
+### Bug
+- #479 Fix bug preventing Nagios upgrade from source
+- #484 Fix #483, eventhandlers are now loaded before contacts
+
+### Improvement
+- #475 Make service groups do negation for removed hostgroups
+- #481 Update lock file location for CentOS/Fedora
+- #488 Fix rubocop warnings
+- #497 Allow base authentication for listed IPs to be disabled
+- #507 Minor fixes for README
+- #508 Add descriptions to Pager Duty commands
+- #510 Switch from nginx cookbook to chef_nginx cookbook
+- #513 Fix rubocop warnings
+- #516 Multiple improvements to align with other community cookbooks (Add delivery config; Add GitHub issue templates; Fix suite names for Test Kitchen in Travis; Fix CookStyle warnings; Update README content; Update kitchen-dokken config and use delivery local instead of rake)
+
 7.2.6
 -----
 ### Bug
