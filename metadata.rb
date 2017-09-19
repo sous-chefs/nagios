@@ -17,18 +17,15 @@ depends 'nginx', '>= 7.0'
 depends 'php-fpm', '>= 0.7.9'
 depends 'zap', '>= 0.6.0'
 
-%w( build-essential php yum-epel nrpe ).each do |cb|
+%w(build-essential php yum-epel nrpe).each do |cb|
   depends cb
 end
 
-%w(
-  amazon
-  centos
-  debian
-  oracle
-  redhat
-  scientific
-  ubuntu
-).each do |os|
-  supports os
+%w(centos oracle redhat).each do |os|
+  supports os, '>= 7.0'
 end
+
+supports 'amazon'
+supports 'debian', '>= 8.0'
+supports 'scientific'
+supports 'ubuntu', '>= 14.04'
