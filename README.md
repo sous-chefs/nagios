@@ -205,8 +205,6 @@ Installs pagerduty plugin for nagios. If you only have a single pagerduty key, y
 
 This recipe was written based on the [Nagios Integration Guide](http://www.pagerduty.com/docs/guides/nagios-integration-guide) from PagerDuty which explains how to get an API key for your Nagios server.
 
-
-
 ## Data Bags
 
 [See Wiki for more databag information](https://github.com/sous-chefs/nagios/wiki/config)
