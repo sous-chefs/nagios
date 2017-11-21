@@ -2,6 +2,11 @@ nagios Cookbook CHANGELOG
 =========================
 This file is used to list changes made in each version of the nagios cookbook.
 
+8.0.1 (21-11-2017)
+------------------
+### Improvement
+- Added option for 
+
 8.0.0 (19-09-2017)
 ------------------
 ### Breaking Changes
