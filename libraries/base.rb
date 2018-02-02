@@ -157,6 +157,7 @@ class Nagios
     def get_definition(options, group)
       return nil if to_s == '*'
       return nil if to_s == 'null'
+      return nil if to_s.start_with? '!'
       d = ["define #{group} {"]
       d += get_definition_options(options)
       d += ['}']
