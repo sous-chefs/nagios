@@ -314,6 +314,7 @@ Copyright 2009, 37signals
 Copyright 2009-2017, Chef Software, Inc
 Copyright 2012, Webtrends Inc.
 Copyright 2013-2014, Limelight Networks, Inc.
+Copyright 2018, Oracle and/or its affiliates. All rights reserved
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
