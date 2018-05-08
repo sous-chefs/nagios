@@ -1,6 +1,15 @@
-nagios Cookbook CHANGELOG
-=========================
+# nagios Cookbook CHANGELOG
+
 This file is used to list changes made in each version of the nagios cookbook.
+
+## 8.1.0 (May 8, 2018)
+
+- Resolve incompatibilities with the latest PHP cookbook by installing php-gd
+- Resolve multiple cookstyle warnings
+- Use the build_essential resource instead of the build-essential cookbook so we can skip the cookbook entirely when on Chef 14
+- Clarify in the readme that this cookbook requires RHEL 7+
+- Skip definitions whose name starts with "!"
+- Add a node['nagios']['pagerduty']['proxy_url'] attribute
 
 8.0.0 (19-09-2017)
 ------------------
