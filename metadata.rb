@@ -16,8 +16,9 @@ depends 'apache2', '>= 4.0'
 depends 'nginx', '>= 7.0'
 depends 'php-fpm', '>= 0.7.9'
 depends 'zap', '>= 0.6.0'
+depends 'build-essential', '>= 5.0'
 
-%w(build-essential php yum-epel nrpe).each do |cb|
+%w(php yum-epel nrpe).each do |cb|
   depends cb
 end
 
