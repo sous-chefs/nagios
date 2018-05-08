@@ -100,18 +100,18 @@ nagios_bags = NagiosDataBags.new
 pagerduty_contacts = nagios_bags.get('nagios_pagerduty')
 
 nagios_command 'notify-service-by-pagerduty' do
-  unless node['nagios']['pagerduty']['proxy_url'].nil?
-    options 'command_line' => ::File.join(node['nagios']['plugin_dir'], 'notify_pagerduty.pl') + ' enqueue -f pd_nagios_object=service -f pd_description="$HOSTNAME$ : $SERVICEDESC$"' + " --proxy #{node['nagios']['pagerduty']['proxy_url']}"
-  else
+  if node['nagios']['pagerduty']['proxy_url'].nil?
     options 'command_line' => ::File.join(node['nagios']['plugin_dir'], 'notify_pagerduty.pl') + ' enqueue -f pd_nagios_object=service -f pd_description="$HOSTNAME$ : $SERVICEDESC$"'
+  else
+    options 'command_line' => ::File.join(node['nagios']['plugin_dir'], 'notify_pagerduty.pl') + ' enqueue -f pd_nagios_object=service -f pd_description="$HOSTNAME$ : $SERVICEDESC$"' + " --proxy #{node['nagios']['pagerduty']['proxy_url']}"
   end
 end
 
 nagios_command 'notify-host-by-pagerduty' do
-  unless node['nagios']['pagerduty']['proxy_url'].nil?
-    options 'command_line' => ::File.join(node['nagios']['plugin_dir'], 'notify_pagerduty.pl') + ' enqueue -f pd_nagios_object=host -f pd_description="$HOSTNAME$ : $SERVICEDESC$"' + " --proxy #{node['nagios']['pagerduty']['proxy_url']}"
-  else
+  if node['nagios']['pagerduty']['proxy_url'].nil?
     options 'command_line' => ::File.join(node['nagios']['plugin_dir'], 'notify_pagerduty.pl') + ' enqueue -f pd_nagios_object=host -f pd_description="$HOSTNAME$ : $SERVICEDESC$"'
+  else
+    options 'command_line' => ::File.join(node['nagios']['plugin_dir'], 'notify_pagerduty.pl') + ' enqueue -f pd_nagios_object=host -f pd_description="$HOSTNAME$ : $SERVICEDESC$"' + " --proxy #{node['nagios']['pagerduty']['proxy_url']}"
   end
 end
 

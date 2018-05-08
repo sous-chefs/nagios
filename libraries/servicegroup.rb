@@ -80,7 +80,6 @@ class Nagios
         end
       end
     end
-    # rubocop:enable MethodLength
 
     def self.create(name)
       Nagios.instance.find(Nagios::Servicegroup.new(name))
@@ -134,7 +133,6 @@ class Nagios
       end
       convert_hostgroup_hash(hostgroup_hash)
     end
-    # rubocop:enable MethodLength
 
     def merge_members(obj)
       obj.members.each { |m| push(m) }
