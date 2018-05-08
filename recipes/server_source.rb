@@ -22,7 +22,8 @@
 # Package pre-reqs
 include_recipe 'build-essential'
 include_recipe 'php::default'
-include_recipe 'php::module_gd'
+
+package node['nagios']['php_gd_package']
 
 # the source install of nagios from this recipe does not include embedded perl support
 # so unless the user explicitly set the p1_file attribute, we want to clear it

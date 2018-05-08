@@ -215,6 +215,13 @@ default['nagios']['server']['nginx_dispatch']['cgi_url']  =
   'unix:/var/run/fcgiwrap.socket'
 default['nagios']['server']['nginx_dispatch']['php_url']  =
   'unix:/var/run/php-fpm-www.sock'
+default['nagios']['php_gd_package']                    =
+  case node['platform_family']
+  when 'rhel'
+    'php-gd'
+  else
+    'php5-gd'
+  end
 default['nagios']['server']['stop_apache']             = false
 default['nagios']['server']['normalize_hostname']      = false
 default['nagios']['server']['load_default_config']     = true
