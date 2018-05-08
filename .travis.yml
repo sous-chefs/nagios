@@ -1,5 +1,4 @@
 sudo: required
-dist: trusty
 
 addons:
   apt:
@@ -23,13 +22,14 @@ env:
   - INSTANCE=server-package-debian-8 CHEF_VERSION=13.0.118
   - INSTANCE=server-package-debian-8
   - INSTANCE=server-package-ubuntu-1404
-  - INSTANCE=server-package-ubuntu-1604 CHEF_VERSION=13.0.118 
+  - INSTANCE=server-package-ubuntu-1604 CHEF_VERSION=13.0.118
   - INSTANCE=server-package-ubuntu-1604
   - INSTANCE=nginx-debian-7
   - INSTANCE=nginx-debian-8
   - INSTANCE=nginx-centos-7
   - INSTANCE=nginx-ubuntu-1404
   - INSTANCE=nginx-ubuntu-1604
+
 
 before_script:
   - sudo iptables -L DOCKER || ( echo "DOCKER iptables chain missing" ; sudo iptables -N DOCKER )
@@ -41,9 +41,6 @@ before_script:
 script: KITCHEN_LOCAL_YAML=.kitchen.dokken.yml kitchen verify ${INSTANCE}
 
 matrix:
-  allow_failures:
-    - env: INSTANCE=server-package-debian-8 CHEF_VERSION=13.0.118 
-    - env: INSTANCE=server-package-ubuntu-1604 CHEF_VERSION=13.0.118 
   include:
     - script:
       - chef exec delivery local all
