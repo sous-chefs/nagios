@@ -19,7 +19,6 @@ services: docker
 
 env:
   matrix:
-  ## - INSTANCE=server-package-centos-6
   - INSTANCE=server-package-centos-7
   - INSTANCE=server-package-debian-8 CHEF_VERSION=12.19.36
   - INSTANCE=server-package-debian-8
@@ -28,7 +27,6 @@ env:
   - INSTANCE=server-package-ubuntu-1604
   - INSTANCE=nginx-debian-7
   - INSTANCE=nginx-debian-8
-  - INSTANCE=nginx-centos-6
   - INSTANCE=nginx-centos-7
   - INSTANCE=nginx-ubuntu-1404
   - INSTANCE=nginx-ubuntu-1604
