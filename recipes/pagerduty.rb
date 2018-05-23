@@ -139,7 +139,7 @@ pagerduty_contacts.each do |contact|
             'host_notification_options'     => contact['host_notification_options'] || 'd,r',
             'service_notification_commands' => 'notify-service-by-pagerduty',
             'host_notification_commands'    => 'notify-host-by-pagerduty',
-            'pager'                         => contact['key'] || contact['pagerduty_key'],
+            'pager'                         => contact['key'] || contact['pagerduty_key'] || node['nagios']['pagerduty']['key'],
             'contactgroups'                 => contact['contactgroups']
   end
 end
