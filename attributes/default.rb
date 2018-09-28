@@ -215,6 +215,13 @@ default['nagios']['server']['nginx_dispatch']['cgi_url']  =
   'unix:/var/run/fcgiwrap.socket'
 default['nagios']['server']['nginx_dispatch']['php_url']  =
   'unix:/var/run/php-fpm-www.sock'
+default['nagios']['php_gd_package']                    =
+  case node['platform_family']
+  when 'rhel'
+    'php-gd'
+  else
+    'php5-gd'
+  end
 default['nagios']['server']['stop_apache']             = false
 default['nagios']['server']['normalize_hostname']      = false
 default['nagios']['server']['load_default_config']     = true
@@ -240,6 +247,7 @@ default['nagios']['cgi']['lock_author_names']                        = 1
 default['nagios']['pagerduty']['script_url'] = 'https://raw.github.com/PagerDuty/pagerduty-nagios-pl/master/pagerduty_nagios.pl'
 default['nagios']['pagerduty']['service_notification_options'] = 'w,u,c,r'
 default['nagios']['pagerduty']['host_notification_options'] = 'd,r'
+default['nagios']['pagerduty']['proxy_url'] = nil
 
 # atrributes for setting broker lines
 default['nagios']['brokers'] = {}

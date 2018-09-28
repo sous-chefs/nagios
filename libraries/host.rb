@@ -207,7 +207,6 @@ class Nagios
         end
       end
     end
-    # rubocop:enable MethodLength
 
     def self.create(name)
       Nagios.instance.find(Nagios::Host.new(name))
@@ -399,7 +398,6 @@ class Nagios
         'register'                     => 'register',
       }
     end
-    # rubocop:enable MethodLength
 
     def merge_members(obj)
       obj.parents.each { |m| push(m) }

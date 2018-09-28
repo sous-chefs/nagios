@@ -1,0 +1,23 @@
+Lint/DuplicateMethods:
+  Exclude:
+    - 'libraries/base.rb'
+    - 'libraries/command.rb'
+    - 'libraries/contact.rb'
+    - 'libraries/host.rb'
+    - 'libraries/hostdependency.rb'
+    - 'libraries/hostescalation.rb'
+    - 'libraries/nagios.rb'
+    - 'libraries/service.rb'
+    - 'libraries/servicedependency.rb'
+    - 'libraries/serviceescalation.rb'
+    - 'libraries/timeperiod.rb'
+
+Lint/Void:
+  Exclude:
+    - 'libraries/command.rb'
+
+Style/IfUnlessModifier:
+  Enabled: false
+
+Metrics/LineLength:
+  Max: 319

@@ -114,7 +114,6 @@ class Nagios
         end
       end
     end
-    # rubocop:enable MethodLength
 
     def to_s
       timeperiod_name

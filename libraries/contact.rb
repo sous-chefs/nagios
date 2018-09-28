@@ -119,7 +119,6 @@ class Nagios
         end
       end
     end
-    # rubocop:enable MethodLength
 
     def service_notification_commands
       get_commands(@service_notification_commands)

@@ -116,7 +116,6 @@ class Nagios
         @escalation_period = nil if @escalation_period == obj
       end
     end
-    # rubocop:enable MethodLength
 
     def to_s
       host_description
@@ -160,7 +159,6 @@ class Nagios
         'register'              => 'register',
       }
     end
-    # rubocop:enable MethodLength
 
     def merge_members(obj)
       obj.contacts.each { |m| push(m) }
@@ -170,4 +168,3 @@ class Nagios
     end
   end
 end
-# rubocop:enable ClassLength

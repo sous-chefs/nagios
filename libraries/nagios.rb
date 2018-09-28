@@ -64,7 +64,6 @@ class Nagios
     @host_name_attribute = 'hostname'
     @normalize_hostname  = false
   end
-  # rubocop:enable MethodLength
 
   def commands
     Hash[@commands.sort]
@@ -108,7 +107,6 @@ class Nagios
       @resources.delete(key)
     end
   end
-  # rubocop:enable MethodLength
 
   def find(obj)
     case obj
@@ -136,7 +134,6 @@ class Nagios
       find_object(obj, @resources)
     end
   end
-  # rubocop:enable MethodLength
 
   def hosts
     Hash[@hosts.sort]
@@ -189,7 +186,6 @@ class Nagios
       raise
     end
   end
-  # rubocop:enable MethodLength
 
   def timeperiods
     Hash[@timeperiods.sort]
@@ -273,7 +269,6 @@ class Nagios
       host.push(hg)
     end
   end
-  # rubocop:enable MethodLength
 
   def push_object(obj)
     object = find(obj.class.new(obj.to_s))
