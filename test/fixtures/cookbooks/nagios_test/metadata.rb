@@ -6,5 +6,5 @@ description      'Contains Nagios configuration items'
 long_description 'Creates configuration items for nagios in order for testing with test-kitchen.'
 version          '0.1.1'
 depends          'nagios'
-depends          'build-essential'
+
 depends          'fcgiwrap_rpm'

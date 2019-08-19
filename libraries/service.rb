@@ -3,7 +3,7 @@
 # Cookbook:: nagios
 # Library:: service
 #
-# Copyright 2014, Sander Botman
+# Copyright:: 2014, Sander Botman
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -290,8 +290,6 @@ class Nagios
 
     # check the True/False options
     # default = nil
-
-    # rubocop:disable Naming/PredicateName
     def is_volatile=(arg)
       @is_volatile = check_bool(arg)
     end
@@ -394,49 +392,49 @@ class Nagios
 
     def config_options
       {
-        'name'                         => 'name',
-        'use'                          => 'use',
-        'service_description'          => 'service_description',
-        'host_name_list'               => 'host_name',
-        'hostgroup_name_list'          => 'hostgroup_name',
-        'servicegroups_list'           => 'servicegroups',
-        'display_name'                 => 'display_name',
-        'is_volatile'                  => 'is_volatile',
-        'check_command'                => 'check_command',
-        'initial_state'                => 'initial_state',
-        'max_check_attempts'           => 'max_check_attempts',
-        'check_interval'               => 'check_interval',
-        'retry_interval'               => 'retry_interval',
-        'active_checks_enabled'        => 'active_checks_enabled',
-        'passive_checks_enabled'       => 'passive_checks_enabled',
-        'check_period'                 => 'check_period',
-        'obsess_over_service'          => 'obsess_over_service',
-        'check_freshness'              => 'check_freshness',
-        'freshness_threshold'          => 'freshness_threshold',
-        'event_handler'                => 'event_handler',
-        'event_handler_enabled'        => 'event_handler_enabled',
-        'low_flap_threshold'           => 'low_flap_threshold',
-        'high_flap_threshold'          => 'high_flap_threshold',
-        'flap_detection_enabled'       => 'flap_detection_enabled',
-        'flap_detection_options'       => 'flap_detection_options',
-        'process_perf_data'            => 'process_perf_data',
-        'retain_status_information'    => 'retain_status_information',
+        'name' => 'name',
+        'use' => 'use',
+        'service_description' => 'service_description',
+        'host_name_list' => 'host_name',
+        'hostgroup_name_list' => 'hostgroup_name',
+        'servicegroups_list' => 'servicegroups',
+        'display_name' => 'display_name',
+        'is_volatile' => 'is_volatile',
+        'check_command' => 'check_command',
+        'initial_state' => 'initial_state',
+        'max_check_attempts' => 'max_check_attempts',
+        'check_interval' => 'check_interval',
+        'retry_interval' => 'retry_interval',
+        'active_checks_enabled' => 'active_checks_enabled',
+        'passive_checks_enabled' => 'passive_checks_enabled',
+        'check_period' => 'check_period',
+        'obsess_over_service' => 'obsess_over_service',
+        'check_freshness' => 'check_freshness',
+        'freshness_threshold' => 'freshness_threshold',
+        'event_handler' => 'event_handler',
+        'event_handler_enabled' => 'event_handler_enabled',
+        'low_flap_threshold' => 'low_flap_threshold',
+        'high_flap_threshold' => 'high_flap_threshold',
+        'flap_detection_enabled' => 'flap_detection_enabled',
+        'flap_detection_options' => 'flap_detection_options',
+        'process_perf_data' => 'process_perf_data',
+        'retain_status_information' => 'retain_status_information',
         'retain_nonstatus_information' => 'retain_nonstatus_information',
-        'notification_interval'        => 'notification_interval',
-        'first_notification_delay'     => 'first_notification_delay',
-        'notification_period'          => 'notification_period',
-        'notification_options'         => 'notification_options',
-        'notifications_enabled'        => 'notifications_enabled',
-        'parallelize_check'            => 'parallelize_check',
-        'contacts_list'                => 'contacts',
-        'contact_groups_list'          => 'contact_groups',
-        'stalking_options'             => 'stalking_options',
-        'notes'                        => 'notes',
-        'notes_url'                    => 'notes_url',
-        'action_url'                   => 'action_url',
-        'icon_image'                   => 'icon_image',
-        'icon_image_alt'               => 'icon_image_alt',
-        'register'                     => 'register',
+        'notification_interval' => 'notification_interval',
+        'first_notification_delay' => 'first_notification_delay',
+        'notification_period' => 'notification_period',
+        'notification_options' => 'notification_options',
+        'notifications_enabled' => 'notifications_enabled',
+        'parallelize_check' => 'parallelize_check',
+        'contacts_list' => 'contacts',
+        'contact_groups_list' => 'contact_groups',
+        'stalking_options' => 'stalking_options',
+        'notes' => 'notes',
+        'notes_url' => 'notes_url',
+        'action_url' => 'action_url',
+        'icon_image' => 'icon_image',
+        'icon_image_alt' => 'icon_image_alt',
+        'register' => 'register',
       }
     end
 
