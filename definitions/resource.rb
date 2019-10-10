@@ -1,9 +1,9 @@
 #
 # Author:: Sander Botman <sbotman@schubergphilis.com>
-# Cookbook Name : nagios
-# Definition    : resource
+# Cookbook:: : nagios
+# Definition::   : resource
 #
-# Copyright 2015, Sander Botman
+# Copyright:: 2015, Sander Botman
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.

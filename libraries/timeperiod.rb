@@ -3,7 +3,7 @@
 # Cookbook:: nagios
 # Library:: timeperiod
 #
-# Copyright 2014, Sander Botman
+# Copyright:: 2014, Sander Botman
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -146,8 +146,8 @@ class Nagios
     def config_options
       {
         'timeperiod_name' => 'timeperiod_name',
-        'alias'           => 'alias',
-        'exclude'         => 'exclude',
+        'alias' => 'alias',
+        'exclude' => 'exclude',
       }
     end
 

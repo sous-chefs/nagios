@@ -11,7 +11,7 @@ if platform_family?('rhel', 'amazon')
     home '/home/vagrant'
   end
 
-  include_recipe 'build-essential'
+  build_essential 'install compilation tools'
   include_recipe 'yum-epel'
   include_recipe 'fcgiwrap_rpm::default'
 

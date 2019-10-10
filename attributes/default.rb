@@ -4,8 +4,8 @@
 # Cookbook:: nagios
 # Attributes:: default
 #
-# Copyright 2011-2016, Chef Software, Inc.
-# Copyright 2013-2014, Limelight Networks, Inc
+# Copyright:: 2011-2016, Chef Software, Inc.
+# Copyright:: 2013-2014, Limelight Networks, Inc
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -53,7 +53,7 @@ when 'rhel', 'amazon'
   default['nagios']['log_dir']       = '/var/log/nagios'
   default['nagios']['cache_dir']     = '/var/log/nagios'
   default['nagios']['state_dir']     = '/var/log/nagios'
-  default['nagios']['run_dir'] = if node['platform'] == 'centos' && node['platform_version'].to_i < 7
+  default['nagios']['run_dir'] = if platform?('centos') && node['platform_version'].to_i < 7
                                    '/var/run'
                                  else
                                    '/var/run/nagios'
