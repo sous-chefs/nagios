@@ -67,7 +67,7 @@ default['nagios']['conf']['max_concurrent_checks']                       = '0'
 default['nagios']['conf']['check_result_reaper_frequency']               = '10'
 default['nagios']['conf']['max_check_result_reaper_time']                = '30'
 default['nagios']['conf']['check_result_path']                           =
-  if platform?('ubuntu') && node['platform_version'].to_i >= 7
+  if platform?('centos') && node['platform_version'].to_i >= 7
     "#{node['nagios']['home']}/checkresults"
   else
     "#{node['nagios']['state_dir']}/spool/checkresults"
@@ -159,8 +159,8 @@ default['nagios']['conf']['service_perfdata_file_processing_command']    = nil
 default['nagios']['conf']['broker_module']                               = nil
 
 if node['nagios']['server']['install_method'] == 'source' ||
-   (platform?('ubuntu') && node['platform_version'].to_i >= 6) ||
-   (platform?('ubuntu') && node['platform_version'].to_i >= 7) ||
+   (platform?('rhel') && node['platform_version'].to_i >= 6) ||
+   (platform?('debian') && node['platform_version'].to_i >= 7) ||
    (platform?('ubuntu') && node['platform_version'].to_f >= 14.04)
   default['nagios']['conf']['allow_empty_hostgroup_assignment'] = '1'
   default['nagios']['conf']['service_check_timeout_state']      = 'c'
