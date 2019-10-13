@@ -4,7 +4,7 @@
 # Cookbook:: nagios
 # Recipe:: pagerduty
 #
-# Copyright 2011, CustomInk LLC
+# Copyright:: 2011, CustomInk LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -117,14 +117,14 @@ end
 
 unless node['nagios']['pagerduty']['key'].nil? || node['nagios']['pagerduty']['key'].empty?
   nagios_contact 'pagerduty' do
-    options 'alias'                         => 'PagerDuty Pseudo-Contact',
-            'service_notification_period'   => '24x7',
-            'host_notification_period'      => '24x7',
-            'service_notification_options'  => node['nagios']['pagerduty']['service_notification_options'],
-            'host_notification_options'     => node['nagios']['pagerduty']['host_notification_options'],
+    options 'alias' => 'PagerDuty Pseudo-Contact',
+            'service_notification_period' => '24x7',
+            'host_notification_period' => '24x7',
+            'service_notification_options' => node['nagios']['pagerduty']['service_notification_options'],
+            'host_notification_options' => node['nagios']['pagerduty']['host_notification_options'],
             'service_notification_commands' => 'notify-service-by-pagerduty',
-            'host_notification_commands'    => 'notify-host-by-pagerduty',
-            'pager'                         => node['nagios']['pagerduty']['key']
+            'host_notification_commands' => 'notify-host-by-pagerduty',
+            'pager' => node['nagios']['pagerduty']['key']
   end
 end
 
@@ -132,15 +132,15 @@ pagerduty_contacts.each do |contact|
   name = contact['contact'] || contact['id']
 
   nagios_contact name do
-    options 'alias'                         => "PagerDuty Pseudo-Contact #{name}",
-            'service_notification_period'   => contact['service_notification_period'] || '24x7',
-            'host_notification_period'      => contact['host_notification_period'] || '24x7',
-            'service_notification_options'  => contact['service_notification_options'] || 'w,u,c,r',
-            'host_notification_options'     => contact['host_notification_options'] || 'd,r',
+    options 'alias' => "PagerDuty Pseudo-Contact #{name}",
+            'service_notification_period' => contact['service_notification_period'] || '24x7',
+            'host_notification_period' => contact['host_notification_period'] || '24x7',
+            'service_notification_options' => contact['service_notification_options'] || 'w,u,c,r',
+            'host_notification_options' => contact['host_notification_options'] || 'd,r',
             'service_notification_commands' => 'notify-service-by-pagerduty',
-            'host_notification_commands'    => 'notify-host-by-pagerduty',
-            'pager'                         => contact['key'] || contact['pagerduty_key'],
-            'contactgroups'                 => contact['contactgroups']
+            'host_notification_commands' => 'notify-host-by-pagerduty',
+            'pager' => contact['key'] || contact['pagerduty_key'],
+            'contactgroups' => contact['contactgroups']
   end
 end
 
