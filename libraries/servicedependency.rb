@@ -3,7 +3,7 @@
 # Cookbook:: nagios
 # Library:: servicedependency
 #
-# Copyright 2014, Sander Botman
+# Copyright:: 2014, Sander Botman
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -186,18 +186,18 @@ class Nagios
 
     def config_options
       {
-        'dependency_period'                => 'dependency_period',
-        'dependent_host_name_list'         => 'dependent_host_name',
-        'dependent_hostgroup_name_list'    => 'dependent_hostgroup_name',
+        'dependency_period' => 'dependency_period',
+        'dependent_host_name_list' => 'dependent_host_name',
+        'dependent_hostgroup_name_list' => 'dependent_hostgroup_name',
         'dependent_servicegroup_name_list' => 'dependent_servicegroup_name',
-        'service_description'              => 'service_description',
-        'servicegroup_name_list'           => 'servicegroup_name',
-        'dependent_service_description'    => 'dependent_service_description',
-        'host_name_list'                   => 'host_name',
-        'hostgroup_name_list'              => 'hostgroup_name',
-        'inherits_parent'                  => 'inherits_parent',
-        'execution_failure_criteria'       => 'execution_failure_criteria',
-        'notification_failure_criteria'    => 'notification_failure_criteria',
+        'service_description' => 'service_description',
+        'servicegroup_name_list' => 'servicegroup_name',
+        'dependent_service_description' => 'dependent_service_description',
+        'host_name_list' => 'host_name',
+        'hostgroup_name_list' => 'hostgroup_name',
+        'inherits_parent' => 'inherits_parent',
+        'execution_failure_criteria' => 'execution_failure_criteria',
+        'notification_failure_criteria' => 'notification_failure_criteria',
       }
     end
 

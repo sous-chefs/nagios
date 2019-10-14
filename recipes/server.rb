@@ -4,10 +4,10 @@
 # Author:: Nathan Haneysmith <nathan@chef.io>
 # Author:: Seth Chisamore <schisamo@chef.io>
 # Author:: Tim Smith <tsmith@chef.io>
-# Cookbook Name:: nagios
+# Cookbook:: nagios
 # Recipe:: server
 #
-# Copyright 2009, 37signals
+# Copyright:: 2009, 37signals
 # Copyright 2009-2016, Chef Software, Inc.
 # Copyright 2013-2014, Limelight Networks, Inc.
 #

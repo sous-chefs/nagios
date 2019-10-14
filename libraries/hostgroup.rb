@@ -3,7 +3,7 @@
 # Cookbook:: nagios
 # Library:: hostgroup
 #
-# Copyright 2014, Sander Botman
+# Copyright:: 2014, Sander Botman
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -96,16 +96,16 @@ class Nagios
 
     def config_options
       {
-        'name'                   => 'name',
-        'use'                    => 'use',
-        'hostgroup_name'         => 'hostgroup_name',
-        'members_list'           => 'members',
+        'name' => 'name',
+        'use' => 'use',
+        'hostgroup_name' => 'hostgroup_name',
+        'members_list' => 'members',
         'hostgroup_members_list' => 'hostgroup_members',
-        'alias'                  => 'alias',
-        'notes'                  => 'notes',
-        'notes_url'              => 'notes_url',
-        'action_url'             => 'action_url',
-        'register'               => 'register',
+        'alias' => 'alias',
+        'notes' => 'notes',
+        'notes_url' => 'notes_url',
+        'action_url' => 'action_url',
+        'register' => 'register',
       }
     end
 

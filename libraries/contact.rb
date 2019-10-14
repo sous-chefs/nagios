@@ -3,7 +3,7 @@
 # Cookbook:: nagios
 # Library:: contact
 #
-# Copyright 2014, Sander Botman
+# Copyright:: 2014, Sander Botman
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -198,26 +198,26 @@ class Nagios
 
     def config_options
       {
-        'name'                          => 'name',
-        'use'                           => 'use',
-        'contact_name'                  => 'contact_name',
-        'contactgroups_list'            => 'contactgroups',
-        'alias'                         => 'alias',
-        'host_notifications_enabled'    => 'host_notifications_enabled',
+        'name' => 'name',
+        'use' => 'use',
+        'contact_name' => 'contact_name',
+        'contactgroups_list' => 'contactgroups',
+        'alias' => 'alias',
+        'host_notifications_enabled' => 'host_notifications_enabled',
         'service_notifications_enabled' => 'service_notifications_enabled',
-        'host_notification_period'      => 'host_notification_period',
-        'service_notification_period'   => 'service_notification_period',
-        'host_notification_options'     => 'host_notification_options',
-        'service_notification_options'  => 'service_notification_options',
-        'host_notification_commands'    => 'host_notification_commands',
+        'host_notification_period' => 'host_notification_period',
+        'service_notification_period' => 'service_notification_period',
+        'host_notification_options' => 'host_notification_options',
+        'service_notification_options' => 'service_notification_options',
+        'host_notification_commands' => 'host_notification_commands',
         'service_notification_commands' => 'service_notification_commands',
-        'email'                         => 'email',
-        'pager'                         => 'pager',
-        'addressx'                      => 'addressx',
-        'can_submit_commands'           => 'can_submit_commands',
-        'retain_status_information'     => 'retain_status_information',
-        'retain_nonstatus_information'  => 'retain_nonstatus_information',
-        'register'                      => 'register',
+        'email' => 'email',
+        'pager' => 'pager',
+        'addressx' => 'addressx',
+        'can_submit_commands' => 'can_submit_commands',
+        'retain_status_information' => 'retain_status_information',
+        'retain_nonstatus_information' => 'retain_nonstatus_information',
+        'register' => 'register',
       }
     end
 
