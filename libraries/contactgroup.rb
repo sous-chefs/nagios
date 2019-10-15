@@ -3,7 +3,7 @@
 # Cookbook:: nagios
 # Library:: contactgroup
 #
-# Copyright 2014, Sander Botman
+# Copyright:: 2014, Sander Botman
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -93,13 +93,13 @@ class Nagios
 
     def config_options
       {
-        'name'                      => 'name',
-        'use'                       => 'use',
-        'contactgroup_name'         => 'contactgroup_name',
-        'members_list'              => 'members',
+        'name' => 'name',
+        'use' => 'use',
+        'contactgroup_name' => 'contactgroup_name',
+        'members_list' => 'members',
         'contactgroup_members_list' => 'contactgroup_members',
-        'alias'                     => 'alias',
-        'register'                  => 'register',
+        'alias' => 'alias',
+        'register' => 'register',
       }
     end
 

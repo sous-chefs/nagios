@@ -3,7 +3,7 @@
 # Cookbook:: nagios
 # Library:: servicegroup
 #
-# Copyright 2014, Sander Botman
+# Copyright:: 2014, Sander Botman
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -97,13 +97,13 @@ class Nagios
 
     def config_options
       {
-        'servicegroup_name'         => 'servicegroup_name',
-        'members_list'              => 'members',
+        'servicegroup_name' => 'servicegroup_name',
+        'members_list' => 'members',
         'servicegroup_members_list' => 'servicegroup_members',
-        'alias'                     => 'alias',
-        'notes'                     => 'notes',
-        'notes_url'                 => 'notes_url',
-        'action_url'                => 'action_url',
+        'alias' => 'alias',
+        'notes' => 'notes',
+        'notes_url' => 'notes_url',
+        'action_url' => 'action_url',
       }
     end
 

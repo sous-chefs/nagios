@@ -32,8 +32,8 @@ describe 'nagios::default' do
     expect(chef_run).to include_recipe('php::default')
   end
 
-  it 'should include the php::module_gd recipe' do
-    expect(chef_run).to include_recipe('php::module_gd')
+  it 'should install the php-gd package' do
+    expect(chef_run).to install_package('php-gd')
   end
 
   it 'should include source install dependency packages' do

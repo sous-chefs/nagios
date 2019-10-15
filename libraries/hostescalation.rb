@@ -3,7 +3,7 @@
 # Cookbook:: nagios
 # Library:: hostescalation
 #
-# Copyright 2014, Sander Botman
+# Copyright:: 2014, Sander Botman
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -144,19 +144,19 @@ class Nagios
 
     def config_options
       {
-        'name'                  => 'name',
-        'use'                   => 'use',
-        'host_description'      => nil,
-        'contacts_list'         => 'contacts',
-        'contact_groups_list'   => 'contact_groups',
-        'escalation_period'     => 'escalation_period',
-        'host_name_list'        => 'host_name',
-        'hostgroup_name_list'   => 'hostgroup_name',
-        'escalation_options'    => 'escalation_options',
-        'first_notification'    => 'first_notification',
-        'last_notification'     => 'last_notification',
+        'name' => 'name',
+        'use' => 'use',
+        'host_description' => nil,
+        'contacts_list' => 'contacts',
+        'contact_groups_list' => 'contact_groups',
+        'escalation_period' => 'escalation_period',
+        'host_name_list' => 'host_name',
+        'hostgroup_name_list' => 'hostgroup_name',
+        'escalation_options' => 'escalation_options',
+        'first_notification' => 'first_notification',
+        'last_notification' => 'last_notification',
         'notification_interval' => 'notification_interval',
-        'register'              => 'register',
+        'register' => 'register',
       }
     end
 
