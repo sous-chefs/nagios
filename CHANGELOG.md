@@ -2,6 +2,10 @@
 
 This file is used to list changes made in each version of the nagios cookbook.
 
+## UNRELEASED
+
+- Require Chef Infra Client 14.0+ and remove the need for the build-essential cookbook depenedency
+
 ## 8.1.0 (May 8, 2018)
 
 - Resolve incompatibilities with the latest PHP cookbook by installing php-gd
@@ -72,7 +76,7 @@ This file is used to list changes made in each version of the nagios cookbook.
 - #463 Adding '*' and 'null' as options.
 - #470 Adding option for wrapper cookbooks.
 - #470 Adding result_limit to cgi.cfg.
- 
+
 7.2.4
 -----
 ### Bug
@@ -111,8 +115,8 @@ This file is used to list changes made in each version of the nagios cookbook.
 - Fixing the services databag filter on environment.
 
 ### Improvement
-- Moving the LWRP's providers into definitions.  
-  This will remove some extra complexity and output will be  
+- Moving the LWRP's providers into definitions.
+  This will remove some extra complexity and output will be
   much nicer and debugging will be easier during the chef-converge.
 
 7.1.6
@@ -135,7 +139,7 @@ This file is used to list changes made in each version of the nagios cookbook.
 ### Improvement
 - Made test config os (in)dependent.
 - Added zap for config file cleanup.
-- Added encrypted user databag support. 
+- Added encrypted user databag support.
 - Added extra configuration tests.
 - Added gitter badge.
 
