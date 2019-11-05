@@ -79,7 +79,7 @@ when 'debian'
   default['nagios']['server']['install_method'] = 'package'
   default['nagios']['server']['service_name']   = 'nagios3'
   default['nagios']['server']['mail_command']   = '/usr/bin/mail'
-  default['nagios']['cgi-path'] = "/cgi-bin/#{node['nagios']['server']['service_name']}"
+  default['nagios']['cgi-path'] = '/cgi-bin/nagios3'
 when 'rhel', 'amazon'
   default['nagios']['cgi-path'] = '/nagios/cgi-bin/'
   default['nagios']['server']['install_method'] = 'package'
