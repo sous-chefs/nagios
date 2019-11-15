@@ -53,7 +53,7 @@ when 'rhel', 'amazon'
   default['nagios']['log_dir']       = '/var/log/nagios'
   default['nagios']['cache_dir']     = '/var/log/nagios'
   default['nagios']['state_dir']     = '/var/log/nagios'
-  default['nagios']['run_dir'] = if node['platform'] == 'centos' && node['platform_version'].to_i < 7
+  default['nagios']['run_dir'] = if platform?('centos') && node['platform_version'].to_i < 7
                                    '/var/run'
                                  else
                                    '/var/run/nagios'
