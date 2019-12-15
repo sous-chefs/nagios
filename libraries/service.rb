@@ -293,7 +293,6 @@ class Nagios
     def is_volatile=(arg)
       @is_volatile = check_bool(arg)
     end
-    # rubocop:enable Naming/PredicateName
 
     def active_checks_enabled=(arg)
       @active_checks_enabled = check_bool(arg)
