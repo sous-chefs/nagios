@@ -106,17 +106,17 @@ class Nagios
       return if obj == self
       case obj
       when Nagios::Host
-        if @host_name.keys?(obj.to_s)
+        if @host_name.key?(obj.to_s)
           pop_object(obj, @host_name)
           pop(self, obj)
         end
       when Nagios::Hostgroup
-        if @host_name.keys?(obj.to_s)
+        if @host_name.key?(obj.to_s)
           pop_object(obj, @hostgroup_name)
           pop(self, obj)
         end
       when Nagios::Servicegroup
-        if @host_name.keys?(obj.to_s)
+        if @host_name.key?(obj.to_s)
           pop_object(obj, @servicegroup_name)
           pop(self, obj)
         end
@@ -129,17 +129,17 @@ class Nagios
       return if obj == self
       case obj
       when Nagios::Host
-        if @dependent_host_name.keys?(obj.to_s)
+        if @dependent_host_name.key?(obj.to_s)
           pop_object(obj, @dependent_host_name)
           obj.pop(self)
         end
       when Nagios::Hostgroup
-        if @dependent_hostgroup_name.keys?(obj.to_s)
+        if @dependent_hostgroup_name.key?(obj.to_s)
           pop_object(obj, @dependent_hostgroup_name)
           obj.pop(self)
         end
       when Nagios::Servicegroup
-        if @dependent_servicegroup_name.keys?(obj.to_s)
+        if @dependent_servicegroup_name.key?(obj.to_s)
           pop_object(obj, @dependent_servicegroup_name)
           obj.pop(self)
         end

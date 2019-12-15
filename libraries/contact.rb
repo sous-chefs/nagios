@@ -105,7 +105,7 @@ class Nagios
       return if obj == self
       case obj
       when Nagios::Contactgroup
-        if @contactgroups.keys?(obj.to_s)
+        if @contactgroups.key?(obj.to_s)
           pop_object(obj, @contactgroups)
           pop(self, obj)
         end
@@ -113,7 +113,7 @@ class Nagios
         @host_notification_period = nil if obj == @host_notification_period
         @service_notification_period = nil if obj == @service_notification_period
       when Nagios::CustomOption
-        if @custom_options.keys?(obj.to_s)
+        if @custom_options.key?(obj.to_s)
           pop_object(obj, @custom_options)
           pop(self, obj)
         end

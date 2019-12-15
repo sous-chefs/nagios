@@ -103,12 +103,12 @@ class Nagios
       return if obj == self
       case obj
       when Nagios::Timeperiod
-        if @exclude.keys?(obj.to_s)
+        if @exclude.key?(obj.to_s)
           pop_object(obj, @exclude)
           pop(self, obj)
         end
       when Nagios::Timeperiodentry
-        if @periods.keys?(obj.to_s)
+        if @periods.key?(obj.to_s)
           pop_object(obj, @periods)
           pop(self, obj)
         end

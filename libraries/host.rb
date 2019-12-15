@@ -188,12 +188,12 @@ class Nagios
           obj.pop(self)
         end
       when Nagios::Contact
-        if @contacts.keys?(obj.to_s)
+        if @contacts.key?(obj.to_s)
           pop_object(obj, @contacts)
           obj.pop(self)
         end
       when Nagios::Contactgroup
-        if @contact_groups.keys?(obj.to_s)
+        if @contact_groups.key?(obj.to_s)
           pop_object(obj, @contact_groups)
           obj.pop(self)
         end
@@ -201,7 +201,7 @@ class Nagios
         @check_period = nil if @check_period == obj
         @notification_period = nil if @notification_period == obj
       when Nagios::CustomOption
-        if @custom_options.keys?(obj.to_s)
+        if @custom_options.key?(obj.to_s)
           pop_object(obj, @custom_options)
           obj.pop(self)
         end

@@ -73,12 +73,12 @@ class Nagios
       return if obj == self
       case obj
       when Nagios::Contact
-        if @members.keys?(obj.to_s)
+        if @members.key?(obj.to_s)
           pop_object(obj, @members)
           pop(self, obj)
         end
       when Nagios::Contactgroup
-        if @contactgroups_members.keys?(obj.to_s)
+        if @contactgroups_members.key?(obj.to_s)
           pop_object(obj, @contactgroup_members)
           pop(self, obj)
         end

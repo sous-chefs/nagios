@@ -69,12 +69,12 @@ class Nagios
       return if obj == self
       case obj
       when Nagios::Service
-        if @members.keys?(obj.to_s)
+        if @members.key?(obj.to_s)
           pop_object(obj, @members)
           pop(self, obj)
         end
       when Nagios::Servicegroup
-        if @servicegroup_members.keys?(obj.to_s)
+        if @servicegroup_members.key?(obj.to_s)
           pop_object(obj, @servicegroup_members)
           pop(self, obj)
         end
