@@ -5,6 +5,7 @@ This file is used to list changes made in each version of the nagios cookbook.
 ## UNRELEASED
 
 - Require Chef Infra Client 14.0+ and remove the need for the build-essential cookbook depenedency
+- Fix hash has no keys method
 
 ## 8.1.0 (May 8, 2018)
 
