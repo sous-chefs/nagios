@@ -6,6 +6,7 @@ This file is used to list changes made in each version of the nagios cookbook.
 
 - Require Chef Infra Client 14.0+ and remove the need for the build-essential cookbook depenedency
 - Fix hash has no keys method
+- Simplify platform detection logic in the attributes file
 
 ## 8.1.0 (May 8, 2018)
 
@@ -16,18 +17,21 @@ This file is used to list changes made in each version of the nagios cookbook.
 - Skip definitions whose name starts with "!"
 - Add a node['nagios']['pagerduty']['proxy_url'] attribute
 
-8.0.0 (19-09-2017)
-------------------
+## 8.0.0 (19-09-2017)
+
 ### Breaking Changes
+
 - #522 Drop support for RHEL 5
 - #531 Drop support for Fedora OSes
 - #534 Drop support for CentOS 6, Fedora OS, FreeBSD
 - #541 Require Chef 12.9+
 
 ### Bug
+
 - #538 Update documentation for large installation tweaks and remove old attribute
 
 ### Improvement
+
 - #522 Resolve Foodcritic warnings, Chef 13 failures
 - #524 Update metadata maintainer and repo urls (moved to Sous Chefs)
 - #529 Allow SSL settings overrides
@@ -44,13 +48,15 @@ This file is used to list changes made in each version of the nagios cookbook.
 - #550 Fix tests to allow Chef 12 and Chef 13 to pass for now
 - #552 Switch from `chef_nginx` back to `nginx`
 
-7.2.7
------
+## 7.2.7
+
 ### Bug
+
 - #479 Fix bug preventing Nagios upgrade from source
 - #484 Fix #483, eventhandlers are now loaded before contacts
 
 ### Improvement
+
 - #475 Make service groups do negation for removed hostgroups
 - #481 Update lock file location for CentOS/Fedora
 - #488 Fix rubocop warnings
@@ -61,15 +67,17 @@ This file is used to list changes made in each version of the nagios cookbook.
 - #513 Fix rubocop warnings
 - #516 Multiple improvements to align with other community cookbooks (Add delivery config; Add GitHub issue templates; Fix suite names for Test Kitchen in Travis; Fix CookStyle warnings; Update README content; Update kitchen-dokken config and use delivery local instead of rake)
 
-7.2.6
------
+## 7.2.6
+
 ### Bug
+
 - #445 Fixing escalation_periods.
 - #448 Fixing service escalations.
 - #459 Fixing undefined method `push'.
 - #453 Fixing nodes without any tags.
 
 ### Improvement
+
 - #443 Merging the timezone settings.
 - #450 Allowing default guest user.
 - #454 Adding inheritance modifiers.
@@ -78,9 +86,10 @@ This file is used to list changes made in each version of the nagios cookbook.
 - #470 Adding option for wrapper cookbooks.
 - #470 Adding result_limit to cgi.cfg.
 
-7.2.4
------
+## 7.2.4
+
 ### Bug
+
 - #419 Fixing the nagios_interval logic and readme.
 - #421 Fixing loading of pagerduty databag contacts.
 - #430 Fixing loading of timeperiods out of databag with ducktyping.
@@ -88,65 +97,76 @@ This file is used to list changes made in each version of the nagios cookbook.
 - #441 Enable setting of Fixnum's within nagios configuration attributes.
 
 ### Improvement
+
 - #426 Added command: service_notify_by_sms_email.
 - #435 Adding pagerduty.cgi and needed packages
 
-7.2.2
------
+## 7.2.2
+
 ### Bug
+
 - Fixing the apache mpm breaking on centos.
 
-7.2.0
------
+## 7.2.0
+
 ### Testing
+
 - Added centos 7.1 for testing.
 - Added centos 5.11 for testing.
 - Added test-kitchen tests.
 
 ### Improvement
+
 - Added logic to exclude nodes based on tag.
 - Including apache2::mpm_prefork for apache.
 - Added the ability to specify command arguments within services.
 - Added the ability to specify custom options on hosts, contacts and services.
 
-7.1.8
------
+## 7.1.8
+
 ### Bug
+
 - Fixing the unmanagedhosts databag filter on environment.
 - Fixing the services databag filter on environment.
 
 ### Improvement
+
 - Moving the LWRP's providers into definitions.
   This will remove some extra complexity and output will be
   much nicer and debugging will be easier during the chef-converge.
 
-7.1.6
------
+## 7.1.6
+
 ### Bug
+
 - Fixing the nagios_[resource] provider delete action.
 
 ### Improvement
+
 - Added option for custom apache auth based on attribute.
 - Update cgi-path attibute on source install.
 - Update on test-kitchen tests.
 - Update on kitchen-vagrant version.
 
-7.1.4
------
+## 7.1.4
+
 ### Bug
+
 - AuthzLDAPAuthoritative is removed in Apache 2.4.
 - Fixed the pagerduty config by using LWRP.
 
 ### Improvement
+
 - Made test config os (in)dependent.
 - Added zap for config file cleanup.
 - Added encrypted user databag support.
 - Added extra configuration tests.
 - Added gitter badge.
 
-7.1.2
------
+## 7.1.2
+
 ### Bug
+
 - Fixed display of style sheets on Ubuntu 14.04+
 - service_check_timeout_state config option is now only set on modern Nagios releases.  This broke Ubuntu 10.04/12.04 service startup
 - Updated Test Kitchen release / added additional platforms for testing
@@ -154,52 +174,63 @@ This file is used to list changes made in each version of the nagios cookbook.
 - Fixed loading of node['nagios']['host_name_attribute']
 
 ### Improvement
+
 - Search queries in hostgroups data bag are now limited to the monitored environments if using node['nagios']['monitored_environments']
 
-7.1.0
------
+## 7.1.0
+
 ### Bug
+
 - Fixed class-type checking with duck-typing on update_options.
 - Fixed host_name_attribute on nagios model.
 
 ### Improvement
+
 - Moved all nagios configuration options within attributes.
 - Moved all nagios configuration attributes into separate file.
 
 ### Breaking Changes
+
 - With the change above we might introduced some config problems.
   Please check your attributes when upgrading.
 
 ### Development
+
 - Added extra kitchen serverspec tests.
 
-7.0.8
------
+## 7.0.8
+
 ### Bug
+
 - Fixed servicegroups members.
 - Chaned the order of data bag loading (commands first).
 
 ### Improvement
+
 - Cleanup of the internals of the nagios model.
 
 ### Development
+
 - Added kitchen serverspec tests.
 
-7.0.6
------
+## 7.0.6
+
 ### Bug
+
 - Fixed data bag import.(#346)
 - Fixed missing create method on Servicegroup object. (#348)
 - Fixed update_dependency_members for depedency objects.
 
-7.0.4
------
+## 7.0.4
+
 ### Bug
+
 - Fixed the order for resource.cfg population to be correct.
 
-7.0.2
------
+## 7.0.2
+
 ### Bug
+
 - Fixed the hardcoded cgi-bin path in server source.
 - Fixed contact_groups within load_default_config recipe.
 - Removed dead code from timeperiod.rb library.
@@ -207,20 +238,24 @@ This file is used to list changes made in each version of the nagios cookbook.
 - Making time formats less restrictive. (#336)
 
 ### Improvement
+
 - Make yum-epel recipe include optional via attribute.
 - Only allow_empty_hostgroup_assignment for Nagios versions >= 3.4.0
 
-7.0.0
------
+## 7.0.0
+
 ### Feature
+
 - Added providers for all nagios configuration objects.
 - Added wiki pages explaining the providers.
 - Added wiki pages explaining the databags.
 
 ### Development
+
 - Updated chefspec (4.2.0)
 
 ### Extra note
+
 - Please test this version before using it in production. Some logic and attributes have changes, so this might break your current setup.
 
 6.1.2
