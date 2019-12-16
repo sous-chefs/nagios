@@ -44,8 +44,7 @@ else
 end
 
 # platform specific directories
-case node['platform_family']
-when 'rhel', 'amazon'
+if platform_family?('rhel', 'amazon')
   default['nagios']['home']          = '/var/spool/nagios'
   default['nagios']['conf_dir']      = '/etc/nagios'
   default['nagios']['resource_dir']  = '/etc/nagios'
@@ -106,12 +105,11 @@ default['nagios']['ssl_ciphers']   = nil
 
 # nagios server name and webserver vname.  this can be changed to allow for the installation of icinga
 default['nagios']['server']['name'] = 'nagios'
-case node['platform_family']
-when 'rhel', 'amazon'
-  default['nagios']['server']['vname'] = 'nagios'
-else
-  default['nagios']['server']['vname'] = 'nagios3'
-end
+default['nagios']['server']['vname'] = if platform_family?('rhel', 'amazon')
+                                         'nagios'
+                                       else
+                                         'nagios3'
+                                       end
 
 # for server from source installation
 default['nagios']['server']['url']       = 'https://assets.nagios.com/downloads/nagioscore/releases/nagios-4.2.4.tar.gz'
@@ -121,8 +119,7 @@ default['nagios']['server']['patches']   = []
 default['nagios']['server']['patch_url'] = nil
 
 # for server from packages installation
-case node['platform_family']
-when 'rhel', 'amazon'
+if platform_family?('rhel', 'amazon')
   default['nagios']['server']['packages'] = %w(nagios nagios-plugins-nrpe)
   default['nagios']['server']['install_yum-epel'] = true
 else
@@ -198,15 +195,13 @@ default['nagios']['server']['web_server']              = 'apache'
 default['nagios']['server']['nginx_dispatch']['type']  = 'both'
 default['nagios']['server']['nginx_dispatch']['type']  = 'both'
 default['nagios']['server']['nginx_dispatch']['packages']  =
-  case node['platform_family']
-  when 'rhel'
+  if platform_family?('rhel')
     %w(spawn-fcgi fcgiwrap)
   else
     %w(fcgiwrap)
   end
 default['nagios']['server']['nginx_dispatch']['services']  =
-  case node['platform_family']
-  when 'rhel'
+  if platform_family?('rhel')
     %w(spawn-fcgi)
   else
     %w(fcgiwrap)
@@ -216,8 +211,7 @@ default['nagios']['server']['nginx_dispatch']['cgi_url']  =
 default['nagios']['server']['nginx_dispatch']['php_url']  =
   'unix:/var/run/php-fpm-www.sock'
 default['nagios']['php_gd_package']                    =
-  case node['platform_family']
-  when 'rhel'
+  if platform_family?('rhel')
     'php-gd'
   else
     'php5-gd'

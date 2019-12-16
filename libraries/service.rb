@@ -73,14 +73,14 @@ class Nagios
     def initialize(service_description)
       @service_description = service_description
       srv = service_description.split('!')
-      @check_command       = srv.shift
-      @arguments           = srv
-      @servicegroups       = {}
-      @contacts            = {}
-      @contact_groups      = {}
-      @hostgroups          = {}
-      @hosts               = {}
-      @custom_options      = {}
+      @check_command = srv.shift
+      @arguments = srv
+      @servicegroups = {}
+      @contacts = {}
+      @contact_groups = {}
+      @hostgroups = {}
+      @hosts = {}
+      @custom_options = {}
       super()
     end
 
