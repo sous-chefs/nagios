@@ -52,7 +52,7 @@ end
 
 file File.join(node['nginx']['dir'], 'conf.d', 'default.conf') do
   action :delete
-  notifies :reload, 'service[nginx]', :immediate
+  notifies :reload, 'service[nginx]', :immediately
 end
 
 template File.join(node['nginx']['dir'], 'sites-available', 'nagios3.conf') do
@@ -61,7 +61,7 @@ template File.join(node['nginx']['dir'], 'sites-available', 'nagios3.conf') do
   variables(
     allowed_ips: node['nagios']['allowed_ips'],
     cgi: %w(cgi both).include?(dispatch_type),
-    cgi_bin_dir: %w(rhel amazon).include?(node['platform_family']) ? '/usr/lib64' : '/usr/lib',
+    cgi_bin_dir: platform_family?('rhel', 'amazon') ? '/usr/lib64' : '/usr/lib',
     chef_env: node.chef_environment == '_default' ? 'default' : node.chef_environment,
     docroot: node['nagios']['docroot'],
     fqdn: node['fqdn'],
