@@ -7,7 +7,8 @@ This file is used to list changes made in each version of the nagios cookbook.
 - Require Chef Infra Client 14.0+ and remove the need for the build-essential cookbook depenedency
 - Fix hash has no keys method
 - Simplify platform detection logic in the attributes file
-- Migrate to actions
+- Migrate to Github Actions for testing
+- Use the :immediately timing not :immediate in notifications
 
 ## 8.1.0 (May 8, 2018)
 
