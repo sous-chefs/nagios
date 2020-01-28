@@ -34,6 +34,15 @@ default['nagios']['web_group'] = 'nagios'
 # Allow specifying which interface on clients to monitor (which IP address to monitor)
 default['nagios']['monitoring_interface'] = nil
 
+default['nagios']['htauth']['template_cookbook'] = 'nagios';
+default['nagios']['htauth']['template_file'] = 'htpasswd.users.erb';
+
+default['nagios']['nagios_config']['template_cookbook'] = 'nagios';
+default['nagios']['nagios_config']['template_file'] = 'nagios.cfg.erb';
+
+default['nagios']['resources']['template_cookbook'] = 'nagios';
+default['nagios']['resources']['template_file'] = 'resource.cfg.erb';
+
 case node['platform_family']
 when 'debian'
   default['nagios']['plugin_dir'] = '/usr/lib/nagios/plugins'

@@ -132,6 +132,12 @@ Example: `default['nagios']['conf']['cfg_dir'] = [ '/etc/nagios/conf.d' , '/usr/
 - `node['nagios']['templates']` - These set directives in the default host template. Unless explicitly overridden, they will be inherited by the host definitions for each discovered node and `nagios_unmanagedhosts` data bag. For more information about these directives, see the Nagios documentation for [host definitions](http://nagios.sourceforge.net/docs/3_0/objectdefinitions.html#host).
 - `node['nagios']['hosts_template']` - Host template you want to inherit properties/variables from, default 'server'. For more information, see the nagios doc on [Object Inheritance](http://nagios.sourceforge.net/docs/3_0/objectinheritance.html).
 - `node['nagios']['brokers']` - Hash of broker modules to include in the config. Hash key is the path to the broker module, the value is any parameters to pass to it.
+- `node['nagios']['nagios_config']['template_cookbook']` - Look for template file in the cookbook mentioned in the attribute. Defaults to nagios
+- `node['nagios']['resources']['template_cookbook']` - Look for template file in the cookbook mentioned in the attribute. Defaults to nagios
+- `node['nagios']['htauth']['template_cookbook']` - Look for template file in the cookbook mentioned in the attribute. Defaults to nagios
+- `node['nagios']['nagios_config']['template_file']` - Template file to be rendered. Defaults to nagios.cfg.erb
+- `node['nagios']['resources']['template_file']` - Template file to be rendered. Defaults to resource.cfg.erb
+- `node['nagios']['htauth']['template_file']` - Template file to be rendered. Defaults to htpasswd.users.erb
 
 - `node['nagios']['default_host']['flap_detection']` - Defaults to `true`.
 - `node['nagios']['default_host']['process_perf_data']` - Defaults to `false`.

@@ -52,7 +52,8 @@ if node['nagios']['server_auth_method'] == 'htauth'
   directory node['nagios']['conf_dir']
 
   template "#{node['nagios']['conf_dir']}/htpasswd.users" do
-    source 'htpasswd.users.erb'
+    cookbook node['nagios']['htauth']['template_cookbook']
+    source node['nagios']['htauth']['template_file']
     owner node['nagios']['user']
     group node['nagios']['web_group']
     mode '0640'
@@ -125,7 +126,8 @@ end
 
 nagios_conf node['nagios']['server']['name'] do
   config_subdir false
-  source 'nagios.cfg.erb'
+  cookbook node['nagios']['nagios_config']['template_cookbook']
+  source node['nagios']['nagios_config']['template_file']
   variables(nagios_config: node['nagios']['conf'])
 end
 
@@ -137,7 +139,8 @@ end
 # resource.cfg differs on RPM and tarball based systems
 if platform_family?('rhel', 'amazon')
   template "#{node['nagios']['resource_dir']}/resource.cfg" do
-    source 'resource.cfg.erb'
+    cookbook node['nagios']['resources']['template_cookbook']
+    source node['nagios']['resources']['template_file']
     owner node['nagios']['user']
     group node['nagios']['group']
     mode '0600'
