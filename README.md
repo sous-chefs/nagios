@@ -176,6 +176,8 @@ Example: `default['nagios']['conf']['cfg_dir'] = [ '/etc/nagios/conf.d' , '/usr/
 - `node['nagios']['cgi']['action_url_target']`                         - Defaults to '_blank'
 - `node['nagios']['cgi']['notes_url_target']`                          - Defaults to '_blank'
 - `node['nagios']['cgi']['lock_author_names']`                         - Defaults to 1
+- `node['nagios']['cgi']['template_cookbook']`                         - Look for template file in the cookbook mentioned in the attribute. Defaults to nagios
+- `node['nagios']['cgi']['template_file']`                             - Template file to be rendered. Defaults to cgi.cfg.erb
 
 ## Recipes
 

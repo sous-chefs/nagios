@@ -133,6 +133,8 @@ end
 
 nagios_conf 'cgi' do
   config_subdir false
+  cookbook node['nagios']['cgi']['template_cookbook']
+  source node['nagios']['cgi']['template_file']
   variables(nagios_service_name: nagios_service_name)
 end
 

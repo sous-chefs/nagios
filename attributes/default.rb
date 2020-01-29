@@ -43,6 +43,9 @@ default['nagios']['nagios_config']['template_file'] = 'nagios.cfg.erb';
 default['nagios']['resources']['template_cookbook'] = 'nagios';
 default['nagios']['resources']['template_file'] = 'resource.cfg.erb';
 
+default['nagios']['cgi']['template_cookbook'] = 'nagios';
+default['nagios']['cgi']['template_file'] = 'cgi.cfg.erb';
+
 case node['platform_family']
 when 'debian'
   default['nagios']['plugin_dir'] = '/usr/lib/nagios/plugins'
