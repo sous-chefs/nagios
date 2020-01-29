@@ -10,6 +10,7 @@ This file is used to list changes made in each version of the nagios cookbook
 - Migrate to Github Actions for testing
 - Use the :immediately timing not :immediate in notifications
 - Changed `['nagios']['pagerduty']['key']` from normal to default level attribute
+- Nginx is now a fuzzy match, `depends 'nginx', '~> 9.0'`
 - Apache2 is now a fuzzy match, `depends 'apache2', '~> 5.0'`
 
 ## 8.1.0 2018-05-08
