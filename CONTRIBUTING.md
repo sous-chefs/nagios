@@ -1,11 +1,21 @@
-If you would like to contribute, please open a pull request here on
-Github.
+# Contributing
 
-Please do not modify the version number in the metadata.rb. Also please
-do not update the CHANGELOG.md. Not all changes to the cookbook may
-be merged and released in the same versions. I will handle the version
-updates during the release process.
+## Branches
 
-If your change adds new attributes, data bags, or other features
-please document how to use the change in the cookbook's README.md file.
-Otherwise no one will know how to use your work.
+### `master` branch
+
+The master branch is the current committed changes. These changes may not yet be released although we try to release often.
+
+## Tags
+
+All releases are tagged in git. To see the releases available to you see the changelog or the tags directly.
+
+## Pull requests
+
+- <https://github.com/sous-chefs/nagios/pulls>
+
+## Issues
+
+Need to report an issue? Use the github issues:
+
+- <https://github.com/sous-chefs/nagios/issues>

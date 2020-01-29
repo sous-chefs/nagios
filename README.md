@@ -184,15 +184,15 @@ Searches are confined to the node's `chef_environment` unless multi-environment 
 The recipe does the following:
 
 1. Searches for users in 'users' databag belonging to a 'sysadmin' group, and authorizes them to access the Nagios web UI and also to receive notification e-mails.
-2. Searches all available roles/environments and builds a list which will become the Nagios hostgroups.
-3. Places nodes in Nagios hostgroups by role / environment membership.
-4. Installs various packages required for the server.
-5. Sets up configuration directories.
-6. Moves the package-installed Nagios configuration to a 'dist' directory.
-7. Disables the 000-default VirtualHost present on Debian/Ubuntu Apache2 package installations.
-8. Templates configuration files for services, contacts, contact groups, templates, hostgroups and hosts.
-9. Enables the Nagios web UI.
-10. Starts the Nagios server service
+1. Searches all available roles/environments and builds a list which will become the Nagios hostgroups.
+1. Places nodes in Nagios hostgroups by role / environment membership.
+1. Installs various packages required for the server.
+1. Sets up configuration directories.
+1. Moves the package-installed Nagios configuration to a 'dist' directory.
+1. Disables the 000-default VirtualHost present on Debian/Ubuntu Apache2 package installations.
+1. Templates configuration files for services, contacts, contact groups, templates, hostgroups and hosts.
+1. Enables the Nagios web UI.
+1. Starts the Nagios server service
 
 ### server_package
 
