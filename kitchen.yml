@@ -52,6 +52,23 @@ suites:
       nagios:
         server:
           install_method: 'source'
+  - name: swappable_config
+    run_list:
+      - recipe[nagios::default]
+      - recipe[nrpe::default]
+      - recipe[nagios_test::default]
+      - role[monitoring]
+    attributes:
+      nagios:
+        server:
+          install_method: 'source'
+        nagios_config:
+          template_cookbook: 'nagios_test'
+    verifier:
+      inspec_tests:
+        - test/smoke/default/server.rb
+        - test/smoke/default/nagios_website.rb
+        - test/smoke/swappable_config/default_test.rb
   - name: pagerduty
     run_list:
       - recipe[nagios::default]
