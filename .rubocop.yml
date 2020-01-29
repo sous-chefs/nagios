@@ -1,3 +1,7 @@
 AllCops:
   Exclude:
     - 'Dangerfile'
+Lint/DuplicateMethods:
+  Enabled: false
+Lint/Void:
+  Enabled: false

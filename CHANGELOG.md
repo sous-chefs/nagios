@@ -9,6 +9,8 @@ This file is used to list changes made in each version of the nagios cookbook.
 - Simplify platform detection logic in the attributes file
 - Migrate to Github Actions for testing
 - Use the :immediately timing not :immediate in notifications
+- Changed `['nagios']['pagerduty']['key']` from normal to default level attribute
+- Apache2 is now a fuzzy match, `depends 'apache2', '~> 5.0'`
 
 ## 8.1.0 (May 8, 2018)
 
