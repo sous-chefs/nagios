@@ -1,6 +1,6 @@
 # nagios Cookbook CHANGELOG
 
-This file is used to list changes made in each version of the nagios cookbook.
+This file is used to list changes made in each version of the nagios cookbook
 
 ## UNRELEASED
 
@@ -12,7 +12,7 @@ This file is used to list changes made in each version of the nagios cookbook.
 - Changed `['nagios']['pagerduty']['key']` from normal to default level attribute
 - Apache2 is now a fuzzy match, `depends 'apache2', '~> 5.0'`
 
-## 8.1.0 (May 8, 2018)
+## 8.1.0 2018-05-08
 
 - Resolve incompatibilities with the latest PHP cookbook by installing php-gd
 - Resolve multiple cookstyle warnings
@@ -21,7 +21,7 @@ This file is used to list changes made in each version of the nagios cookbook.
 - Skip definitions whose name starts with "!"
 - Add a node['nagios']['pagerduty']['proxy_url'] attribute
 
-## 8.0.0 (19-09-2017)
+## 8.0.0 2017-09-19
 
 ### Breaking Changes
 
@@ -94,78 +94,78 @@ This file is used to list changes made in each version of the nagios cookbook.
 
 ### Bug
 
-- #419 Fixing the nagios_interval logic and readme.
-- #421 Fixing loading of pagerduty databag contacts.
-- #430 Fixing loading of timeperiods out of databag with ducktyping.
-- #437 Fixing loading of unmanaged_host databag regards to environments.
-- #441 Enable setting of Fixnum's within nagios configuration attributes.
+- #419 Fixing the nagios_interval logic and readme
+- #421 Fixing loading of pagerduty databag contacts
+- #430 Fixing loading of timeperiods out of databag with ducktyping
+- #437 Fixing loading of unmanaged_host databag regards to environments
+- #441 Enable setting of Fixnum's within nagios configuration attributes
 
 ### Improvement
 
-- #426 Added command: service_notify_by_sms_email.
+- #426 Added command: service_notify_by_sms_email
 - #435 Adding pagerduty.cgi and needed packages
 
 ## 7.2.2
 
 ### Bug
 
-- Fixing the apache mpm breaking on centos.
+- Fixing the apache mpm breaking on centos
 
 ## 7.2.0
 
 ### Testing
 
-- Added centos 7.1 for testing.
-- Added centos 5.11 for testing.
-- Added test-kitchen tests.
+- Added centos 7.1 for testing
+- Added centos 5.11 for testing
+- Added test-kitchen tests
 
 ### Improvement
 
-- Added logic to exclude nodes based on tag.
-- Including apache2::mpm_prefork for apache.
-- Added the ability to specify command arguments within services.
-- Added the ability to specify custom options on hosts, contacts and services.
+- Added logic to exclude nodes based on tag
+- Including apache2::mpm_prefork for apache
+- Added the ability to specify command arguments within services
+- Added the ability to specify custom options on hosts, contacts and services
 
 ## 7.1.8
 
 ### Bug
 
-- Fixing the unmanagedhosts databag filter on environment.
-- Fixing the services databag filter on environment.
+- Fixing the unmanagedhosts databag filter on environment
+- Fixing the services databag filter on environment
 
 ### Improvement
 
-- Moving the LWRP's providers into definitions.
+- Moving the LWRP's providers into definitions
   This will remove some extra complexity and output will be
-  much nicer and debugging will be easier during the chef-converge.
+  much nicer and debugging will be easier during the chef-converge
 
 ## 7.1.6
 
 ### Bug
 
-- Fixing the nagios_[resource] provider delete action.
+- Fixing the nagios_[resource] provider delete action
 
 ### Improvement
 
-- Added option for custom apache auth based on attribute.
-- Update cgi-path attibute on source install.
-- Update on test-kitchen tests.
-- Update on kitchen-vagrant version.
+- Added option for custom apache auth based on attribute
+- Update cgi-path attibute on source install
+- Update on test-kitchen tests
+- Update on kitchen-vagrant version
 
 ## 7.1.4
 
 ### Bug
 
-- AuthzLDAPAuthoritative is removed in Apache 2.4.
-- Fixed the pagerduty config by using LWRP.
+- AuthzLDAPAuthoritative is removed in Apache 2.4
+- Fixed the pagerduty config by using LWRP
 
 ### Improvement
 
-- Made test config os (in)dependent.
-- Added zap for config file cleanup.
-- Added encrypted user databag support.
-- Added extra configuration tests.
-- Added gitter badge.
+- Made test config os (in)dependent
+- Added zap for config file cleanup
+- Added encrypted user databag support
+- Added extra configuration tests
+- Added gitter badge
 
 ## 7.1.2
 
@@ -185,37 +185,37 @@ This file is used to list changes made in each version of the nagios cookbook.
 
 ### Bug
 
-- Fixed class-type checking with duck-typing on update_options.
-- Fixed host_name_attribute on nagios model.
+- Fixed class-type checking with duck-typing on update_options
+- Fixed host_name_attribute on nagios model
 
 ### Improvement
 
-- Moved all nagios configuration options within attributes.
-- Moved all nagios configuration attributes into separate file.
+- Moved all nagios configuration options within attributes
+- Moved all nagios configuration attributes into separate file
 
 ### Breaking Changes
 
-- With the change above we might introduced some config problems.
-  Please check your attributes when upgrading.
+- With the change above we might introduced some config problems
+  Please check your attributes when upgrading
 
 ### Development
 
-- Added extra kitchen serverspec tests.
+- Added extra kitchen serverspec tests
 
 ## 7.0.8
 
 ### Bug
 
-- Fixed servicegroups members.
-- Chaned the order of data bag loading (commands first).
+- Fixed servicegroups members
+- Chaned the order of data bag loading (commands first)
 
 ### Improvement
 
-- Cleanup of the internals of the nagios model.
+- Cleanup of the internals of the nagios model
 
 ### Development
 
-- Added kitchen serverspec tests.
+- Added kitchen serverspec tests
 
 ## 7.0.6
 
@@ -223,36 +223,36 @@ This file is used to list changes made in each version of the nagios cookbook.
 
 - Fixed data bag import.(#346)
 - Fixed missing create method on Servicegroup object. (#348)
-- Fixed update_dependency_members for depedency objects.
+- Fixed update_dependency_members for depedency objects
 
 ## 7.0.4
 
 ### Bug
 
-- Fixed the order for resource.cfg population to be correct.
+- Fixed the order for resource.cfg population to be correct
 
 ## 7.0.2
 
 ### Bug
 
-- Fixed the hardcoded cgi-bin path in server source.
-- Fixed contact_groups within load_default_config recipe.
-- Removed dead code from timeperiod.rb library.
-- Ignore timeperiods that don't comply.
+- Fixed the hardcoded cgi-bin path in server source
+- Fixed contact_groups within load_default_config recipe
+- Removed dead code from timeperiod.rb library
+- Ignore timeperiods that don't comply
 - Making time formats less restrictive. (#336)
 
 ### Improvement
 
-- Make yum-epel recipe include optional via attribute.
+- Make yum-epel recipe include optional via attribute
 - Only allow_empty_hostgroup_assignment for Nagios versions >= 3.4.0
 
 ## 7.0.0
 
 ### Feature
 
-- Added providers for all nagios configuration objects.
-- Added wiki pages explaining the providers.
-- Added wiki pages explaining the databags.
+- Added providers for all nagios configuration objects
+- Added wiki pages explaining the providers
+- Added wiki pages explaining the databags
 
 ### Development
 
@@ -260,13 +260,13 @@ This file is used to list changes made in each version of the nagios cookbook.
 
 ### Extra note
 
-- Please test this version before using it in production. Some logic and attributes have changes, so this might break your current setup.
+- Please test this version before using it in production. Some logic and attributes have changes, so this might break your current setup
 
 ## 6.1.2
 
 ### Feature
 
-- Allow defining parents in the unmanaged hosts data bag so you can build the host map.
+- Allow defining parents in the unmanaged hosts data bag so you can build the host map
 
 ### Bug
 
@@ -369,7 +369,7 @@ This file is used to list changes made in each version of the nagios cookbook.
 
 - New attribute node['nagios']['monitored_environments'] for specifying multiple environments you'd like to monitor
 - Allow using the exclusion hostgroup format used by Nagios when defining the hostgroup for a check
-- Host templates can now be defined via a new host_templates data bag.
+- Host templates can now be defined via a new host_templates data bag
 
 ### Development
 
@@ -399,7 +399,7 @@ This file is used to list changes made in each version of the nagios cookbook.
 
 ### Breaking changes
 
-- Directories for RHEL installations have been updated to use correct RHEL directories vs. Debian directories. You may need to override these directories with the existing directories to not break existing installations on RHEL. Proceed with caution.
+- Directories for RHEL installations have been updated to use correct RHEL directories vs. Debian directories. You may need to override these directories with the existing directories to not break existing installations on RHEL. Proceed with caution
 
 ### Bug
 
@@ -466,9 +466,9 @@ This file is used to list changes made in each version of the nagios cookbook.
 - All configuration options in the cgi.cfg and nrpe.cfg files can now be controlled via attributes
 - **[COOK-3690](https://tickets.opscode.com/browse/COOK-3690)** An intermediate SSL certificate can now be used on the web server as defined in the new attribute `node['nagios']['ssl_cert_chain_file']`
 - **[COOK-2732](https://tickets.opscode.com/browse/COOK-2732)** A service can now be applied to multiple hostgroups via the data bag definition
-- **[COOK-3781](https://tickets.opscode.com/browse/COOK-3781)** Service escalations can now be written using wildcards.  See the readme for an example of this feature.
-- **[COOK-3702](https://tickets.opscode.com/browse/COOK-3702)** Multiple PagerDuty keys for different contacts can be defined via a new nagios_pagerduty data bag.  See the readme for more information on the new data bag and attributes for this feature.
-- **[COOK-3774](https://tickets.opscode.com/browse/COOK-3774)**Services can be limited to run on nagios servers in specific chef environments by adding a new "activate_check_in_environment" key to the services data bag.  See the Services section of the readme for an example.
+- **[COOK-3781](https://tickets.opscode.com/browse/COOK-3781)** Service escalations can now be written using wildcards.  See the readme for an example of this feature
+- **[COOK-3702](https://tickets.opscode.com/browse/COOK-3702)** Multiple PagerDuty keys for different contacts can be defined via a new nagios_pagerduty data bag.  See the readme for more information on the new data bag and attributes for this feature
+- **[COOK-3774](https://tickets.opscode.com/browse/COOK-3774)**Services can be limited to run on nagios servers in specific chef environments by adding a new "activate_check_in_environment" key to the services data bag.  See the Services section of the readme for an example
 - **[CHEF-4702](https://tickets.opscode.com/browse/CHEF-4702)** Chef solo users can now user solo-search for data bag searchd <https://github.com/edelight/chef-solo-search>
 
 ## v5.0.2
@@ -565,15 +565,15 @@ This file is used to list changes made in each version of the nagios cookbook.
 - [COOK-2473] - Install Nagios 3.4.4 for source installs
 - [COOK-2541] - Nagios cookbook should use node.roles instead of node.run_list.roles when calculating hostgroups
 - [COOK-2543] - Adds the ability to normalize hostnames to lowercase
-- [COOK-2450] - Add ability to define service groups through data bags.
+- [COOK-2450] - Add ability to define service groups through data bags
 - [COOK-2642] - With multiple nagios servers, they can't use NRPE to check each other
 - [COOK-2613] - Install Nagios 3.5.0 when installing from source
 
 ## v4.0.0
 
-This is a major release that refactors a significant amount of the service configuration to use data bags rather than hardcoding specific checks in the templates. The README describes how to create services via data bags.
+This is a major release that refactors a significant amount of the service configuration to use data bags rather than hardcoding specific checks in the templates. The README describes how to create services via data bags
 
-The main incompatibility and breaking change is that the default services that are monitored by Nagios is reduced to only the "check-nagios" service. This means that existing installations will need to start converting checks over to the new data bag entries.
+The main incompatibility and breaking change is that the default services that are monitored by Nagios is reduced to only the "check-nagios" service. This means that existing installations will need to start converting checks over to the new data bag entries
 
 - [COOK-1553] - Nagios: check_nagios command does not work if Nagios is installed from source
 - [COOK-1554] - Nagios: The nagios server should be added to all relevant host groups
@@ -605,7 +605,7 @@ The main incompatibility and breaking change is that the default services that a
 - [COOK-2300] - You should be able to define a nagios_service into the "all" host group
 - [COOK-2341] - pagerduty_nagios.pl URL changed
 - [COOK-2350] - Nagios server fails to start when installed via source on Ubuntu/Debian
-- [COOK-2369] - Add LDAP support in the nagios cookbook.
+- [COOK-2369] - Add LDAP support in the nagios cookbook
 - [COOK-2374] - Setting an unmanaged host to a string returns 'no method error'
 - [COOK-2375] - Allows adding a service that utilizes a pre-existing command
 - [COOK-2433] - Nagios: ldap authentication needs to handle anonymous binding ldap servers
@@ -617,14 +617,14 @@ The main incompatibility and breaking change is that the default services that a
 
 ## v3.0.0
 
-This is a major release due to some dramatic refactoring to the service check configuration which may not be compatible with existing implementations of this cookbook.
+This is a major release due to some dramatic refactoring to the service check configuration which may not be compatible with existing implementations of this cookbook
 
 - [COOK-1544] - Nagios cookbook needs to support event handlers
 - [COOK-1785] - Template causes service restart every time
 - [COOK-1879] - Nagios: add configuration to automatically redirect <http://myserver/> to <http://myserver/nagios3/>
 - [COOK-1880] - Extra attribute was left over after the `multi_environment_monitoring` update
 - [COOK-1881] - Oracle should be added to the metadata for Nagios
-- [COOK-1891] - README says to modify the nrpe.cfg template, but the cookbook exports a resource for nrpe checks.
+- [COOK-1891] - README says to modify the nrpe.cfg template, but the cookbook exports a resource for nrpe checks
 - [COOK-1947] - Nagios: Pager duty portions of Nagios cookbook not using nagios user/group attributes
 - [COOK-1949] - Nagios: A bad role on a node shouldn't cause the cookbook to fail
 - [COOK-1950] - Nagios: Simplify hostgroup building and cookbook code
@@ -634,7 +634,7 @@ This is a major release due to some dramatic refactoring to the service check co
 - [COOK-2032] - Use public IP address for intra-cloud checks
 - [COOK-2034] - Nagios cookbook calls search more often than necessary
 - [COOK-2054] - Use service description in the nagios_services databag items
-- [COOK-2061] - template.erb refers to a service variable when it should reference template.
+- [COOK-2061] - template.erb refers to a service variable when it should reference template
 
 ## v2.0.0
 
@@ -704,6 +704,6 @@ This is a major release due to some dramatic refactoring to the service check co
 
 ## v1.0.0
 
-- Use Chef 0.10's `node.chef_environment` instead of `node['app_environment']`.
+- Use Chef 0.10's `node.chef_environment` instead of `node['app_environment']`
 - source installation support on both client and server sides
 - initial RHEL/CentOS/Fedora support
