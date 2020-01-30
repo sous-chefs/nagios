@@ -1,6 +1,6 @@
 # nagios cookbook
 
-[![Cookbook Version](https://img.shields.io/cookbook/v/nagios.svg)](https://supermarket.chef.io/cookbooks/nagiosb)
+[![Cookbook Version](https://img.shields.io/cookbook/v/nagios.svg)](https://supermarket.chef.io/cookbooks/nagios)
 [![CI State](https://github.com/sous-chefs/nagios/workflows/ci/badge.svg)](https://github.com/sous-chefs/nagios/actions?query=workflow%3Aci)
 [![OpenCollective](https://opencollective.com/sous-chefs/backers/badge.svg)](#backers)
 [![OpenCollective](https://opencollective.com/sous-chefs/sponsors/badge.svg)](#sponsors)
