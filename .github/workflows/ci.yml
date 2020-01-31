@@ -49,6 +49,7 @@ jobs:
           - 'pagerduty'
           - 'allowed-ips'
           - 'nginx'
+          - 'swappable-config'
       fail-fast: false
 
     steps:
