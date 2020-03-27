@@ -8,8 +8,8 @@ issues_url       'https://github.com/sous-chefs/nagios/issues'
 source_url       'https://github.com/sous-chefs/nagios'
 chef_version     '>= 14'
 
-depends 'apache2',  '~> 5.0' # 6.0+ removes all recipes and attributes
-depends 'nginx',    '~> 9.0' # 10.0+ removes all recipes and attributes
+depends 'apache2', '>= 8.0'
+depends 'nginx', '~> 9.0' # 10.0+ removes all recipes and attributes
 depends 'nrpe'
 depends 'php', '>= 4.0.0'
 depends 'yum-epel'
