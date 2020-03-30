@@ -19,6 +19,8 @@
 # limitations under the License.
 #
 
+::Chef::Resource.send(:include, Apache2::Cookbook::Helpers)
+
 # Package pre-reqs
 build_essential 'install compilation tools'
 include_recipe 'php::default'
@@ -41,7 +43,7 @@ web_srv = node['nagios']['server']['web_server']
 group node['nagios']['group'] do
   members [
     node['nagios']['user'],
-    web_srv == 'nginx' ? node['nginx']['user'] : node['apache']['user'],
+    web_srv == 'nginx' ? node['nginx']['user'] : default_apache_user,
   ]
   action :create
 end
