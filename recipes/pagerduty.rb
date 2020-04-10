@@ -20,6 +20,11 @@
 
 package nagios_pagerduty_packages
 
+directory "#{node['nagios']['plugin_dir']}" do
+  owner 'root'
+  group 'root'
+end
+
 remote_file "#{node['nagios']['plugin_dir']}/notify_pagerduty.pl" do
   owner 'root'
   group 'root'
