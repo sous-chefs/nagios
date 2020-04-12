@@ -4,7 +4,9 @@ This file is used to list changes made in each version of the nagios cookbook.
 
 ## Unreleased
 
-- Cookstyle fixes (#587)
+- Sous Chefs Adoption
+- Standardise files with files in sous-chefs/repo-management
+- Cookstyle fixes
 
 ## 9.0.1 (2020-09-16)
 

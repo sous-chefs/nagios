@@ -52,7 +52,7 @@ template "#{apache_dir}/sites-available/#{node['nagios']['server']['vname']}.con
     https: node['nagios']['enable_ssl'],
     ssl_cert_file: node['nagios']['ssl_cert_file'],
     ssl_cert_key: node['nagios']['ssl_cert_key'],
-    apache_log_dir: default_log_dir,
+    apache_log_dir: default_log_dir
   )
   if File.symlink?("#{apache_dir}/sites-enabled/#{node['nagios']['server']['vname']}.conf")
     notifies :restart, 'service[apache2]'

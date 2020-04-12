@@ -20,7 +20,7 @@
 
 package nagios_pagerduty_packages
 
-directory "#{node['nagios']['plugin_dir']}" do
+directory node['nagios']['plugin_dir'] do
   owner 'root'
   group 'root'
 end
