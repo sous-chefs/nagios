@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Updated CHANGELOG.md to follow standard defined at https://keepachangelog.com (#586)
+- Cookstyle fixes (#587)
 
 ## [v9.0.0] - (2020-09-08)
 
