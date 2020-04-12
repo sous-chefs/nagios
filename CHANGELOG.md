@@ -4,18 +4,7 @@ This file is used to list changes made in each version of the nagios cookbook.
 
 ## Unreleased
 
-- resolved cookstyle error: libraries/base.rb:103:7 convention: `Style/ReturnNil`
-- resolved cookstyle error: libraries/base.rb:104:7 convention: `Style/ReturnNil`
-- resolved cookstyle error: libraries/base.rb:110:7 convention: `Style/ReturnNil`
-- resolved cookstyle error: libraries/base.rb:137:7 convention: `Style/ReturnNil`
-- resolved cookstyle error: libraries/base.rb:157:7 convention: `Style/ReturnNil`
-- resolved cookstyle error: libraries/base.rb:158:7 convention: `Style/ReturnNil`
-- resolved cookstyle error: libraries/base.rb:159:7 convention: `Style/ReturnNil`
-- resolved cookstyle error: libraries/base.rb:202:7 convention: `Style/ReturnNil`
-- resolved cookstyle error: libraries/base.rb:275:7 convention: `Style/ReturnNil`
-- resolved cookstyle error: libraries/nagios.rb:259:5 convention: `Style/ReturnNil`
-- resolved cookstyle error: test/smoke/default/nagios_website.rb:1:1 convention: `Style/Encoding`
-- resolved cookstyle error: test/smoke/default/server.rb:1:1 convention: `Style/Encoding`
+- Cookstyle fixes (#587)
 
 ## 9.0.1 (2020-09-16)
 
