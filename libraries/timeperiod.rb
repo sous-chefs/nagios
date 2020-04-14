@@ -69,7 +69,7 @@ class Nagios
 
     def definition
       configured = configured_options
-      periods.values.each { |v| configured[v.moment] = v.period }
+      periods.each_value { |v| configured[v.moment] = v.period }
       get_definition(configured, 'timeperiod')
     end
 
