@@ -2,6 +2,10 @@
 
 This file is used to list changes made in each version of the nagios cookbook.
 
+## Unreleased
+
+- resolved cookstyle error: libraries/timeperiod.rb:72:15 convention: `Style/HashEachMethods`
+
 ## 8.2.0 (2019-31-01)
 
 - Require Chef Infra Client 14.0+ and remove the need for the build-essential cookbook depenedency
