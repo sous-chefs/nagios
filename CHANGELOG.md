@@ -2,7 +2,7 @@
 
 This file is used to list changes made in each version of the nagios cookbook.
 
-## Unreleased
+## 8.2.1 (2020-05-05)
 
 - resolved cookstyle error: libraries/timeperiod.rb:72:15 convention: `Style/HashEachMethods`
 
