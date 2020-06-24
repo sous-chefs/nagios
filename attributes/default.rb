@@ -129,6 +129,11 @@ default['nagios']['server']['checksum']  = 'b0055c475683ce50d77b1536ff0cec9abf89
 default['nagios']['server']['src_dir']   = node['nagios']['server']['url'].split('/')[-1].chomp('.tar.gz')
 default['nagios']['server']['patches']   = []
 default['nagios']['server']['patch_url'] = nil
+default['nagios']['server']['dependencies'] = value_for_platform_family(
+  'rhel' => %w(openssl-devel gd-devel tar),
+  'debian' => %w(libssl-dev libgd2-xpm-dev bsd-mailx tar),
+  'default' => %w(libssl-dev libgd2-xpm-dev bsd-mailx tar)
+)
 
 # for server from packages installation
 if platform_family?('rhel', 'amazon')
