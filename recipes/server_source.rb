@@ -30,11 +30,7 @@ package node['nagios']['php_gd_package']
 # Note: the cookbook now defaults to Nagios 4.X which doesn't support embedded perl anyways
 node.default['nagios']['conf']['p1_file'] = nil
 
-node['nagios']['server']['dependencies'].each do |pkg|
-  package pkg do
-    action :install
-  end
-end
+package node['nagios']['server']['dependencies']
 
 user node['nagios']['user'] do
   action :create

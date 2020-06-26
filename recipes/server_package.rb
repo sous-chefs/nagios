@@ -35,9 +35,7 @@ when 'debian'
   end
 end
 
-node['nagios']['server']['packages'].each do |pkg|
-  package pkg
-end
+package node['nagios']['server']['packages']
 
 directory node['nagios']['config_dir'] do
   owner 'root'
