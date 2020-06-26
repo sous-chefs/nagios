@@ -30,13 +30,7 @@ package node['nagios']['php_gd_package']
 # Note: the cookbook now defaults to Nagios 4.X which doesn't support embedded perl anyways
 node.default['nagios']['conf']['p1_file'] = nil
 
-pkgs = value_for_platform_family(
-  'rhel' => %w(openssl-devel gd-devel tar),
-  'debian' => %w(libssl-dev libgd2-xpm-dev bsd-mailx tar),
-  'default' => %w(libssl-dev libgd2-xpm-dev bsd-mailx tar)
-)
-
-pkgs.each do |pkg|
+node['nagios']['server']['dependencies'].each do |pkg|
   package pkg do
     action :install
   end
