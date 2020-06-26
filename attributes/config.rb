@@ -157,14 +157,8 @@ default['nagios']['conf']['service_perfdata_file_processing_interval']   = nil
 default['nagios']['conf']['host_perfdata_file_processing_command']       = nil
 default['nagios']['conf']['service_perfdata_file_processing_command']    = nil
 default['nagios']['conf']['broker_module']                               = nil
-
-if node['nagios']['server']['install_method'] == 'source' ||
-   (platform?('rhel') && node['platform_version'].to_i >= 6) ||
-   (platform?('debian') && node['platform_version'].to_i >= 7) ||
-   (platform?('ubuntu') && node['platform_version'].to_f >= 14.04)
-  default['nagios']['conf']['allow_empty_hostgroup_assignment'] = '1'
-  default['nagios']['conf']['service_check_timeout_state']      = 'c'
-end
+default['nagios']['conf']['allow_empty_hostgroup_assignment'] = '1'
+default['nagios']['conf']['service_check_timeout_state']      = 'c'
 
 case node['platform_family']
 when 'debian'
