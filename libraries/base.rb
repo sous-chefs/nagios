@@ -278,15 +278,15 @@ class Nagios
 
     def update_hash_options(hash)
       hash.each do |k, v|
-        push(Nagios::CustomOption.new(k.upcase, v)) if k.start_with?('_')
-        m = k + '='
+        push(Nagios::CustomOption.new(k.upcase, v)) if k.to_s.start_with?('_')
+        m = k.to_s + '='
         send(m, v) if respond_to?(m)
       end
     end
 
     def update_members(hash, option, object, remote = false)
       return if blank?(hash) || hash[option].nil?
-      if hash[option].is_a?(String) && hash[option].start_with?('+')
+      if hash[option].is_a?(String) && hash[option].to_s.start_with?('+')
         @add_modifiers[option] = '+'
         hash[option] = hash[option][1..-1]
       end

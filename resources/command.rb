@@ -1,7 +1,7 @@
 #
 # Author:: Sander Botman <sbotman@schubergphilis.com>
 # Cookbook:: : nagios
-# Definition::   : hostgroup
+# Resource:: : command
 #
 # Copyright:: 2015, Sander Botman
 #
@@ -17,17 +17,21 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+property :command_line, String, required: true
 
-define :nagios_hostgroup do
-  params[:action] ||= :create
-  params[:options] ||= {}
+action :create do
+  o = Nagios::Command.create(new_resource.name)
+  options = {
+    command_name: new_resource.name,
+    command_line: new_resource.command_line,
+  }
+  o.import(options)
+end
 
-  if nagios_action_create?(params[:action])
-    o = Nagios::Hostgroup.create(params[:name])
-    o.import(params[:options])
-  end
+action :delete do
+  Nagios.instance.delete('command', new_resource.name)
+end
 
-  if nagios_action_delete?(params[:action])
-    Nagios.instance.delete('hostgroup', params[:name])
-  end
+action_class do
+  require_relative '../libraries/command'
 end

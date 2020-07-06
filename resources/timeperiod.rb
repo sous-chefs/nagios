@@ -1,7 +1,7 @@
 #
 # Author:: Sander Botman <sbotman@schubergphilis.com>
 # Cookbook:: : nagios
-# Definition::   : servicedependency
+# Resource::   : timeperiod
 #
 # Copyright:: 2015, Sander Botman
 #
@@ -17,17 +17,24 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+property :nagios_alias, String
+property :times, Hash, default: {}
+property :exclude, Hash, default: {}
 
-define :nagios_servicedependency do
-  params[:action] ||= :create
-  params[:options] ||= {}
+action :create do
+  o = Nagios::Timeperiod.create(new_resource.name)
+  options = {
+    alias: new_resource.nagios_alias,
+    times: new_resource.times,
+    exclude: new_resource.exclude,
+  }
+  o.import(options)
+end
 
-  if nagios_action_create?(params[:action])
-    o = Nagios::Servicedependency.create(params[:name])
-    o.import(params[:options])
-  end
+action :delete do
+  Nagios.instance.delete('timeperiod', new_resource.name)
+end
 
-  if nagios_action_delete?(params[:action])
-    Nagios.instance.delete('servicedependency', params[:name])
-  end
+action_class do
+  require_relative '../libraries/timeperiod'
 end

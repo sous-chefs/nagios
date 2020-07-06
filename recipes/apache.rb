@@ -16,8 +16,8 @@
 # limitations under the License.
 #
 
-::Chef::Recipe.send(:include, Apache2::Cookbook::Helpers)
-::Chef::Resource.send(:include, Apache2::Cookbook::Helpers)
+::Chef::Recipe.include Apache2::Cookbook::Helpers
+::Chef::Resource.include Apache2::Cookbook::Helpers
 
 service 'apache2' do
   service_name apache_platform_service_name
