@@ -4,11 +4,6 @@ AllCops:
     - 'Dangerfile'
 
 # TODO: Remove this once this is migrated to resources
-ChefModernize/Definitions:
-  Exclude:
-    - '**/definitions/*.rb'
-
-# TODO: Remove this once this is migrated to resources
 Lint/DuplicateMethods:
   Exclude:
     - 'libraries/base.rb'

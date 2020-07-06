@@ -16,10 +16,6 @@
 # limitations under the License.
 #
 
-::Chef::Recipe.send(:include, Nginx::Cookbook::Helpers)
-::Chef::Recipe.send(:include, Apache2::Cookbook::Helpers)
-::Chef::Resource.send(:include, Nginx::Cookbook::Helpers)
-
 service 'nginx' do
   supports status: true, restart: true, reload: true
   action :nothing

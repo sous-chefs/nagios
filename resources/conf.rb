@@ -4,7 +4,7 @@
 # Author:: Nathan Haneysmith <nathan@chef.io>
 # Author:: Seth Chisamore <schisamo@chef.io>
 # Cookbook:: nagios
-# Definition:: nagios_conf
+# Resource:: nagios_conf
 #
 # Copyright:: 2009, 37signals
 # Copyright:: 2009-2016, Chef Software, Inc.
@@ -21,18 +21,27 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-define :nagios_conf, variables: {}, config_subdir: true, source: nil do
-  conf_dir = params[:config_subdir] ? node['nagios']['config_dir'] : node['nagios']['conf_dir']
-  params[:source] ||= "#{params[:name]}.cfg.erb"
+property :variables, Hash, default: {}
+property :config_subdir, [true, false], default: true
+property :source, String
+property :cookbook, String, default: 'nagios'
 
-  template "#{conf_dir}/#{params[:name]}.cfg" do
-    cookbook params[:cookbook] if params[:cookbook]
-    owner node['nagios']['user']
-    group node['nagios']['group']
-    source params[:source]
+action :create do
+  conf_dir = new_resource.config_subdir ? node['nagios']['config_dir'] : node['nagios']['conf_dir']
+  source ||= "#{new_resource.name}.cfg.erb"
+
+  template "#{conf_dir}/#{new_resource.name}.cfg" do
+    cookbook new_resource.cookbook if new_resource.cookbook
+    owner 'nagios'
+    group 'nagios'
+    source source
     mode '0644'
-    variables params[:variables]
+    variables new_resource.variables
     notifies :restart, 'service[nagios]'
     backup 0
   end
+end
+
+action_class do
+  require_relative '../libraries/nagios'
 end

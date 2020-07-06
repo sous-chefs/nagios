@@ -1,7 +1,7 @@
 #
 # Author:: Sander Botman <sbotman@schubergphilis.com>
-# Cookbook:: : nagios
-# Definition::   : hostdependency
+# Cookbook:: nagios
+# Resource:: resource
 #
 # Copyright:: 2015, Sander Botman
 #
@@ -17,17 +17,17 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+property :options, [Hash, Chef::DataBagItem], default: {}
 
-define :nagios_hostdependency do
-  params[:action] ||= :create
-  params[:options] ||= {}
+action :create do
+  o = Nagios::Resource.create(new_resource.name)
+  o.import(new_resource.options)
+end
 
-  if nagios_action_create?(params[:action])
-    o = Nagios::Hostdependency.create(params[:name])
-    o.import(params[:options])
-  end
+action :delete do
+  Nagios.instance.delete('resource', new_resource.name)
+end
 
-  if nagios_action_delete?(params[:action])
-    Nagios.instance.delete('hostdependency', params[:name])
-  end
+action_class do
+  require_relative '../libraries/resource'
 end

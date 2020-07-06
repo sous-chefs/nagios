@@ -8,7 +8,7 @@ issues_url       'https://github.com/sous-chefs/nagios/issues'
 source_url       'https://github.com/sous-chefs/nagios'
 chef_version     '>= 14'
 
-depends 'apache2' '>= 8.0'
+depends 'apache2', '>= 8.0'
 depends 'nginx', '>= 10.2'
 depends 'nrpe'
 depends 'php', '>= 4.0.0'

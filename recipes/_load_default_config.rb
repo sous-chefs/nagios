@@ -208,6 +208,7 @@ nagios_service 'default-service' do
           'register' => 0,
           'action_url' => nagios_attr(:default_service)[:action_url]
 end
+
 # Default service template
 Nagios.instance.default_service = 'default-service'
 

@@ -1,7 +1,7 @@
 #
 # Author:: Sander Botman <sbotman@schubergphilis.com>
 # Cookbook:: : nagios
-# Definition::   : timeperiod
+# Resource:: : contact
 #
 # Copyright:: 2015, Sander Botman
 #
@@ -17,17 +17,17 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+property :options, [Hash, Chef::DataBagItem], default: {}
 
-define :nagios_timeperiod do
-  params[:action] ||= :create
-  params[:options] ||= {}
+action :create do
+  o = Nagios::Contact.create(new_resource.name)
+  o.import(new_resource.options)
+end
 
-  if nagios_action_create?(params[:action])
-    o = Nagios::Timeperiod.create(params[:name])
-    o.import(params[:options])
-  end
+action :delete do
+  Nagios.instance.delete('contact', new_resource.name)
+end
 
-  if nagios_action_delete?(params[:action])
-    Nagios.instance.delete('timeperiod', params[:name])
-  end
+action_class do
+  require_relative '../libraries/contact'
 end

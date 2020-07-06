@@ -1,7 +1,7 @@
 #
 # Author:: Sander Botman <sbotman@schubergphilis.com>
-# Cookbook:: : nagios
-# Definition::   : resource
+# Cookbook:: nagios
+# Resource:: host
 #
 # Copyright:: 2015, Sander Botman
 #
@@ -18,16 +18,17 @@
 # limitations under the License.
 #
 
-define :nagios_resource do
-  params[:action] ||= :create
-  params[:options] ||= {}
+property :options, [Hash, Chef::DataBagItem], default: {}
 
-  if nagios_action_create?(params[:action])
-    o = Nagios::Resource.create(params[:name])
-    o.import(params[:options])
-  end
+action :create do
+  o = Nagios::Host.create(new_resource.name)
+  o.import(new_resource.options)
+end
 
-  if nagios_action_delete?(params[:action])
-    Nagios.instance.delete('resource', params[:name])
-  end
+action :delete do
+  Nagios.instance.delete('host', new_resource.name)
+end
+
+action_class do
+  require_relative '../libraries/host'
 end

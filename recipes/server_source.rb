@@ -19,9 +19,6 @@
 # limitations under the License.
 #
 
-::Chef::Resource.send(:include, Apache2::Cookbook::Helpers)
-::Chef::Resource.send(:include, Nginx::Cookbook::Helpers)
-
 # Package pre-reqs
 build_essential 'install compilation tools'
 include_recipe 'php::default'

@@ -1,7 +1,7 @@
 #
 # Author:: Sander Botman <sbotman@schubergphilis.com>
-# Cookbook:: : nagios
-# Definition::   : host
+# Cookbook:: nagios
+# Resource:: serviceescalation
 #
 # Copyright:: 2015, Sander Botman
 #
@@ -17,17 +17,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+property :options, [Hash, Chef::DataBagItem], default: {}
 
-define :nagios_host do
-  params[:action] ||= :create
-  params[:options] ||= {}
+action :create do
+  o = Nagios::Serviceescalation.new(new_resource.name)
+  o.import(new_resource.options)
+  Nagios.instance.push(o)
+end
 
-  if nagios_action_create?(params[:action])
-    o = Nagios::Host.create(params[:name])
-    o.import(params[:options])
-  end
+action :delete do
+  Nagios.instance.delete('serviceescalation', new_resource.name)
+end
 
-  if nagios_action_delete?(params[:action])
-    Nagios.instance.delete('host', params[:name])
-  end
+action_class do
+  require_relative '../libraries/serviceescalation'
 end
