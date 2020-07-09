@@ -60,17 +60,17 @@ node['nagios']['server']['patches'].each do |patch|
   end
 end
 
-execute 'extract-nagios' do
-  cwd Chef::Config[:file_cache_path]
-  command 'tar zxvf nagios_core.tar.gz'
-  creates "#{Chef::Config[:file_cache_path]}/#{node['nagios']['server']['src_dir']}"
+nagios_src_dir = "#{Chef::Config[:file_cache_path]}/nagios_core"
+
+archive_file "#{Chef::Config[:file_cache_path]}/nagios_core.tar.gz" do
+  destination nagios_src_dir
 end
 
 node['nagios']['server']['patches'].each do |patch|
   bash "patch-#{patch}" do
     cwd Chef::Config[:file_cache_path]
     code <<-EOF
-      cd #{node['nagios']['server']['src_dir']}
+      cd #{nagios_src_dir}
       patch -p1 --forward --silent --dry-run < '#{Chef::Config[:file_cache_path]}/#{patch}' >/dev/null
       if [ $? -eq 0 ]; then
         patch -p1 --forward < '#{Chef::Config[:file_cache_path]}/#{patch}'
@@ -86,7 +86,7 @@ end
 execute 'compile-nagios' do
   cwd Chef::Config[:file_cache_path]
   command <<-EOH
-    cd #{node['nagios']['server']['src_dir']}
+    cd #{nagios_src_dir}
     ./configure --prefix=/usr \
         --mandir=/usr/share/man \
         --bindir=/usr/sbin \

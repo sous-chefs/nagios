@@ -7,12 +7,16 @@ driver:
 provisioner:
   name: chef_zero
   product_name: chef
+  enforce_idempotency: true
+  multiple_converge: 2
+  deprecations_as_errors: true
 
 verifier:
   name: inspec
 
 platforms:
   - name: centos-7
+  - name: centos-8
   - name: debian-10
   - name: ubuntu-16.04
   - name: ubuntu-18.04
