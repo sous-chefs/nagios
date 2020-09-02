@@ -25,7 +25,7 @@ property :hostgroup_name, String
 property :servicegroups, [Hash, Array]
 property :display_name, String
 property :is_volatile, [String, Integer]
-property :check_command, String
+property :check_command, String, default: ''
 property :initial_state, String
 property :max_check_attempts, [String, Integer]
 property :check_interval, [String, Integer]

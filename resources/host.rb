@@ -71,7 +71,7 @@ action :create do
     name: new_resource.name,
     use: new_resource.use,
     host_name: new_resource.host_name,
-    hostgroups_list: new_resource.hostgroups,
+    hostgroups_list: new_resource.hostgroups_list,
     alias: new_resource.nagios_alias,
     display_name: new_resource.display_name,
     address: new_resource.address,

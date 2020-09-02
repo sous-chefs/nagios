@@ -209,6 +209,24 @@ module NagiosCookbook
       when 'debian'
         %w(libcgi-pm-perl libjson-perl libwww-perl libcrypt-ssleay-perl)
       end
+
+    def nagios_node_search(new_resource)
+      if new_resource.multi_environment_monitoring
+        multi_env = new_resource.monitored_environments
+        multi_env_search =
+          if multi_env.empty?
+            ''
+          else
+            ' AND (chef_environment:' + multi_env.join(' OR chef_environment:') + ')'
+          end
+        "name:*#{multi_env_search}"
+      else
+        "name:* AND chef_environment:#{node.chef_environment}"
+      end
+    end
+
+    def nagios_ssl_req
+      "/C=US/ST=Several/L=Locality/O=Example/OU=Operations/CN=#{node['nagios']['server_name']}/emailAddress=ops@#{node['nagios']['server_name']}"
     end
   end
 end

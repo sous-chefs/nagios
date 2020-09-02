@@ -5,14 +5,14 @@ require 'chef/search/query'
 class NagiosUsers
   attr_accessor :users
 
-  def initialize(node)
+  def initialize(node, new_resource)
     @node = node
     @users = []
 
-    user_databag = node['nagios']['users_databag'].to_sym
-    group = node['nagios']['users_databag_group']
+    user_databag = new_resource.users_databag.to_sym
+    group = new_resource.users_databag_group
 
-    if node['nagios']['server']['use_encrypted_data_bags']
+    if new_resource.use_encrypted_data_bags
       load_encrypted_databag(user_databag)
     else
       search_databag(user_databag, group)

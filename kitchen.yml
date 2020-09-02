@@ -23,6 +23,15 @@ platforms:
   - name: ubuntu-20.04
 
 suites:
+  - name: install
+    run_list:
+      - recipe[nagios_test::install]
+  - name: apache
+    run_list:
+      - recipe[nagios_test::apache]
+  - name: configure
+    run_list:
+      - recipe[nagios_test::configure]
   - name: server_package
     run_list:
       - recipe[nagios::default]

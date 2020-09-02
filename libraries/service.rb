@@ -93,6 +93,7 @@ class Nagios
     end
 
     def check_command=(cmd)
+      puts "\ncmd " + cmd.to_s
       cmd = cmd.split('!')
       cmd.shift
       @arguments = cmd
