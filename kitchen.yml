@@ -6,29 +6,19 @@ driver:
 
 provisioner:
   name: chef_zero
-  require_chef_omnibus: <%= ENV['CHEF_VERSION'] || 'latest' %>
+  product_name: chef
 
 verifier:
   name: inspec
 
 platforms:
-  - name: ubuntu-14.04
-    run_list:
-      - recipe[apt::default]
-  - name: ubuntu-16.04
-    run_list:
-      - recipe[apt::default]
-  - name: debian-7
-    run_list:
-      - recipe[apt::default]
-  - name: debian-8
-    run_list:
-      - recipe[apt::default]
+  - name: amazonlinux-2
   - name: centos-7
-  - name: centos-6
-  - name: amazon-linux
-    driver_config:
-      box: mvbcoding/awslinux
+  - name: debian-10
+  - name: debian-9
+  - name: ubuntu-16.04
+  - name: ubuntu-18.04
+  - name: ubuntu-20.04
 
 suites:
   - name: server_package
