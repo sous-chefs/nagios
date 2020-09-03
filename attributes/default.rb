@@ -46,14 +46,15 @@ default['nagios']['resources']['template_file'] = 'resource.cfg.erb'
 default['nagios']['cgi']['template_cookbook'] = 'nagios'
 default['nagios']['cgi']['template_file'] = 'cgi.cfg.erb'
 
-case node['platform_family']
-when 'debian'
-  default['nagios']['plugin_dir'] = '/usr/lib/nagios/plugins'
-when 'rhel'
-  default['nagios']['plugin_dir'] = node['kernel']['machine'] == 'i686' ? '/usr/lib/nagios/plugins' : '/usr/lib64/nagios/plugins'
-else
-  default['nagios']['plugin_dir'] = '/usr/lib/nagios/plugins'
-end
+default['nagios']['plugin_dir'] =
+  case node['platform_family']
+  when 'debian'
+    '/usr/lib/nagios/plugins'
+  when 'rhel'
+    node['kernel']['machine'] == 'i686' ? '/usr/lib/nagios/plugins' : '/usr/lib64/nagios/plugins'
+  else
+    '/usr/lib/nagios/plugins'
+  end
 
 # platform specific directories
 default['nagios']['home']         = nagios_home

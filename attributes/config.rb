@@ -160,11 +160,12 @@ default['nagios']['conf']['broker_module']                               = nil
 default['nagios']['conf']['allow_empty_hostgroup_assignment'] = '1'
 default['nagios']['conf']['service_check_timeout_state']      = 'c'
 
-case node['platform_family']
-when 'debian'
-  default['nagios']['conf']['p1_file'] = "#{nagios_home}/p1.pl"
-when 'rhel'
-  default['nagios']['conf']['p1_file'] = '/usr/sbin/p1.pl'
-else
-  default['nagios']['conf']['p1_file'] = "#{nagios_home}/p1.pl"
-end
+default['nagios']['conf']['p1_file'] =
+  case node['platform_family']
+  when 'debian'
+    "#{nagios_home}/p1.pl"
+  when 'rhel'
+    '/usr/sbin/p1.pl'
+  else
+    "#{nagios_home}/p1.pl"
+  end
