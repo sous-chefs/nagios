@@ -163,7 +163,7 @@ default['nagios']['conf']['service_check_timeout_state']      = 'c'
 case node['platform_family']
 when 'debian'
   default['nagios']['conf']['p1_file'] = "#{nagios_home}/p1.pl"
-when 'rhel', 'amazon'
+when 'rhel'
   default['nagios']['conf']['p1_file'] = '/usr/sbin/p1.pl'
 else
   default['nagios']['conf']['p1_file'] = "#{nagios_home}/p1.pl"

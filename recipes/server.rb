@@ -139,7 +139,7 @@ nagios_conf 'cgi' do
 end
 
 # resource.cfg differs on RPM and tarball based systems
-if platform_family?('rhel', 'amazon')
+if platform_family?('rhel')
   template "#{node['nagios']['resource_dir']}/resource.cfg" do
     cookbook node['nagios']['resources']['template_cookbook']
     source node['nagios']['resources']['template_file']

@@ -11,6 +11,7 @@ This file is used to list changes made in each version of the nagios cookbook.
 - Use `node['nagios']['server']['dependencies']` attribute to set the packages to be installed in the source recipe
 - Add support for Debian 10
 - Create helpers library to better manage platform configuration
+- Remove support for Debian 9 and Amazon Linux 2
 
 ## 8.2.1 (2020-05-05)
 

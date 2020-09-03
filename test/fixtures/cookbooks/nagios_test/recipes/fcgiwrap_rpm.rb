@@ -4,7 +4,7 @@
 #
 # Copyright:: 2017, The Authors, All Rights Reserved.
 
-if platform_family?('rhel', 'amazon')
+if platform_family?('rhel')
   Chef::Log.info 'Build and install custom fcgiwrap RPM'
 
   user 'vagrant' do

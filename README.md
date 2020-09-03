@@ -28,7 +28,7 @@ The functionality that was previously in the nagios::client recipe has been move
 
 ### Platform
 
-- Debian 9+
+- Debian 10+
 - Ubuntu 16.04+
 - Red Hat Enterprise Linux (CentOS) 7+
 

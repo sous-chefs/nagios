@@ -49,7 +49,7 @@ default['nagios']['cgi']['template_file'] = 'cgi.cfg.erb'
 case node['platform_family']
 when 'debian'
   default['nagios']['plugin_dir'] = '/usr/lib/nagios/plugins'
-when 'rhel', 'amazon'
+when 'rhel'
   default['nagios']['plugin_dir'] = node['kernel']['machine'] == 'i686' ? '/usr/lib/nagios/plugins' : '/usr/lib64/nagios/plugins'
 else
   default['nagios']['plugin_dir'] = '/usr/lib/nagios/plugins'
@@ -96,7 +96,7 @@ default['nagios']['server']['patches']   = []
 default['nagios']['server']['patch_url'] = nil
 default['nagios']['server']['dependencies'] = nagios_server_dependencies
 default['nagios']['server']['packages'] = nagios_packages
-default['nagios']['server']['install_yum-epel'] = platform_family?('rhel', 'amazon')
+default['nagios']['server']['install_yum-epel'] = platform_family?('rhel')
 
 default['nagios']['check_external_commands']     = true
 default['nagios']['default_contact_groups']      = %w(admins)

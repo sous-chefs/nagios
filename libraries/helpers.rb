@@ -1,7 +1,7 @@
 module NagiosCookbook
   module Helpers
     def nagios_vname
-      if platform_family?('rhel', 'amazon')
+      if platform_family?('rhel')
         'nagios'
       elsif platform?('debian')
         'nagios4'
@@ -16,7 +16,7 @@ module NagiosCookbook
     end
 
     def nagios_packages
-      if platform_family?('rhel', 'amazon')
+      if platform_family?('rhel')
         %w(nagios nagios-plugins-nrpe)
       elsif platform?('debian')
         %w(nagios4 nagios-nrpe-plugin nagios-images)
@@ -31,7 +31,7 @@ module NagiosCookbook
     end
 
     def nagios_php_gd_package
-      if platform_family?('rhel', 'amazon')
+      if platform_family?('rhel')
         'php-gd'
       elsif platform?('debian')
         'php7.3-gd'
@@ -48,7 +48,7 @@ module NagiosCookbook
     end
 
     def nagios_server_dependencies
-      if platform_family?('rhel', 'amazon')
+      if platform_family?('rhel')
         %w(openssl-devel gd-devel tar)
       elsif platform?('debian')
         %w(libssl-dev libgdchart-gd2-xpm-dev bsd-mailx tar)
@@ -63,7 +63,7 @@ module NagiosCookbook
     end
 
     def nagios_home
-      if platform_family?('rhel', 'amazon')
+      if platform_family?('rhel')
         '/var/spool/nagios'
       else
         "/usr/lib/#{nagios_vname}"
@@ -83,7 +83,7 @@ module NagiosCookbook
     end
 
     def nagios_cache_dir
-      if platform_family?('rhel', 'amazon')
+      if platform_family?('rhel')
         '/var/log/nagios'
       else
         "/var/cache/#{nagios_vname}"
@@ -91,7 +91,7 @@ module NagiosCookbook
     end
 
     def nagios_state_dir
-      if platform_family?('rhel', 'amazon')
+      if platform_family?('rhel')
         '/var/log/nagios'
       else
         "/var/lib/#{nagios_vname}"
@@ -99,7 +99,7 @@ module NagiosCookbook
     end
 
     def nagios_run_dir
-      if platform_family?('rhel', 'amazon')
+      if platform_family?('rhel')
         if platform?('centos') && node['platform_version'].to_i < 7
           '/var/run'
         else
@@ -111,7 +111,7 @@ module NagiosCookbook
     end
 
     def nagios_docroot
-      if platform_family?('rhel', 'amazon')
+      if platform_family?('rhel')
         '/usr/share/nagios/html'
       else
         "/usr/share/#{nagios_vname}/htdocs"
@@ -119,7 +119,7 @@ module NagiosCookbook
     end
 
     def nagios_cgi_bin
-      if platform_family?('rhel', 'amazon')
+      if platform_family?('rhel')
         '/usr/lib64/nagios/cgi-bin/'
       else
         "/usr/lib/cgi-bin/#{nagios_vname}"
@@ -131,7 +131,7 @@ module NagiosCookbook
     end
 
     def nagios_mail_command
-      if platform_family?('rhel', 'amazon')
+      if platform_family?('rhel')
         '/bin/mail'
       else
         '/usr/bin/mail'
@@ -139,7 +139,7 @@ module NagiosCookbook
     end
 
     def nagios_cgi_path
-      if platform_family?('rhel', 'amazon')
+      if platform_family?('rhel')
         '/nagios/cgi-bin/'
       else
         "/cgi-bin/#{nagios_service_name}"
@@ -155,7 +155,7 @@ module NagiosCookbook
     end
 
     def nagios_install_method
-      if platform_family?('rhel', 'amazon', 'debian')
+      if platform_family?('rhel', 'debian')
         'package'
       else
         'source'

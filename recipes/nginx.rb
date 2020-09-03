@@ -61,7 +61,7 @@ template File.join(node['nginx']['dir'], 'sites-available', 'nagios3.conf') do
   variables(
     allowed_ips: node['nagios']['allowed_ips'],
     cgi: %w(cgi both).include?(dispatch_type),
-    cgi_bin_dir: platform_family?('rhel', 'amazon') ? '/usr/lib64' : '/usr/lib',
+    cgi_bin_dir: platform_family?('rhel') ? '/usr/lib64' : '/usr/lib',
     chef_env: node.chef_environment == '_default' ? 'default' : node.chef_environment,
     docroot: node['nagios']['docroot'],
     fqdn: node['fqdn'],
@@ -125,7 +125,7 @@ execute 'fix_docroot_perms' do
   action :nothing
 end
 
-if platform_family?('rhel', 'amazon')
+if platform_family?('rhel')
   directory node['nagios']['docroot'] do
     group node['nginx']['group']
     notifies :run, 'execute[fix_docroot_perms]', :before

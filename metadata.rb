@@ -21,7 +21,5 @@ end
   supports os, '>= 7.0'
 end
 
-supports 'amazon'
 supports 'debian', '>= 8.0'
-supports 'scientific'
 supports 'ubuntu', '>= 14.04'
