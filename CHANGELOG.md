@@ -12,6 +12,7 @@ This file is used to list changes made in each version of the nagios cookbook.
 - Add support for Debian 10
 - Create helpers library to better manage platform configuration
 - Remove support for Debian 9 and Amazon Linux 2
+- Update source build to nagios-4.4.6
 
 ## 8.2.1 (2020-05-05)
 

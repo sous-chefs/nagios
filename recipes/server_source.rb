@@ -60,7 +60,7 @@ end
 execute 'extract-nagios' do
   cwd Chef::Config[:file_cache_path]
   command 'tar zxvf nagios_core.tar.gz'
-  not_if { ::File.exist?("#{Chef::Config[:file_cache_path]}/#{node['nagios']['server']['src_dir']}") }
+  creates "#{Chef::Config[:file_cache_path]}/#{node['nagios']['server']['src_dir']}"
 end
 
 node['nagios']['server']['patches'].each do |patch|
@@ -80,9 +80,9 @@ node['nagios']['server']['patches'].each do |patch|
   end
 end
 
-bash 'compile-nagios' do
+execute 'compile-nagios' do
   cwd Chef::Config[:file_cache_path]
-  code <<-EOH
+  command <<-EOH
     cd #{node['nagios']['server']['src_dir']}
     ./configure --prefix=/usr \
         --mandir=/usr/share/man \

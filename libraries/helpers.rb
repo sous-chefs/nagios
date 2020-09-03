@@ -1,7 +1,9 @@
 module NagiosCookbook
   module Helpers
     def nagios_vname
-      if platform_family?('rhel')
+      if !node['nagios']['server'].nil? && node['nagios']['server']['install_method'] == 'source'
+        'nagios'
+      elsif platform_family?('rhel')
         'nagios'
       elsif platform?('debian')
         'nagios4'
@@ -49,15 +51,15 @@ module NagiosCookbook
 
     def nagios_server_dependencies
       if platform_family?('rhel')
-        %w(openssl-devel gd-devel tar)
+        %w(openssl-devel gd-devel tar unzip)
       elsif platform?('debian')
-        %w(libssl-dev libgdchart-gd2-xpm-dev bsd-mailx tar)
+        %w(libssl-dev libgdchart-gd2-xpm-dev bsd-mailx tar unzip)
       elsif platform?('ubuntu')
         case node['platform_version'].to_f
-        when 16.04, 18.04
-          %w(libssl-dev libgd2-xpm-dev bsd-mailx tar)
-        when 20.04
-          %w(libssl-dev libgd2-xpm-dev bsd-mailx tar)
+        when 16.04
+          %w(libssl-dev libgd2-xpm-dev bsd-mailx tar unzip)
+        when 18.04, 20.04
+          %w(libssl-dev libgdchart-gd2-xpm-dev bsd-mailx tar unzip)
         end
       end
     end

@@ -90,8 +90,8 @@ default['nagios']['server']['name'] = 'nagios'
 default['nagios']['server']['vname'] = nagios_vname
 
 # for server from source installation
-default['nagios']['server']['url']       = 'https://assets.nagios.com/downloads/nagioscore/releases/nagios-4.2.4.tar.gz'
-default['nagios']['server']['checksum']  = 'b0055c475683ce50d77b1536ff0cec9abf89139adecf771601fa021ef9a20b70'
+default['nagios']['server']['url']       = 'https://assets.nagios.com/downloads/nagioscore/releases/nagios-4.4.6.tar.gz'
+default['nagios']['server']['checksum']  = 'ab0d5a52caf01e6f4dcd84252c4eb5df5a24f90bb7f951f03875eef54f5ab0f4'
 default['nagios']['server']['src_dir']   = node['nagios']['server']['url'].split('/')[-1].chomp('.tar.gz')
 default['nagios']['server']['patches']   = []
 default['nagios']['server']['patch_url'] = nil

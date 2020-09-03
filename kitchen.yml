@@ -39,6 +39,9 @@ suites:
       nagios:
         server:
           install_method: 'source'
+    verifier:
+      inspec_tests:
+        - test/smoke/server_source/default_test.rb
   - name: swappable_config
     run_list:
       - recipe[nagios::default]
