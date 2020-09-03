@@ -7,16 +7,21 @@
 
 title 'Nagios Server Checks'
 
-if os.name == 'debian'
-  vname = 'nagios3'
-elsif os.name == 'ubuntu'
-  case os.release.to_f
-  when 16.04, 18.04
-    vname = 'nagios3'
-  when 20.04
-    vname = 'nagios4'
+install_method = input('install_method')
+
+vname =
+  if install_method == 'source'
+    'nagios'
+  elsif os.name == 'debian'
+    'nagios4'
+  elsif os.name == 'ubuntu'
+    case os.release.to_f
+    when 16.04, 18.04
+      'nagios3'
+    when 20.04
+      'nagios4'
+    end
   end
-end
 
 if %w(redhat).include?(os[:family])
   path_config_dir    = '/etc/nagios/conf.d'

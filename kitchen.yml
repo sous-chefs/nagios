@@ -29,6 +29,8 @@ suites:
       inspec_tests:
         - test/smoke/default/server.rb
         - test/smoke/default/nagios_website.rb
+      inputs:
+        install_method: 'package'
   - name: server_source
     run_list:
       - recipe[nagios::default]
@@ -59,6 +61,8 @@ suites:
         - test/smoke/default/server.rb
         - test/smoke/default/nagios_website.rb
         - test/smoke/swappable_config/default_test.rb
+      inputs:
+        install_method: 'source'
   - name: pagerduty
     run_list:
       - recipe[nagios::default]

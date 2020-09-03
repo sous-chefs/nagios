@@ -3,9 +3,12 @@
 title 'Nagios Website Checks'
 
 wget_cmd = 'wget -qO- --user=admin --password=admin http://localhost'
+install_method = input('install_method')
 
 cgi_cmd =
-  if os.family == 'redhat'
+  if install_method == 'source' && os.family == 'debian'
+    "#{wget_cmd}/cgi-bin/nagios"
+  elsif os.family == 'redhat'
     "#{wget_cmd}/nagios/cgi-bin"
   elsif os.name == 'debian'
     "#{wget_cmd}/cgi-bin/nagios4"
