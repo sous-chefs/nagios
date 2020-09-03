@@ -46,11 +46,10 @@ jobs:
           - 'ubuntu-1804'
           - 'ubuntu-2004'
         suite:
+          - 'nginx'
+          - 'pagerduty'
           - 'server-package'
           - 'server-source'
-          - 'pagerduty'
-          - 'allowed-ips'
-          - 'nginx'
           - 'swappable-config'
       fail-fast: false
 

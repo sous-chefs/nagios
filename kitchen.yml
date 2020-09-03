@@ -80,15 +80,6 @@ suites:
       inspec_tests:
         - test/smoke/pagerduty/default_test.rb
         - test/smoke/pagerduty/pagerduty_test.rb
-  - name: allowed_ips
-    run_list:
-      - recipe[nagios::default]
-      - recipe[nrpe::default]
-      - recipe[nagios_test::default]
-      - role[monitoring]
-    attributes:
-      nagios:
-        allowed_ips: ['127.0.0.1', '::1']
   - name: nginx
     run_list:
       - recipe[nagios_test::fcgiwrap_rpm]
