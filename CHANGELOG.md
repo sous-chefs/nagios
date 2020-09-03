@@ -13,6 +13,7 @@ This file is used to list changes made in each version of the nagios cookbook.
 - Create helpers library to better manage platform configuration
 - Remove support for Debian 9 and Amazon Linux 2
 - Update source build to nagios-4.4.6
+- Ensure we install the cgis when building from source
 
 ## 8.2.1 (2020-05-05)
 

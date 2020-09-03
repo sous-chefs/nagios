@@ -93,6 +93,7 @@ execute 'compile-nagios' do
         --infodir=/usr/share/info \
         --libexecdir=#{node['nagios']['plugin_dir']} \
         --localstatedir=#{node['nagios']['state_dir']} \
+        --with-cgibindir=#{node['nagios']['cgi-bin']} \
         --enable-event-broker \
         --with-nagios-user=#{node['nagios']['user']} \
         --with-nagios-group=#{node['nagios']['group']} \
@@ -106,6 +107,7 @@ execute 'compile-nagios' do
         --with-cgiurl=#{node['nagios']['cgi-path']}
     make all
     make install
+    make install-cgis
     make install-init
     make install-config
     make install-commandmode
