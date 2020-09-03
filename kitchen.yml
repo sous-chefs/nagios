@@ -73,9 +73,13 @@ suites:
     attributes:
       nagios:
         server:
-          install_method: 'source'
+          install_method: 'package'
         pagerduty:
           key: 'your_key_here_3eC2'
+    verifier:
+      inspec_tests:
+        - test/smoke/pagerduty/default_test.rb
+        - test/smoke/pagerduty/pagerduty_test.rb
   - name: allowed_ips
     run_list:
       - recipe[nagios::default]
