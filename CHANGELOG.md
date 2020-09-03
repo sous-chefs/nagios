@@ -10,6 +10,7 @@ This file is used to list changes made in each version of the nagios cookbook.
 - Remove the check for the legacy Pagerduty attribute at `node['nagios']['pagerduty_key']`. This needs to be set at `node['nagios']['pagerduty']['key']` now
 - Use `node['nagios']['server']['dependencies']` attribute to set the packages to be installed in the source recipe
 - Add support for Debian 10
+- Create helpers library to better manage platform configuration
 
 ## 8.2.1 (2020-05-05)
 

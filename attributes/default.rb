@@ -56,60 +56,29 @@ else
 end
 
 # platform specific directories
-if platform_family?('rhel', 'amazon')
-  default['nagios']['home']          = '/var/spool/nagios'
-  default['nagios']['conf_dir']      = '/etc/nagios'
-  default['nagios']['resource_dir']  = '/etc/nagios'
-  default['nagios']['config_dir']    = '/etc/nagios/conf.d'
-  default['nagios']['log_dir']       = '/var/log/nagios'
-  default['nagios']['cache_dir']     = '/var/log/nagios'
-  default['nagios']['state_dir']     = '/var/log/nagios'
-  default['nagios']['run_dir'] = if platform?('centos') && node['platform_version'].to_i < 7
-                                   '/var/run'
-                                 else
-                                   '/var/run/nagios'
-                                 end
-  default['nagios']['docroot']       = '/usr/share/nagios/html'
-  default['nagios']['cgi-bin']       = '/usr/lib64/nagios/cgi-bin/'
-else
-  default['nagios']['home']          = '/usr/lib/nagios3'
-  default['nagios']['conf_dir']      = '/etc/nagios3'
-  default['nagios']['resource_dir']  = '/etc/nagios3'
-  default['nagios']['config_dir']    = '/etc/nagios3/conf.d'
-  default['nagios']['log_dir']       = '/var/log/nagios3'
-  default['nagios']['cache_dir']     = '/var/cache/nagios3'
-  default['nagios']['state_dir']     = '/var/lib/nagios3'
-  default['nagios']['run_dir']       = '/var/run/nagios3'
-  default['nagios']['docroot']       = '/usr/share/nagios3/htdocs'
-  default['nagios']['cgi-bin']       = '/usr/lib/cgi-bin/nagios3'
-end
+default['nagios']['home']         = nagios_home
+default['nagios']['conf_dir']     = nagios_conf_dir
+default['nagios']['resource_dir'] = nagios_conf_dir
+default['nagios']['config_dir']   = nagios_config_dir
+default['nagios']['log_dir']      = nagios_log_dir
+default['nagios']['cache_dir']    = nagios_cache_dir
+default['nagios']['state_dir']    = nagios_state_dir
+default['nagios']['run_dir']      = nagios_run_dir
+default['nagios']['docroot']      = nagios_docroot
+default['nagios']['cgi-bin']      = nagios_cgi_bin
 
-# platform specific atttributes
-case node['platform_family']
-when 'debian'
-  default['nagios']['server']['install_method'] = 'package'
-  default['nagios']['server']['service_name']   = 'nagios3'
-  default['nagios']['server']['mail_command']   = '/usr/bin/mail'
-  default['nagios']['cgi-path'] = "/cgi-bin/#{node['nagios']['server']['service_name']}"
-when 'rhel', 'amazon'
-  default['nagios']['cgi-path'] = '/nagios/cgi-bin/'
-  default['nagios']['server']['install_method'] = 'package'
-  default['nagios']['server']['service_name']   = 'nagios'
-  default['nagios']['server']['mail_command']   = '/bin/mail'
-else
-  default['nagios']['cgi-path'] = '/cgi-bin/nagios3'
-  default['nagios']['server']['install_method'] = 'source'
-  default['nagios']['server']['service_name']   = 'nagios'
-  default['nagios']['server']['mail_command']   = '/bin/mail'
-end
+default['nagios']['server']['install_method'] = nagios_install_method
+default['nagios']['server']['service_name']   = nagios_service_name
+default['nagios']['server']['mail_command']   = nagios_mail_command
+default['nagios']['cgi-path'] = nagios_cgi_path
 
 # webserver configuration
 default['nagios']['enable_ssl']    = false
 default['nagios']['http_port']     = node['nagios']['enable_ssl'] ? '443' : '80'
 default['nagios']['server_name']   = node['fqdn']
 default['nagios']['server']['server_alias'] = nil
-default['nagios']['ssl_cert_file'] = "#{node['nagios']['conf_dir']}/certificates/nagios-server.pem"
-default['nagios']['ssl_cert_key']  = "#{node['nagios']['conf_dir']}/certificates/nagios-server.pem"
+default['nagios']['ssl_cert_file'] = "#{nagios_conf_dir}/certificates/nagios-server.pem"
+default['nagios']['ssl_cert_key']  = "#{nagios_conf_dir}/certificates/nagios-server.pem"
 default['nagios']['ssl_req']       = '/C=US/ST=Several/L=Locality/O=Example/OU=Operations/' \
   "CN=#{node['nagios']['server_name']}/emailAddress=ops@#{node['nagios']['server_name']}"
 default['nagios']['ssl_protocols'] = 'all -SSLv3 -SSLv2'
@@ -117,11 +86,7 @@ default['nagios']['ssl_ciphers']   = nil
 
 # nagios server name and webserver vname.  this can be changed to allow for the installation of icinga
 default['nagios']['server']['name'] = 'nagios'
-default['nagios']['server']['vname'] = if platform_family?('rhel', 'amazon')
-                                         'nagios'
-                                       else
-                                         'nagios3'
-                                       end
+default['nagios']['server']['vname'] = nagios_vname
 
 # for server from source installation
 default['nagios']['server']['url']       = 'https://assets.nagios.com/downloads/nagioscore/releases/nagios-4.2.4.tar.gz'
@@ -129,19 +94,9 @@ default['nagios']['server']['checksum']  = 'b0055c475683ce50d77b1536ff0cec9abf89
 default['nagios']['server']['src_dir']   = node['nagios']['server']['url'].split('/')[-1].chomp('.tar.gz')
 default['nagios']['server']['patches']   = []
 default['nagios']['server']['patch_url'] = nil
-default['nagios']['server']['dependencies'] = value_for_platform_family(
-  'rhel' => %w(openssl-devel gd-devel tar),
-  'debian' => %w(libssl-dev libgd2-xpm-dev bsd-mailx tar),
-  'default' => %w(libssl-dev libgd2-xpm-dev bsd-mailx tar)
-)
-
-# for server from packages installation
-if platform_family?('rhel', 'amazon')
-  default['nagios']['server']['packages'] = %w(nagios nagios-plugins-nrpe)
-  default['nagios']['server']['install_yum-epel'] = true
-else
-  default['nagios']['server']['packages'] = %w(nagios3 nagios-nrpe-plugin nagios-images)
-end
+default['nagios']['server']['dependencies'] = nagios_server_dependencies
+default['nagios']['server']['packages'] = nagios_packages
+default['nagios']['server']['install_yum-epel'] = platform_family?('rhel', 'amazon')
 
 default['nagios']['check_external_commands']     = true
 default['nagios']['default_contact_groups']      = %w(admins)
@@ -227,12 +182,7 @@ default['nagios']['server']['nginx_dispatch']['cgi_url']  =
   'unix:/var/run/fcgiwrap.socket'
 default['nagios']['server']['nginx_dispatch']['php_url']  =
   'unix:/var/run/php-fpm-www.sock'
-default['nagios']['php_gd_package']                    =
-  if platform_family?('rhel')
-    'php-gd'
-  else
-    'php5-gd'
-  end
+default['nagios']['php_gd_package']                    = nagios_php_gd_package
 default['nagios']['server']['stop_apache']             = false
 default['nagios']['server']['normalize_hostname']      = false
 default['nagios']['server']['load_default_config']     = true
