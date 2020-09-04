@@ -30,6 +30,7 @@ when 'debian'
   %w(adminpassword adminpassword-repeat).each do |setting|
     execute "debconf-set-selections::#{node['nagios']['server']['vname']}-cgi::#{node['nagios']['server']['vname']}/#{setting}" do
       command "echo #{node['nagios']['server']['vname']}-cgi #{node['nagios']['server']['vname']}/#{setting} password #{random_initial_password} | debconf-set-selections"
+      sensitive true
       not_if "dpkg -l #{node['nagios']['server']['vname']}"
     end
   end
