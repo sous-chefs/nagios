@@ -36,10 +36,12 @@ The functionality that was previously in the nagios::client recipe has been move
 
 ### Cookbooks
 
-- apache2 4.0 or greater
-- nginx 7.0 or greater
-- php
+- apache2 ~> 5.0
+- nginx ~> 9.0
+- nrpe
+- php >= 4.0
 - yum-epel
+- zap >= 0.6.0
 
 ## Attributes
 
