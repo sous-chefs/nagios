@@ -17,6 +17,7 @@ This file is used to list changes made in each version of the nagios cookbook.
 - Remove allowed-ips suite as that should be tested with ChefSpec
 - Switch to using php cookbook and fix nginx cookbook version
 - Set sensitive for debconf-set-selections execute resource
+- Remove support for Apache 2.2 (resolves #556)
 
 ## 8.2.1 (2020-05-05)
 

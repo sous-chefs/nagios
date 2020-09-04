@@ -8,12 +8,12 @@ issues_url       'https://github.com/sous-chefs/nagios/issues'
 source_url       'https://github.com/sous-chefs/nagios'
 chef_version     '>= 14'
 
-depends 'apache2', '< 6.0' # 6.0+ removes all recipes and attributes
-depends 'nginx', '< 10.0'
-depends 'php', '>= 4.0.0'
-depends 'zap', '>= 0.6.0'
+depends 'apache2',  '~> 5.0' # 6.0+ removes all recipes and attributes
+depends 'nginx',    '~> 9.0'
+depends 'php',      '>= 4.0.0'
+depends 'zap',      '>= 0.6.0'
 
-%w(php yum-epel nrpe).each do |cb|
+%w(yum-epel nrpe).each do |cb|
   depends cb
 end
 
@@ -21,5 +21,5 @@ end
   supports os, '>= 7.0'
 end
 
-supports 'debian', '>= 8.0'
-supports 'ubuntu', '>= 14.04'
+supports 'debian', '>= 10.0'
+supports 'ubuntu', '>= 16.04'

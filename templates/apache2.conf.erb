@@ -80,7 +80,6 @@
     <% unless node['nagios']['ldap_bind_dn'].nil? -%>AuthLDAPBindDN "<%= node['nagios']['ldap_bind_dn'] %>" <% end -%>
     <% unless node['nagios']['ldap_bind_password'].nil? -%>AuthLDAPBindPassword "<%= node['nagios']['ldap_bind_password'] %>"<% end -%>
     AuthLDAPURL "<%= node['nagios']['ldap_url'] %>"
-    <% if node['apache']['version'] < "2.4" and !node['nagios']['ldap_authoritative'].nil? %>AuthzLDAPAuthoritative <%= node['nagios']['ldap_authoritative'] %><% end %>
     require <%= node['nagios']['server_auth_require'] %>
   </Location>
 <% else -%>
