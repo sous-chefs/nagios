@@ -1,3 +1,4 @@
+---
 Lint/DuplicateMethods:
   Enabled: false
 Lint/Void:
