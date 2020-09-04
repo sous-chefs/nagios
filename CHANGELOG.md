@@ -15,6 +15,7 @@ This file is used to list changes made in each version of the nagios cookbook.
 - Update source build to nagios-4.4.6
 - Ensure we install the cgis when building from source
 - Remove allowed-ips suite as that should be tested with ChefSpec
+- Switch to using php cookbook and fix nginx cookbook version
 
 ## 8.2.1 (2020-05-05)
 

@@ -19,12 +19,12 @@
 node.default['nagios']['server']['web_server'] = 'nginx'
 
 include_recipe 'nginx'
+include_recipe 'php'
 
-node.default['php-fpm']['pools']['www']['user'] = node['nginx']['user']
-node.default['php-fpm']['pools']['www']['group'] = node['nginx']['group']
-node.default['php-fpm']['user'] = node['nginx']['user']
-node.default['php-fpm']['group'] = node['nginx']['group']
-include_recipe 'php-fpm'
+php_fpm_pool 'nagios' do
+  user node['nginx']['user']
+  group node['nginx']['group']
+end
 
 package nagios_array(node['nagios']['server']['nginx_dispatch']['packages'])
 
@@ -113,8 +113,9 @@ end
 include_recipe 'nagios::server'
 
 ## Some post nagios install cleanup
+apache_service = platform_family?('rhel') ? 'httpd' : 'apache2'
 
-service node['apache']['service_name'] do
+service apache_service do
   action [:disable, :stop]
   notifies :start, 'service[nginx]', :delayed
   notifies :restart, 'service[nagios]', :delayed

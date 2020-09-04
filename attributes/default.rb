@@ -179,10 +179,8 @@ default['nagios']['server']['nginx_dispatch']['services']  =
   else
     %w(fcgiwrap)
   end
-default['nagios']['server']['nginx_dispatch']['cgi_url']  =
-  'unix:/var/run/fcgiwrap.socket'
-default['nagios']['server']['nginx_dispatch']['php_url']  =
-  'unix:/var/run/php-fpm-www.sock'
+default['nagios']['server']['nginx_dispatch']['cgi_url']  = 'unix:/var/run/fcgiwrap.socket'
+default['nagios']['server']['nginx_dispatch']['php_url']  = "unix:#{node['php']['fpm_socket']}"
 default['nagios']['php_gd_package']                    = nagios_php_gd_package
 default['nagios']['server']['stop_apache']             = false
 default['nagios']['server']['normalize_hostname']      = false

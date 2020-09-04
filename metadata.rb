@@ -9,8 +9,8 @@ source_url       'https://github.com/sous-chefs/nagios'
 chef_version     '>= 14'
 
 depends 'apache2', '< 6.0' # 6.0+ removes all recipes and attributes
-depends 'nginx', '>= 7.0'
-depends 'php-fpm', '>= 0.7.9'
+depends 'nginx', '< 10.0'
+depends 'php', '>= 4.0.0'
 depends 'zap', '>= 0.6.0'
 
 %w(php yum-epel nrpe).each do |cb|
