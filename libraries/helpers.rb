@@ -64,11 +64,38 @@ module NagiosCookbook
       end
     end
 
+    def nagios_nginx_dispatch_packages
+      if platform_family?('rhel')
+        %w(spawn-fcgi fcgiwrap)
+      else
+        %w(fcgiwrap)
+      end
+    end
+
+    def nagios_nginx_dispatch_services
+      if platform_family?('rhel')
+        %w(spawn-fcgi)
+      else
+        %w(fcgiwrap)
+      end
+    end
+
     def nagios_home
       if platform_family?('rhel')
         '/var/spool/nagios'
       else
         "/usr/lib/#{nagios_vname}"
+      end
+    end
+
+    def nagios_plugin_dir
+      case node['platform_family']
+      when 'debian'
+        '/usr/lib/nagios/plugins'
+      when 'rhel'
+        node['kernel']['machine'] == 'i686' ? '/usr/lib/nagios/plugins' : '/usr/lib64/nagios/plugins'
+      else
+        '/usr/lib/nagios/plugins'
       end
     end
 
@@ -156,11 +183,31 @@ module NagiosCookbook
       end
     end
 
+    def nagios_conf_p1_file
+      case node['platform_family']
+      when 'debian'
+        "#{nagios_home}/p1.pl"
+      when 'rhel'
+        '/usr/sbin/p1.pl'
+      else
+        "#{nagios_home}/p1.pl"
+      end
+    end
+
     def nagios_install_method
       if platform_family?('rhel', 'debian')
         'package'
       else
         'source'
+      end
+    end
+
+    def nagios_pagerduty_packages
+      case node['platform_family']
+      when 'rhel'
+        %w(perl-CGI perl-JSON perl-libwww-perl perl-Crypt-SSLeay)
+      when 'debian'
+        %w(libcgi-pm-perl libjson-perl libwww-perl libcrypt-ssleay-perl)
       end
     end
   end

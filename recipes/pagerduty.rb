@@ -18,53 +18,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-package 'perl-CGI' do
-  case node['platform_family']
-  when 'rhel'
-    package_name 'perl-CGI'
-  when 'debian'
-    package_name 'libcgi-pm-perl'
-  when 'arch'
-    package_name 'perl-cgi'
-  end
-  action :install
-end
-
-package 'perl-JSON' do
-  case node['platform_family']
-  when 'rhel'
-    package_name 'perl-JSON'
-  when 'debian'
-    package_name 'libjson-perl'
-  when 'arch'
-    package_name 'perl-json'
-  end
-  action :install
-end
-
-package 'libwww-perl' do
-  case node['platform_family']
-  when 'rhel'
-    package_name 'perl-libwww-perl'
-  when 'debian'
-    package_name 'libwww-perl'
-  when 'arch'
-    package_name 'libwww-perl'
-  end
-  action :install
-end
-
-package 'libcrypt-ssleay-perl' do
-  case node['platform_family']
-  when 'rhel'
-    package_name 'perl-Crypt-SSLeay'
-  when 'debian'
-    package_name 'libcrypt-ssleay-perl'
-  when 'arch'
-    package_name 'libcrypt-ssleay-perl'
-  end
-  action :install
-end
+package nagios_pagerduty_packages
 
 remote_file "#{node['nagios']['plugin_dir']}/notify_pagerduty.pl" do
   owner 'root'

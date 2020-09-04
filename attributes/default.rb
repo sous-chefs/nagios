@@ -46,15 +46,7 @@ default['nagios']['resources']['template_file'] = 'resource.cfg.erb'
 default['nagios']['cgi']['template_cookbook'] = 'nagios'
 default['nagios']['cgi']['template_file'] = 'cgi.cfg.erb'
 
-default['nagios']['plugin_dir'] =
-  case node['platform_family']
-  when 'debian'
-    '/usr/lib/nagios/plugins'
-  when 'rhel'
-    node['kernel']['machine'] == 'i686' ? '/usr/lib/nagios/plugins' : '/usr/lib64/nagios/plugins'
-  else
-    '/usr/lib/nagios/plugins'
-  end
+default['nagios']['plugin_dir'] = nagios_plugin_dir
 
 # platform specific directories
 default['nagios']['home']         = nagios_home
@@ -167,18 +159,8 @@ default['nagios']['default_service']['action_url']            = nil
 default['nagios']['server']['web_server']              = 'apache'
 default['nagios']['server']['nginx_dispatch']['type']  = 'both'
 default['nagios']['server']['nginx_dispatch']['type']  = 'both'
-default['nagios']['server']['nginx_dispatch']['packages']  =
-  if platform_family?('rhel')
-    %w(spawn-fcgi fcgiwrap)
-  else
-    %w(fcgiwrap)
-  end
-default['nagios']['server']['nginx_dispatch']['services']  =
-  if platform_family?('rhel')
-    %w(spawn-fcgi)
-  else
-    %w(fcgiwrap)
-  end
+default['nagios']['server']['nginx_dispatch']['packages']  = nagios_nginx_dispatch_packages
+default['nagios']['server']['nginx_dispatch']['services']  = nagios_nginx_dispatch_services
 default['nagios']['server']['nginx_dispatch']['cgi_url']  = 'unix:/var/run/fcgiwrap.socket'
 default['nagios']['server']['nginx_dispatch']['php_url']  = "unix:#{node['php']['fpm_socket']}"
 default['nagios']['php_gd_package']                    = nagios_php_gd_package
