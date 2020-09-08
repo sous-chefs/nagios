@@ -30,11 +30,7 @@ package node['nagios']['php_gd_package']
 # Note: the cookbook now defaults to Nagios 4.X which doesn't support embedded perl anyways
 node.default['nagios']['conf']['p1_file'] = nil
 
-node['nagios']['server']['dependencies'].each do |pkg|
-  package pkg do
-    action :install
-  end
-end
+package node['nagios']['server']['dependencies']
 
 user node['nagios']['user'] do
   action :create
@@ -64,7 +60,7 @@ end
 execute 'extract-nagios' do
   cwd Chef::Config[:file_cache_path]
   command 'tar zxvf nagios_core.tar.gz'
-  not_if { ::File.exist?("#{Chef::Config[:file_cache_path]}/#{node['nagios']['server']['src_dir']}") }
+  creates "#{Chef::Config[:file_cache_path]}/#{node['nagios']['server']['src_dir']}"
 end
 
 node['nagios']['server']['patches'].each do |patch|
@@ -84,9 +80,9 @@ node['nagios']['server']['patches'].each do |patch|
   end
 end
 
-bash 'compile-nagios' do
+execute 'compile-nagios' do
   cwd Chef::Config[:file_cache_path]
-  code <<-EOH
+  command <<-EOH
     cd #{node['nagios']['server']['src_dir']}
     ./configure --prefix=/usr \
         --mandir=/usr/share/man \
@@ -97,6 +93,7 @@ bash 'compile-nagios' do
         --infodir=/usr/share/info \
         --libexecdir=#{node['nagios']['plugin_dir']} \
         --localstatedir=#{node['nagios']['state_dir']} \
+        --with-cgibindir=#{node['nagios']['cgi-bin']} \
         --enable-event-broker \
         --with-nagios-user=#{node['nagios']['user']} \
         --with-nagios-group=#{node['nagios']['group']} \
@@ -110,6 +107,7 @@ bash 'compile-nagios' do
         --with-cgiurl=#{node['nagios']['cgi-path']}
     make all
     make install
+    make install-cgis
     make install-init
     make install-config
     make install-commandmode

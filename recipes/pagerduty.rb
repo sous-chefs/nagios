@@ -18,65 +18,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# TODO: remove when backward compatibility is dropped.
-def using_old_pagerduty_key_attribute?
-  node['nagios']['pagerduty_key'] &&
-    node['nagios']['pagerduty_key'] != node['nagios']['pagerduty']['key']
-end
-
-if using_old_pagerduty_key_attribute?
-  Chef::Log.warn('The nagios.pagerduty_key attribute is deprecated. It is replaced by the nagios.pagerduty.key attribute.')
-  Chef::Log.warn('Assigning nagios.pagerduty.key from nagios.pagerduty_key now.')
-  node.normal['nagios']['pagerduty']['key'] = node['nagios']['pagerduty_key']
-end
-
-package 'perl-CGI' do
-  case node['platform_family']
-  when 'rhel', 'amazon'
-    package_name 'perl-CGI'
-  when 'debian'
-    package_name 'libcgi-pm-perl'
-  when 'arch'
-    package_name 'perl-cgi'
-  end
-  action :install
-end
-
-package 'perl-JSON' do
-  case node['platform_family']
-  when 'rhel', 'amazon'
-    package_name 'perl-JSON'
-  when 'debian'
-    package_name 'libjson-perl'
-  when 'arch'
-    package_name 'perl-json'
-  end
-  action :install
-end
-
-package 'libwww-perl' do
-  case node['platform_family']
-  when 'rhel', 'amazon'
-    package_name 'perl-libwww-perl'
-  when 'debian'
-    package_name 'libwww-perl'
-  when 'arch'
-    package_name 'libwww-perl'
-  end
-  action :install
-end
-
-package 'libcrypt-ssleay-perl' do
-  case node['platform_family']
-  when 'rhel', 'amazon'
-    package_name 'perl-Crypt-SSLeay'
-  when 'debian'
-    package_name 'libcrypt-ssleay-perl'
-  when 'arch'
-    package_name 'libcrypt-ssleay-perl'
-  end
-  action :install
-end
+package nagios_pagerduty_packages
 
 remote_file "#{node['nagios']['plugin_dir']}/notify_pagerduty.pl" do
   owner 'root'

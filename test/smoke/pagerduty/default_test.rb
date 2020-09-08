@@ -1,21 +1,27 @@
+vname =
+  if os.name == 'debian'
+    'nagios4'
+  elsif os.name == 'ubuntu'
+    case os.release.to_f
+    when 16.04, 18.04
+      'nagios3'
+    when 20.04
+      'nagios4'
+    end
+  end
+
 if os.redhat?
   apache_bin      = 'httpd'
   config_cgi_path = 'nagios/cgi-bin/config.cgi'
   path_config_dir = '/etc/nagios/conf.d'
   path_conf_dir   = '/etc/nagios'
   service_name    = 'nagios'
-elsif os.suse?
-  apache_bin      = 'httpd-prefork'
-  config_cgi_path = 'cgi-bin/nagios3/config.cgi'
-  path_config_dir = '/etc/nagios3/conf.d'
-  path_conf_dir   = '/etc/nagios3'
-  service_name    = 'nagios'
 else
   apache_bin      = 'apache2'
-  config_cgi_path = 'cgi-bin/nagios3/config.cgi'
-  path_config_dir = '/etc/nagios3/conf.d'
-  path_conf_dir   = '/etc/nagios3'
-  service_name    = 'nagios3'
+  config_cgi_path = "cgi-bin/#{vname}/config.cgi"
+  path_config_dir = "/etc/#{vname}/conf.d"
+  path_conf_dir   = "/etc/#{vname}"
+  service_name    = vname
 end
 
 # Test Nagios Config
@@ -86,9 +92,9 @@ describe file("#{path_config_dir}/hostgroups.cfg") do
 end
 
 describe file("#{path_config_dir}/servicegroups.cfg") do
-  its(:content) { should match "servicegroup_name.*servicegroup_a\n\s*members.*host_a_alt,service_a,host_a_alt,service_b,host_b_alt,service_b,host_b_alt,service_c" }
-  its(:content) { should match "servicegroup_name.*servicegroup_b\n\s*members.*host_b_alt,service_c" }
-  its(:content) { should match "servicegroup_name.*selective_services\n\s*members\s*host_a_alt,selective_service,host_b_alt,selective_service" }
+  its(:content) { should match "servicegroup_name.*servicegroup_a\n\s*members\s+host_a_alt,service_a,host_a_alt,service_b,host_b,service_b,host_b,service_c" }
+  its(:content) { should match "servicegroup_name.*servicegroup_b\n\s*members\s+host_b,service_c" }
+  its(:content) { should match "servicegroup_name.*selective_services\n\s*members\s+host_a_alt,selective_service,host_b,selective_service" }
 end
 
 describe file("#{path_config_dir}/templates.cfg") do
@@ -120,7 +126,7 @@ describe port(80) do
 end
 
 describe command('wget -qO- --user=admin --password=admin localhost') do
-  its(:stdout) { should match %r{(?i).*<title>Nagios Core.*</title>.*} }
+  its(:stdout) { should match %r{(?i).*<title>(Nagios: localhost|Nagios Core).*</title>.*} }
 end
 
 # This looks wrong and can't make it work - perhaps someone can take a look or decide to remove this test entirely?

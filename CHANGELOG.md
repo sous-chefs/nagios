@@ -2,6 +2,23 @@
 
 This file is used to list changes made in each version of the nagios cookbook.
 
+## Unreleased
+
+- Use multipackage installs to speed up installs
+- Pin the Apache2 requirement at < 7.0 since 7.0+ is not compatible with this cookbook
+- Remove some legacy and broken attribute gating that would prevent all attributes from being set on RHEL systems
+- Remove the check for the legacy Pagerduty attribute at `node['nagios']['pagerduty_key']`. This needs to be set at `node['nagios']['pagerduty']['key']` now
+- Use `node['nagios']['server']['dependencies']` attribute to set the packages to be installed in the source recipe
+- Add support for Debian 10
+- Create helpers library to better manage platform configuration
+- Remove support for Debian 9 and Amazon Linux 2
+- Update source build to nagios-4.4.6
+- Ensure we install the cgis when building from source
+- Remove allowed-ips suite as that should be tested with ChefSpec
+- Switch to using php cookbook and fix nginx cookbook version
+- Set sensitive for debconf-set-selections execute resource
+- Remove support for Apache 2.2 (resolves #556)
+
 ## 8.2.1 (2020-05-05)
 
 - resolved cookstyle error: libraries/timeperiod.rb:72:15 convention: `Style/HashEachMethods`

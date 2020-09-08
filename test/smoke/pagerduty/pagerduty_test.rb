@@ -1,12 +1,24 @@
+vname =
+  if os.name == 'debian'
+    'nagios4'
+  elsif os.name == 'ubuntu'
+    case os.release.to_f
+    when 16.04, 18.04
+      'nagios3'
+    when 20.04
+      'nagios4'
+    end
+  end
+
 if os.redhat?
   command_file      = '/var/log/nagios/rw/nagios.cmd'
   pagerduty_cgi_dir = '/usr/lib64/nagios/cgi-bin'
   path_config_dir   = '/etc/nagios/conf.d'
   perl_cgi_package  = 'perl-CGI'
 else
-  command_file      = '/var/lib/nagios3/rw/nagios.cmd'
-  pagerduty_cgi_dir = '/usr/lib/cgi-bin/nagios3'
-  path_config_dir   = '/etc/nagios3/conf.d'
+  command_file      = "/var/lib/#{vname}/rw/nagios.cmd"
+  pagerduty_cgi_dir = "/usr/lib/cgi-bin/#{vname}"
+  path_config_dir   = "/etc/#{vname}/conf.d"
   perl_cgi_package  = 'libcgi-pm-perl'
 end
 

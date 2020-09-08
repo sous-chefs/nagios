@@ -4,7 +4,7 @@
 #
 # Copyright:: 2017, The Authors, All Rights Reserved.
 
-if platform_family?('rhel', 'amazon')
+if platform_family?('rhel')
   Chef::Log.info 'Build and install custom fcgiwrap RPM'
 
   user 'vagrant' do
@@ -15,7 +15,7 @@ if platform_family?('rhel', 'amazon')
   include_recipe 'yum-epel'
   include_recipe 'fcgiwrap_rpm::default'
 
-  package %w(createrepo)
+  package 'createrepo'
 
   execute 'create_repo' do
     command 'createrepo .'

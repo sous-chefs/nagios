@@ -3,12 +3,23 @@
 title 'Nagios Website Checks'
 
 wget_cmd = 'wget -qO- --user=admin --password=admin http://localhost'
+install_method = input('install_method')
 
-cgi_cmd = if %w(redhat).include?(os[:family])
-            "#{wget_cmd}/nagios/cgi-bin"
-          else
-            "#{wget_cmd}/cgi-bin/nagios3"
-          end
+cgi_cmd =
+  if install_method == 'source' && os.family == 'debian'
+    "#{wget_cmd}/cgi-bin/nagios"
+  elsif os.family == 'redhat'
+    "#{wget_cmd}/nagios/cgi-bin"
+  elsif os.name == 'debian'
+    "#{wget_cmd}/cgi-bin/nagios4"
+  elsif os.name == 'ubuntu'
+    case os.release.to_f
+    when 16.04, 18.04
+      "#{wget_cmd}/cgi-bin/nagios3"
+    when 20.04
+      "#{wget_cmd}/cgi-bin/nagios4"
+    end
+  end
 
 control 'nagios-website-01' do
   impact 1.0
@@ -28,7 +39,7 @@ control 'nagios-website-02' do
   describe command(wget_cmd) do
     its('exit_status') { should eq 0 }
     its('stdout') do
-      should match(%r{<title>Nagios Core.*<\/title>})
+      should match(%r{<title>(Nagios: (localhost|nagios)|Nagios Core).*<\/title>})
     end
   end
 end

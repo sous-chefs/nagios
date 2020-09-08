@@ -21,14 +21,14 @@
 # This class holds all nagios configuration options.
 #
 
-default['nagios']['conf']['log_file']                                    = "#{node['nagios']['log_dir']}/#{node['nagios']['server']['name']}.log"
+default['nagios']['conf']['log_file']                                    = "#{nagios_log_dir}/#{node['nagios']['server']['name']}.log"
 default['nagios']['conf']['cfg_dir']                                     = node['nagios']['config_dir']
-default['nagios']['conf']['object_cache_file']                           = "#{node['nagios']['cache_dir']}/objects.cache"
-default['nagios']['conf']['precached_object_file']                       = "#{node['nagios']['cache_dir']}/objects.precache"
-default['nagios']['conf']['resource_file']                               = "#{node['nagios']['resource_dir']}/resource.cfg"
-default['nagios']['conf']['temp_file']                                   = "#{node['nagios']['cache_dir']}/#{node['nagios']['server']['name']}.tmp"
+default['nagios']['conf']['object_cache_file']                           = "#{nagios_cache_dir}/objects.cache"
+default['nagios']['conf']['precached_object_file']                       = "#{nagios_cache_dir}/objects.precache"
+default['nagios']['conf']['resource_file']                               = "#{nagios_conf_dir}/resource.cfg"
+default['nagios']['conf']['temp_file']                                   = "#{nagios_cache_dir}/#{node['nagios']['server']['name']}.tmp"
 default['nagios']['conf']['temp_path']                                   = '/tmp'
-default['nagios']['conf']['status_file']                                 = "#{node['nagios']['cache_dir']}/status.dat"
+default['nagios']['conf']['status_file']                                 = "#{nagios_cache_dir}/status.dat"
 default['nagios']['conf']['status_update_interval']                      = '10'
 default['nagios']['conf']['nagios_user']                                 = node['nagios']['user']
 default['nagios']['conf']['nagios_group']                                = node['nagios']['group']
@@ -39,15 +39,15 @@ default['nagios']['conf']['execute_host_checks']                         = '1'
 default['nagios']['conf']['accept_passive_host_checks']                  = '1'
 default['nagios']['conf']['enable_event_handlers']                       = '1'
 default['nagios']['conf']['log_rotation_method']                         = 'd'
-default['nagios']['conf']['log_archive_path']                            = "#{node['nagios']['log_dir']}/archives"
+default['nagios']['conf']['log_archive_path']                            = "#{nagios_log_dir}/archives"
 default['nagios']['conf']['check_external_commands']                     = '1'
 default['nagios']['conf']['command_check_interval']                      = '-1'
-default['nagios']['conf']['command_file']                                = "#{node['nagios']['state_dir']}/rw/#{node['nagios']['server']['name']}.cmd"
+default['nagios']['conf']['command_file']                                = "#{nagios_state_dir}/rw/#{node['nagios']['server']['name']}.cmd"
 default['nagios']['conf']['external_command_buffer_slots']               = '4096' # Deprecated, Starting with Nagios Core 4, this variable has no effect.
 default['nagios']['conf']['check_for_updates']                           = '0'
-default['nagios']['conf']['lock_file']                                   = "#{node['nagios']['run_dir']}/#{node['nagios']['server']['vname']}.pid"
+default['nagios']['conf']['lock_file']                                   = "#{nagios_run_dir}/#{node['nagios']['server']['vname']}.pid"
 default['nagios']['conf']['retain_state_information']                    = '1'
-default['nagios']['conf']['state_retention_file']                        = "#{node['nagios']['state_dir']}/retention.dat"
+default['nagios']['conf']['state_retention_file']                        = "#{nagios_state_dir}/retention.dat"
 default['nagios']['conf']['retention_update_interval']                   = '60'
 default['nagios']['conf']['use_retained_program_state']                  = '1'
 default['nagios']['conf']['use_retained_scheduling_info']                = '1'
@@ -129,7 +129,7 @@ default['nagios']['conf']['retained_process_service_attribute_mask']     = '0'
 default['nagios']['conf']['retained_contact_host_attribute_mask']        = '0'
 default['nagios']['conf']['retained_contact_service_attribute_mask']     = '0'
 default['nagios']['conf']['daemon_dumps_core']                           = '0'
-default['nagios']['conf']['debug_file']                                  = "#{node['nagios']['state_dir']}/#{node['nagios']['server']['name']}.debug"
+default['nagios']['conf']['debug_file']                                  = "#{nagios_state_dir}/#{node['nagios']['server']['name']}.debug"
 default['nagios']['conf']['debug_level']                                 = '0'
 default['nagios']['conf']['debug_verbosity']                             = '1'
 default['nagios']['conf']['max_debug_file_size']                         = '1000000'
@@ -157,20 +157,7 @@ default['nagios']['conf']['service_perfdata_file_processing_interval']   = nil
 default['nagios']['conf']['host_perfdata_file_processing_command']       = nil
 default['nagios']['conf']['service_perfdata_file_processing_command']    = nil
 default['nagios']['conf']['broker_module']                               = nil
+default['nagios']['conf']['allow_empty_hostgroup_assignment'] = '1'
+default['nagios']['conf']['service_check_timeout_state']      = 'c'
 
-if node['nagios']['server']['install_method'] == 'source' ||
-   (platform?('rhel') && node['platform_version'].to_i >= 6) ||
-   (platform?('debian') && node['platform_version'].to_i >= 7) ||
-   (platform?('ubuntu') && node['platform_version'].to_f >= 14.04)
-  default['nagios']['conf']['allow_empty_hostgroup_assignment'] = '1'
-  default['nagios']['conf']['service_check_timeout_state']      = 'c'
-end
-
-case node['platform_family']
-when 'debian'
-  default['nagios']['conf']['p1_file'] = "#{node['nagios']['home']}/p1.pl"
-when 'rhel', 'amazon'
-  default['nagios']['conf']['p1_file'] = '/usr/sbin/p1.pl'
-else
-  default['nagios']['conf']['p1_file'] = "#{node['nagios']['home']}/p1.pl"
-end
+default['nagios']['conf']['p1_file'] = nagios_conf_p1_file

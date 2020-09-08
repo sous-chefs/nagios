@@ -1,4 +1,9 @@
+---
 Lint/DuplicateMethods:
   Enabled: false
 Lint/Void:
+  Enabled: false
+
+# this whole cookbook will need to be refactored to fix this
+ChefModernize/Definitions:
   Enabled: false

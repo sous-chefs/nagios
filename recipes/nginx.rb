@@ -19,12 +19,12 @@
 node.default['nagios']['server']['web_server'] = 'nginx'
 
 include_recipe 'nginx'
+include_recipe 'php'
 
-node.default['php-fpm']['pools']['www']['user'] = node['nginx']['user']
-node.default['php-fpm']['pools']['www']['group'] = node['nginx']['group']
-node.default['php-fpm']['user'] = node['nginx']['user']
-node.default['php-fpm']['group'] = node['nginx']['group']
-include_recipe 'php-fpm'
+php_fpm_pool 'nagios' do
+  user node['nginx']['user']
+  group node['nginx']['group']
+end
 
 package nagios_array(node['nagios']['server']['nginx_dispatch']['packages'])
 
@@ -61,7 +61,7 @@ template File.join(node['nginx']['dir'], 'sites-available', 'nagios3.conf') do
   variables(
     allowed_ips: node['nagios']['allowed_ips'],
     cgi: %w(cgi both).include?(dispatch_type),
-    cgi_bin_dir: platform_family?('rhel', 'amazon') ? '/usr/lib64' : '/usr/lib',
+    cgi_bin_dir: platform_family?('rhel') ? '/usr/lib64' : '/usr/lib',
     chef_env: node.chef_environment == '_default' ? 'default' : node.chef_environment,
     docroot: node['nagios']['docroot'],
     fqdn: node['fqdn'],
@@ -113,8 +113,9 @@ end
 include_recipe 'nagios::server'
 
 ## Some post nagios install cleanup
+apache_service = platform_family?('rhel') ? 'httpd' : 'apache2'
 
-service node['apache']['service_name'] do
+service apache_service do
   action [:disable, :stop]
   notifies :start, 'service[nginx]', :delayed
   notifies :restart, 'service[nagios]', :delayed
@@ -125,7 +126,7 @@ execute 'fix_docroot_perms' do
   action :nothing
 end
 
-if platform_family?('rhel', 'amazon')
+if platform_family?('rhel')
   directory node['nagios']['docroot'] do
     group node['nginx']['group']
     notifies :run, 'execute[fix_docroot_perms]', :before

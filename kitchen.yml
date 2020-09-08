@@ -1,3 +1,4 @@
+---
 driver:
   name: vagrant
   network:
@@ -5,29 +6,17 @@ driver:
 
 provisioner:
   name: chef_zero
-  require_chef_omnibus: <%= ENV['CHEF_VERSION'] || 'latest' %>
+  product_name: chef
 
 verifier:
   name: inspec
 
 platforms:
-  - name: ubuntu-14.04
-    run_list:
-      - recipe[apt::default]
-  - name: ubuntu-16.04
-    run_list:
-      - recipe[apt::default]
-  - name: debian-7
-    run_list:
-      - recipe[apt::default]
-  - name: debian-8
-    run_list:
-      - recipe[apt::default]
   - name: centos-7
-  - name: centos-6
-  - name: amazon-linux
-    driver_config:
-      box: mvbcoding/awslinux
+  - name: debian-10
+  - name: ubuntu-16.04
+  - name: ubuntu-18.04
+  - name: ubuntu-20.04
 
 suites:
   - name: server_package
@@ -36,12 +25,12 @@ suites:
       - recipe[nrpe::default]
       - recipe[nagios_test::default]
       - role[monitoring]
-    attributes:
-      nagios:
     verifier:
       inspec_tests:
         - test/smoke/default/server.rb
         - test/smoke/default/nagios_website.rb
+      inputs:
+        install_method: 'package'
   - name: server_source
     run_list:
       - recipe[nagios::default]
@@ -52,6 +41,9 @@ suites:
       nagios:
         server:
           install_method: 'source'
+    verifier:
+      inspec_tests:
+        - test/smoke/server_source/default_test.rb
   - name: swappable_config
     run_list:
       - recipe[nagios::default]
@@ -69,6 +61,8 @@ suites:
         - test/smoke/default/server.rb
         - test/smoke/default/nagios_website.rb
         - test/smoke/swappable_config/default_test.rb
+      inputs:
+        install_method: 'source'
   - name: pagerduty
     run_list:
       - recipe[nagios::default]
@@ -79,18 +73,13 @@ suites:
     attributes:
       nagios:
         server:
-          install_method: 'source'
+          install_method: 'package'
         pagerduty:
           key: 'your_key_here_3eC2'
-  - name: allowed_ips
-    run_list:
-      - recipe[nagios::default]
-      - recipe[nrpe::default]
-      - recipe[nagios_test::default]
-      - role[monitoring]
-    attributes:
-      nagios:
-        allowed_ips: ['127.0.0.1', '::1']
+    verifier:
+      inspec_tests:
+        - test/smoke/pagerduty/default_test.rb
+        - test/smoke/pagerduty/pagerduty_test.rb
   - name: nginx
     run_list:
       - recipe[nagios_test::fcgiwrap_rpm]
