@@ -2,7 +2,7 @@
 
 This file is used to list changes made in each version of the nagios cookbook.
 
-## Unreleased
+## 9.0.0 (2020-09-08)
 
 - Use multipackage installs to speed up installs
 - Pin the Apache2 requirement at < 7.0 since 7.0+ is not compatible with this cookbook
