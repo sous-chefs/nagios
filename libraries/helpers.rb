@@ -209,6 +209,7 @@ module NagiosCookbook
       when 'debian'
         %w(libcgi-pm-perl libjson-perl libwww-perl libcrypt-ssleay-perl)
       end
+    end
 
     def nagios_node_search(new_resource)
       if new_resource.multi_environment_monitoring

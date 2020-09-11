@@ -259,12 +259,12 @@ action :configure do
     not_if { Dir.glob(cfg_files).empty? }
   end
 
-	nagios_conf 'nagios' do
-		config_subdir false
-		cookbook new_resource.template_cookbook node['nagios']['nagios_config']['template_cookbook']
-		source node['nagios']['nagios_config']['template_file']
-		variables(nagios_config: node['nagios']['conf'])
-	end
+  nagios_conf 'nagios' do
+    config_subdir false
+    cookbook new_resource.template_cookbook node['nagios']['nagios_config']['template_cookbook']
+    source node['nagios']['nagios_config']['template_file']
+    variables(nagios_config: node['nagios']['conf'])
+  end
 end
 
 action_class do

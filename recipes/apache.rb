@@ -16,7 +16,7 @@
 # limitations under the License.
 #
 
-::Chef::Recipe.include Apache2::Cookbook::Helpers
+::Chef::DSL::Recipe.include Apache2::Cookbook::Helpers
 ::Chef::Resource.include Apache2::Cookbook::Helpers
 
 service 'apache2' do

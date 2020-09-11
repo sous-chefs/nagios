@@ -16,8 +16,8 @@
 # limitations under the License.
 #
 
-::Chef::Recipe.include Nginx::Cookbook::Helpers
-::Chef::Recipe.include Apache2::Cookbook::Helpers
+::Chef::DSL::Recipe.include Nginx::Cookbook::Helpers
+::Chef::DSL::Recipe.include Apache2::Cookbook::Helpers
 ::Chef::Resource.include Nginx::Cookbook::Helpers
 
 service 'nginx' do
