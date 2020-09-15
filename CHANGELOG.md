@@ -2,6 +2,10 @@
 
 This file is used to list changes made in each version of the nagios cookbook.
 
+## Unreleased
+
+- resolved cookstyle error: libraries/helpers.rb:215:1 refactor: `ChefCorrectness/IncorrectLibraryInjection`
+
 ## 9.0.0 (2020-09-08)
 
 - Use multipackage installs to speed up installs

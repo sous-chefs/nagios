@@ -212,6 +212,6 @@ module NagiosCookbook
     end
   end
 end
-Chef::Recipe.include ::NagiosCookbook::Helpers
+Chef::DSL::Recipe.include ::NagiosCookbook::Helpers
 Chef::Resource.include ::NagiosCookbook::Helpers
 Chef::Node.include ::NagiosCookbook::Helpers
