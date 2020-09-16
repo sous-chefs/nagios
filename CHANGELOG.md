@@ -2,7 +2,7 @@
 
 This file is used to list changes made in each version of the nagios cookbook.
 
-## Unreleased
+## 9.0.1 (2020-09-16)
 
 - Cookstyle Bot Auto Corrections with Cookstyle 6.17.6
 
