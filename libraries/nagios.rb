@@ -256,7 +256,7 @@ class Nagios
   def push_node(obj)
     groups = get_groups(obj)
     hostname = get_hostname(obj)
-    return nil if hostname.nil?
+    return if hostname.nil?
 
     host = find(Nagios::Host.new(hostname))
     # TODO: merge the ip_to_monitor funtion into this logic here

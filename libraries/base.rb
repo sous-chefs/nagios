@@ -100,14 +100,14 @@ class Nagios
     end
 
     def check_use_and_name(default)
-      return nil if default.nil?
-      return nil if to_s == default.to_s
+      return if default.nil?
+      return if to_s == default.to_s
       default
     end
 
     def default_template
       return @use unless @use.nil?
-      return nil if @name
+      return if @name
       case self
       when Nagios::Command
         check_use_and_name(Nagios.instance.default_command)
@@ -134,7 +134,7 @@ class Nagios
 
     def configured_option(method, option)
       value = send(method)
-      return nil if blank?(value)
+      return if blank?(value)
       value = value.split(',') if value.is_a? String
       value = value.map do |e|
         (@not_modifiers[option][e] || '') + e
@@ -154,9 +154,9 @@ class Nagios
     end
 
     def get_definition(options, group)
-      return nil if to_s == '*'
-      return nil if to_s == 'null'
-      return nil if to_s.start_with? '!'
+      return if to_s == '*'
+      return if to_s == 'null'
+      return if to_s.start_with? '!'
       d = ["define #{group} {"]
       d += get_definition_options(options)
       d += ['}']
@@ -199,7 +199,7 @@ class Nagios
     end
 
     def get_timeperiod(obj)
-      return nil if obj.nil?
+      return if obj.nil?
       return obj.to_s if obj.class == Nagios::Timeperiod
       obj
     end
@@ -272,7 +272,7 @@ class Nagios
     end
 
     def update_options(hash)
-      return nil if blank?(hash)
+      return if blank?(hash)
       update_hash_options(hash) if hash.respond_to?('each_pair')
     end
 
