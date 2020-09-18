@@ -1,5 +1,3 @@
-# # encoding: utf-8
-
 title 'Nagios Website Checks'
 
 wget_cmd = 'wget -qO- --user=admin --password=admin http://localhost'
