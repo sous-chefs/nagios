@@ -32,9 +32,7 @@ apache2_install 'default-install' do
 end
 apache2_module 'cgi'
 apache2_module 'rewrite'
-apache2_module "php#{node['php']['version'].to_i}" do
-  mod_name "libphp#{node['php']['version'].to_i}.so"
-end
+apache2_mod_php
 apache2_module 'ssl' if node['nagios']['enable_ssl']
 
 apache2_site '000-default' do
