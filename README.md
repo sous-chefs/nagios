@@ -84,7 +84,6 @@ Example: `default['nagios']['conf']['cfg_dir'] = [ '/etc/nagios/conf.d' , '/usr/
 - `node['nagios']['server']['server_alias']` - alias name for the webserver for use with Apache.  Defaults to nil
 - `node['nagios']['ssl_req']` - info to use in a cert, default `/C=US/ST=Several/L=Locality/O=Example/OU=Operations/CN=#{node['nagios']['server_name']}/emailAddress=ops@#{node['nagios']['server_name']}`
 
-- `node['nagios']['server']['url']` - url to download the server source from if installing from source
 - `node['nagios']['server']['version']` - version of the server source to download
 - `node['nagios']['server']['checksum']` - checksum of the source files
 - `node['nagios']['server']['patch_url']` - url to download patches from if installing from source
