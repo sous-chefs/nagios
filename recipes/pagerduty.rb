@@ -18,12 +18,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-package nagios_pagerduty_packages
+include_recipe 'nagios::server_package'
 
-directory node['nagios']['plugin_dir'] do
-  owner 'root'
-  group 'root'
-end
+package nagios_pagerduty_packages
 
 remote_file "#{node['nagios']['plugin_dir']}/notify_pagerduty.pl" do
   owner 'root'

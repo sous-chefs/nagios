@@ -217,9 +217,9 @@ module NagiosCookbook
     def nagios_pagerduty_packages
       case node['platform_family']
       when 'rhel'
-        %w(perl-CGI perl-JSON perl-libwww-perl perl-Crypt-SSLeay)
+        %w(perl-CGI perl-JSON perl-libwww-perl perl-Sys-Syslog)
       when 'debian'
-        %w(libcgi-pm-perl libjson-perl libwww-perl libcrypt-ssleay-perl)
+        %w(libcgi-pm-perl libjson-perl libwww-perl)
       end
     end
   end

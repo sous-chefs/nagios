@@ -12,6 +12,7 @@ This file is used to list changes made in each version of the nagios cookbook.
 - Refactor and improve source installation
 - Fix InSpec tests
 - Use proper locations for zapping distribution configuration
+- Various fixes for pagerduty recipe
 
 ## 9.0.1 (2020-09-16)
 
