@@ -82,7 +82,6 @@ suites:
         - test/smoke/pagerduty/pagerduty_test.rb
   - name: nginx
     run_list:
-      - recipe[nagios_test::fcgiwrap_rpm]
       - recipe[nagios::nginx]
       - recipe[nrpe::default]
       - recipe[nagios_test::default]

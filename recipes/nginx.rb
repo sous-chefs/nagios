@@ -16,23 +16,25 @@
 # limitations under the License.
 #
 
-service 'nginx' do
-  supports status: true, restart: true, reload: true
-  action :nothing
-end
-
 node.default['nagios']['server']['web_server'] = 'nginx'
 
-nginx_install 'default' do
-  source 'distro'
+nginx_install 'nagios' do
+  source platform_family?('rhel') ? 'epel' : 'distro'
+  ohai_plugin_enabled false
+end
+
+nginx_config 'nagios' do
   default_site_enabled false
+  notifies :restart, 'nginx_service[nagios]', :delayed
 end
 
 include_recipe 'php'
 
 php_fpm_pool 'nagios' do
-  user node['nginx']['user']
-  group node['nginx']['group']
+  user nginx_user
+  group nginx_group
+  listen_user nginx_user
+  listen_group nginx_group
 end
 
 package nagios_array(node['nagios']['server']['nginx_dispatch']['packages'])
@@ -55,14 +57,9 @@ end
 
 dispatch_type = node['nagios']['server']['nginx_dispatch']['type']
 
-file "#{nginx_dir}/conf.d/default.conf" do
-  action :delete
-  notifies :reload, 'service[nginx]', :immediately
-end
-
-template "#{nginx_dir}/sites-available/nagios3.conf" do
-  source 'nginx.conf.erb'
-  mode '0644'
+nginx_site 'nagios' do
+  template 'nginx.conf.erb'
+  cookbook 'nagios'
   variables(
     allowed_ips: node['nagios']['allowed_ips'],
     cgi: %w(cgi both).include?(dispatch_type),
@@ -84,13 +81,13 @@ template "#{nginx_dir}/sites-available/nagios3.conf" do
     ssl_cert_file: node['nagios']['ssl_cert_file'],
     ssl_cert_key: node['nagios']['ssl_cert_key']
   )
-  if File.symlink?("#{nginx_dir}/sites-enabled/nagios3.conf")
-    notifies :reload, 'service[nginx]', :immediately
-  end
+  notifies :reload, 'nginx_service[nagios]', :delayed
+  action [:create, :enable]
 end
 
-nginx_site 'nagios3.conf' do
-  notifies :reload, 'service[nginx]'
+nginx_service 'nagios' do
+  action :enable
+  delayed_action :start
 end
 
 node.default['nagios']['web_user'] = nginx_user
@@ -116,22 +113,3 @@ else
 end
 
 include_recipe 'nagios::server'
-
-service apache_platform_service_name do
-  action [:disable, :stop]
-  notifies :start, 'service[nginx]', :delayed
-  notifies :restart, 'service[nagios]', :delayed
-end
-
-execute 'fix_docroot_perms' do
-  command "chgrp -R #{node['nagios']['web_group']} #{node['nagios']['docroot']}"
-  action :nothing
-end
-
-if platform_family?('rhel')
-  directory node['nagios']['docroot'] do
-    group nginx_user
-    notifies :run, 'execute[fix_docroot_perms]', :before
-    action :create
-  end
-end

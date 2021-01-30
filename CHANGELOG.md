@@ -8,6 +8,7 @@ This file is used to list changes made in each version of the nagios cookbook.
 - Standardise files with files in sous-chefs/repo-management
 - Cookstyle fixes
 - Convert definitions to custom resources
+- Update nginx recipe to use newer nginx cookbook
 
 ## 9.0.1 (2020-09-16)
 
