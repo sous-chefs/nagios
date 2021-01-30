@@ -39,7 +39,7 @@ end
 package node['nagios']['server']['packages']
 
 # File typically exists on Debian
-file "#{node['apache']['dir']}/conf-enabled/#{node['nagios']['server']['vname']}-cgi.conf" do
+file "#{apache_dir}/conf-enabled/#{node['nagios']['server']['vname']}-cgi.conf" do
   manage_symlink_source true
   action :delete
 end
