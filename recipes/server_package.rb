@@ -44,6 +44,11 @@ file "#{apache_dir}/conf-enabled/#{node['nagios']['server']['vname']}-cgi.conf" 
   action :delete
 end
 
+# File typically exists on RHEL
+file "#{apache_dir}/conf.d/nagios.conf" do
+  action :delete
+end
+
 directory node['nagios']['config_dir'] do
   owner 'root'
   group 'root'

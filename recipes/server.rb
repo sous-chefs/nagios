@@ -87,11 +87,12 @@ directory "#{node['nagios']['conf_dir']}/dist" do
   mode '0755'
 end
 
+# Don't run on RHEL since the state directory is the same as the log directory and causes idempotency issues
 directory node['nagios']['state_dir'] do
   owner node['nagios']['user']
   group node['nagios']['group']
   mode '0751'
-end
+end unless platform_family?('rhel')
 
 directory "#{node['nagios']['state_dir']}/rw" do
   owner node['nagios']['user']

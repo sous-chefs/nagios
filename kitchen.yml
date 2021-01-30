@@ -7,23 +7,27 @@ driver:
 provisioner:
   name: chef_zero
   product_name: chef
+  enforce_idempotency: true
+  # This needs to be 3 due to the use of node searches
+  multiple_converge: 3
+  deprecations_as_errors: true
 
 verifier:
   name: inspec
 
 platforms:
   - name: centos-7
+  - name: centos-8
   - name: debian-10
-  - name: ubuntu-16.04
   - name: ubuntu-18.04
   - name: ubuntu-20.04
 
 suites:
   - name: server_package
     run_list:
+      - recipe[nagios_test::default]
       - recipe[nagios::default]
       - recipe[nrpe::default]
-      - recipe[nagios_test::default]
       - role[monitoring]
     verifier:
       inspec_tests:
@@ -33,6 +37,7 @@ suites:
         install_method: 'package'
   - name: server_source
     run_list:
+      - recipe[nagios_test::default]
       - recipe[nagios::default]
       - recipe[nrpe::default]
       - recipe[nagios_test::default]
@@ -46,6 +51,7 @@ suites:
         - test/smoke/server_source/default_test.rb
   - name: swappable_config
     run_list:
+      - recipe[nagios_test::default]
       - recipe[nagios::default]
       - recipe[nrpe::default]
       - recipe[nagios_test::default]
@@ -53,7 +59,7 @@ suites:
     attributes:
       nagios:
         server:
-          install_method: 'source'
+          install_method: 'package'
         nagios_config:
           template_cookbook: 'nagios_test'
     verifier:
@@ -62,11 +68,12 @@ suites:
         - test/smoke/default/nagios_website.rb
         - test/smoke/swappable_config/default_test.rb
       inputs:
-        install_method: 'source'
+        install_method: 'package'
   - name: pagerduty
     run_list:
-      - recipe[nagios::default]
+      - recipe[nagios_test::default]
       - recipe[nagios::pagerduty]
+      - recipe[nagios::default]
       - recipe[nrpe::default]
       - recipe[nagios_test::default]
       - role[monitoring]
@@ -82,6 +89,7 @@ suites:
         - test/smoke/pagerduty/pagerduty_test.rb
   - name: nginx
     run_list:
+      - recipe[nagios_test::default]
       - recipe[nagios::nginx]
       - recipe[nrpe::default]
       - recipe[nagios_test::default]

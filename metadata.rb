@@ -20,4 +20,4 @@ depends 'zap', '>= 0.6.0'
 end
 
 supports 'debian', '>= 10.0'
-supports 'ubuntu', '>= 16.04'
+supports 'ubuntu', '>= 18.04'

@@ -4,7 +4,7 @@ describe 'nagios::default' do
   cached(:chef_run) do
     ChefSpec::ServerRunner.new(
       platform: 'ubuntu',
-      version: '16.04',
+      version: '20.04',
       step_into: %w(nagios_conf nagios_timeperiod)
     ) do |_node, server|
       server.create_data_bag(
@@ -22,21 +22,21 @@ describe 'nagios::default' do
   end
 
   before do
-    stub_command('dpkg -l nagios3').and_return(true)
+    stub_command('dpkg -l nagios4').and_return(true)
     stub_command('/usr/sbin/apache2 -t').and_return(true)
   end
 
   it 'should create conf_dir' do
-    expect(chef_run).to create_directory('/etc/nagios3')
+    expect(chef_run).to create_directory('/etc/nagios4')
   end
 
   it 'should template apache2 htpassword file with only admins' do
-    expect(chef_run).to render_file('/etc/nagios3/htpasswd.users')
+    expect(chef_run).to render_file('/etc/nagios4/htpasswd.users')
   end
 
   it 'should template contacts config with valid users' do
-    expect(chef_run).to render_file('/etc/nagios3/conf.d/contacts.cfg').with_content('tsmith')
-    expect(chef_run).not_to render_file('/etc/nagios3/conf.d/contacts.cfg').with_content('bsmith')
+    expect(chef_run).to render_file('/etc/nagios4/conf.d/contacts.cfg').with_content('tsmith')
+    expect(chef_run).not_to render_file('/etc/nagios4/conf.d/contacts.cfg').with_content('bsmith')
   end
 
   it do
@@ -44,13 +44,13 @@ describe 'nagios::default' do
   end
 
   it do
-    expect(chef_run).to create_template('/etc/nagios3/conf.d/timeperiods.cfg').with(
+    expect(chef_run).to create_template('/etc/nagios4/conf.d/timeperiods.cfg').with(
       variables: {}
     )
   end
 
   it 'should template nagios config files' do
-    expect(chef_run).to render_file('/etc/nagios3/conf.d/timeperiods.cfg').with_content(/
+    expect(chef_run).to render_file('/etc/nagios4/conf.d/timeperiods.cfg').with_content(/
 define timeperiod {
   timeperiod_name  24x7
   alias            24 Hours A Day, 7 Days A Week
@@ -63,7 +63,7 @@ define timeperiod {
   saturday         00:00-24:00
 }
 /)
-    expect(chef_run).to render_file('/etc/nagios3/conf.d/hosts.cfg').with_content(/
+    expect(chef_run).to render_file('/etc/nagios4/conf.d/hosts.cfg').with_content(/
 define host {
   use         server
   host_name   Fauxhai
@@ -71,7 +71,7 @@ define host {
   address     10.0.0.2
 }
 /)
-    expect(chef_run).to render_file('/etc/nagios3/conf.d/hostgroups.cfg').with_content(/
+    expect(chef_run).to render_file('/etc/nagios4/conf.d/hostgroups.cfg').with_content(/
 define hostgroup {
   hostgroup_name all
   alias all
@@ -88,14 +88,14 @@ define hostgroup {
   members         Fauxhai
 }
 /)
-    expect(chef_run).to render_file('/etc/nagios3/conf.d/servicegroups.cfg')
-    expect(chef_run).to render_file('/etc/nagios3/conf.d/services.cfg')
+    expect(chef_run).to render_file('/etc/nagios4/conf.d/servicegroups.cfg')
+    expect(chef_run).to render_file('/etc/nagios4/conf.d/services.cfg')
     [
-      %r{^main_config_file=/etc/nagios3/nagios.cfg$},
-      %r{^physical_html_path=/usr/share/nagios3/htdocs$},
-      %r{^url_html_path=/nagios3$},
+      %r{^main_config_file=/etc/nagios4/nagios.cfg$},
+      %r{^physical_html_path=/usr/share/nagios4/htdocs$},
+      %r{^url_html_path=/nagios4$},
       /^show_context_help=1$/,
-      %r{^nagios_check_command=/usr/lib/nagios/plugins/check_nagios /var/cache/nagios3/status.dat 5 '/usr/sbin/nagios3'$},
+      %r{^nagios_check_command=/usr/lib/nagios/plugins/check_nagios /var/cache/nagios4/status.dat 5 '/usr/sbin/nagios4'$},
       /^use_authentication=1$/,
       /^#default_user_name=guest$/,
       /^authorized_for_system_information=\*$/,
@@ -115,18 +115,18 @@ define hostgroup {
       /^notes_url_target=_blank$/,
       /^lock_author_names=1$/,
     ].each do |line|
-      expect(chef_run).to render_file('/etc/nagios3/cgi.cfg').with_content(line)
+      expect(chef_run).to render_file('/etc/nagios4/cgi.cfg').with_content(line)
     end
-    expect(chef_run).to render_file('/etc/nagios3/conf.d/templates.cfg')
-    expect(chef_run).to render_file('/etc/nagios3/nagios.cfg').with_content(%r{
-log_file=/var/log/nagios3/nagios.log
-cfg_dir=/etc/nagios3/conf.d
-object_cache_file=/var/cache/nagios3/objects.cache
-precached_object_file=/var/cache/nagios3/objects.precache
-resource_file=/etc/nagios3/resource.cfg
-temp_file=/var/cache/nagios3/nagios.tmp
+    expect(chef_run).to render_file('/etc/nagios4/conf.d/templates.cfg')
+    expect(chef_run).to render_file('/etc/nagios4/nagios.cfg').with_content(%r{
+log_file=/var/log/nagios4/nagios.log
+cfg_dir=/etc/nagios4/conf.d
+object_cache_file=/var/cache/nagios4/objects.cache
+precached_object_file=/var/cache/nagios4/objects.precache
+resource_file=/etc/nagios4/resource.cfg
+temp_file=/var/cache/nagios4/nagios.tmp
 temp_path=/tmp
-status_file=/var/cache/nagios3/status.dat
+status_file=/var/cache/nagios4/status.dat
 status_update_interval=10
 nagios_user=nagios
 nagios_group=nagios
@@ -137,15 +137,15 @@ execute_host_checks=1
 accept_passive_host_checks=1
 enable_event_handlers=1
 log_rotation_method=d
-log_archive_path=/var/log/nagios3/archives
+log_archive_path=/var/log/nagios4/archives
 check_external_commands=1
 command_check_interval=-1
-command_file=/var/lib/nagios3/rw/nagios.cmd
+command_file=/var/lib/nagios4/rw/nagios.cmd
 external_command_buffer_slots=4096
 check_for_updates=0
-lock_file=/var/run/nagios3/nagios3.pid
+lock_file=/var/run/nagios4/nagios4.pid
 retain_state_information=1
-state_retention_file=/var/lib/nagios3/retention.dat
+state_retention_file=/var/lib/nagios4/retention.dat
 retention_update_interval=60
 use_retained_program_state=1
 use_retained_scheduling_info=1
@@ -164,7 +164,7 @@ service_interleave_factor=s
 max_concurrent_checks=0
 check_result_reaper_frequency=10
 max_check_result_reaper_time=30
-check_result_path=/var/lib/nagios3/spool/checkresults
+check_result_path=/var/lib/nagios4/spool/checkresults
 max_check_result_file_age=3600
 host_inter_check_delay_method=s
 max_host_check_spread=5
@@ -222,15 +222,15 @@ retained_process_service_attribute_mask=0
 retained_contact_host_attribute_mask=0
 retained_contact_service_attribute_mask=0
 daemon_dumps_core=0
-debug_file=/var/lib/nagios3/nagios.debug
+debug_file=/var/lib/nagios4/nagios.debug
 debug_level=0
 debug_verbosity=1
 max_debug_file_size=1000000
 allow_empty_hostgroup_assignment=1
 service_check_timeout_state=c
-p1_file=/usr/lib/nagios3/p1.pl
+p1_file=/usr/lib/nagios4/p1.pl
 })
-    expect(chef_run).to render_file('/etc/nagios3/conf.d/servicedependencies.cfg')
-    expect(chef_run).to render_file('/etc/nagios3/conf.d/commands.cfg')
+    expect(chef_run).to render_file('/etc/nagios4/conf.d/servicedependencies.cfg')
+    expect(chef_run).to render_file('/etc/nagios4/conf.d/commands.cfg')
   end
 end

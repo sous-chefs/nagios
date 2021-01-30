@@ -9,7 +9,7 @@ module NagiosCookbook
         'nagios4'
       elsif platform?('ubuntu')
         case node['platform_version'].to_f
-        when 16.04, 18.04
+        when 18.04
           'nagios3'
         when 20.04
           'nagios4'
@@ -24,7 +24,7 @@ module NagiosCookbook
         %w(nagios4 nagios-nrpe-plugin nagios-images)
       elsif platform?('ubuntu')
         case node['platform_version'].to_f
-        when 16.04, 18.04
+        when 18.04
           %w(nagios3 nagios-nrpe-plugin nagios-images)
         when 20.04
           %w(nagios4 nagios-nrpe-plugin nagios-images)
@@ -39,8 +39,6 @@ module NagiosCookbook
         'php7.3-gd'
       elsif platform?('ubuntu')
         case node['platform_version'].to_f
-        when 16.04
-          'php7.0-gd'
         when 18.04
           'php7.2-gd'
         when 20.04
@@ -52,15 +50,8 @@ module NagiosCookbook
     def nagios_server_dependencies
       if platform_family?('rhel')
         %w(openssl-devel gd-devel tar unzip)
-      elsif platform?('debian')
+      else
         %w(libssl-dev libgdchart-gd2-xpm-dev bsd-mailx tar unzip)
-      elsif platform?('ubuntu')
-        case node['platform_version'].to_f
-        when 16.04
-          %w(libssl-dev libgd2-xpm-dev bsd-mailx tar unzip)
-        when 18.04, 20.04
-          %w(libssl-dev libgdchart-gd2-xpm-dev bsd-mailx tar unzip)
-        end
       end
     end
 

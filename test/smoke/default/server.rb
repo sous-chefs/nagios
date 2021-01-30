@@ -14,7 +14,7 @@ vname =
     'nagios4'
   elsif os.name == 'ubuntu'
     case os.release.to_f
-    when 16.04, 18.04
+    when 18.04
       'nagios3'
     when 20.04
       'nagios4'

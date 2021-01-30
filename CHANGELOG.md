@@ -14,6 +14,7 @@ This file is used to list changes made in each version of the nagios cookbook.
 - Use proper locations for zapping distribution configuration
 - Various fixes for pagerduty recipe
 - Switch to using `apache2_mod_php` resource
+- Fix idempotency and other misc kitchen fixes
 
 ## 9.0.1 (2020-09-16)
 

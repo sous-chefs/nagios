@@ -12,7 +12,7 @@ cgi_cmd =
     "#{wget_cmd}/cgi-bin/nagios4"
   elsif os.name == 'ubuntu'
     case os.release.to_f
-    when 16.04, 18.04
+    when 18.04
       "#{wget_cmd}/cgi-bin/nagios3"
     when 20.04
       "#{wget_cmd}/cgi-bin/nagios4"
