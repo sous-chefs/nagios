@@ -165,7 +165,8 @@ nagios_conf 'services'
 nagios_conf 'servicegroups'
 nagios_conf 'servicedependencies'
 
-zap_directory node['nagios']['config_dir'] do
+# Remove distribution included config files that aren't managed via this cookbook
+zap_directory nagios_distro_config_dir do
   pattern '*.cfg'
 end
 

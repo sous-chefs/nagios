@@ -107,6 +107,14 @@ module NagiosCookbook
       "#{nagios_conf_dir}/conf.d"
     end
 
+    def nagios_distro_config_dir
+      if platform_family?('rhel')
+        "#{nagios_conf_dir}/objects"
+      else
+        "#{nagios_conf_dir}/dist"
+      end
+    end
+
     def nagios_log_dir
       "/var/log/#{nagios_vname}"
     end
