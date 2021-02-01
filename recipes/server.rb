@@ -166,12 +166,13 @@ nagios_conf 'services'
 nagios_conf 'servicegroups'
 nagios_conf 'servicedependencies'
 
+service 'nagios' do
+  service_name nagios_service_name
+  # don't start as it will cause issues on initial runs on Ubuntu platforms
+  action :enable
+end
+
 # Remove distribution included config files that aren't managed via this cookbook
 zap_directory nagios_distro_config_dir do
   pattern '*.cfg'
-end
-
-service 'nagios' do
-  service_name nagios_service_name
-  action [:enable, :start]
 end

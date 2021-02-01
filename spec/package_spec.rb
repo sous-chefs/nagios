@@ -32,8 +32,7 @@ describe 'nagios::default' do
     expect(chef_run).to install_package(%w(nagios4 nagios-nrpe-plugin nagios-images))
   end
 
-  it 'should start and enable service nagios' do
-    expect(chef_run).to start_service('nagios')
+  it do
     expect(chef_run).to enable_service('nagios')
   end
 end
