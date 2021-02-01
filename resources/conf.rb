@@ -30,15 +30,19 @@ action :create do
   conf_dir = new_resource.config_subdir ? node['nagios']['config_dir'] : node['nagios']['conf_dir']
   source ||= "#{new_resource.name}.cfg.erb"
 
-  template "#{conf_dir}/#{new_resource.name}.cfg" do
-    cookbook new_resource.cookbook if new_resource.cookbook
-    owner 'nagios'
-    group 'nagios'
-    source source
-    mode '0644'
-    variables new_resource.variables
-    notifies :restart, 'service[nagios]'
-    backup 0
+  with_run_context(:root) do
+    template "#{conf_dir}/#{new_resource.name}.cfg" do
+      cookbook new_resource.cookbook if new_resource.cookbook
+      owner 'nagios'
+      group 'nagios'
+      source source
+      mode '0644'
+      variables new_resource.variables
+      notifies :restart, 'service[nagios]'
+      backup 0
+      action :nothing
+      delayed_action :create
+    end
   end
 end
 
