@@ -13,10 +13,9 @@ vname =
   elsif os.name == 'debian'
     'nagios4'
   elsif os.name == 'ubuntu'
-    case os.release.to_f
-    when 18.04
+    if os.release.to_f < 20.04
       'nagios3'
-    when 20.04
+    else
       'nagios4'
     end
   end
