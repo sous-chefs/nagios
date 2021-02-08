@@ -8,10 +8,9 @@ module NagiosCookbook
       elsif platform?('debian')
         'nagios4'
       elsif platform?('ubuntu')
-        case node['platform_version'].to_f
-        when 16.04, 18.04
+        if node['platform_version'].to_f < 20.04
           'nagios3'
-        when 20.04
+        else
           'nagios4'
         end
       end
@@ -23,10 +22,9 @@ module NagiosCookbook
       elsif platform?('debian')
         %w(nagios4 nagios-nrpe-plugin nagios-images)
       elsif platform?('ubuntu')
-        case node['platform_version'].to_f
-        when 16.04, 18.04
+        if node['platform_version'].to_f < 20.04
           %w(nagios3 nagios-nrpe-plugin nagios-images)
-        when 20.04
+        else
           %w(nagios4 nagios-nrpe-plugin nagios-images)
         end
       end
@@ -38,12 +36,9 @@ module NagiosCookbook
       elsif platform?('debian')
         'php7.3-gd'
       elsif platform?('ubuntu')
-        case node['platform_version'].to_f
-        when 16.04
-          'php7.0-gd'
-        when 18.04
+        if node['platform_version'].to_f < 20.04
           'php7.2-gd'
-        when 20.04
+        else
           'php7.4-gd'
         end
       end
@@ -52,15 +47,8 @@ module NagiosCookbook
     def nagios_server_dependencies
       if platform_family?('rhel')
         %w(openssl-devel gd-devel tar unzip)
-      elsif platform?('debian')
+      else
         %w(libssl-dev libgdchart-gd2-xpm-dev bsd-mailx tar unzip)
-      elsif platform?('ubuntu')
-        case node['platform_version'].to_f
-        when 16.04
-          %w(libssl-dev libgd2-xpm-dev bsd-mailx tar unzip)
-        when 18.04, 20.04
-          %w(libssl-dev libgdchart-gd2-xpm-dev bsd-mailx tar unzip)
-        end
       end
     end
 
@@ -105,6 +93,14 @@ module NagiosCookbook
 
     def nagios_config_dir
       "#{nagios_conf_dir}/conf.d"
+    end
+
+    def nagios_distro_config_dir
+      if platform_family?('rhel')
+        "#{nagios_conf_dir}/objects"
+      else
+        "#{nagios_conf_dir}/dist"
+      end
     end
 
     def nagios_log_dir
@@ -202,12 +198,16 @@ module NagiosCookbook
       end
     end
 
+    def nagios_source_url
+      "https://assets.nagios.com/downloads/nagioscore/releases/nagios-#{node['nagios']['server']['version']}.tar.gz"
+    end
+
     def nagios_pagerduty_packages
       case node['platform_family']
       when 'rhel'
-        %w(perl-CGI perl-JSON perl-libwww-perl perl-Crypt-SSLeay)
+        %w(perl-CGI perl-JSON perl-libwww-perl perl-Sys-Syslog)
       when 'debian'
-        %w(libcgi-pm-perl libjson-perl libwww-perl libcrypt-ssleay-perl)
+        %w(libcgi-pm-perl libjson-perl libwww-perl)
       end
     end
   end

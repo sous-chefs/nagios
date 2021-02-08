@@ -18,6 +18,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+include_recipe 'nagios::server_package'
+
 package nagios_pagerduty_packages
 
 remote_file "#{node['nagios']['plugin_dir']}/notify_pagerduty.pl" do

@@ -6,12 +6,12 @@ description      'Installs and configures Nagios server'
 version          '9.0.1'
 issues_url       'https://github.com/sous-chefs/nagios/issues'
 source_url       'https://github.com/sous-chefs/nagios'
-chef_version     '>= 14'
+chef_version     '>= 15'
 
-depends 'apache2',  '~> 5.0' # 6.0+ removes all recipes and attributes
-depends 'nginx',    '~> 9.0' # 10.0+ removes all recipes and attributes
+depends 'apache2', '>= 8.3'
+depends 'nginx', '>= 11.2'
 depends 'nrpe'
-depends 'php', '>= 4.0.0'
+depends 'php', '>= 7.2'
 depends 'yum-epel'
 depends 'zap', '>= 0.6.0'
 
@@ -20,4 +20,4 @@ depends 'zap', '>= 0.6.0'
 end
 
 supports 'debian', '>= 10.0'
-supports 'ubuntu', '>= 16.04'
+supports 'ubuntu', '>= 18.04'

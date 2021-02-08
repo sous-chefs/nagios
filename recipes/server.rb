@@ -87,11 +87,12 @@ directory "#{node['nagios']['conf_dir']}/dist" do
   mode '0755'
 end
 
+# Don't run on RHEL since the state directory is the same as the log directory and causes idempotency issues
 directory node['nagios']['state_dir'] do
   owner node['nagios']['user']
   group node['nagios']['group']
   mode '0751'
-end
+end unless platform_family?('rhel')
 
 directory "#{node['nagios']['state_dir']}/rw" do
   owner node['nagios']['user']
@@ -165,11 +166,13 @@ nagios_conf 'services'
 nagios_conf 'servicegroups'
 nagios_conf 'servicedependencies'
 
-zap_directory node['nagios']['config_dir'] do
-  pattern '*.cfg'
-end
-
 service 'nagios' do
   service_name nagios_service_name
-  action [:enable, :start]
+  # don't start as it will cause issues on initial runs on Ubuntu platforms
+  action :enable
+end
+
+# Remove distribution included config files that aren't managed via this cookbook
+zap_directory nagios_distro_config_dir do
+  pattern '*.cfg'
 end

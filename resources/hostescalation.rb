@@ -1,7 +1,7 @@
 #
 # Author:: Sander Botman <sbotman@schubergphilis.com>
-# Cookbook:: : nagios
-# Definition::   : command
+# Cookbook:: nagios
+# Resource:: hostescalation
 #
 # Copyright:: 2015, Sander Botman
 #
@@ -18,16 +18,18 @@
 # limitations under the License.
 #
 
-define :nagios_command do
-  params[:action] ||= :create
-  params[:options] ||= {}
+property :options, [Hash, Chef::DataBagItem], default: {}
 
-  if nagios_action_create?(params[:action])
-    o = Nagios::Command.create(params[:name])
-    o.import(params[:options])
-  end
+action :create do
+  o = Nagios::Hostescalation.new(new_resource.name)
+  o.import(new_resource.options)
+  Nagios.instance.push(o)
+end
 
-  if nagios_action_delete?(params[:action])
-    Nagios.instance.delete('command', params[:name])
-  end
+action :delete do
+  Nagios.instance.delete('hostescalation', new_resource.name)
+end
+
+action_class do
+  require_relative '../libraries/hostescalation'
 end

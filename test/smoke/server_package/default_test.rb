@@ -120,7 +120,7 @@ describe port(80) do
 end
 
 describe command('wget -qO- --user=admin --password=admin localhost') do
-  its(:stdout) { should match %r{(?i).*<title>Nagios Core.*</title>.*} }
+  its(:stdout) { should match %r{(?i).*<h2>Nagios Core.*</h2>.*} }
 end
 
 # This looks wrong and can't make it work - perhaps someone can take a look or decide to remove this test entirely?

@@ -41,15 +41,12 @@ web_srv = node['nagios']['server']['web_server']
 group node['nagios']['group'] do
   members [
     node['nagios']['user'],
-    web_srv == 'nginx' ? node['nginx']['user'] : node['apache']['user'],
+    web_srv == 'nginx' ? nginx_user : default_apache_user,
   ]
   action :create
 end
 
-remote_file "#{Chef::Config[:file_cache_path]}/nagios_core.tar.gz" do
-  source node['nagios']['server']['url']
-  checksum node['nagios']['server']['checksum']
-end
+nagios_version = node['nagios']['server']['version']
 
 node['nagios']['server']['patches'].each do |patch|
   remote_file "#{Chef::Config[:file_cache_path]}/#{patch}" do
@@ -57,33 +54,18 @@ node['nagios']['server']['patches'].each do |patch|
   end
 end
 
-execute 'extract-nagios' do
-  cwd Chef::Config[:file_cache_path]
-  command 'tar zxvf nagios_core.tar.gz'
-  creates "#{Chef::Config[:file_cache_path]}/#{node['nagios']['server']['src_dir']}"
-end
-
-node['nagios']['server']['patches'].each do |patch|
-  bash "patch-#{patch}" do
-    cwd Chef::Config[:file_cache_path]
-    code <<-EOF
-      cd #{node['nagios']['server']['src_dir']}
-      patch -p1 --forward --silent --dry-run < '#{Chef::Config[:file_cache_path]}/#{patch}' >/dev/null
-      if [ $? -eq 0 ]; then
-        patch -p1 --forward < '#{Chef::Config[:file_cache_path]}/#{patch}'
-      else
-        exit 0
-      fi
-    EOF
-    action :nothing
-    subscribes :run, 'execute[extract-nagios]', :immediately
-  end
+remote_file 'nagios source file' do
+  path ::File.join(Chef::Config[:file_cache_path], "nagios-#{nagios_version}.tar.gz")
+  source nagios_source_url
+  checksum node['nagios']['server']['checksum']
+  notifies :run, 'execute[compile-nagios]', :immediately
 end
 
 execute 'compile-nagios' do
   cwd Chef::Config[:file_cache_path]
   command <<-EOH
-    cd #{node['nagios']['server']['src_dir']}
+    tar xzf nagios-#{nagios_version}.tar.gz
+    cd nagios-#{nagios_version}
     ./configure --prefix=/usr \
         --mandir=/usr/share/man \
         --bindir=/usr/sbin \
@@ -114,7 +96,6 @@ execute 'compile-nagios' do
     #{node['nagios']['source']['add_build_commands'].join("\n")}
   EOH
   action :nothing
-  subscribes :run, 'execute[extract-nagios]', :immediately
 end
 
 directory node['nagios']['config_dir'] do

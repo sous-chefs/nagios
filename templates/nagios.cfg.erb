@@ -12,7 +12,7 @@
   <% case items %>
   <% when String %>
 <%= key + '=' + items %>
-  <% when Fixnum %>
+  <% when Integer %>
 <%= key + '=' + items.to_s %>
   <% when Array %>
     <% items.each do |item| %>

@@ -7,14 +7,18 @@ driver:
 provisioner:
   name: chef_zero
   product_name: chef
+  enforce_idempotency: true
+  # This needs to be 3 due to the use of node searches
+  multiple_converge: 3
+  deprecations_as_errors: true
 
 verifier:
   name: inspec
 
 platforms:
   - name: centos-7
+  - name: centos-8
   - name: debian-10
-  - name: ubuntu-16.04
   - name: ubuntu-18.04
   - name: ubuntu-20.04
 
@@ -53,7 +57,7 @@ suites:
     attributes:
       nagios:
         server:
-          install_method: 'source'
+          install_method: 'package'
         nagios_config:
           template_cookbook: 'nagios_test'
     verifier:
@@ -62,11 +66,11 @@ suites:
         - test/smoke/default/nagios_website.rb
         - test/smoke/swappable_config/default_test.rb
       inputs:
-        install_method: 'source'
+        install_method: 'package'
   - name: pagerduty
     run_list:
-      - recipe[nagios::default]
       - recipe[nagios::pagerduty]
+      - recipe[nagios::default]
       - recipe[nrpe::default]
       - recipe[nagios_test::default]
       - role[monitoring]
@@ -82,7 +86,6 @@ suites:
         - test/smoke/pagerduty/pagerduty_test.rb
   - name: nginx
     run_list:
-      - recipe[nagios_test::fcgiwrap_rpm]
       - recipe[nagios::nginx]
       - recipe[nrpe::default]
       - recipe[nagios_test::default]

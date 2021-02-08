@@ -16,51 +16,61 @@
 # limitations under the License.
 #
 
-node.default['nagios']['server']['web_server'] = 'apache'
-
-include_recipe 'apache2'
-include_recipe 'apache2::mod_cgi'
-include_recipe 'apache2::mod_rewrite'
-include_recipe 'apache2::mod_php'
-include_recipe 'apache2::mod_ssl' if node['nagios']['enable_ssl']
-
-apache_site '000-default' do
-  enable false
+service 'apache2' do
+  service_name apache_platform_service_name
+  supports restart: true, status: true, reload: true
+  action :nothing
 end
 
-template "#{node['apache']['dir']}/sites-available/#{node['nagios']['server']['vname']}.conf" do
+node.default['nagios']['server']['web_server'] = 'apache'
+
+include_recipe 'php'
+
+apache2_install 'default-install' do
+  listen node['nagios']['enable_ssl'] ? %w(80 443) : %w(80)
+  mpm node['nagios']['apache_mpm']
+end
+apache2_module 'cgi'
+apache2_module 'rewrite'
+apache2_mod_php
+apache2_module 'ssl' if node['nagios']['enable_ssl']
+
+apache2_site '000-default' do
+  action :disable
+end
+
+template "#{apache_dir}/sites-available/#{node['nagios']['server']['vname']}.conf" do
   source 'apache2.conf.erb'
   mode '0644'
   variables(
     nagios_url: node['nagios']['url'],
     https: node['nagios']['enable_ssl'],
     ssl_cert_file: node['nagios']['ssl_cert_file'],
-    ssl_cert_key: node['nagios']['ssl_cert_key']
+    ssl_cert_key: node['nagios']['ssl_cert_key'],
+    apache_log_dir: default_log_dir
   )
-  if File.symlink?("#{node['apache']['dir']}/sites-enabled/#{node['nagios']['server']['vname']}.conf")
+  if File.symlink?("#{apache_dir}/sites-enabled/#{node['nagios']['server']['vname']}.conf")
     notifies :restart, 'service[apache2]'
   end
 end
 
-file "#{node['apache']['dir']}/conf.d/#{node['nagios']['server']['vname']}.conf" do
+file "#{apache_dir}/conf.d/#{node['nagios']['server']['vname']}.conf" do
   action :delete
 end
 
-apache_site node['nagios']['server']['vname'] do
-  notifies :restart, 'service[apache2]'
-end
+apache2_site node['nagios']['server']['vname']
 
-node.default['nagios']['web_user'] = node['apache']['user']
-node.default['nagios']['web_group'] = node['apache']['group'] || node['apache']['user']
+node.default['nagios']['web_user'] = default_apache_user
+node.default['nagios']['web_group'] = default_apache_group
 
 # configure the appropriate authentication method for the web server
 case node['nagios']['server_auth_method']
 when 'openid'
-  include_recipe 'apache2::mod_auth_openid'
+  apache2_module 'auth_openid'
 when 'cas'
-  include_recipe 'apache2::mod_auth_cas'
+  apache2_module 'auth_cas'
 when 'ldap'
-  include_recipe 'apache2::mod_authnz_ldap'
+  apache2_module 'authnz_ldap'
 when 'htauth'
   Chef::Log.info('Authentication method htauth configured in server.rb')
 else

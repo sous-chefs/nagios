@@ -18,12 +18,23 @@
 
 node.default['nagios']['server']['web_server'] = 'nginx'
 
-include_recipe 'nginx'
+nginx_install 'nagios' do
+  source platform_family?('rhel') ? 'epel' : 'distro'
+  ohai_plugin_enabled false
+end
+
+nginx_config 'nagios' do
+  default_site_enabled false
+  notifies :restart, 'nginx_service[nagios]', :delayed
+end
+
 include_recipe 'php'
 
 php_fpm_pool 'nagios' do
-  user node['nginx']['user']
-  group node['nginx']['group']
+  user nginx_user
+  group nginx_group
+  listen_user nginx_user
+  listen_group nginx_group
 end
 
 package nagios_array(node['nagios']['server']['nginx_dispatch']['packages'])
@@ -32,6 +43,9 @@ if platform_family?('rhel')
   template '/etc/sysconfig/spawn-fcgi' do
     source 'spawn-fcgi.erb'
     notifies :start, 'service[spawn-fcgi]', :delayed
+    variables(
+      nginx_user: nginx_user
+    )
   end
 end
 
@@ -43,21 +57,9 @@ end
 
 dispatch_type = node['nagios']['server']['nginx_dispatch']['type']
 
-%w(default 000-default).each do |disable_site|
-  nginx_site disable_site do
-    enable false
-    notifies :reload, 'service[nginx]'
-  end
-end
-
-file File.join(node['nginx']['dir'], 'conf.d', 'default.conf') do
-  action :delete
-  notifies :reload, 'service[nginx]', :immediately
-end
-
-template File.join(node['nginx']['dir'], 'sites-available', 'nagios3.conf') do
-  source 'nginx.conf.erb'
-  mode '0644'
+nginx_site 'nagios' do
+  template 'nginx.conf.erb'
+  cookbook 'nagios'
   variables(
     allowed_ips: node['nagios']['allowed_ips'],
     cgi: %w(cgi both).include?(dispatch_type),
@@ -79,17 +81,17 @@ template File.join(node['nginx']['dir'], 'sites-available', 'nagios3.conf') do
     ssl_cert_file: node['nagios']['ssl_cert_file'],
     ssl_cert_key: node['nagios']['ssl_cert_key']
   )
-  if File.symlink?(File.join(node['nginx']['dir'], 'sites-enabled', 'nagios3.conf'))
-    notifies :reload, 'service[nginx]', :immediately
-  end
+  notifies :reload, 'nginx_service[nagios]', :delayed
+  action [:create, :enable]
 end
 
-nginx_site 'nagios3.conf' do
-  notifies :reload, 'service[nginx]'
+nginx_service 'nagios' do
+  action :enable
+  delayed_action :start
 end
 
-node.default['nagios']['web_user'] = node['nginx']['user']
-node.default['nagios']['web_group'] = node['nginx']['group']
+node.default['nagios']['web_user'] = nginx_user
+node.default['nagios']['web_group'] = nginx_user
 
 # configure the appropriate authentication method for the web server
 case node['nagios']['server_auth_method']
@@ -111,25 +113,3 @@ else
 end
 
 include_recipe 'nagios::server'
-
-## Some post nagios install cleanup
-apache_service = platform_family?('rhel') ? 'httpd' : 'apache2'
-
-service apache_service do
-  action [:disable, :stop]
-  notifies :start, 'service[nginx]', :delayed
-  notifies :restart, 'service[nagios]', :delayed
-end
-
-execute 'fix_docroot_perms' do
-  command "chgrp -R #{node['nagios']['web_group']} #{node['nagios']['docroot']}"
-  action :nothing
-end
-
-if platform_family?('rhel')
-  directory node['nagios']['docroot'] do
-    group node['nginx']['group']
-    notifies :run, 'execute[fix_docroot_perms]', :before
-    action :create
-  end
-end

@@ -4,18 +4,17 @@ This file is used to list changes made in each version of the nagios cookbook.
 
 ## Unreleased
 
-- resolved cookstyle error: libraries/base.rb:103:7 convention: `Style/ReturnNil`
-- resolved cookstyle error: libraries/base.rb:104:7 convention: `Style/ReturnNil`
-- resolved cookstyle error: libraries/base.rb:110:7 convention: `Style/ReturnNil`
-- resolved cookstyle error: libraries/base.rb:137:7 convention: `Style/ReturnNil`
-- resolved cookstyle error: libraries/base.rb:157:7 convention: `Style/ReturnNil`
-- resolved cookstyle error: libraries/base.rb:158:7 convention: `Style/ReturnNil`
-- resolved cookstyle error: libraries/base.rb:159:7 convention: `Style/ReturnNil`
-- resolved cookstyle error: libraries/base.rb:202:7 convention: `Style/ReturnNil`
-- resolved cookstyle error: libraries/base.rb:275:7 convention: `Style/ReturnNil`
-- resolved cookstyle error: libraries/nagios.rb:259:5 convention: `Style/ReturnNil`
-- resolved cookstyle error: test/smoke/default/nagios_website.rb:1:1 convention: `Style/Encoding`
-- resolved cookstyle error: test/smoke/default/server.rb:1:1 convention: `Style/Encoding`
+- Sous Chefs Adoption
+- Standardise files with files in sous-chefs/repo-management
+- Cookstyle fixes
+- Convert definitions to custom resources
+- Update nginx recipe to use newer nginx cookbook
+- Refactor and improve source installation
+- Fix InSpec tests
+- Use proper locations for zapping distribution configuration
+- Various fixes for pagerduty recipe
+- Switch to using `apache2_mod_php` resource
+- Fix idempotency and other misc kitchen fixes
 
 ## 9.0.1 (2020-09-16)
 
