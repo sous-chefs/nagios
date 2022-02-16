@@ -34,7 +34,11 @@ module NagiosCookbook
       if platform_family?('rhel')
         'php-gd'
       elsif platform?('debian')
-        'php7.3-gd'
+        if node['platform_version'].to_i < 11
+          'php7.3-gd'
+        else
+          'php7.4-gd'
+        end
       elsif platform?('ubuntu')
         if node['platform_version'].to_f < 20.04
           'php7.2-gd'
