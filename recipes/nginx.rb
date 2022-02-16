@@ -15,7 +15,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-
+Chef::DSL::Universal.include(Nginx::Cookbook::Helpers)
 node.default['nagios']['server']['web_server'] = 'nginx'
 
 nginx_install 'nagios' do
