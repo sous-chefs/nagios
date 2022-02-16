@@ -25,6 +25,7 @@ property :variables, Hash, default: {}
 property :config_subdir, [true, false], default: true
 property :source, String
 property :cookbook, String, default: 'nagios'
+unified_mode true
 
 action :create do
   conf_dir = new_resource.config_subdir ? node['nagios']['config_dir'] : node['nagios']['conf_dir']
