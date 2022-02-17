@@ -15,7 +15,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-Chef::DSL::Universal.include(Nginx::Cookbook::Helpers)
 node.default['nagios']['server']['web_server'] = 'nginx'
 
 nginx_install 'nagios' do
@@ -31,10 +30,10 @@ end
 include_recipe 'php'
 
 php_fpm_pool 'nagios' do
-  user nginx_user
-  group nginx_group
-  listen_user nginx_user
-  listen_group nginx_group
+  user nagios_nginx_user
+  group nagios_nginx_group
+  listen_user nagios_nginx_user
+  listen_group nagios_nginx_group
 end
 
 package nagios_array(node['nagios']['server']['nginx_dispatch']['packages'])
@@ -44,7 +43,7 @@ if platform_family?('rhel')
     source 'spawn-fcgi.erb'
     notifies :start, 'service[spawn-fcgi]', :delayed
     variables(
-      nginx_user: nginx_user
+      nginx_user: nagios_nginx_user
     )
   end
 end
@@ -90,8 +89,8 @@ nginx_service 'nagios' do
   delayed_action :start
 end
 
-node.default['nagios']['web_user'] = nginx_user
-node.default['nagios']['web_group'] = nginx_user
+node.default['nagios']['web_user'] = nagios_nginx_user
+node.default['nagios']['web_group'] = nagios_nginx_user
 
 # configure the appropriate authentication method for the web server
 case node['nagios']['server_auth_method']

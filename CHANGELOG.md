@@ -8,8 +8,8 @@ This file is used to list changes made in each version of the nagios cookbook.
 - Update tested platforms
 - Enable `unified_mode` and require Chef >= 15.3
 - Start nagios service
-- Include Nginx cookbook helper methods
 - Add support for Debian 11
+- Use www-data user for nginx on Debian based systems
 
 ## 10.0.4 - *2022-02-08*
 

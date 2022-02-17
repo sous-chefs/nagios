@@ -72,6 +72,22 @@ module NagiosCookbook
       end
     end
 
+    def nagios_nginx_user
+      if platform_family?('rhel')
+        'nginx'
+      else
+        'www-data'
+      end
+    end
+
+    def nagios_nginx_group
+      if platform_family?('rhel')
+        'nginx'
+      else
+        'www-data'
+      end
+    end
+
     def nagios_home
       if platform_family?('rhel')
         '/var/spool/nagios'
