@@ -2,6 +2,8 @@
 
 This file is used to list changes made in each version of the nagios cookbook.
 
+## Unreleased
+
 ## 11.0.0 - *2022-02-17*
 
 - Remove delivery and move to calling RSpec directly via a reusable workflow
