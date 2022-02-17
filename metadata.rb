@@ -6,7 +6,7 @@ description      'Installs and configures Nagios server'
 version          '10.0.4'
 issues_url       'https://github.com/sous-chefs/nagios/issues'
 source_url       'https://github.com/sous-chefs/nagios'
-chef_version     '>= 15'
+chef_version     '>= 15.3'
 
 depends 'apache2', '>= 8.3'
 depends 'nginx', '>= 11.2'

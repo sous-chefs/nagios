@@ -168,8 +168,11 @@ nagios_conf 'servicedependencies'
 
 service 'nagios' do
   service_name nagios_service_name
-  # don't start as it will cause issues on initial runs on Ubuntu platforms
-  action :enable
+  if ::File.exist?("#{nagios_config_dir}/services.cfg")
+    action [:enable, :start]
+  else
+    action :enable
+  end
 end
 
 # Remove distribution included config files that aren't managed via this cookbook

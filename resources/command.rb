@@ -18,6 +18,7 @@
 # limitations under the License.
 #
 property :options, [Hash, Chef::DataBagItem], default: {}
+unified_mode true
 
 action :create do
   o = Nagios::Command.create(new_resource.name)

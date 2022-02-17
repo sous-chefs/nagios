@@ -16,7 +16,7 @@ This cookbook is maintained by the Sous Chefs. The Sous Chefs are a community of
 
 ### Chef
 
-Chef Infra Client version 14+ is required
+Chef Infra Client version 15.3+ is required
 
 Because of the heavy use of search, this recipe will not work with Chef Solo, as it cannot do any searches without a server.
 
@@ -36,12 +36,12 @@ The functionality that was previously in the nagios::client recipe has been move
 
 ### Cookbooks
 
-- apache2 ~> 5.0
-- nginx ~> 9.0
+- apache2
+- nginx
 - nrpe
-- php >= 4.0
+- php
 - yum-epel
-- zap >= 0.6.0
+- zap
 
 ## Attributes
 

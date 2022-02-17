@@ -19,6 +19,7 @@
 #
 
 property :options, [Hash, Chef::DataBagItem], default: {}
+unified_mode true
 
 action :create do
   o = Nagios::Service.create(new_resource.name)

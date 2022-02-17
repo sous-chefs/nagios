@@ -5,7 +5,7 @@ driver:
     - ["forwarded_port", {guest: 80, host: 8080}]
 
 provisioner:
-  name: chef_zero
+  name: chef_infra
   product_name: chef
   enforce_idempotency: true
   # This needs to be 3 due to the use of node searches
@@ -16,9 +16,12 @@ verifier:
   name: inspec
 
 platforms:
+  - name: almalinux-8
   - name: centos-7
-  - name: centos-8
+  - name: centos-stream-8
   - name: debian-10
+  - name: debian-11
+  - name: rockylinux-8
   - name: ubuntu-18.04
   - name: ubuntu-20.04
 
