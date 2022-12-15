@@ -4,6 +4,8 @@ This file is used to list changes made in each version of the nagios cookbook.
 
 ## Unreleased
 
+- Standardise files with files in sous-chefs/repo-management
+
 ## 11.1.0 - *2022-08-10*
 
 - Remove 5 second munging of command timeouts
