@@ -23,29 +23,29 @@ jobs:
     strategy:
       matrix:
         os:
-          - 'almalinux-8'
-          - 'centos-7'
-          - 'centos-stream-8'
-          - 'debian-10'
-          - 'debian-11'
-          - 'rockylinux-8'
-          - 'ubuntu-1804'
-          - 'ubuntu-2004'
+          - "almalinux-8"
+          - "centos-7"
+          - "centos-stream-8"
+          - "debian-10"
+          - "debian-11"
+          - "rockylinux-8"
+          - "ubuntu-1804"
+          - "ubuntu-2004"
         suite:
-          - 'nginx'
-          - 'pagerduty'
-          - 'server-package'
-          - 'server-source'
-          - 'swappable-config'
+          - "nginx"
+          - "pagerduty"
+          - "server-package"
+          - "server-source"
+          - "swappable-config"
       fail-fast: false
 
     steps:
       - name: Check out code
         uses: actions/checkout@v3
       - name: Install Chef
-        uses: actionshub/chef-install@main
+        uses: actionshub/chef-install@2.0.4
       - name: Dokken
-        uses: actionshub/test-kitchen@main
+        uses: actionshub/test-kitchen@2.1.0
         env:
           CHEF_LICENSE: accept-no-persist
           KITCHEN_LOCAL_YAML: kitchen.dokken.yml
