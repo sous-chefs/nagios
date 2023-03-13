@@ -51,7 +51,7 @@ The functionality that was previously in the nagios::client recipe has been move
 
 Example: `default['nagios']['conf']['cfg_dir'] = [ '/etc/nagios/conf.d' , '/usr/local/nagios/conf.d' ]`
 
-### default
+### default attributes
 
 - `node['nagios']['user']` - Nagios user, default 'nagios'.
 - `node['nagios']['group']` - Nagios group, default 'nagios'.
@@ -182,7 +182,7 @@ Example: `default['nagios']['conf']['cfg_dir'] = [ '/etc/nagios/conf.d' , '/usr/
 
 ## Recipes
 
-### default
+### default recipe
 
 Includes the correct client installation recipe based on platform, either `nagios::server_package` or `nagios::server_source`.
 
