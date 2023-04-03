@@ -4,11 +4,15 @@ This file is used to list changes made in each version of the nagios cookbook.
 
 ## Unreleased
 
+- Standardise files with files in sous-chefs/repo-management
+
 ## 11.1.11 - *2023-04-05*
+
+- Fix typos on oracle, redhat and centos
 
 ## 11.1.10 - *2023-04-04*
 
-Update lint-unit-workflow
+- Update lint-unit-workflow
 
 ## 11.1.9 - *2023-04-01*
 
