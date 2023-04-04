@@ -15,9 +15,8 @@ depends 'php', '>= 7.2'
 depends 'yum-epel'
 depends 'zap', '>= 0.6.0'
 
-%w(centos oracle redhat).each do |os|
-  supports os, '>= 7.0'
-end
-
+suports 'centos' '>= 7.0'
+supports 'oracle' '>= 7.0'
+supports 'redhat' '>= 7.0'
 supports 'debian', '>= 10.0'
 supports 'ubuntu', '>= 18.04'

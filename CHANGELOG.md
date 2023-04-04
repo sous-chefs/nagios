@@ -4,7 +4,11 @@ This file is used to list changes made in each version of the nagios cookbook.
 
 ## Unreleased
 
+Update lint-unit-workflow
+
 ## 11.1.9 - *2023-04-01*
+
+Standardise files with files in sous-chefs/repo-management
 
 ## 11.1.8 - *2023-04-01*
 
@@ -387,64 +391,64 @@ Standardise files with files in sous-chefs/repo-management
 
 ## v5.1.0
 
-- **[COOK-3210](https://tickets.opscode.com/browse/COOK-3210)** Contacts are now only written out if the contact has Nagios keys defined, which prevents e-mail-less contacts from being written out
-- **[COOK-4098](https://tickets.opscode.com/browse/COOK-4098)** Fixed an incorrect example for using templates in the readme
+- [COOK-3210] Contacts are now only written out if the contact has Nagios keys defined, which prevents e-mail-less contacts from being written out
+- [COOK-4098] Fixed an incorrect example for using templates in the readme
 - Fixed a typo in the servicedependencies.cfg.erb template that resulted in hostgroup_name always being blank
 - The Yum cookbook dependency has been pinned to < 3.0 to prevent breakage when the 3.0 cookbook is released
-- **[COOK-2389](https://tickets.opscode.com/browse/COOK-2389)** The logic used to determine what IP to identify the monitored host by has been moved into the default library to simplify the hosts.cfg.erb template
+- [COOK-2389] The logic used to determine what IP to identify the monitored host by has been moved into the default library to simplify the hosts.cfg.erb template
 - A Vagrantfile has been added to allow for testing on Ubuntu 10.04/12.04 and CentOS 5.9/6.4 in multi-node setups
 - Chef spec tests have been added for the server
 - Gemfile updated to use Rubocop 0.15 and TestKitchen 1.0
-- **[COOK-3913](https://tickets.opscode.com/browse/COOK-3913)** / **[COOK-3914](https://tickets.opscode.com/browse/COOK-3914)** Source based installations now use Nagios 3.5.1 and the Nagios Plugins 1.5.0
+- [COOK-3913]/[COOK-3914] Source based installations now use Nagios 3.5.1 and the Nagios Plugins 1.5.0
 
 - The names of the various data bags used in the cookbook can now be controlled with new attributes found in the server.rb attribute file
 - All configuration options in the cgi.cfg and nrpe.cfg files can now be controlled via attributes
-- **[COOK-3690](https://tickets.opscode.com/browse/COOK-3690)** An intermediate SSL certificate can now be used on the web server as defined in the new attribute `ssl_cert_chain_file`
-- **[COOK-2732](https://tickets.opscode.com/browse/COOK-2732)** A service can now be applied to multiple hostgroups via the data bag definition
-- **[COOK-3781](https://tickets.opscode.com/browse/COOK-3781)** Service escalations can now be written using wildcards.  See the readme for an example of this feature.
-- **[COOK-3702](https://tickets.opscode.com/browse/COOK-3702)** Multiple PagerDuty keys for different contacts can be defined via a new nagios_pagerduty data bag.  See the readme for more information on the new data bag and attributes for this feature.
-- **[COOK-3774](https://tickets.opscode.com/browse/COOK-3774)**Services can be limited to run on nagios servers in specific chef environments by adding a new "activate_check_in_environment" key to the services data bag.  See the Services section of the readme for an example.
-- **[CHEF-4702](https://tickets.opscode.com/browse/CHEF-4702)** Chef solo users can now user solo-search for data bag searchd (<https://github.com/edelight/chef-solo-search>)
+- [COOK-3690] An intermediate SSL certificate can now be used on the web server as defined in the new attribute `ssl_cert_chain_file`
+- [COOK-2732] A service can now be applied to multiple hostgroups via the data bag definition
+- [COOK-3781] Service escalations can now be written using wildcards.  See the readme for an example of this feature.
+- [COOK-3702] Multiple PagerDuty keys for different contacts can be defined via a new nagios_pagerduty data bag.  See the readme for more information on the new data bag and attributes for this feature.
+- [COOK-3774]Services can be limited to run on nagios servers in specific chef environments by adding a new "activate_check_in_environment" key to the services data bag.  See the Services section of the readme for an example.
+- [CHEF-4702] Chef solo users can now user solo-search for data bag searchd (<https://github.com/edelight/chef-solo-search>)
 
 ## v5.0.2
 
-- **[COOK-3777](https://tickets.opscode.com/browse/COOK-3777)** - Update NRPE in nagios cookbook to 2.15
-- **[COOK-3021](https://tickets.opscode.com/browse/COOK-3021)** - NRPE LWRP updates files every run
+- [COOK-3777] - Update NRPE in nagios cookbook to 2.15
+- [COOK-3021] - NRPE LWRP updates files every run
 - Fixing up to pass rubocop
 
 ## v5.0.0
 
-- **[COOK-3778](https://tickets.opscode.com/browse/COOK-3778)** - Fix missing customization points for Icinga
-- **[COOK-3731](https://tickets.opscode.com/browse/COOK-3731)** - Remove range searches in Nagios cookbook that break chef-zero
-- **[COOK-3729](https://tickets.opscode.com/browse/COOK-3729)** - Update Nagios Plugin download URL
-- **[COOK-3579](https://tickets.opscode.com/browse/COOK-3579)** - Stop shipping icons files that arent used
-- **[COOK-3332](https://tickets.opscode.com/browse/COOK-3332)** - Fix `nagios::client` failures on Chef Solo
-- **[COOK-3730](https://tickets.opscode.com/browse/COOK-3730)** - Change the default authentication method
-- **[COOK-3696](https://tickets.opscode.com/browse/COOK-3696)** - Sort hostgroups so they don't get updated on each run
-- **[COOK-3670](https://tickets.opscode.com/browse/COOK-3670)** - Add Travis support
-- **[COOK-3583](https://tickets.opscode.com/browse/COOK-3583)** - Update Nagios source to 3.5.1
-- **[COOK-3577](https://tickets.opscode.com/browse/COOK-3577)** - Cleanup code style
-- **[COOK-3287](https://tickets.opscode.com/browse/COOK-3287)** - Provide more customization points to make it possible to use Icinga
-- **[COOK-1725](https://tickets.opscode.com/browse/COOK-1725)** - Add configurable notification options for `nagios::pagerduty`
-- **[COOK-3723](https://tickets.opscode.com/browse/COOK-3723)** - Support regexp_matching in Nagios
-- **[COOK-3695](https://tickets.opscode.com/browse/COOK-3695)** - Add more tunables for default host template
+- [COOK-3778] - Fix missing customization points for Icinga
+- [COOK-3731] - Remove range searches in Nagios cookbook that break chef-zero
+- [COOK-3729] - Update Nagios Plugin download URL
+- [COOK-3579] - Stop shipping icons files that arent used
+- [COOK-3332] - Fix `nagios::client` failures on Chef Solo
+- [COOK-3730] - Change the default authentication method
+- [COOK-3696] - Sort hostgroups so they don't get updated on each run
+- [COOK-3670] - Add Travis support
+- [COOK-3583] - Update Nagios source to 3.5.1
+- [COOK-3577] - Cleanup code style
+- [COOK-3287] - Provide more customization points to make it possible to use Icinga
+- [COOK-1725] - Add configurable notification options for `nagios::pagerduty`
+- [COOK-3723] - Support regexp_matching in Nagios
+- [COOK-3695] - Add more tunables for default host template
 
 ## v4.2.0
 
-- **[COOK-3445](https://tickets.opscode.com/browse/COOK-3445)** - Allow setting service dependencies from data dags
-- **[COOK-3429](https://tickets.opscode.com/browse/COOK-3429)** - Allow setting timezone from attribute
-- **[COOK-3422](https://tickets.opscode.com/browse/COOK-3422)** - Enable large installation tweaks by attribute
-- **[COOK-3440](https://tickets.opscode.com/browse/COOK-3440)** - Permit additional pagerduty-like integrations
-- **[COOK-3136](https://tickets.opscode.com/browse/COOK-3136)** - Fix `nagios::client_source` under Gentoo
-- **[COOK-3111](https://tickets.opscode.com/browse/COOK-3111)** - Add support for alternate users databag to Nagios cookbook
-- **[COOK-2891](https://tickets.opscode.com/browse/COOK-2891)** - Improve RHEL 5 detection in Nagios cookbook to catch all versions
-- **[COOK-2721](https://tickets.opscode.com/browse/COOK-2721)** - Add Chef Solo support
-- **[COOK-3405](https://tickets.opscode.com/browse/COOK-3405)** - Fix NRPE source install on Ubuntu
-- **[COOK-3404](https://tickets.opscode.com/browse/COOK-3404)** - Fix `htpasswd` file references (Chef 11 fix)
-- **[COOK-3282](https://tickets.opscode.com/browse/COOK-3282)** - Use `host_name` attribute when used in conjunction with a search-defined hostgroup
-- **[COOK-3162](https://tickets.opscode.com/browse/COOK-3162)** - Allow setting port
-- **[COOK-3140](https://tickets.opscode.com/browse/COOK-3140)** - No longer import databag users even if they don't have an `htpasswd` value set
-- **[COOK-3068](https://tickets.opscode.com/browse/COOK-3068)** - Use `nagios_conf` definition in `nagios::pagerduty`
+- [COOK-3445] - Allow setting service dependencies from data dags
+- [COOK-3429] - Allow setting timezone from attribute
+- [COOK-3422] - Enable large installation tweaks by attribute
+- [COOK-3440] - Permit additional pagerduty-like integrations
+- [COOK-3136] - Fix `nagios::client_source` under Gentoo
+- [COOK-3111] - Add support for alternate users databag to Nagios cookbook
+- [COOK-2891] - Improve RHEL 5 detection in Nagios cookbook to catch all versions
+- [COOK-2721] - Add Chef Solo support
+- [COOK-3405] - Fix NRPE source install on Ubuntu
+- [COOK-3404] - Fix `htpasswd` file references (Chef 11 fix)
+- [COOK-3282] - Use `host_name` attribute when used in conjunction with a search-defined hostgroup
+- [COOK-3162] - Allow setting port
+- [COOK-3140] - No longer import databag users even if they don't have an `htpasswd` value set
+- [COOK-3068] - Use `nagios_conf` definition in `nagios::pagerduty`
 
 ## v4.1.4
 
