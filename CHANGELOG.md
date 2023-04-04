@@ -2,7 +2,7 @@
 
 This file is used to list changes made in each version of the nagios cookbook.
 
-## Unreleased
+## 11.1.10 - *2023-04-04*
 
 Update lint-unit-workflow
 
