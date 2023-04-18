@@ -4,43 +4,47 @@ This file is used to list changes made in each version of the nagios cookbook.
 
 ## Unreleased
 
+- Standardise files with files in sous-chefs/repo-management
+
 ## 11.1.11 - *2023-04-05*
+
+- Fix typos on oracle, redhat and centos
 
 ## 11.1.10 - *2023-04-04*
 
-Update lint-unit-workflow
+- Update lint-unit-workflow
 
 ## 11.1.9 - *2023-04-01*
 
-Standardise files with files in sous-chefs/repo-management
+- Standardise files with files in sous-chefs/repo-management
 
 ## 11.1.8 - *2023-04-01*
 
-Standardise files with files in sous-chefs/repo-management
+- Standardise files with files in sous-chefs/repo-management
 
 ## 11.1.7 - *2023-03-20*
 
-Standardise files with files in sous-chefs/repo-management
+- Standardise files with files in sous-chefs/repo-management
 
 ## 11.1.6 - *2023-03-13*
 
-Standardise files with files in sous-chefs/repo-management
+- Standardise files with files in sous-chefs/repo-management
 
 ## 11.1.5 - *2023-03-13*
 
-Standardise files with files in sous-chefs/repo-management
+- Standardise files with files in sous-chefs/repo-management
 
 ## 11.1.4 - *2023-02-27*
 
-Standardise files with files in sous-chefs/repo-management
+- Standardise files with files in sous-chefs/repo-management
 
 ## 11.1.3 - *2023-02-16*
 
-Standardise files with files in sous-chefs/repo-management
+- Standardise files with files in sous-chefs/repo-management
 
 ## 11.1.2 - *2023-02-14*
 
-Standardise files with files in sous-chefs/repo-management
+- Standardise files with files in sous-chefs/repo-management
 
 ## 11.1.1 - *2022-12-15*
 
