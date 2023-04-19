@@ -71,8 +71,12 @@ when 'cas'
     notifies :reload, 'apache2_service[nagios]'
   end
 when 'ldap'
-  apache2_module 'authnz_ldap' do
-    notifies :reload, 'apache2_service[nagios]'
+  package 'mod_ldap' if platform_family?('rhel')
+
+  %w(ldap authnz_ldap).each do |m|
+    apache2_module m do
+      notifies :reload, 'apache2_service[nagios]'
+    end
   end
 when 'htauth'
   Chef::Log.info('Authentication method htauth configured in server.rb')

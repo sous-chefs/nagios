@@ -38,6 +38,23 @@ suites:
         - test/smoke/default/nagios_website.rb
       inputs:
         install_method: 'package'
+  - name: server_package_ldap
+    run_list:
+      - recipe[nagios::default]
+      - recipe[nrpe::default]
+      - recipe[nagios_test::default]
+      - role[monitoring]
+    attributes:
+      nagios:
+        server_auth_method: 'ldap'
+        ldap_url: 'ldaps://ldap.example.org:636/ou=People,dc=example,dc=org?uid?sub?(objectClass=*)'
+    verifier:
+      inspec_tests:
+        - test/smoke/default/server.rb
+        - test/smoke/default/nagios_website.rb
+      inputs:
+        install_method: 'package'
+        ldap_auth: true
   - name: server_source
     run_list:
       - recipe[nagios::default]

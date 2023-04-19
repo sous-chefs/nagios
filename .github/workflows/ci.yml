@@ -35,6 +35,7 @@ jobs:
           - "nginx"
           - "pagerduty"
           - "server-package"
+          - "server-package-ldap"
           - "server-source"
           - "swappable-config"
       fail-fast: false
