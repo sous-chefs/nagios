@@ -2,6 +2,8 @@
 
 This file is used to list changes made in each version of the nagios cookbook.
 
+## Unreleased
+
 ## 11.2.0 - *2023-04-25*
 
 - Update to support apache2_service resource
