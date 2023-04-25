@@ -2,6 +2,7 @@ title 'Nagios Website Checks'
 
 wget_cmd = 'wget -qO- --user=admin --password=admin http://localhost'
 install_method = input('install_method')
+ldap_auth = input('ldap_auth', value: false)
 
 cgi_cmd =
   if install_method == 'source' && os.family == 'debian'
@@ -32,6 +33,7 @@ control 'nagios-website-02' do
   impact 1.0
   title
   desc 'should be listening on port 80'
+  only_if { !ldap_auth }
 
   describe command(wget_cmd) do
     its('exit_status') { should eq 0 }
@@ -45,6 +47,7 @@ control 'nagios-website-03' do
   impact 1.0
   title 'should have a CGI (sub) page'
   desc 'should have a CGI (sub) page'
+  only_if { !ldap_auth }
 
   describe command("#{cgi_cmd}/tac.cgi") do
     its('exit_status') { should eq 0 }
@@ -58,6 +61,7 @@ control 'nagios-website-04' do
   impact 1.0
   title 'should not contain eventhandler for bighost1'
   desc 'should not contain eventhandler for bighost1'
+  only_if { !ldap_auth }
 
   describe command("#{cgi_cmd}/config.cgi?'type=hosts&expand=bighost1'") do
     its('exit_status') { should eq 0 }
@@ -69,6 +73,7 @@ control 'nagios-website-05' do
   impact 1.0
   title 'should contain eventhandler for bighost2'
   desc 'should contain eventhandler for bighost2'
+  only_if { !ldap_auth }
 
   describe command("#{cgi_cmd}/config.cgi?'type=hosts&expand=bighost2'") do
     its('stdout') { should match(/.*my-event-handler-command.*/i) }

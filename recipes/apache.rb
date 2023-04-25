@@ -16,27 +16,24 @@
 # limitations under the License.
 #
 
-service 'apache2' do
-  service_name apache_platform_service_name
-  supports restart: true, status: true, reload: true
-  action :nothing
-end
-
 node.default['nagios']['server']['web_server'] = 'apache'
 
 include_recipe 'php'
 
-apache2_install 'default-install' do
+apache2_install 'nagios' do
   listen node['nagios']['enable_ssl'] ? %w(80 443) : %w(80)
   mpm node['nagios']['apache_mpm']
 end
+
 apache2_module 'cgi'
 apache2_module 'rewrite'
-apache2_mod_php
+apache2_mod_php 'nagios'
+
 apache2_module 'ssl' if node['nagios']['enable_ssl']
 
 apache2_site '000-default' do
   action :disable
+  notifies :reload, 'apache2_service[nagios]'
 end
 
 template "#{apache_dir}/sites-available/#{node['nagios']['server']['vname']}.conf" do
@@ -50,7 +47,7 @@ template "#{apache_dir}/sites-available/#{node['nagios']['server']['vname']}.con
     apache_log_dir: default_log_dir
   )
   if File.symlink?("#{apache_dir}/sites-enabled/#{node['nagios']['server']['vname']}.conf")
-    notifies :restart, 'service[apache2]'
+    notifies :restart, 'apache2_service[nagios]'
   end
 end
 
@@ -66,15 +63,34 @@ node.default['nagios']['web_group'] = default_apache_group
 # configure the appropriate authentication method for the web server
 case node['nagios']['server_auth_method']
 when 'openid'
-  apache2_module 'auth_openid'
+  apache2_module 'auth_openid' do
+    notifies :reload, 'apache2_service[nagios]'
+  end
 when 'cas'
-  apache2_module 'auth_cas'
+  apache2_module 'auth_cas' do
+    notifies :reload, 'apache2_service[nagios]'
+  end
 when 'ldap'
-  apache2_module 'authnz_ldap'
+  package 'mod_ldap' if platform_family?('rhel')
+
+  %w(ldap authnz_ldap).each do |m|
+    apache2_module m do
+      notifies :reload, 'apache2_service[nagios]'
+    end
+  end
 when 'htauth'
   Chef::Log.info('Authentication method htauth configured in server.rb')
 else
   Chef::Log.info('Default method htauth configured in server.rb')
+end
+
+apache2_service 'nagios' do
+  action [:enable, :start]
+  subscribes :restart, 'apache2_install[nagios]'
+  subscribes :reload, 'apache2_module[cgi]'
+  subscribes :reload, 'apache2_module[rewrite]'
+  subscribes :reload, 'apache2_mod_php[nagios]'
+  subscribes :reload, 'apache2_module[ssl]' if node['nagios']['enable_ssl']
 end
 
 include_recipe 'nagios::server'
