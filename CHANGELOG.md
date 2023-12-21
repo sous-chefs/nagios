@@ -4,6 +4,8 @@ This file is used to list changes made in each version of the nagios cookbook.
 
 ## Unreleased
 
+Standardise files with files in sous-chefs/repo-management
+
 ## 11.2.6 - *2023-12-21*
 
 ## 11.2.5 - *2023-10-31*
