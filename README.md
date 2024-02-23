@@ -86,6 +86,7 @@ Example: `default['nagios']['conf']['cfg_dir'] = [ '/etc/nagios/conf.d' , '/usr/
 
 - `node['nagios']['server']['version']` - version of the server source to download
 - `node['nagios']['server']['checksum']` - checksum of the source files
+- `node['nagios']['server']['source_url']` - nagios core source url
 - `node['nagios']['server']['patch_url']` - url to download patches from if installing from source
 - `node['nagios']['server']['patches']` - array of patch filenames to apply if installing from source
 - `node['nagios']['url']` - URL to host Nagios from - defaults to nil and instead uses  FQDN
