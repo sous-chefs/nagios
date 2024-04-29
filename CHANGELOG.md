@@ -4,6 +4,15 @@ This file is used to list changes made in each version of the nagios cookbook.
 
 ## Unreleased
 
+## 11.2.9 - *2024-04-29*
+
+- Add FollowSymLinks option to cgi-bin directory on Apache. This prevents running into AH00670 errors if a Rewrite rule
+  is used elsewhere in an apache configuration globally.
+
+## 11.2.8 - *2024-04-29*
+
+## 11.2.7 - *2024-04-29*
+
 ## 11.2.6 - *2023-12-21*
 
 ## 11.2.5 - *2023-10-31*
