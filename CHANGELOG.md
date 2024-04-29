@@ -2,7 +2,7 @@
 
 This file is used to list changes made in each version of the nagios cookbook.
 
-## Unreleased
+## 11.2.8 - *2024-04-29*
 
 ## 11.2.7 - *2024-04-29*
 
