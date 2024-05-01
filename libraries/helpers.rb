@@ -218,10 +218,6 @@ module NagiosCookbook
       end
     end
 
-    def nagios_source_url
-      "https://assets.nagios.com/downloads/nagioscore/releases/nagios-#{node['nagios']['server']['version']}.tar.gz"
-    end
-
     def nagios_pagerduty_packages
       case node['platform_family']
       when 'rhel'

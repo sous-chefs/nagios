@@ -86,6 +86,7 @@ Example: `default['nagios']['conf']['cfg_dir'] = [ '/etc/nagios/conf.d' , '/usr/
 
 - `node['nagios']['server']['version']` - version of the server source to download
 - `node['nagios']['server']['checksum']` - checksum of the source files
+- `node['nagios']['server']['source_url']` - nagios core source url
 - `node['nagios']['server']['patch_url']` - url to download patches from if installing from source
 - `node['nagios']['server']['patches']` - array of patch filenames to apply if installing from source
 - `node['nagios']['url']` - URL to host Nagios from - defaults to nil and instead uses  FQDN
@@ -157,7 +158,7 @@ Example: `default['nagios']['conf']['cfg_dir'] = [ '/etc/nagios/conf.d' , '/usr/
 - `node['nagios']['server']['web_server']` - web server to use. supports Apache or Nginx, default "apache"
 - `node['nagios']['server']['nginx_dispatch']` - nginx dispatch method. supports cgi or php, default "cgi"
 - `node['nagios']['server']['stop_apache']` - stop apache service if using nginx, default false
-- `node['nagios']['server']['redirect_root']` - if using Apache, should [http://server/](http://server/) redirect to [http://server/nagios3](http://server/nagios3) automatically, default false
+- `node['nagios']['server']['redirect_root']` - if using Apache, should `http://server/` redirect to `http://server/nagios3` automatically, default false
 - `node['nagios']['server']['normalize_hostname']` - If set to true, normalize all hostnames in hosts.cfg to lowercase. Defaults to false.
 
  These are nagios cgi.config options.

@@ -56,7 +56,7 @@ end
 
 remote_file 'nagios source file' do
   path ::File.join(Chef::Config[:file_cache_path], "nagios-#{nagios_version}.tar.gz")
-  source nagios_source_url
+  source node['nagios']['server']['source_url']
   checksum node['nagios']['server']['checksum']
   notifies :run, 'execute[compile-nagios]', :immediately
 end
