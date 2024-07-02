@@ -8,11 +8,7 @@ module NagiosCookbook
       elsif platform?('debian')
         'nagios4'
       elsif platform?('ubuntu')
-        if node['platform_version'].to_f < 20.04
-          'nagios3'
-        else
-          'nagios4'
-        end
+        'nagios4'
       end
     end
 
@@ -22,11 +18,7 @@ module NagiosCookbook
       elsif platform?('debian')
         %w(nagios4 nagios-nrpe-plugin nagios-images)
       elsif platform?('ubuntu')
-        if node['platform_version'].to_f < 20.04
-          %w(nagios3 nagios-nrpe-plugin nagios-images)
-        else
-          %w(nagios4 nagios-nrpe-plugin nagios-images)
-        end
+        %w(nagios4 nagios-nrpe-plugin nagios-images)
       end
     end
 
@@ -34,16 +26,20 @@ module NagiosCookbook
       if platform_family?('rhel')
         'php-gd'
       elsif platform?('debian')
-        if node['platform_version'].to_i < 11
-          'php7.3-gd'
-        else
+        case node['platform_version'].to_i
+        when 11
           'php7.4-gd'
+        else
+          'php8.2-gd'
         end
       elsif platform?('ubuntu')
-        if node['platform_version'].to_f < 20.04
-          'php7.2-gd'
-        else
+        case node['platform_version'].to_f
+        when 20.04
           'php7.4-gd'
+        when 22.04
+          'php8.1-gd'
+        else
+          'php8.3-gd'
         end
       end
     end

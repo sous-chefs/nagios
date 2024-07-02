@@ -21,7 +21,8 @@
 
 # Package pre-reqs
 build_essential 'install compilation tools'
-include_recipe 'php::default'
+
+php_install 'nagios'
 
 package node['nagios']['php_gd_package']
 

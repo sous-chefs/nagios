@@ -1,18 +1,7 @@
-vname =
-  if os.name == 'debian'
-    'nagios4'
-  elsif os.name == 'ubuntu'
-    if os.release.to_f < 20.04
-      'nagios3'
-    else
-      'nagios4'
-    end
-  end
-
 path_conf_dir = if os.redhat?
                   '/etc/nagios'
                 else
-                  "/etc/#{vname}"
+                  '/etc/nagios4'
                 end
 
 describe file("#{path_conf_dir}/nagios.cfg") do

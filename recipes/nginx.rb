@@ -27,7 +27,7 @@ nginx_config 'nagios' do
   notifies :restart, 'nginx_service[nagios]', :delayed
 end
 
-include_recipe 'php'
+php_install 'nagios'
 
 php_fpm_pool 'nagios' do
   user nagios_nginx_user
@@ -72,7 +72,7 @@ nginx_site 'nagios' do
     log_dir: node['nagios']['log_dir'],
     nagios_url: node['nagios']['url'],
     nginx_dispatch_cgi_url: node['nagios']['server']['nginx_dispatch']['cgi_url'],
-    nginx_dispatch_php_url: node['nagios']['server']['nginx_dispatch']['php_url'],
+    nginx_dispatch_php_url: "unix:#{php_fpm_socket}",
     php: %w(php both).include?(dispatch_type),
     public_domain: node['public_domain'] || node['domain'],
     server_name: node['nagios']['server']['name'],

@@ -28,9 +28,7 @@ describe 'nagios::default' do
     expect(chef_run).to include_recipe('nagios::server_source')
   end
 
-  it 'should include the php::default recipe' do
-    expect(chef_run).to include_recipe('php::default')
-  end
+  it { expect(chef_run).to install_php_install 'nagios' }
 
   it 'should install the php-gd package' do
     expect(chef_run).to install_package('php7.4-gd')
