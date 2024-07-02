@@ -2,7 +2,7 @@
 
 This file is used to list changes made in each version of the nagios cookbook.
 
-## Unreleased
+## 12.0.0 - *2024-07-02*
 
 - Standardise files with files in sous-chefs/repo-management
 - Update cookbook to use newer resource driven php cookbook
