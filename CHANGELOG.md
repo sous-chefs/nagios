@@ -4,9 +4,10 @@ This file is used to list changes made in each version of the nagios cookbook.
 
 ## Unreleased
 
-Standardise files with files in sous-chefs/repo-management
-
-Standardise files with files in sous-chefs/repo-management
+- Standardise files with files in sous-chefs/repo-management
+- Update cookbook to use newer resource driven php cookbook
+- Remove EOL platforms and other platform updates
+- Add initial support for Ubuntu 24.04 (requires apache2 cookbook updates)
 
 ## 11.3.2 - *2024-05-02*
 

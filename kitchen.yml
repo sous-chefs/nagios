@@ -17,13 +17,13 @@ verifier:
 
 platforms:
   - name: almalinux-8
-  - name: centos-7
   - name: centos-stream-8
-  - name: debian-10
   - name: debian-11
+  - name: debian-12
   - name: rockylinux-8
-  - name: ubuntu-18.04
   - name: ubuntu-20.04
+  - name: ubuntu-22.04
+  - name: ubuntu-24.04
 
 suites:
   - name: server_package

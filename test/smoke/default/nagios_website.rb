@@ -12,11 +12,7 @@ cgi_cmd =
   elsif os.name == 'debian'
     "#{wget_cmd}/cgi-bin/nagios4"
   elsif os.name == 'ubuntu'
-    if os.release.to_f < 20.04
-      "#{wget_cmd}/cgi-bin/nagios3"
-    else
-      "#{wget_cmd}/cgi-bin/nagios4"
-    end
+    "#{wget_cmd}/cgi-bin/nagios4"
   end
 
 control 'nagios-website-01' do

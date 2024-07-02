@@ -1,14 +1,3 @@
-vname =
-  if os.name == 'debian'
-    'nagios4'
-  elsif os.name == 'ubuntu'
-    if os.release.to_f < 20.04
-      'nagios3'
-    else
-      'nagios4'
-    end
-  end
-
 if os.redhat?
   apache_bin      = 'httpd'
   config_cgi_path = 'nagios/cgi-bin/config.cgi'
@@ -17,10 +6,10 @@ if os.redhat?
   service_name    = 'nagios'
 else
   apache_bin      = 'apache2'
-  config_cgi_path = "cgi-bin/#{vname}/config.cgi"
-  path_config_dir = "/etc/#{vname}/conf.d"
-  path_conf_dir   = "/etc/#{vname}"
-  service_name    = vname
+  config_cgi_path = 'cgi-bin/nagios4/config.cgi'
+  path_config_dir = '/etc/nagios4/conf.d'
+  path_conf_dir   = '/etc/nagios4'
+  service_name    = 'nagios4'
 end
 
 # Test Nagios Config

@@ -13,11 +13,7 @@ vname =
   elsif os.name == 'debian'
     'nagios4'
   elsif os.name == 'ubuntu'
-    if os.release.to_f < 20.04
-      'nagios3'
-    else
-      'nagios4'
-    end
+    'nagios4'
   end
 
 if %w(redhat).include?(os[:family])

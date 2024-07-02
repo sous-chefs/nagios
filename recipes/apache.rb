@@ -18,7 +18,7 @@
 
 node.default['nagios']['server']['web_server'] = 'apache'
 
-include_recipe 'php'
+php_install 'php'
 
 apache2_install 'nagios' do
   listen node['nagios']['enable_ssl'] ? %w(80 443) : %w(80)
