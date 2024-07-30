@@ -34,7 +34,7 @@
   </Directory>
 
   <FilesMatch ".+\.ph(p[345]?|t|tml)$">
-     SetHandler application/x-httpd-php
+     SetHandler "<%= @apache_php_handler %>"
   </FilesMatch>
 
 <% if @https -%>
