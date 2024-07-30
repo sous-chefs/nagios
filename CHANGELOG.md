@@ -6,6 +6,9 @@ This file is used to list changes made in each version of the nagios cookbook.
 
 Standardise files with files in sous-chefs/repo-management
 
+- Add support for el9 based systems
+- Centos stream 8 is EOL, switched to Centos stream 9
+
 ## 12.0.0 - *2024-07-02*
 
 - Standardise files with files in sous-chefs/repo-management

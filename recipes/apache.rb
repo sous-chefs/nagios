@@ -27,7 +27,21 @@ end
 
 apache2_module 'cgi'
 apache2_module 'rewrite'
-apache2_mod_php 'nagios'
+if apache_mod_php_supported?
+  apache2_mod_php 'nagios'
+  apache_php_handler = 'application/x-httpd-php'
+else
+  apache2_module 'proxy'
+  apache2_module 'proxy_fcgi'
+  apache2_mod_proxy 'proxy'
+  php_fpm_pool 'nagios' do
+    user default_apache_user
+    group default_apache_group
+    listen_user default_apache_user
+    listen_group default_apache_group
+  end
+  apache_php_handler = "proxy:unix:#{php_fpm_socket}|fcgi://localhost"
+end
 
 apache2_module 'ssl' if node['nagios']['enable_ssl']
 
@@ -44,11 +58,10 @@ template "#{apache_dir}/sites-available/#{node['nagios']['server']['vname']}.con
     https: node['nagios']['enable_ssl'],
     ssl_cert_file: node['nagios']['ssl_cert_file'],
     ssl_cert_key: node['nagios']['ssl_cert_key'],
-    apache_log_dir: default_log_dir
+    apache_log_dir: default_log_dir,
+    apache_php_handler: apache_php_handler
   )
-  if File.symlink?("#{apache_dir}/sites-enabled/#{node['nagios']['server']['vname']}.conf")
-    notifies :restart, 'apache2_service[nagios]'
-  end
+  notifies :restart, 'apache2_service[nagios]' if File.symlink?("#{apache_dir}/sites-enabled/#{node['nagios']['server']['vname']}.conf")
 end
 
 file "#{apache_dir}/conf.d/#{node['nagios']['server']['vname']}.conf" do
@@ -89,7 +102,10 @@ apache2_service 'nagios' do
   subscribes :restart, 'apache2_install[nagios]'
   subscribes :reload, 'apache2_module[cgi]'
   subscribes :reload, 'apache2_module[rewrite]'
-  subscribes :reload, 'apache2_mod_php[nagios]'
+  subscribes :reload, 'apache2_mod_php[nagios]' if apache_mod_php_supported?
+  subscribes :reload, 'apache2_module[proxy]' unless apache_mod_php_supported?
+  subscribes :reload, 'apache2_module[proxy_fcgi]' unless apache_mod_php_supported?
+  subscribes :reload, 'apache2_mod_proxy[proxy]' unless apache_mod_php_supported?
   subscribes :reload, 'apache2_module[ssl]' if node['nagios']['enable_ssl']
 end
 
