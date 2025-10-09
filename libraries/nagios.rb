@@ -148,7 +148,7 @@ class Nagios
   end
 
   def normalize_hostname=(expr)
-    @normalize_hostname = (expr == true || !(expr =~ /y|yes|true|1/).nil?)
+    @normalize_hostname = expr == true || !(expr =~ /y|yes|true|1/).nil?
   end
 
   def push(obj)
