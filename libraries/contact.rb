@@ -63,7 +63,7 @@ class Nagios
         "# Skipping #{contact_name} because missing email/pager."
       else
         configured = configured_options
-        custom_options.each { |_, v| configured[v.to_s] = v.value }
+        custom_options.each_value { |v| configured[v.to_s] = v.value }
         get_definition(configured, 'contact')
       end
     end
@@ -223,7 +223,7 @@ class Nagios
 
     def merge_members(obj)
       obj.contactgroups.each { |m| push(m) }
-      obj.custom_options.each { |_, m| push(m) }
+      obj.custom_options.each_value { |m| push(m) }
     end
   end
 end

@@ -110,7 +110,7 @@ class Nagios
 
     def definition
       configured = configured_options
-      custom_options.each { |_, v| configured[v.to_s] = v.value }
+      custom_options.each_value { |v| configured[v.to_s] = v.value }
       get_definition(configured, 'host')
     end
 
@@ -404,7 +404,7 @@ class Nagios
       obj.contacts.each { |m| push(m) }
       obj.contact_groups.each { |m| push(m) }
       obj.hostgroups.each { |m| push(m) }
-      obj.custom_options.each { |_, m| push(m) }
+      obj.custom_options.each_value { |m| push(m) }
     end
   end
 end

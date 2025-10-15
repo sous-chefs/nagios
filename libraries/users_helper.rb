@@ -20,12 +20,10 @@ class NagiosUsers
   end
 
   def return_user_contacts
-    contacts = []
     # add base contacts from nagios_users data bag
-    @users.each do |s|
-      contacts << s['id']
+    @users.map do |s|
+      s['id']
     end
-    contacts
   end
 
   private
@@ -36,11 +34,11 @@ class NagiosUsers
   end
 
   def load_encrypted_databag(user_databag)
-    data_bag(user_databag).each do |u, _|
+    data_bag(user_databag).each_key do |u|
       d = data_bag_item(user_databag, u)
       @users << d unless d['nagios'].nil? || d['nagios']['email'].nil?
     end
-  rescue Net::HTTPServerException
+  rescue Net::HTTPClientException
     fail_search(user_databag)
   end
 
@@ -48,7 +46,7 @@ class NagiosUsers
     Chef::Search::Query.new.search(user_databag, "groups:#{group} NOT action:remove") do |d|
       @users << d unless d['nagios'].nil? || d['nagios']['email'].nil?
     end
-  rescue Net::HTTPServerException
+  rescue Net::HTTPClientException
     fail_search(user_databag)
   end
 end

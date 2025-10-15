@@ -177,7 +177,7 @@ class Nagios
 
     def get_longest_option(options)
       longest = 0
-      options.each do |k, _|
+      options.each_key do |k|
         longest = k.length if longest < k.length
       end
       longest
@@ -205,7 +205,7 @@ class Nagios
     end
 
     def merge_attributes(obj)
-      config_options.each do |m, _|
+      config_options.each_key do |m|
         n = obj.send(m)
         next if n.nil?
         m += '='
