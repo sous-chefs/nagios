@@ -5,6 +5,13 @@ This file is used to list changes made in each version of the nagios cookbook.
 Standardise files with files in sous-chefs/repo-management
 Standardise files with files in sous-chefs/repo-management
 
+## [12.1.4](https://github.com/sous-chefs/nagios/compare/12.1.3...v12.1.4) (2025-10-16)
+
+
+### Bug Fixes
+
+* **ci:** Update workflows to use release pipeline ([#689](https://github.com/sous-chefs/nagios/issues/689)) ([acede45](https://github.com/sous-chefs/nagios/commit/acede45b7c556e2c2579ecc3f3016e4a4686b2d5))
+
 ## 12.1.3 - *2025-09-04*
 
 Standardise files with files in sous-chefs/repo-management
