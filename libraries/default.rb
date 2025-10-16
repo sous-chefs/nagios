@@ -45,9 +45,9 @@ end
 
 def nagios_action_delete?(action)
   if action.is_a?(Symbol)
-    return true if action == :delete || action == :remove
+    true if action == :delete || action == :remove
   elsif action.is_a?(Array)
-    return true if action.include?(:delete) || action.include?(:remove)
+    true if action.include?(:delete) || action.include?(:remove)
   else
     false
   end
@@ -55,9 +55,9 @@ end
 
 def nagios_action_create?(action)
   if action.is_a?(Symbol)
-    return true if action == :create || action == :add
+    true if action == :create || action == :add
   elsif action.is_a?(Array)
-    return true if action.include?(:create) || action.include?(:add)
+    true if action.include?(:create) || action.include?(:add)
   else
     false
   end
