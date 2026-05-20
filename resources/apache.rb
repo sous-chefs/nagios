@@ -86,7 +86,7 @@ action :create do
       notifies :reload, 'apache2_service[nagios]'
     end
   when 'ldap'
-    package 'mod_ldap' if platform_family?('rhel')
+    package 'mod_ldap' if platform_family?('rhel', 'fedora')
 
     %w(ldap authnz_ldap).each do |mod|
       apache2_module mod do
