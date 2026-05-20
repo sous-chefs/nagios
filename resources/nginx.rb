@@ -16,13 +16,21 @@ action :create do
     notifies :restart, 'nginx_service[nagios]', :delayed
   end
 
-  php_install 'nagios'
+  php_install 'nagios' do
+    conf_dir nagios_php_conf_dir
+  end
 
   php_fpm_pool 'nagios' do
+    default_conf nagios_php_fpm_default_conf
+    fpm_conf_dir nagios_php_fpm_conf_dir
+    fpm_package nagios_php_fpm_package
+    listen nagios_php_fpm_socket
     user nagios_nginx_user
     group nagios_nginx_group
     listen_user nagios_nginx_user
     listen_group nagios_nginx_group
+    pool_dir nagios_php_fpm_pool_dir
+    service nagios_php_fpm_service
   end
 
   package nagios_array(node['nagios']['server']['nginx_dispatch']['packages'])
@@ -60,7 +68,7 @@ action :create do
       log_dir: node['nagios']['log_dir'],
       nagios_url: node['nagios']['url'],
       nginx_dispatch_cgi_url: node['nagios']['server']['nginx_dispatch']['cgi_url'],
-      nginx_dispatch_php_url: "unix:#{php_fpm_socket}",
+      nginx_dispatch_php_url: "unix:#{nagios_php_fpm_socket}",
       php: %w(php both).include?(dispatch_type),
       public_domain: node['public_domain'] || node['domain'],
       server_name: node['nagios']['server']['name'],

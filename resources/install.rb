@@ -20,7 +20,7 @@ action_class do
   def install_package
     case node['platform_family']
     when 'rhel'
-      yum_epel 'default' if node['nagios']['server']['install_yum-epel']
+      include_recipe 'yum-epel' if node['nagios']['server']['install_yum-epel']
     when 'debian'
       random_initial_password = rand(36**16).to_s(36)
 
@@ -56,7 +56,9 @@ action_class do
   def install_source
     build_essential 'install compilation tools'
 
-    php_install 'nagios'
+    php_install 'nagios' do
+      conf_dir nagios_php_conf_dir
+    end
 
     package node['nagios']['php_gd_package']
     package node['nagios']['server']['dependencies']

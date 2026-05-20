@@ -32,6 +32,8 @@ module NagiosCookbook
         case node['platform_version'].to_i
         when 11
           'php7.4-gd'
+        when 13
+          'php8.4-gd'
         else
           'php8.2-gd'
         end
@@ -44,6 +46,88 @@ module NagiosCookbook
         else
           'php8.3-gd'
         end
+      end
+    end
+
+    def nagios_php_version
+      if platform?('debian')
+        case node['platform_version'].to_i
+        when 11
+          '7.4'
+        when 13
+          '8.4'
+        else
+          '8.2'
+        end
+      elsif platform?('ubuntu')
+        case node['platform_version'].to_f
+        when 20.04
+          '7.4'
+        when 22.04
+          '8.1'
+        else
+          '8.3'
+        end
+      elsif platform_family?('rhel')
+        node['platform_version'].to_i >= 9 ? '8.0' : '7.2'
+      elsif platform_family?('fedora')
+        '8.3'
+      end
+    end
+
+    def nagios_php_conf_dir
+      if platform_family?('rhel', 'fedora')
+        '/etc'
+      else
+        "/etc/php/#{nagios_php_version}/cli"
+      end
+    end
+
+    def nagios_php_fpm_conf_dir
+      if platform_family?('rhel', 'fedora')
+        '/etc/php-fpm.d'
+      else
+        "/etc/php/#{nagios_php_version}/fpm"
+      end
+    end
+
+    def nagios_php_fpm_default_conf
+      if platform_family?('rhel', 'fedora')
+        '/etc/php-fpm.d/www.conf'
+      else
+        "#{nagios_php_fpm_pool_dir}/www.conf"
+      end
+    end
+
+    def nagios_php_fpm_package
+      if platform_family?('rhel', 'fedora')
+        'php-fpm'
+      else
+        "php#{nagios_php_version}-fpm"
+      end
+    end
+
+    def nagios_php_fpm_pool_dir
+      if platform_family?('rhel', 'fedora')
+        '/etc/php-fpm.d'
+      else
+        "/etc/php/#{nagios_php_version}/fpm/pool.d"
+      end
+    end
+
+    def nagios_php_fpm_service
+      if platform_family?('rhel', 'fedora')
+        'php-fpm'
+      else
+        "php#{nagios_php_version}-fpm"
+      end
+    end
+
+    def nagios_php_fpm_socket
+      if platform_family?('rhel', 'fedora')
+        "/var/run/php#{nagios_php_version}-fpm.sock"
+      else
+        "/var/run/php/php#{nagios_php_version}-fpm.sock"
       end
     end
 

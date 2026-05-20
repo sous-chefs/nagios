@@ -6,7 +6,9 @@ unified_mode true
 action :create do
   node.default['nagios']['server']['web_server'] = 'apache'
 
-  php_install 'php'
+  php_install 'php' do
+    conf_dir nagios_php_conf_dir
+  end
 
   apache2_install 'nagios' do
     listen node['nagios']['enable_ssl'] ? %w(80 443) : %w(80)
@@ -25,12 +27,18 @@ action :create do
       apache2_module 'proxy_fcgi'
       apache2_mod_proxy 'proxy'
       php_fpm_pool 'nagios' do
+        default_conf nagios_php_fpm_default_conf
+        fpm_conf_dir nagios_php_fpm_conf_dir
+        fpm_package nagios_php_fpm_package
+        listen nagios_php_fpm_socket
         user default_apache_user
         group default_apache_group
         listen_user default_apache_user
         listen_group default_apache_group
+        pool_dir nagios_php_fpm_pool_dir
+        service nagios_php_fpm_service
       end
-      "proxy:unix:#{php_fpm_socket}|fcgi://localhost"
+      "proxy:unix:#{nagios_php_fpm_socket}|fcgi://localhost"
     end
 
   apache2_module 'ssl' if node['nagios']['enable_ssl']
@@ -96,4 +104,8 @@ action :create do
   end
 
   nagios_configure 'nagios'
+end
+
+action_class do
+  include NagiosCookbook::Helpers
 end
