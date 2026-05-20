@@ -1,0 +1,7 @@
+---
+name: swappable_config
+title: Nagios Swappable Config Tests
+maintainer: Sous Chefs
+license: Apache-2.0
+summary: Alternate Nagios configuration template tests
+version: 1.0.0

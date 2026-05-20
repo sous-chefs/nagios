@@ -1,3 +1,6 @@
+# frozen_string_literal: true
+
+provides :nagios_conf
 #
 # Author:: Joshua Sierles <joshua@37signals.com>
 # Author:: Joshua Timberman <joshua@chef.io>

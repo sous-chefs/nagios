@@ -1,0 +1,7 @@
+---
+name: server_package
+title: Nagios Package Install Tests
+maintainer: Sous Chefs
+license: Apache-2.0
+summary: Package-based Nagios server integration tests
+version: 1.0.0

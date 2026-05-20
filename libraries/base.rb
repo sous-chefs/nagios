@@ -188,7 +188,7 @@ class Nagios
       case option
       when String
         members = object == Nagios::Command ? [option] : option.split(',')
-        members.map(&:strip!)
+        members.map!(&:strip)
       when Array
         members = option
       else

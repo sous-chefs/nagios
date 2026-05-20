@@ -8,7 +8,6 @@ provisioner:
   name: chef_infra
   product_name: chef
   enforce_idempotency: true
-  # This needs to be 3 due to the use of node searches
   multiple_converge: 3
   deprecations_as_errors: true
 
@@ -19,105 +18,75 @@ platforms:
   - name: almalinux-8
   - name: almalinux-9
   - name: centos-stream-9
-  - name: debian-11
   - name: debian-12
+  - name: debian-13
   - name: fedora-latest
+  - name: oraclelinux-8
+  - name: oraclelinux-9
   - name: rockylinux-8
   - name: rockylinux-9
-  - name: ubuntu-20.04
   - name: ubuntu-22.04
   - name: ubuntu-24.04
 
+x-run-lists:
+  default: &default_run_list
+    - recipe[test::default]
+    - role[monitoring]
+  ldap: &ldap_run_list
+    - recipe[test::server_package_ldap]
+    - role[monitoring]
+  source: &source_run_list
+    - recipe[test::server_source]
+    - role[monitoring]
+  swappable_config: &swappable_config_run_list
+    - recipe[test::swappable_config]
+    - role[monitoring]
+  pagerduty: &pagerduty_run_list
+    - recipe[test::pagerduty]
+    - role[monitoring]
+  nginx: &nginx_run_list
+    - recipe[test::nginx]
+    - role[monitoring]
+
+x-verifiers:
+  default: &default_verifier
+    inspec_tests:
+      - path: test/integration/default
+    inputs:
+      install_method: 'package'
+
 suites:
-  - name: server_package
-    run_list:
-      - recipe[nagios::default]
-      - recipe[nrpe::default]
-      - recipe[nagios_test::default]
-      - role[monitoring]
+  - name: default
+    run_list: *default_run_list
+    verifier: *default_verifier
+  - name: ldap
+    run_list: *ldap_run_list
     verifier:
       inspec_tests:
-        - test/smoke/default/server.rb
-        - test/smoke/default/nagios_website.rb
-      inputs:
-        install_method: 'package'
-  - name: server_package_ldap
-    run_list:
-      - recipe[nagios::default]
-      - recipe[nrpe::default]
-      - recipe[nagios_test::default]
-      - role[monitoring]
-    attributes:
-      nagios:
-        server_auth_method: 'ldap'
-        ldap_url: 'ldaps://ldap.example.org:636/ou=People,dc=example,dc=org?uid?sub?(objectClass=*)'
-    verifier:
-      inspec_tests:
-        - test/smoke/default/server.rb
-        - test/smoke/default/nagios_website.rb
+        - path: test/integration/default
       inputs:
         install_method: 'package'
         ldap_auth: true
-  - name: server_source
-    run_list:
-      - recipe[nagios::default]
-      - recipe[nrpe::default]
-      - recipe[nagios_test::default]
-      - role[monitoring]
-    attributes:
-      nagios:
-        server:
-          install_method: 'source'
+  - name: source
+    run_list: *source_run_list
     verifier:
       inspec_tests:
-        - test/smoke/server_source/default_test.rb
-  - name: swappable_config
-    run_list:
-      - recipe[nagios::default]
-      - recipe[nrpe::default]
-      - recipe[nagios_test::default]
-      - role[monitoring]
-    attributes:
-      nagios:
-        server:
-          install_method: 'package'
-        nagios_config:
-          template_cookbook: 'nagios_test'
+        - path: test/integration/server_source
+      inputs:
+        install_method: 'source'
+  - name: swappable-config
+    run_list: *swappable_config_run_list
     verifier:
       inspec_tests:
-        - test/smoke/default/server.rb
-        - test/smoke/default/nagios_website.rb
-        - test/smoke/swappable_config/default_test.rb
+        - path: test/integration/default
+        - path: test/integration/swappable_config
       inputs:
         install_method: 'package'
   - name: pagerduty
-    run_list:
-      - recipe[nagios::pagerduty]
-      - recipe[nagios::default]
-      - recipe[nrpe::default]
-      - recipe[nagios_test::default]
-      - role[monitoring]
-    attributes:
-      nagios:
-        server:
-          install_method: 'package'
-        pagerduty:
-          key: 'your_key_here_3eC2'
+    run_list: *pagerduty_run_list
     verifier:
       inspec_tests:
-        - test/smoke/pagerduty/default_test.rb
-        - test/smoke/pagerduty/pagerduty_test.rb
+        - path: test/integration/pagerduty
   - name: nginx
-    run_list:
-      - recipe[nagios::nginx]
-      - recipe[nrpe::default]
-      - recipe[nagios_test::default]
-      - role[monitoring]
-    attributes:
-      nagios:
-        server:
-          stop_apache: true
-    verifier:
-      inspec_tests:
-        - test/smoke/default/server.rb
-        - test/smoke/default/nagios_website.rb
+    run_list: *nginx_run_list
+    verifier: *default_verifier
