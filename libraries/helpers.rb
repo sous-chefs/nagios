@@ -199,7 +199,7 @@ module NagiosCookbook
       case node['platform_family']
       when 'debian'
         '/usr/lib/nagios/plugins'
-      when 'rhel'
+      when 'rhel', 'fedora'
         node['kernel']['machine'] == 'i686' ? '/usr/lib/nagios/plugins' : '/usr/lib64/nagios/plugins'
       else
         '/usr/lib/nagios/plugins'
@@ -319,7 +319,7 @@ module NagiosCookbook
 
     def nagios_pagerduty_packages
       case node['platform_family']
-      when 'rhel'
+      when 'rhel', 'fedora'
         %w(perl-CGI perl-JSON perl-libwww-perl perl-Sys-Syslog)
       when 'debian'
         %w(libcgi-pm-perl libjson-perl libwww-perl)

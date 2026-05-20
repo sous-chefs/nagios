@@ -1,4 +1,4 @@
-if os.redhat?
+if os.redhat? || os.family == 'fedora'
   command_file      = '/var/log/nagios/rw/nagios.cmd'
   pagerduty_cgi_dir = '/usr/lib64/nagios/cgi-bin'
   path_config_dir   = '/etc/nagios/conf.d'

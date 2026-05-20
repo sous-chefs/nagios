@@ -52,7 +52,10 @@ action :create do
   end
 
   NagiosDataBags.new.get(new_resource.contact_data_bag).each do |contact|
-    name = contact['contact'] || contact['id']
+    contact = contact.first if contact.is_a?(Array)
+    contact = contact.to_hash if contact.respond_to?(:to_hash)
+    name = contact['contact'] || contact['id'] || contact[:contact] || contact[:id]
+    next if name.nil? || name.empty?
 
     nagios_contact name do
       options 'alias' => "PagerDuty Pseudo-Contact #{name}",

@@ -1,4 +1,4 @@
-if os.redhat?
+if os.redhat? || os.family == 'fedora'
   apache_bin      = 'httpd'
   config_cgi_path = 'nagios/cgi-bin/config.cgi'
   path_config_dir = '/etc/nagios/conf.d'

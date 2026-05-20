@@ -1,4 +1,4 @@
-apache_bin      = os.redhat? ? 'httpd' : 'apache2'
+apache_bin      = os.redhat? || os.family == 'fedora' ? 'httpd' : 'apache2'
 config_cgi_path = 'nagios/cgi-bin/config.cgi'
 path_config_dir = '/etc/nagios/conf.d'
 path_conf_dir   = '/etc/nagios'
