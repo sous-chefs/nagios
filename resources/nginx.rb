@@ -63,7 +63,7 @@ action :create do
     variables(
       allowed_ips: node['nagios']['allowed_ips'],
       cgi: %w(cgi both).include?(dispatch_type),
-      cgi_bin_dir: platform_family?('rhel') ? '/usr/lib64' : '/usr/lib',
+      cgi_bin_dir: platform_family?('rhel', 'fedora') ? '/usr/lib64' : '/usr/lib',
       chef_env: node.chef_environment == '_default' ? 'default' : node.chef_environment,
       docroot: node['nagios']['docroot'],
       fqdn: node['fqdn'],

@@ -1,4 +1,4 @@
-path_conf_dir = if os.redhat?
+path_conf_dir = if os.redhat? || os.family == 'fedora'
                   '/etc/nagios'
                 else
                   '/etc/nagios4'

@@ -6,7 +6,7 @@ module NagiosCookbook
       if install_method == 'source' ||
          (!node['nagios'].nil? && !node['nagios']['server'].nil? && node['nagios']['server']['install_method'] == 'source')
         'nagios'
-      elsif platform_family?('rhel')
+      elsif platform_family?('rhel', 'fedora')
         'nagios'
       elsif platform?('debian')
         'nagios4'
@@ -16,7 +16,7 @@ module NagiosCookbook
     end
 
     def nagios_packages
-      if platform_family?('rhel')
+      if platform_family?('rhel', 'fedora')
         %w(nagios nagios-plugins-nrpe)
       elsif platform?('debian')
         %w(nagios4 nagios-nrpe-plugin nagios-images)
@@ -332,12 +332,12 @@ module NagiosCookbook
       conf_dir = resource.conf_dir || "/etc/#{vname}"
       config_dir = resource.config_dir || "#{conf_dir}/conf.d"
       log_dir = resource.log_dir || "/var/log/#{vname}"
-      cache_dir = resource.cache_dir || (platform_family?('rhel') ? '/var/log/nagios' : "/var/cache/#{vname}")
-      state_dir = resource.state_dir || (platform_family?('rhel') ? '/var/log/nagios' : "/var/lib/#{vname}")
-      run_dir = resource.run_dir || (platform_family?('rhel') ? '/var/run/nagios' : "/var/run/#{vname}")
-      home = resource.home || (platform_family?('rhel') ? '/var/spool/nagios' : "/usr/lib/#{vname}")
-      docroot = resource.docroot || (platform_family?('rhel') ? '/usr/share/nagios/html' : "/usr/share/#{vname}/htdocs")
-      cgi_bin = resource.cgi_bin || (platform_family?('rhel') ? '/usr/lib64/nagios/cgi-bin/' : "/usr/lib/cgi-bin/#{vname}")
+      cache_dir = resource.cache_dir || (platform_family?('rhel', 'fedora') ? '/var/log/nagios' : "/var/cache/#{vname}")
+      state_dir = resource.state_dir || (platform_family?('rhel', 'fedora') ? '/var/log/nagios' : "/var/lib/#{vname}")
+      run_dir = resource.run_dir || (platform_family?('rhel', 'fedora') ? '/var/run/nagios' : "/var/run/#{vname}")
+      home = resource.home || (platform_family?('rhel', 'fedora') ? '/var/spool/nagios' : "/usr/lib/#{vname}")
+      docroot = resource.docroot || (platform_family?('rhel', 'fedora') ? '/usr/share/nagios/html' : "/usr/share/#{vname}/htdocs")
+      cgi_bin = resource.cgi_bin || (platform_family?('rhel', 'fedora') ? '/usr/lib64/nagios/cgi-bin/' : "/usr/lib/cgi-bin/#{vname}")
       install_method = resource.install_method || nagios_install_method
 
       defaults = {
@@ -375,7 +375,7 @@ module NagiosCookbook
         'run_dir' => run_dir,
         'docroot' => docroot,
         'cgi-bin' => cgi_bin,
-        'cgi-path' => resource.cgi_path || (platform_family?('rhel') ? '/nagios/cgi-bin/' : "/cgi-bin/#{vname}"),
+        'cgi-path' => resource.cgi_path || (platform_family?('rhel', 'fedora') ? '/nagios/cgi-bin/' : "/cgi-bin/#{vname}"),
         'enable_ssl' => resource.enable_ssl,
         'http_port' => resource.http_port || (resource.enable_ssl ? '443' : '80'),
         'server_name' => server_name,

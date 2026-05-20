@@ -43,7 +43,7 @@ action :create do
     owner node['nagios']['user']
     group node['nagios']['group']
     mode '0751'
-  end unless platform_family?('rhel')
+  end unless platform_family?('rhel', 'fedora')
 
   directory "#{node['nagios']['state_dir']}/rw" do
     owner node['nagios']['user']
@@ -82,7 +82,7 @@ action :create do
     variables(nagios_service_name: nagios_service_name)
   end
 
-  if platform_family?('rhel')
+  if platform_family?('rhel', 'fedora')
     template "#{node['nagios']['resource_dir']}/resource.cfg" do
       cookbook node['nagios']['resources']['template_cookbook']
       source node['nagios']['resources']['template_file']
