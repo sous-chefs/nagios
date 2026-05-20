@@ -1,0 +1,7 @@
+---
+name: pagerduty
+title: Nagios PagerDuty Tests
+maintainer: Sous Chefs
+license: Apache-2.0
+summary: PagerDuty integration tests
+version: 1.0.0

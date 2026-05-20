@@ -1,0 +1,7 @@
+---
+name: default
+title: Nagios Default Tests
+maintainer: Sous Chefs
+license: Apache-2.0
+summary: Default Nagios server integration tests
+version: 1.0.0

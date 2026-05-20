@@ -2,6 +2,7 @@
 AllCops:
   Exclude:
     - 'Dangerfile'
+    - 'vendor/bundle/**/*'
 
 # TODO: Remove this once this is migrated to resources
 Lint/DuplicateMethods:

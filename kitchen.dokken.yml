@@ -1,10 +1,17 @@
+---
 driver:
   name: dokken
   privileged: true
-  chef_version: <%= ENV['CHEF_VERSION'] || 'current' %>
+  chef_image: cincproject/cinc
+  chef_version: <%= ENV['CHEF_VERSION'] || 'latest' %>
 
-transport: { name: dokken }
-provisioner: { name: dokken }
+transport:
+  name: dokken
+
+provisioner:
+  name: dokken
+  product_name: cinc
+  chef_binary: /opt/cinc/bin/cinc-client
 
 platforms:
   - name: almalinux-8
@@ -17,24 +24,9 @@ platforms:
       image: dokken/almalinux-9
       pid_one_command: /usr/lib/systemd/systemd
 
-  - name: almalinux-10
-    driver:
-      image: dokken/almalinux-10
-      pid_one_command: /usr/lib/systemd/systemd
-
-  - name: amazonlinux-2023
-    driver:
-      image: dokken/amazonlinux-2023
-      pid_one_command: /usr/lib/systemd/systemd
-
   - name: centos-stream-9
     driver:
       image: dokken/centos-stream-9
-      pid_one_command: /usr/lib/systemd/systemd
-
-  - name: centos-stream-10
-    driver:
-      image: dokken/centos-stream-10
       pid_one_command: /usr/lib/systemd/systemd
 
   - name: debian-12
@@ -50,11 +42,6 @@ platforms:
   - name: fedora-latest
     driver:
       image: dokken/fedora-latest
-      pid_one_command: /usr/lib/systemd/systemd
-
-  - name: opensuse-leap-15
-    driver:
-      image: dokken/opensuse-leap-15
       pid_one_command: /usr/lib/systemd/systemd
 
   - name: oraclelinux-8
@@ -76,16 +63,6 @@ platforms:
     driver:
       image: dokken/rockylinux-9
       pid_one_command: /usr/lib/systemd/systemd
-
-  - name: rockylinux-10
-    driver:
-      image: dokken/rockylinux-10
-      pid_one_command: /usr/lib/systemd/systemd
-
-  - name: ubuntu-20.04
-    driver:
-      image: dokken/ubuntu-20.04
-      pid_one_command: /bin/systemd
 
   - name: ubuntu-22.04
     driver:

@@ -1,0 +1,7 @@
+---
+name: server_source
+title: Nagios Source Install Tests
+maintainer: Sous Chefs
+license: Apache-2.0
+summary: Source-based Nagios server integration tests
+version: 1.0.0
