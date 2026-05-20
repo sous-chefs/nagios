@@ -28,6 +28,8 @@ module NagiosCookbook
     def nagios_php_gd_package
       if platform_family?('rhel')
         'php-gd'
+      elsif platform_family?('fedora')
+        'php-gd'
       elsif platform?('debian')
         case node['platform_version'].to_i
         when 11
@@ -71,7 +73,7 @@ module NagiosCookbook
       elsif platform_family?('rhel')
         node['platform_version'].to_i >= 9 ? '8.0' : '7.2'
       elsif platform_family?('fedora')
-        '8.3'
+        node['platform_version'].to_i >= 44 ? '8.5' : '8.3'
       end
     end
 
@@ -132,7 +134,7 @@ module NagiosCookbook
     end
 
     def nagios_server_dependencies
-      if platform_family?('rhel')
+      if platform_family?('rhel', 'fedora')
         %w(openssl-devel gd-devel tar unzip)
       else
         %w(libssl-dev libgdchart-gd2-xpm-dev bsd-mailx tar unzip)
@@ -140,23 +142,37 @@ module NagiosCookbook
     end
 
     def nagios_nginx_dispatch_packages
-      if platform_family?('rhel')
+      if platform_family?('rhel') && node['platform_version'].to_i < 9
         %w(spawn-fcgi fcgiwrap)
+      elsif platform_family?('rhel', 'fedora')
+        %w(fcgiwrap)
       else
         %w(fcgiwrap)
       end
     end
 
     def nagios_nginx_dispatch_services
-      if platform_family?('rhel')
+      if platform_family?('rhel') && node['platform_version'].to_i < 9
         %w(spawn-fcgi)
+      elsif platform_family?('rhel', 'fedora')
+        %w(fcgiwrap@nginx.socket)
       else
         %w(fcgiwrap)
       end
     end
 
+    def nagios_nginx_dispatch_cgi_url
+      if platform_family?('rhel') && node['platform_version'].to_i >= 9
+        'unix:/run/fcgiwrap/fcgiwrap-nginx.sock'
+      elsif platform_family?('fedora')
+        'unix:/run/fcgiwrap/fcgiwrap-nginx.sock'
+      else
+        'unix:/var/run/fcgiwrap.socket'
+      end
+    end
+
     def nagios_nginx_user
-      if platform_family?('rhel')
+      if platform_family?('rhel', 'fedora')
         'nginx'
       else
         'www-data'
@@ -164,7 +180,7 @@ module NagiosCookbook
     end
 
     def nagios_nginx_group
-      if platform_family?('rhel')
+      if platform_family?('rhel', 'fedora')
         'nginx'
       else
         'www-data'
@@ -438,7 +454,7 @@ module NagiosCookbook
             'type' => resource.nginx_dispatch_type,
             'packages' => resource.nginx_dispatch_packages || nagios_nginx_dispatch_packages,
             'services' => resource.nginx_dispatch_services || nagios_nginx_dispatch_services,
-            'cgi_url' => resource.nginx_dispatch_cgi_url,
+            'cgi_url' => resource.nginx_dispatch_cgi_url || nagios_nginx_dispatch_cgi_url,
           },
         },
       }

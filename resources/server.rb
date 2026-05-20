@@ -105,7 +105,7 @@ property :cgi_template_file, String, default: 'cgi.cfg.erb'
 property :nginx_dispatch_type, String, equal_to: %w(cgi php both), default: 'both'
 property :nginx_dispatch_packages, [Array, nil], default: nil
 property :nginx_dispatch_services, [Array, nil], default: nil
-property :nginx_dispatch_cgi_url, String, default: 'unix:/var/run/fcgiwrap.socket'
+property :nginx_dispatch_cgi_url, [String, nil]
 property :stop_apache, [true, false], default: false
 
 property :mail_command, [String, nil]

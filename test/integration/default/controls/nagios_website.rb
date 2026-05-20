@@ -5,7 +5,9 @@ install_method = input('install_method')
 ldap_auth = input('ldap_auth', value: false)
 
 cgi_cmd =
-  if install_method == 'source' && os.family == 'debian'
+  if os.family == 'fedora'
+    "#{wget_cmd}/cgi-bin/nagios"
+  elsif install_method == 'source' && os.family == 'debian'
     "#{wget_cmd}/cgi-bin/nagios"
   elsif os.family == 'redhat'
     "#{wget_cmd}/nagios/cgi-bin"

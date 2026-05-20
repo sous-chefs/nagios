@@ -20,6 +20,11 @@ action :create do
     conf_dir nagios_php_conf_dir
   end
 
+  package nagios_php_fpm_package
+  file nagios_php_fpm_default_conf do
+    action :delete
+  end
+
   php_fpm_pool 'nagios' do
     default_conf nagios_php_fpm_default_conf
     fpm_conf_dir nagios_php_fpm_conf_dir
@@ -35,7 +40,7 @@ action :create do
 
   package nagios_array(node['nagios']['server']['nginx_dispatch']['packages'])
 
-  if platform_family?('rhel')
+  if nagios_array(node['nagios']['server']['nginx_dispatch']['services']).include?('spawn-fcgi')
     template '/etc/sysconfig/spawn-fcgi' do
       cookbook 'nagios'
       source 'spawn-fcgi.erb'

@@ -26,6 +26,10 @@ action :create do
       apache2_module 'proxy'
       apache2_module 'proxy_fcgi'
       apache2_mod_proxy 'proxy'
+      package nagios_php_fpm_package
+      file nagios_php_fpm_default_conf do
+        action :delete
+      end
       php_fpm_pool 'nagios' do
         default_conf nagios_php_fpm_default_conf
         fpm_conf_dir nagios_php_fpm_conf_dir
