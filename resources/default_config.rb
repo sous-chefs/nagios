@@ -3,6 +3,8 @@
 provides :nagios_default_config
 unified_mode true
 
+property :users, [Array, nil], default: nil
+
 action :create do
   Chef::Log.info('Beginning search for nodes. This may take some time depending on node count')
 
@@ -121,7 +123,7 @@ action_class do
               'host_notification_commands' => 'host_notify_by_email'
     end
 
-    nagios_users = NagiosUsers.new(node)
+    nagios_users = NagiosUsers.new(node, users: new_resource.users)
     nagios_users.users.each do |item|
       contact = Nagios::Contact.create(item['id'])
       contact.import(item.to_hash)

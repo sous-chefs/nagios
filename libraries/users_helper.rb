@@ -5,9 +5,14 @@ require 'chef/search/query'
 class NagiosUsers
   attr_accessor :users
 
-  def initialize(node)
+  def initialize(node, users: nil)
     @node = node
     @users = []
+
+    unless users.nil?
+      @users = users.map { |user| stringify_keys(user) }
+      return
+    end
 
     user_databag = node['nagios']['users_databag'].to_sym
     group = node['nagios']['users_databag_group']
@@ -48,5 +53,20 @@ class NagiosUsers
     end
   rescue Net::HTTPClientException
     fail_search(user_databag)
+  end
+
+  def stringify_keys(value)
+    value = value.to_hash if value.respond_to?(:to_hash)
+
+    case value
+    when Hash
+      value.each_with_object({}) do |(key, child), result|
+        result[key.to_s] = stringify_keys(child)
+      end
+    when Array
+      value.map { |child| stringify_keys(child) }
+    else
+      value
+    end
   end
 end
