@@ -3,6 +3,8 @@
 provides :nagios_nginx
 unified_mode true
 
+property :users, [Array, nil], default: nil
+
 action :create do
   node.default['nagios']['server']['web_server'] = 'nginx'
 
@@ -102,7 +104,9 @@ action :create do
     raise 'LDAP authentication not supported on NGINX'
   end
 
-  nagios_configure 'nagios'
+  nagios_configure 'nagios' do
+    users new_resource.users
+  end
 end
 
 action_class do

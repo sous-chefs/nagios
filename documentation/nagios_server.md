@@ -41,6 +41,7 @@ Installs and configures a Nagios Core server.
 
 - `server_auth_method`, `server_auth_require`, `default_contact_groups`, `default_user_name`: UI authentication.
 - `sysadmin_email`, `sysadmin_sms_email`, `check_external_commands`, `allowed_ips`: contact and access settings.
+- `users`: explicit admin users. When set, this overrides the users data bag search.
 - `users_databag`, `users_databag_group`: admin user search settings.
 - `services_databag`, `servicegroups_databag`, `templates_databag`, `hosttemplates_databag`, `eventhandlers_databag`, `unmanagedhosts_databag`, `serviceescalations_databag`, `hostgroups_databag`, `hostescalations_databag`, `contacts_databag`, `contactgroups_databag`, `servicedependencies_databag`, `timeperiods_databag`: data bag names.
 
@@ -65,5 +66,20 @@ nagios_server 'default' do
   config(
     'enable_notifications' => 1
   )
+end
+```
+
+```ruby
+nagios_server 'default' do
+  users [
+    {
+      'id' => 'alice',
+      'htpasswd' => '$apr1$...',
+      'nagios' => {
+        'email' => 'alice@example.com',
+        'pager' => 'alice-sms@example.com',
+      },
+    },
+  ]
 end
 ```
