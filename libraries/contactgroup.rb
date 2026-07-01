@@ -78,7 +78,7 @@ class Nagios
           pop(self, obj)
         end
       when Nagios::Contactgroup
-        if @contactgroups_members.key?(obj.to_s)
+        if @contactgroup_members.key?(obj.to_s)
           pop_object(obj, @contactgroup_members)
           pop(self, obj)
         end

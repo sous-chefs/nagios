@@ -14,7 +14,13 @@ class NagiosDataBags
   def get(bag_name)
     results = []
     if @bag_list.include?(bag_name)
-      Chef::Search::Query.new.search(bag_name.to_s, '*:*') { |rows| results << rows }
+      # Return plain (mutable) hashes. Chef::DataBagItem only delegates Hash
+      # methods through method_missing and makes #each private on modern Chef
+      # Infra clients, so callers that iterate items or write into them (as the
+      # load_* helpers do) would otherwise raise.
+      Chef::Search::Query.new.search(bag_name.to_s, '*:*') do |row|
+        results << (row.respond_to?(:raw_data) ? row.raw_data : row)
+      end
     else
       Chef::Log.info "The #{bag_name} data bag does not exist."
     end
