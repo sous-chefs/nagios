@@ -5,6 +5,13 @@ This file is used to list changes made in each version of the nagios cookbook.
 Standardise files with files in sous-chefs/repo-management
 Standardise files with files in sous-chefs/repo-management
 
+## [13.0.1](https://github.com/sous-chefs/nagios/compare/v13.0.0...v13.0.1) (2026-07-01)
+
+
+### Bug Fixes
+
+* harden nagios object import against DataBagItem, immutable attrs, and Ruby 3.x ([#704](https://github.com/sous-chefs/nagios/issues/704)) ([ef43ddf](https://github.com/sous-chefs/nagios/commit/ef43ddfe63eefd18545b83c3a30b00092458846a))
+
 ## [13.0.0](https://github.com/sous-chefs/nagios/compare/v12.1.4...v13.0.0) (2026-05-20)
 
 
