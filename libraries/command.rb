@@ -48,7 +48,9 @@ class Nagios
 
     def import(hash)
       @command_line = hash if hash.class == String
-      hash['command_line'] == hash['command'] unless hash['command'].nil?
+      # Accept 'command' as an alias for 'command_line' (= not ==; the original
+      # comparison was a no-op that silently dropped such commands).
+      @command_line = hash['command'] unless hash.is_a?(String) || hash['command'].nil?
       update_options(hash)
     end
 
