@@ -57,9 +57,13 @@ x-verifiers:
 
 suites:
   - name: default
+    provisioner:
+      named_run_list: default
     run_list: *default_run_list
     verifier: *default_verifier
   - name: ldap
+    provisioner:
+      named_run_list: ldap
     run_list: *ldap_run_list
     verifier:
       inspec_tests:
@@ -68,6 +72,8 @@ suites:
         install_method: 'package'
         ldap_auth: true
   - name: source
+    provisioner:
+      named_run_list: source
     run_list: *source_run_list
     verifier:
       inspec_tests:
@@ -75,6 +81,8 @@ suites:
       inputs:
         install_method: 'source'
   - name: swappable-config
+    provisioner:
+      named_run_list: swappable_config
     run_list: *swappable_config_run_list
     verifier:
       inspec_tests:
@@ -83,10 +91,14 @@ suites:
       inputs:
         install_method: 'package'
   - name: pagerduty
+    provisioner:
+      named_run_list: pagerduty
     run_list: *pagerduty_run_list
     verifier:
       inspec_tests:
         - path: test/integration/pagerduty
   - name: nginx
+    provisioner:
+      named_run_list: nginx
     run_list: *nginx_run_list
     verifier: *default_verifier

@@ -1,8 +1,7 @@
 {
   "id": "escalation_a",
-  "servicegroup_name": "servicegroup_a",
-  "host_name": "host_a_alt",
-  "service_description": "service_a",
+  "host_name": "*",
+  "service_description": "wildcard_host_service",
   "first_notification":	4,
   "last_notification": 0,
   "notification_interval": 30,
