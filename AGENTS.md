@@ -25,10 +25,11 @@ compatibility reason here.
 
 ## Kitchen And Policyfile Run Lists
 
-The Kitchen suites include `role[monitoring]` to exercise Chef Server search and override attribute
-behavior. Do not add that role to `Policyfile.rb`; Chef's Policyfile solver treats `role[...]` as a
-cookbook dependency and fails resolution. Keep the role in Kitchen until the test cookbook provides
-equivalent attributes another way.
+The legacy Kitchen suites included `role[monitoring]` to exercise Chef Server search and override
+attribute behavior. Do not add that role to `Policyfile.rb`; Chef's Policyfile solver treats
+`role[...]` as a cookbook dependency and fails resolution. Use
+`recipe[test::policyfile_monitoring_role]` in Policyfile named run lists to recreate the test-only
+role attributes and node role group.
 
 ## Package Installation
 
