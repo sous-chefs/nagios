@@ -8,6 +8,10 @@ require_relative '../../libraries/contactgroup'
 require_relative '../../libraries/command'
 require_relative '../../libraries/host'
 require_relative '../../libraries/hostgroup'
+require_relative '../../libraries/service'
+require_relative '../../libraries/serviceescalation'
+require_relative '../../libraries/servicegroup'
+require_relative '../../libraries/timeperiod'
 
 RSpec.describe 'Nagios::Base' do
   before { Nagios.instance.instance_variable_set(:@hostgroups, {}) }
@@ -61,6 +65,21 @@ RSpec.describe 'Nagios::Base' do
       command = Nagios::Command.new('check_thing')
       command.import('command' => '$USER1$/check_thing')
       expect(command.command_line).to eq('$USER1$/check_thing')
+    end
+  end
+
+  describe 'Nagios::Serviceescalation#definition' do
+    it 'keeps service_description when servicegroup_name is configured' do
+      escalation = Nagios::Serviceescalation.new('service_a')
+      escalation.import(
+        'service_description' => 'service_a',
+        'host_name' => 'host_a_alt',
+        'servicegroup_name' => 'servicegroup_a'
+      )
+
+      expect(escalation.definition).to match(/service_description\s+service_a/)
+      expect(escalation.definition).to match(/host_name\s+host_a_alt/)
+      expect(escalation.definition).to match(/servicegroup_name\s+servicegroup_a/)
     end
   end
 end

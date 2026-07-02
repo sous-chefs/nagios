@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require 'chefspec'
-require 'chefspec/berkshelf'
+require 'chefspec/policyfile'
 require 'chef/data_bag'
 require 'chef/search/query'
 
