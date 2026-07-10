@@ -182,8 +182,8 @@ class Nagios
     when Nagios::Resource
       push_object(obj)
     else
-      Chef::Log.fail("Nagios error: Pushing unknown object: #{obj.class} into Nagios.instance")
-      raise
+      Chef::Log.fatal("Nagios error: Pushing unknown object: #{obj.class} into Nagios.instance")
+      raise "Nagios error: Pushing unknown object: #{obj.class} into Nagios.instance"
     end
   end
 

@@ -40,7 +40,8 @@ class Nagios
     private
 
     def check_period(period)
-      return period if period =~ /^(([01]?[0-9]|2[0-3])\:[0-5][0-9]-([01]?[0-9]|2[0-4])\:[0-5][0-9],?)*$/
+      # Object#=~ was removed in Ruby 3.2, so match on the string form.
+      return period if period.to_s =~ /^(([01]?[0-9]|2[0-3])\:[0-5][0-9]-([01]?[0-9]|2[0-4])\:[0-5][0-9],?)*$/
       nil
     end
   end

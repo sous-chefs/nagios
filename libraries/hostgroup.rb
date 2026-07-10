@@ -77,7 +77,7 @@ class Nagios
           obj.pop(obj)
         end
       when Nagios::Hostgroup
-        if @hostgroups_members.key?(obj.to_s)
+        if @hostgroup_members.key?(obj.to_s)
           pop_object(obj, @hostgroup_members)
           obj.pop(obj)
         end

@@ -63,15 +63,13 @@ class Nagios
         return true if expr == ''
       when 'Array', 'Hash', Array, Hash
         return true if expr.empty?
-      else
-        false
       end
       false
     end
 
     def check_bool(arg)
       return 1 if arg.class == TrueClass
-      return 1 if arg.to_s =~ /^y|yes|true|on|1$/i
+      return 1 if arg.to_s =~ /^(y|yes|true|on|1)$/i
       0
     end
 
@@ -84,15 +82,15 @@ class Nagios
       if options.include?(arg)
         Chef::Log.debug("#{self.class} #{self} adding option #{arg} for entry #{entry}")
       else
-        Chef::Log.fail("#{self.class} #{self} object error: Unknown option #{arg} for entry #{entry}")
+        Chef::Log.fatal("#{self.class} #{self} object error: Unknown option #{arg} for entry #{entry}")
         raise 'Unknown option'
       end
     end
 
     def check_state_options(arg, options, entry)
-      if arg.class == String
+      if arg.is_a?(String)
         check_state_options(arg.split(','), options, entry)
-      elsif arg.class == Array
+      elsif arg.is_a?(Array)
         arg.each { |a| check_state_option(a.strip, options, entry) }.join(',')
       else
         arg
@@ -129,7 +127,7 @@ class Nagios
     end
 
     def get_commands(obj)
-      obj.map(&:to_s).join(',')
+      obj.join(',')
     end
 
     def configured_option(method, option)
@@ -192,7 +190,7 @@ class Nagios
       when Array
         members = option
       else
-        Chef::Log.fail("Nagios fail: Use an Array or comma seperated String for option: #{option} within #{self.class}")
+        Chef::Log.fatal("Nagios fail: Use an Array or comma seperated String for option: #{option} within #{self.class}")
         raise 'Use an Array or comma seperated String for option'
       end
       members
@@ -253,7 +251,7 @@ class Nagios
           c = Nagios::Command.new(o.strip)
           n = Nagios.instance.find(c)
           if c == n
-            Chef::Log.fail("#{self.class} fail: Cannot find command #{o} please define it first.")
+            Chef::Log.fatal("#{self.class} fail: Cannot find command #{o} please define it first.")
             raise "#{self.class} fail: Cannot find command #{o} please define it first."
           else
             commands.push(n)
@@ -273,6 +271,9 @@ class Nagios
 
     def update_options(hash)
       return if blank?(hash)
+      # Chef::DataBagItem delegates [] but not iteration (#each is private on
+      # modern Chef Infra clients), so coerce it to a plain Hash before iterating.
+      hash = hash.to_hash if hash.respond_to?(:to_hash) && !hash.is_a?(Hash)
       update_hash_options(hash) if hash.respond_to?('each_pair')
     end
 
@@ -286,11 +287,15 @@ class Nagios
 
     def update_members(hash, option, object, remote = false)
       return if blank?(hash) || hash[option].nil?
-      if hash[option].is_a?(String) && hash[option].to_s.start_with?('+')
+      # Read the value out rather than rewriting hash[option] in place: hash may be
+      # a Chef::DataBagItem or an immutable node attribute (ImmutableMash), neither
+      # of which can be safely mutated.
+      value = hash[option]
+      if value.is_a?(String) && value.to_s.start_with?('+')
         @add_modifiers[option] = '+'
-        hash[option] = hash[option][1..-1]
+        value = value[1..-1]
       end
-      get_members(hash[option], object).each do |member|
+      get_members(value, object).each do |member|
         if member.start_with?('!')
           member = member[1..-1]
           @not_modifiers[option][member] = '!'

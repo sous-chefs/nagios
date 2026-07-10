@@ -50,10 +50,6 @@ class Nagios
 
     def definition
       configured = configured_options
-      unless blank?(servicegroup_name)
-        configured.delete('service_description')
-        configured.delete('host_name')
-      end
       get_definition(configured, 'serviceescalation')
     end
 
