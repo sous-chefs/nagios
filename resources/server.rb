@@ -74,6 +74,7 @@ property :sysadmin_sms_email, String, default: 'root@localhost'
 property :check_external_commands, [true, false], default: true
 property :allowed_ips, Array, default: []
 
+property :users, [Array, nil], default: nil
 property :users_databag, String, default: 'users'
 property :users_databag_group, String, default: 'sysadmin'
 property :services_databag, String, default: 'nagios_services'
@@ -122,12 +123,18 @@ action :create do
 
   case settings['server']['web_server']
   when 'apache'
-    nagios_apache 'nagios'
+    nagios_apache 'nagios' do
+      users new_resource.users
+    end
   when 'nginx'
-    nagios_nginx 'nagios'
+    nagios_nginx 'nagios' do
+      users new_resource.users
+    end
   when 'none'
     nagios_install 'nagios'
-    nagios_configure 'nagios'
+    nagios_configure 'nagios' do
+      users new_resource.users
+    end
   end
 end
 

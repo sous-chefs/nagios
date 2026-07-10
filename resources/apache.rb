@@ -3,6 +3,8 @@
 provides :nagios_apache
 unified_mode true
 
+property :users, [Array, nil], default: nil
+
 action :create do
   node.default['nagios']['server']['web_server'] = 'apache'
 
@@ -107,7 +109,9 @@ action :create do
     subscribes :reload, 'apache2_module[ssl]' if node['nagios']['enable_ssl']
   end
 
-  nagios_configure 'nagios'
+  nagios_configure 'nagios' do
+    users new_resource.users
+  end
 end
 
 action_class do

@@ -3,10 +3,12 @@
 provides :nagios_configure
 unified_mode true
 
+property :users, [Array, nil], default: nil
+
 action :create do
   nagios_install 'nagios'
 
-  nagios_users = NagiosUsers.new(node)
+  nagios_users = NagiosUsers.new(node, users: new_resource.users)
   if nagios_users.users.empty?
     Chef::Log.fatal('Could not find users in the ' \
       "\"#{node['nagios']['users_databag']}\"" \
@@ -30,7 +32,11 @@ action :create do
   Nagios.instance.normalize_hostname = node['nagios']['server']['normalize_hostname']
   Nagios.instance.host_name_attribute = node['nagios']['host_name_attribute']
 
-  nagios_default_config 'default' if node['nagios']['server']['load_default_config']
+  if node['nagios']['server']['load_default_config']
+    nagios_default_config 'default' do
+      users new_resource.users
+    end
+  end
   nagios_data_bag_config 'default' if node['nagios']['server']['load_databag_config']
 
   directory "#{node['nagios']['conf_dir']}/dist" do

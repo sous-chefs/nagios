@@ -131,6 +131,23 @@ The server resource searches the `users` data bag for users in the configured ad
 }
 ```
 
+To bypass the users data bag search, pass the users directly to `nagios_server`:
+
+```ruby
+nagios_server 'default' do
+  users [
+    {
+      'id' => 'alice',
+      'htpasswd' => '$apr1$...',
+      'nagios' => {
+        'email' => 'alice@example.com',
+        'pager' => 'alice-sms@example.com',
+      },
+    },
+  ]
+end
+```
+
 Additional object data bags can be loaded by `nagios_data_bag_config` or by enabling `load_databag_config` on `nagios_server`. The default bag names are exposed as `nagios_server` properties.
 
 PagerDuty contacts can be declared with `nagios_pagerduty`:
