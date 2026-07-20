@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 name             'test'
 maintainer       'Sander Botman'
 maintainer_email 'sbotman@schubergphilis.com'

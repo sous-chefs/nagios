@@ -29,12 +29,17 @@ nagios_server 'default' do
   server_auth_method 'ldap'
   install_method 'source'
   config(
-    'enable_notifications' => 1
+    'conf' => {
+      'enable_notifications' => 1,
+    }
   )
 end
 ```
 
-Nested configuration hashes remain available through resource properties such as `config`, `cgi_config`, `default_host`, `default_service`, `templates`, and `brokers`.
+`config` deep-merges into the complete server settings hash, so former
+`node['nagios']['conf']` values belong under `config['conf']`. Other nested
+configuration hashes remain available through resource properties such as
+`cgi_config`, `default_host`, `default_service`, `templates`, and `brokers`.
 
 ## Wrapper Cookbook Example
 
@@ -55,4 +60,6 @@ nagios_host 'web01' do
 end
 ```
 
-Declare `nagios_pagerduty` after `nagios_server` because it uses the server paths calculated by `nagios_server`.
+`nagios_pagerduty` calculates platform path defaults independently. Set
+`plugin_dir`, `cgi_bin`, `command_file`, `nagios_user`, and `nagios_group`
+explicitly when the server uses non-default paths or identities.

@@ -4,7 +4,10 @@ Installs and configures a Nagios Core server.
 
 ## Actions
 
-- `:create`
+| Action | Description |
+| --- | --- |
+| `:create` | Installs and configures the server (default). |
+| `:delete` | Removes the web configuration, Nagios configuration, and installation. |
 
 ## Properties
 
@@ -64,10 +67,15 @@ nagios_server 'default' do
   web_server 'nginx'
   server_auth_method 'htauth'
   config(
-    'enable_notifications' => 1
+    'conf' => {
+      'enable_notifications' => 1,
+    }
   )
 end
 ```
+
+`config` deep-merges into the complete server settings hash. Main `nagios.cfg`
+values therefore belong below the `conf` key.
 
 ```ruby
 nagios_server 'default' do

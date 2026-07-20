@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 path_conf_dir = if os.redhat? || os.family == 'fedora'
                   '/etc/nagios'
                 else

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #
 # Author:: Sander Botman <sbotman@schubergphilis.com>
 # Cookbook:: nagios

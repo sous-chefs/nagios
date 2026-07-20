@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 apache_bin      = os.redhat? || os.family == 'fedora' ? 'httpd' : 'apache2'
 config_cgi_path = 'nagios/cgi-bin/config.cgi'
 path_config_dir = '/etc/nagios/conf.d'

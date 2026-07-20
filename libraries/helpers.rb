@@ -3,8 +3,7 @@
 module NagiosCookbook
   module Helpers
     def nagios_vname(install_method = nil)
-      if install_method == 'source' ||
-         (!node['nagios'].nil? && !node['nagios']['server'].nil? && node['nagios']['server']['install_method'] == 'source')
+      if (install_method || nagios_install_method) == 'source'
         'nagios'
       elsif platform_family?('rhel', 'fedora')
         'nagios'
@@ -326,6 +325,20 @@ module NagiosCookbook
       end
     end
 
+    def nagios_array(value)
+      value.nil? ? [] : Array(value)
+    end
+
+    def nagios_boolean(value)
+      value ? '1' : '0'
+    end
+
+    def nagios_interval(seconds, interval_length = 1)
+      raise ArgumentError, 'Specified nagios interval of 0 seconds is not allowed' if seconds.to_i.zero?
+
+      interval_length.to_i == 1 ? seconds : seconds.to_f / interval_length.to_i
+    end
+
     def nagios_default_settings(resource)
       vname = resource.server_vname || nagios_vname(resource.install_method || nagios_install_method)
       server_name = resource.server_name || node['fqdn']
@@ -340,13 +353,16 @@ module NagiosCookbook
       cgi_bin = resource.cgi_bin || (platform_family?('rhel', 'fedora') ? '/usr/lib64/nagios/cgi-bin/' : "/usr/lib/cgi-bin/#{vname}")
       install_method = resource.install_method || nagios_install_method
 
+      web_user = resource.web_user || default_web_user(resource.web_server, resource.nagios_user)
+      web_group = resource.web_group || default_web_group(resource.web_server, resource.nagios_group)
+
       defaults = {
         'multi_environment_monitoring' => resource.multi_environment_monitoring,
         'monitored_environments' => resource.monitored_environments,
         'user' => resource.nagios_user,
         'group' => resource.nagios_group,
-        'web_user' => resource.web_user || resource.nagios_user,
-        'web_group' => resource.web_group || resource.nagios_group,
+        'web_user' => web_user,
+        'web_group' => web_group,
         'monitoring_interface' => resource.monitoring_interface,
         'htauth' => {
           'template_cookbook' => resource.htauth_template_cookbook,
@@ -460,6 +476,28 @@ module NagiosCookbook
       }
 
       deep_merge(defaults, resource.config)
+    end
+
+    def default_web_user(web_server, fallback)
+      case web_server
+      when 'apache'
+        default_apache_user
+      when 'nginx'
+        nagios_nginx_user
+      else
+        fallback
+      end
+    end
+
+    def default_web_group(web_server, fallback)
+      case web_server
+      when 'apache'
+        default_apache_group
+      when 'nginx'
+        nagios_nginx_group
+      else
+        fallback
+      end
     end
 
     def nagios_default_cgi_config

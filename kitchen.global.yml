@@ -13,6 +13,7 @@ provisioner:
 
 verifier:
   name: inspec
+  sudo: true
 
 platforms:
   - name: almalinux-8

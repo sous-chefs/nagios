@@ -4,7 +4,17 @@ Configures NGINX, PHP-FPM, and CGI dispatch for the Nagios web front end, then r
 
 ## Actions
 
-- `:create`
+| Action | Description |
+| --- | --- |
+| `:create` | Configures NGINX and Nagios (default). |
+| `:delete` | Removes the NGINX site and Nagios installation. |
+
+## Properties
+
+| Property | Type | Default | Description |
+| --- | --- | --- | --- |
+| `settings` | Hash | required | Server settings prepared by `nagios_server`; behavior-only property. |
+| `users` | Array, nil | `nil` | Explicit Nagios UI users. |
 
 ## Examples
 

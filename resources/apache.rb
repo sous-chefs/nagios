@@ -3,18 +3,18 @@
 provides :nagios_apache
 unified_mode true
 
+use '_partial/_settings'
+
 property :users, [Array, nil], default: nil
 
 action :create do
-  node.default['nagios']['server']['web_server'] = 'apache'
-
   php_install 'php' do
     conf_dir nagios_php_conf_dir
   end
 
   apache2_install 'nagios' do
-    listen node['nagios']['enable_ssl'] ? %w(80 443) : %w(80)
-    mpm node['nagios']['apache_mpm']
+    listen settings['enable_ssl'] ? %w(80 443) : %w(80)
+    mpm settings['apache_mpm']
   end
 
   apache2_module 'cgi'
@@ -47,38 +47,36 @@ action :create do
       "proxy:unix:#{nagios_php_fpm_socket}|fcgi://localhost"
     end
 
-  apache2_module 'ssl' if node['nagios']['enable_ssl']
+  apache2_module 'ssl' if settings['enable_ssl']
 
   apache2_site '000-default' do
     action :disable
     notifies :reload, 'apache2_service[nagios]'
   end
 
-  template "#{apache_dir}/sites-available/#{node['nagios']['server']['vname']}.conf" do
+  template "#{apache_dir}/sites-available/#{settings['server']['vname']}.conf" do
     cookbook 'nagios'
     source 'apache2.conf.erb'
     mode '0644'
     variables(
-      nagios_url: node['nagios']['url'],
-      https: node['nagios']['enable_ssl'],
-      ssl_cert_file: node['nagios']['ssl_cert_file'],
-      ssl_cert_key: node['nagios']['ssl_cert_key'],
+      settings: settings,
+      nagios_url: settings['url'],
+      https: settings['enable_ssl'],
+      ssl_cert_file: settings['ssl_cert_file'],
+      ssl_cert_key: settings['ssl_cert_key'],
       apache_log_dir: default_log_dir,
       apache_php_handler: apache_php_handler
     )
-    notifies :restart, 'apache2_service[nagios]' if ::File.symlink?("#{apache_dir}/sites-enabled/#{node['nagios']['server']['vname']}.conf")
+    notifies :restart, 'apache2_service[nagios]' if ::File.symlink?("#{apache_dir}/sites-enabled/#{settings['server']['vname']}.conf")
   end
 
-  file "#{apache_dir}/conf.d/#{node['nagios']['server']['vname']}.conf" do
+  file "#{apache_dir}/conf.d/#{settings['server']['vname']}.conf" do
     action :delete
   end
 
-  apache2_site node['nagios']['server']['vname']
+  apache2_site settings['server']['vname']
 
-  node.default['nagios']['web_user'] = default_apache_user
-  node.default['nagios']['web_group'] = default_apache_group
-
-  case node['nagios']['server_auth_method']
+  case settings['server_auth_method']
   when 'openid'
     apache2_module 'auth_openid' do
       notifies :reload, 'apache2_service[nagios]'
@@ -106,14 +104,39 @@ action :create do
     subscribes :reload, 'apache2_module[proxy]' unless apache_mod_php_supported?
     subscribes :reload, 'apache2_module[proxy_fcgi]' unless apache_mod_php_supported?
     subscribes :reload, 'apache2_mod_proxy[proxy]' unless apache_mod_php_supported?
-    subscribes :reload, 'apache2_module[ssl]' if node['nagios']['enable_ssl']
+    subscribes :reload, 'apache2_module[ssl]' if settings['enable_ssl']
   end
 
   nagios_configure 'nagios' do
+    settings new_resource.settings
     users new_resource.users
+  end
+end
+
+action :delete do
+  apache2_site settings['server']['vname'] do
+    action :disable
+  end
+
+  file "#{apache_dir}/sites-available/#{settings['server']['vname']}.conf" do
+    action :delete
+  end
+
+  nagios_configure 'nagios' do
+    settings new_resource.settings
+    action :delete
+  end
+
+  nagios_install 'nagios' do
+    settings new_resource.settings
+    action :remove
   end
 end
 
 action_class do
   include NagiosCookbook::Helpers
+
+  def settings
+    new_resource.settings
+  end
 end

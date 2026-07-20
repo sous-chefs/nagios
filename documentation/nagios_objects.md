@@ -4,19 +4,19 @@ Nagios object resources render object definitions through the shared Nagios mode
 
 ## Resources
 
-- `nagios_command`
-- `nagios_contact`
-- `nagios_contactgroup`
-- `nagios_host`
-- `nagios_hostdependency`
-- `nagios_hostescalation`
-- `nagios_hostgroup`
-- `nagios_resource`
-- `nagios_service`
-- `nagios_servicedependency`
-- `nagios_serviceescalation`
-- `nagios_servicegroup`
-- `nagios_timeperiod`
+- [nagios_command](nagios_command.md)
+- [nagios_contact](nagios_contact.md)
+- [nagios_contactgroup](nagios_contactgroup.md)
+- [nagios_host](nagios_host.md)
+- [nagios_hostdependency](nagios_hostdependency.md)
+- [nagios_hostescalation](nagios_hostescalation.md)
+- [nagios_hostgroup](nagios_hostgroup.md)
+- [nagios_resource](nagios_resource.md)
+- [nagios_service](nagios_service.md)
+- [nagios_servicedependency](nagios_servicedependency.md)
+- [nagios_serviceescalation](nagios_serviceescalation.md)
+- [nagios_servicegroup](nagios_servicegroup.md)
+- [nagios_timeperiod](nagios_timeperiod.md)
 
 ## Actions
 

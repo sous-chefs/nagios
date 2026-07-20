@@ -22,7 +22,11 @@ RSpec.describe 'nagios_server' do
   it { is_expected.to create_template('/etc/nagios4/nagios.cfg') }
   it { is_expected.to create_template('/etc/nagios4/cgi.cfg') }
   it { is_expected.to create_template('/etc/nagios4/conf.d/timeperiods.cfg') }
-  it { is_expected.to enable_service('nagios') }
+  it { is_expected.to enable_service('nagios').with(service_name: 'nagios4') }
+
+  it 'does not store resource configuration in node attributes' do
+    expect(chef_run.node['nagios']).to be_nil
+  end
 end
 
 RSpec.describe 'nagios_server with explicit users' do
@@ -52,7 +56,7 @@ RSpec.describe 'nagios_server with explicit users' do
   it 'uses the configured users instead of searching the users data bag' do
     expect(Chef::Search::Query).not_to receive(:new)
 
-    expect(chef_run.node['nagios'].to_hash).not_to include('users')
+    expect(chef_run.node['nagios']).to be_nil
     expect(chef_run.template('/etc/nagios4/htpasswd.users').variables[:nagios_users]).to eq(
       [
         {
@@ -66,4 +70,20 @@ RSpec.describe 'nagios_server with explicit users' do
       ]
     )
   end
+end
+
+RSpec.describe 'nagios_server removal' do
+  step_into :nagios_server, :nagios_apache, :nagios_configure, :nagios_conf, :nagios_install
+  platform 'ubuntu', '24.04'
+
+  recipe do
+    nagios_server 'default' do
+      action :delete
+    end
+  end
+
+  it { is_expected.to disable_apache2_site('nagios4') }
+  it { is_expected.to delete_file('/etc/apache2/sites-available/nagios4.conf') }
+  it { is_expected.to stop_service('nagios4') }
+  it { is_expected.to remove_package(%w(nagios4 nagios-nrpe-plugin nagios-images)) }
 end

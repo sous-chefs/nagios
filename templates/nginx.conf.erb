@@ -9,7 +9,7 @@ server {
   access_log <%= File.join(@log_dir, 'nginx_access.log') %>;
   error_log <%= File.join(@log_dir, 'nginx_error.log') %>;
   root <%= @docroot %>;
-  <% unless node['nagios']['allowed_ips'].empty?  -%>
+  <% unless @settings['allowed_ips'].empty?  -%>
   satisfy  any;
   <%= @allowed_ips.join(";\n") %>;
   deny   all;
@@ -29,7 +29,7 @@ server {
 
 <% if @cgi %>
   location ~ \.cgi$ {
-    root <%= node['nagios']['cgi-bin'] %>;
+    root <%= @settings['cgi-bin'] %>;
     gzip off;
     fastcgi_pass <%= @nginx_dispatch_cgi_url.to_s %>;
     fastcgi_index index.cgi;
@@ -58,7 +58,7 @@ server {
   }
 <% end %>
 
-<% if node['platform_family'] == 'debian' && node['nagios']['server']['install_method'] == 'package'-%>
+<% if node['platform_family'] == 'debian' && @settings['server']['install_method'] == 'package'-%>
   location /stylesheets {
     alias /etc/<%= @server_vname %>/stylesheets;
   }
@@ -70,7 +70,7 @@ server {
 
   location / {
     root <%= @docroot %>;
-    try_files $uri $uri/ index.php /<%= node['nagios']['server']['vname'] %>;
+    try_files $uri $uri/ index.php /<%= @settings['server']['vname'] %>;
   }
 
   location /<%= @server_vname %> {

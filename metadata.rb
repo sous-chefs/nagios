@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 name             'nagios'
 maintainer       'Sous Chefs'
 maintainer_email 'help@sous-chefs.org'

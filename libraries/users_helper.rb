@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'chef/log'
 require 'chef/search/query'
 
@@ -5,8 +7,9 @@ require 'chef/search/query'
 class NagiosUsers
   attr_accessor :users
 
-  def initialize(node, users: nil)
+  def initialize(node, settings:, users: nil)
     @node = node
+    @settings = settings
     @users = []
 
     unless users.nil?
@@ -14,10 +17,10 @@ class NagiosUsers
       return
     end
 
-    user_databag = node['nagios']['users_databag'].to_sym
-    group = node['nagios']['users_databag_group']
+    user_databag = settings['users_databag'].to_sym
+    group = settings['users_databag_group']
 
-    if node['nagios']['server']['use_encrypted_data_bags']
+    if settings['server']['use_encrypted_data_bags']
       load_encrypted_databag(user_databag)
     else
       search_databag(user_databag, group)
