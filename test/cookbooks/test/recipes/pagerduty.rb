@@ -17,6 +17,10 @@ end
 
 nagios_pagerduty 'pagerduty' do
   key 'your_key_here_3eC2'
+  if platform?('fedora')
+    cgi_bin '/usr/lib64/nagios/cgi-bin'
+    command_file '/var/log/nagios/rw/nagios.cmd'
+  end
 end
 
 include_recipe 'test::objects'

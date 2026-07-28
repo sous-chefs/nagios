@@ -15,7 +15,7 @@ property :plugin_dir, String, default: lazy { nagios_plugin_dir }
 property :cgi_bin, String, default: lazy { nagios_cgi_bin }
 property :nagios_user, String, default: 'nagios'
 property :nagios_group, String, default: 'nagios'
-property :command_file, String, default: lazy { "#{nagios_state_dir}/rw/#{nagios_vname}.cmd" }
+property :command_file, String, default: lazy { "#{nagios_state_dir}/rw/nagios.cmd" }
 
 action :create do
   package nagios_pagerduty_packages
