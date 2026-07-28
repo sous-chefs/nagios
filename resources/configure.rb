@@ -3,115 +3,143 @@
 provides :nagios_configure
 unified_mode true
 
+use '_partial/_settings'
+
 property :users, [Array, nil], default: nil
 
 action :create do
-  nagios_install 'nagios'
+  nagios_install 'nagios' do
+    settings new_resource.settings
+  end
 
-  nagios_users = NagiosUsers.new(node, users: new_resource.users)
+  nagios_users = NagiosUsers.new(node, settings: settings, users: new_resource.users)
   if nagios_users.users.empty?
     Chef::Log.fatal('Could not find users in the ' \
-      "\"#{node['nagios']['users_databag']}\"" \
-      "databag with the \"#{node['nagios']['users_databag_group']}\"" \
+      "\"#{settings['users_databag']}\"" \
+      "databag with the \"#{settings['users_databag_group']}\"" \
       ' group. Users must be defined to allow for logins to the UI.')
   end
 
-  if node['nagios']['server_auth_method'] == 'htauth'
-    directory node['nagios']['conf_dir']
+  if settings['server_auth_method'] == 'htauth'
+    directory settings['conf_dir']
 
-    template "#{node['nagios']['conf_dir']}/htpasswd.users" do
-      cookbook node['nagios']['htauth']['template_cookbook']
-      source node['nagios']['htauth']['template_file']
-      owner node['nagios']['user']
-      group node['nagios']['web_group']
+    template "#{settings['conf_dir']}/htpasswd.users" do
+      cookbook settings['htauth']['template_cookbook']
+      source settings['htauth']['template_file']
+      owner settings['user']
+      group settings['web_group']
       mode '0640'
       variables(nagios_users: nagios_users.users)
     end
   end
 
-  Nagios.instance.normalize_hostname = node['nagios']['server']['normalize_hostname']
-  Nagios.instance.host_name_attribute = node['nagios']['host_name_attribute']
+  Nagios.instance.normalize_hostname = settings['server']['normalize_hostname']
+  Nagios.instance.host_name_attribute = settings['host_name_attribute']
 
-  if node['nagios']['server']['load_default_config']
+  if settings['server']['load_default_config']
     nagios_default_config 'default' do
+      settings new_resource.settings
       users new_resource.users
     end
   end
-  nagios_data_bag_config 'default' if node['nagios']['server']['load_databag_config']
+  if settings['server']['load_databag_config']
+    nagios_data_bag_config 'default' do
+      settings new_resource.settings
+    end
+  end
 
-  directory "#{node['nagios']['conf_dir']}/dist" do
-    owner node['nagios']['user']
-    group node['nagios']['group']
+  directory "#{settings['conf_dir']}/dist" do
+    owner settings['user']
+    group settings['group']
     mode '0755'
   end
 
-  directory node['nagios']['state_dir'] do
-    owner node['nagios']['user']
-    group node['nagios']['group']
+  directory settings['state_dir'] do
+    owner settings['user']
+    group settings['group']
     mode '0751'
   end unless platform_family?('rhel', 'fedora')
 
-  directory "#{node['nagios']['state_dir']}/rw" do
-    owner node['nagios']['user']
-    group node['nagios']['web_group']
+  directory "#{settings['state_dir']}/rw" do
+    owner settings['user']
+    group settings['web_group']
     mode '2710'
   end
 
   execute 'archive-default-nagios-object-definitions' do
-    command "mv #{node['nagios']['config_dir']}/*_#{node['nagios']['server']['name']}*.cfg #{node['nagios']['conf_dir']}/dist"
-    not_if { Dir.glob("#{node['nagios']['config_dir']}/*_#{node['nagios']['server']['name']}*.cfg").empty? }
+    command "mv #{settings['config_dir']}/*_#{settings['server']['name']}*.cfg #{settings['conf_dir']}/dist"
+    not_if { Dir.glob("#{settings['config_dir']}/*_#{settings['server']['name']}*.cfg").empty? }
   end
 
-  directory "#{node['nagios']['conf_dir']}/certificates" do
-    owner node['nagios']['web_user']
-    group node['nagios']['web_group']
+  directory "#{settings['conf_dir']}/certificates" do
+    owner settings['web_user']
+    group settings['web_group']
     mode '0700'
   end
 
   execute 'Create SSL Certificates' do
-    cwd "#{node['nagios']['conf_dir']}/certificates"
+    cwd "#{settings['conf_dir']}/certificates"
     command ssl_command
-    not_if { ::File.exist?(node['nagios']['ssl_cert_file']) }
+    not_if { ::File.exist?(settings['ssl_cert_file']) }
   end
 
-  nagios_conf node['nagios']['server']['name'] do
+  nagios_conf settings['server']['name'] do
     config_subdir false
-    cookbook node['nagios']['nagios_config']['template_cookbook']
-    source node['nagios']['nagios_config']['template_file']
-    variables(nagios_config: node['nagios']['conf'])
+    conf_dir settings['conf_dir']
+    config_dir settings['config_dir']
+    cookbook settings['nagios_config']['template_cookbook']
+    source settings['nagios_config']['template_file']
+    owner settings['user']
+    group settings['group']
+    service_name 'nagios'
+    variables(nagios_config: settings['conf'])
   end
 
   nagios_conf 'cgi' do
     config_subdir false
-    cookbook node['nagios']['cgi']['template_cookbook']
-    source node['nagios']['cgi']['template_file']
-    variables(nagios_service_name: nagios_service_name)
+    conf_dir settings['conf_dir']
+    config_dir settings['config_dir']
+    cookbook settings['cgi']['template_cookbook']
+    source settings['cgi']['template_file']
+    owner settings['user']
+    group settings['group']
+    service_name 'nagios'
+    variables(nagios_service_name: nagios_service_name, settings: settings)
   end
 
   if platform_family?('rhel', 'fedora')
-    template "#{node['nagios']['resource_dir']}/resource.cfg" do
-      cookbook node['nagios']['resources']['template_cookbook']
-      source node['nagios']['resources']['template_file']
-      owner node['nagios']['user']
-      group node['nagios']['group']
+    template "#{settings['resource_dir']}/resource.cfg" do
+      cookbook settings['resources']['template_cookbook']
+      source settings['resources']['template_file']
+      owner settings['user']
+      group settings['group']
       mode '0600'
     end
 
-    directory node['nagios']['resource_dir'] do
+    directory settings['resource_dir'] do
       owner 'root'
-      group node['nagios']['group']
+      group settings['group']
       mode '0755'
     end
   end
 
   %w(timeperiods contacts commands hosts hostgroups templates services servicegroups servicedependencies).each do |conf|
-    nagios_conf conf
+    nagios_conf conf do
+      conf_dir settings['conf_dir']
+      config_dir settings['config_dir']
+      owner settings['user']
+      group settings['group']
+      service_name 'nagios'
+      variables(settings: settings)
+    end
   end
+
+  platform_service_name = nagios_service_name
 
   with_run_context(:root) do
     service 'nagios' do
-      service_name nagios_service_name
-      if ::File.exist?("#{nagios_config_dir}/services.cfg")
+      service_name platform_service_name
+      if ::File.exist?("#{settings['config_dir']}/services.cfg")
         action [:enable, :start]
       else
         action :enable
@@ -119,8 +147,37 @@ action :create do
     end
   end
 
-  zap_directory nagios_distro_config_dir do
+  zap_directory distro_config_dir do
     pattern '*.cfg'
+  end
+end
+
+action :delete do
+  service nagios_service_name do
+    action [:stop, :disable]
+    ignore_failure true
+  end
+
+  [
+    "#{settings['conf_dir']}/htpasswd.users",
+    "#{settings['conf_dir']}/#{settings['server']['name']}.cfg",
+    "#{settings['conf_dir']}/cgi.cfg",
+    "#{settings['resource_dir']}/resource.cfg",
+  ].uniq.each do |path|
+    file path do
+      action :delete
+    end
+  end
+
+  %w(timeperiods contacts commands hosts hostgroups templates services servicegroups servicedependencies).each do |conf|
+    nagios_conf conf do
+      conf_dir settings['conf_dir']
+      config_dir settings['config_dir']
+      owner settings['user']
+      group settings['group']
+      service_name 'nagios'
+      action :delete
+    end
   end
 end
 
@@ -128,19 +185,27 @@ action_class do
   include NagiosCookbook::Helpers
   require_relative '../libraries/users_helper'
 
+  def settings
+    new_resource.settings
+  end
+
   def nagios_service_name
-    if platform_family?('debian') && node['nagios']['server']['install_method'] == 'source'
-      node['nagios']['server']['name']
+    if platform_family?('debian') && settings['server']['install_method'] == 'source'
+      settings['server']['name']
     else
-      node['nagios']['server']['service_name']
+      settings['server']['service_name']
     end
+  end
+
+  def distro_config_dir
+    platform_family?('rhel') ? "#{settings['conf_dir']}/objects" : "#{settings['conf_dir']}/dist"
   end
 
   def ssl_command
     <<~EOH
       umask 077
       openssl genrsa 2048 > nagios-server.key
-      openssl req -subj #{node['nagios']['ssl_req']} -new -x509 -nodes -sha1 -days 3650 -key nagios-server.key > nagios-server.crt
+      openssl req -subj #{settings['ssl_req']} -new -x509 -nodes -sha256 -days 3650 -key nagios-server.key > nagios-server.crt
       cat nagios-server.key nagios-server.crt > nagios-server.pem
     EOH
   end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #
 # Author:: Sander Botman <sbotman@schubergphilis.com>
 # Cookbook:: test
@@ -17,7 +19,19 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-nagios_server 'default'
+nagios_server 'default' do
+  config(
+    'conf' => {
+      'host_perfdata_command' => %w(command_a command_b),
+      'query_socket' => nil,
+      'use_syslog' => 0,
+    }
+  )
+  exclude_tag_host %w(foo)
+  host_name_attribute 'custom_host_name_attribute'
+  monitored_environments %w(_default)
+  multi_environment_monitoring true
+end
 
 package 'wget'
 

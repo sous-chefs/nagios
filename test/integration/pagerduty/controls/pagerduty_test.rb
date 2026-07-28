@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 if os.redhat? || os.family == 'fedora'
   command_file      = '/var/log/nagios/rw/nagios.cmd'
   pagerduty_cgi_dir = '/usr/lib64/nagios/cgi-bin'

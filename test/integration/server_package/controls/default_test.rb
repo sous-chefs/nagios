@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 if os.redhat?
   apache_bin      = 'httpd'
   config_cgi_path = 'nagios/cgi-bin/config.cgi'

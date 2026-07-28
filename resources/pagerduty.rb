@@ -3,17 +3,24 @@
 provides :nagios_pagerduty
 unified_mode true
 
+include NagiosCookbook::Helpers
+
 property :key, [String, nil]
 property :script_url, String, default: 'https://raw.github.com/PagerDuty/pagerduty-nagios-pl/master/pagerduty_nagios.pl'
 property :proxy_url, [String, nil]
 property :service_notification_options, String, default: 'w,u,c,r'
 property :host_notification_options, String, default: 'd,r'
 property :contact_data_bag, String, default: 'nagios_pagerduty'
+property :plugin_dir, String, default: lazy { nagios_plugin_dir }
+property :cgi_bin, String, default: lazy { nagios_cgi_bin }
+property :nagios_user, String, default: 'nagios'
+property :nagios_group, String, default: 'nagios'
+property :command_file, String, default: lazy { "#{nagios_state_dir}/rw/nagios.cmd" }
 
 action :create do
   package nagios_pagerduty_packages
 
-  remote_file "#{node['nagios']['plugin_dir']}/notify_pagerduty.pl" do
+  remote_file "#{new_resource.plugin_dir}/notify_pagerduty.pl" do
     owner 'root'
     group 'root'
     mode '0755'
@@ -21,13 +28,13 @@ action :create do
     action :create_if_missing
   end
 
-  template "#{node['nagios']['cgi-bin']}/pagerduty.cgi" do
+  template "#{new_resource.cgi_bin}/pagerduty.cgi" do
     cookbook 'nagios'
     source 'pagerduty.cgi.erb'
-    owner node['nagios']['user']
-    group node['nagios']['group']
+    owner new_resource.nagios_user
+    group new_resource.nagios_group
     mode '0755'
-    variables(command_file: node['nagios']['conf']['command_file'])
+    variables(command_file: new_resource.command_file)
   end
 
   nagios_command 'notify-service-by-pagerduty' do
@@ -71,9 +78,33 @@ action :create do
   end
 
   cron 'Flush Pagerduty' do
-    user node['nagios']['user']
+    user new_resource.nagios_user
     mailto 'root@localhost'
-    command "#{::File.join(node['nagios']['plugin_dir'], 'notify_pagerduty.pl')} flush"
+    command "#{::File.join(new_resource.plugin_dir, 'notify_pagerduty.pl')} flush"
+  end
+end
+
+action :delete do
+  cron 'Flush Pagerduty' do
+    action :delete
+  end
+
+  file "#{new_resource.plugin_dir}/notify_pagerduty.pl" do
+    action :delete
+  end
+
+  file "#{new_resource.cgi_bin}/pagerduty.cgi" do
+    action :delete
+  end
+
+  %w(notify-service-by-pagerduty notify-host-by-pagerduty).each do |command_name|
+    nagios_command command_name do
+      action :delete
+    end
+  end
+
+  nagios_contact 'pagerduty' do
+    action :delete
   end
 end
 
@@ -82,7 +113,7 @@ action_class do
   require_relative '../libraries/data_bag_helper'
 
   def pagerduty_command(object_type)
-    command = ::File.join(node['nagios']['plugin_dir'], 'notify_pagerduty.pl') +
+    command = ::File.join(new_resource.plugin_dir, 'notify_pagerduty.pl') +
               " enqueue -f pd_nagios_object=#{object_type} -f pd_description=\"$HOSTNAME$ : $SERVICEDESC$\""
     new_resource.proxy_url.nil? ? command : "#{command} --proxy #{new_resource.proxy_url}"
   end

@@ -4,7 +4,15 @@ Loads Nagios objects from configured data bags.
 
 ## Actions
 
-- `:create`
+| Action | Description |
+| --- | --- |
+| `:create` | Loads configured data bags into Nagios objects (default). |
+
+## Properties
+
+| Property | Type | Default | Description |
+| --- | --- | --- | --- |
+| `settings` | Hash | required | Server and data bag settings prepared by `nagios_server`; behavior-only property. |
 
 ## Data Bags
 

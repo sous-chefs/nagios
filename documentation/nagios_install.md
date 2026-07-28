@@ -4,7 +4,16 @@ Installs Nagios packages or compiles Nagios Core from source using settings prep
 
 ## Actions
 
-- `:install`
+| Action | Description |
+| --- | --- |
+| `:install` | Installs Nagios from packages or source (default). |
+| `:remove` | Stops Nagios and removes its installation and managed paths. |
+
+## Properties
+
+| Property | Type | Default | Description |
+| --- | --- | --- | --- |
+| `settings` | Hash | required | Installation settings prepared by `nagios_server`; behavior-only property. |
 
 ## Examples
 

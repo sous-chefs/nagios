@@ -119,21 +119,52 @@ property :pagerduty_proxy_url, [String, nil]
 action :create do
   settings = nagios_default_settings(new_resource)
   settings['conf'] = nagios_default_conf(settings)
-  node.default['nagios'] = settings
 
   case settings['server']['web_server']
   when 'apache'
     nagios_apache 'nagios' do
+      settings settings
       users new_resource.users
     end
   when 'nginx'
     nagios_nginx 'nagios' do
+      settings settings
       users new_resource.users
     end
   when 'none'
-    nagios_install 'nagios'
+    nagios_install 'nagios' do
+      settings settings
+    end
     nagios_configure 'nagios' do
+      settings settings
       users new_resource.users
+    end
+  end
+end
+
+action :delete do
+  settings = nagios_default_settings(new_resource)
+  settings['conf'] = nagios_default_conf(settings)
+
+  case settings['server']['web_server']
+  when 'apache'
+    nagios_apache 'nagios' do
+      settings settings
+      action :delete
+    end
+  when 'nginx'
+    nagios_nginx 'nagios' do
+      settings settings
+      action :delete
+    end
+  when 'none'
+    nagios_configure 'nagios' do
+      settings settings
+      action :delete
+    end
+    nagios_install 'nagios' do
+      settings settings
+      action :remove
     end
   end
 end

@@ -114,7 +114,19 @@ The previous `nagios::default`, `nagios::server_package`, `nagios::server_source
 - [nagios_data_bag_config](documentation/nagios_data_bag_config.md)
 - [nagios_pagerduty](documentation/nagios_pagerduty.md)
 - [nagios_conf](documentation/nagios_conf.md)
-- [Nagios object resources](documentation/nagios_objects.md)
+- [nagios_command](documentation/nagios_command.md)
+- [nagios_contact](documentation/nagios_contact.md)
+- [nagios_contactgroup](documentation/nagios_contactgroup.md)
+- [nagios_host](documentation/nagios_host.md)
+- [nagios_hostdependency](documentation/nagios_hostdependency.md)
+- [nagios_hostescalation](documentation/nagios_hostescalation.md)
+- [nagios_hostgroup](documentation/nagios_hostgroup.md)
+- [nagios_resource](documentation/nagios_resource.md)
+- [nagios_service](documentation/nagios_service.md)
+- [nagios_servicedependency](documentation/nagios_servicedependency.md)
+- [nagios_serviceescalation](documentation/nagios_serviceescalation.md)
+- [nagios_servicegroup](documentation/nagios_servicegroup.md)
+- [nagios_timeperiod](documentation/nagios_timeperiod.md)
 
 ## Data Bags
 
@@ -179,7 +191,9 @@ Set the `config` property to enable Nagios notifications:
 ```ruby
 nagios_server 'default' do
   config(
-    'enable_notifications' => 1
+    'conf' => {
+      'enable_notifications' => 1,
+    }
   )
 end
 ```

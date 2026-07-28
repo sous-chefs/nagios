@@ -3,11 +3,11 @@
 provides :nagios_nginx
 unified_mode true
 
+use '_partial/_settings'
+
 property :users, [Array, nil], default: nil
 
 action :create do
-  node.default['nagios']['server']['web_server'] = 'nginx'
-
   nginx_install 'nagios' do
     source platform_family?('rhel') ? 'epel' : 'distro'
     ohai_plugin_enabled false
@@ -40,48 +40,49 @@ action :create do
     service nagios_php_fpm_service
   end
 
-  package nagios_array(node['nagios']['server']['nginx_dispatch']['packages'])
+  package nagios_array(settings['server']['nginx_dispatch']['packages'])
 
-  if nagios_array(node['nagios']['server']['nginx_dispatch']['services']).include?('spawn-fcgi')
+  if nagios_array(settings['server']['nginx_dispatch']['services']).include?('spawn-fcgi')
     template '/etc/sysconfig/spawn-fcgi' do
       cookbook 'nagios'
       source 'spawn-fcgi.erb'
       notifies :start, 'service[spawn-fcgi]', :delayed
-      variables(nginx_user: nagios_nginx_user)
+      variables(nginx_user: nagios_nginx_user, settings: settings)
     end
   end
 
-  nagios_array(node['nagios']['server']['nginx_dispatch']['services']).each do |svc|
+  nagios_array(settings['server']['nginx_dispatch']['services']).each do |svc|
     service svc do
       action [:enable, :start]
     end
   end
 
-  dispatch_type = node['nagios']['server']['nginx_dispatch']['type']
+  dispatch_type = settings['server']['nginx_dispatch']['type']
 
   nginx_site 'nagios' do
     template 'nginx.conf.erb'
     cookbook 'nagios'
     variables(
-      allowed_ips: node['nagios']['allowed_ips'],
+      settings: settings,
+      allowed_ips: settings['allowed_ips'],
       cgi: %w(cgi both).include?(dispatch_type),
       cgi_bin_dir: platform_family?('rhel', 'fedora') ? '/usr/lib64' : '/usr/lib',
       chef_env: node.chef_environment == '_default' ? 'default' : node.chef_environment,
-      docroot: node['nagios']['docroot'],
+      docroot: settings['docroot'],
       fqdn: node['fqdn'],
-      htpasswd_file: ::File.join(node['nagios']['conf_dir'], 'htpasswd.users'),
-      https: node['nagios']['enable_ssl'],
-      listen_port: node['nagios']['http_port'],
-      log_dir: node['nagios']['log_dir'],
-      nagios_url: node['nagios']['url'],
-      nginx_dispatch_cgi_url: node['nagios']['server']['nginx_dispatch']['cgi_url'],
+      htpasswd_file: ::File.join(settings['conf_dir'], 'htpasswd.users'),
+      https: settings['enable_ssl'],
+      listen_port: settings['http_port'],
+      log_dir: settings['log_dir'],
+      nagios_url: settings['url'],
+      nginx_dispatch_cgi_url: settings['server']['nginx_dispatch']['cgi_url'],
       nginx_dispatch_php_url: "unix:#{nagios_php_fpm_socket}",
       php: %w(php both).include?(dispatch_type),
       public_domain: node['public_domain'] || node['domain'],
-      server_name: node['nagios']['server']['name'],
-      server_vname: node['nagios']['server']['vname'],
-      ssl_cert_file: node['nagios']['ssl_cert_file'],
-      ssl_cert_key: node['nagios']['ssl_cert_key']
+      server_name: settings['server']['name'],
+      server_vname: settings['server']['vname'],
+      ssl_cert_file: settings['ssl_cert_file'],
+      ssl_cert_key: settings['ssl_cert_key']
     )
     notifies :reload, 'nginx_service[nagios]', :delayed
     action [:create, :enable]
@@ -92,10 +93,7 @@ action :create do
     delayed_action :start
   end
 
-  node.default['nagios']['web_user'] = nagios_nginx_user
-  node.default['nagios']['web_group'] = nagios_nginx_user
-
-  case node['nagios']['server_auth_method']
+  case settings['server_auth_method']
   when 'openid'
     raise 'OpenID authentication not supported on NGINX'
   when 'cas'
@@ -105,10 +103,42 @@ action :create do
   end
 
   nagios_configure 'nagios' do
+    settings new_resource.settings
     users new_resource.users
+  end
+end
+
+action :delete do
+  nginx_site 'nagios' do
+    action [:disable, :delete]
+  end
+
+  nagios_array(settings['server']['nginx_dispatch']['services']).each do |svc|
+    service svc do
+      action [:stop, :disable]
+      ignore_failure true
+    end
+  end
+
+  file '/etc/sysconfig/spawn-fcgi' do
+    action :delete
+  end
+
+  nagios_configure 'nagios' do
+    settings new_resource.settings
+    action :delete
+  end
+
+  nagios_install 'nagios' do
+    settings new_resource.settings
+    action :remove
   end
 end
 
 action_class do
   include NagiosCookbook::Helpers
+
+  def settings
+    new_resource.settings
+  end
 end

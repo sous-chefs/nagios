@@ -3,15 +3,17 @@
 provides :nagios_default_config
 unified_mode true
 
+use '_partial/_settings'
+
 property :users, [Array, nil], default: nil
 
 action :create do
   Chef::Log.info('Beginning search for nodes. This may take some time depending on node count')
 
-  multi_env = node['nagios']['monitored_environments']
+  multi_env = settings['monitored_environments']
   multi_env_search = multi_env.empty? ? '' : " AND (chef_environment:#{multi_env.join(' OR chef_environment:')})"
 
-  nodes = if node['nagios']['multi_environment_monitoring']
+  nodes = if settings['multi_environment_monitoring']
             search(:node, "name:*#{multi_env_search}")
           else
             search(:node, "name:* AND chef_environment:#{node.chef_environment}")
@@ -24,7 +26,7 @@ action :create do
 
   Nagios.instance.push(node)
 
-  exclude_tag = nagios_array(node['nagios']['exclude_tag_host'])
+  exclude_tag = nagios_array(settings['exclude_tag_host'])
   nodes.each do |monitored_node|
     if monitored_node.respond_to?('tags')
       Nagios.instance.push(monitored_node) unless nagios_array(monitored_node.tags).any? { |tag| exclude_tag.include?(tag) }
@@ -63,19 +65,19 @@ action :create do
   end
 
   nagios_command 'host_notify_by_email' do
-    options 'command_line' => '/usr/bin/printf "%b" "$LONGDATETIME$\n\n$HOSTALIAS$ $NOTIFICATIONTYPE$ $HOSTSTATE$\n\n$HOSTOUTPUT$\n\nLogin: ssh://$HOSTNAME$" | ' + node['nagios']['server']['mail_command'] + ' -s "$NOTIFICATIONTYPE$ - $HOSTALIAS$ $HOSTSTATE$!" $CONTACTEMAIL$'
+    options 'command_line' => '/usr/bin/printf "%b" "$LONGDATETIME$\n\n$HOSTALIAS$ $NOTIFICATIONTYPE$ $HOSTSTATE$\n\n$HOSTOUTPUT$\n\nLogin: ssh://$HOSTNAME$" | ' + settings['server']['mail_command'] + ' -s "$NOTIFICATIONTYPE$ - $HOSTALIAS$ $HOSTSTATE$!" $CONTACTEMAIL$'
   end
 
   nagios_command 'service_notify_by_email' do
-    options 'command_line' => '/usr/bin/printf "%b" "$LONGDATETIME$ - $SERVICEDESC$ $SERVICESTATE$\n\n$HOSTALIAS$  $NOTIFICATIONTYPE$\n\n$SERVICEOUTPUT$\n\nLogin: ssh://$HOSTNAME$" | ' + node['nagios']['server']['mail_command'] + ' -s "** $NOTIFICATIONTYPE$ - $HOSTALIAS$ - $SERVICEDESC$ - $SERVICESTATE$" $CONTACTEMAIL$'
+    options 'command_line' => '/usr/bin/printf "%b" "$LONGDATETIME$ - $SERVICEDESC$ $SERVICESTATE$\n\n$HOSTALIAS$  $NOTIFICATIONTYPE$\n\n$SERVICEOUTPUT$\n\nLogin: ssh://$HOSTNAME$" | ' + settings['server']['mail_command'] + ' -s "** $NOTIFICATIONTYPE$ - $HOSTALIAS$ - $SERVICEDESC$ - $SERVICESTATE$" $CONTACTEMAIL$'
   end
 
   nagios_command 'host_notify_by_sms_email' do
-    options 'command_line' => '/usr/bin/printf "%b" "$HOSTALIAS$ $NOTIFICATIONTYPE$ $HOSTSTATE$\n\n$HOSTOUTPUT$" | ' + node['nagios']['server']['mail_command'] + ' -s "$HOSTALIAS$ $HOSTSTATE$!" $CONTACTPAGER$'
+    options 'command_line' => '/usr/bin/printf "%b" "$HOSTALIAS$ $NOTIFICATIONTYPE$ $HOSTSTATE$\n\n$HOSTOUTPUT$" | ' + settings['server']['mail_command'] + ' -s "$HOSTALIAS$ $HOSTSTATE$!" $CONTACTPAGER$'
   end
 
   nagios_command 'service_notify_by_sms_email' do
-    options 'command_line' => '/usr/bin/printf "%b" "$SERVICEDESC$ $NOTIFICATIONTYPE$ $SERVICESTATE$\n\n$SERVICEOUTPUT$" | ' + node['nagios']['server']['mail_command'] + ' -s "$HOSTALIAS$ $SERVICEDESC$ $SERVICESTATE$!" $CONTACTPAGER$'
+    options 'command_line' => '/usr/bin/printf "%b" "$SERVICEDESC$ $NOTIFICATIONTYPE$ $SERVICESTATE$\n\n$SERVICEOUTPUT$" | ' + settings['server']['mail_command'] + ' -s "$HOSTALIAS$ $SERVICEDESC$ $SERVICESTATE$!" $CONTACTPAGER$'
   end
 
   create_default_contacts
@@ -83,13 +85,17 @@ action :create do
   create_default_services
 
   nagios_resource 'USER1' do
-    options 'value' => node['nagios']['plugin_dir']
+    options 'value' => settings['plugin_dir']
   end
 end
 
 action_class do
   include NagiosCookbook::Helpers
   require_relative '../libraries/users_helper'
+
+  def settings
+    new_resource.settings
+  end
 
   def create_default_contacts
     nagios_contact 'root' do
@@ -123,7 +129,7 @@ action_class do
               'host_notification_commands' => 'host_notify_by_email'
     end
 
-    nagios_users = NagiosUsers.new(node, users: new_resource.users)
+    nagios_users = NagiosUsers.new(node, settings: settings, users: new_resource.users)
     nagios_users.users.each do |item|
       contact = Nagios::Contact.create(item['id'])
       contact.import(item.to_hash)
@@ -147,30 +153,30 @@ action_class do
       options 'name' => 'default-host',
               'notifications_enabled' => 1,
               'event_handler_enabled' => 1,
-              'flap_detection_enabled' => nagios_boolean(node['nagios']['default_host']['flap_detection']),
-              'process_perf_data' => nagios_boolean(node['nagios']['default_host']['process_perf_data']),
+              'flap_detection_enabled' => nagios_boolean(settings['default_host']['flap_detection']),
+              'process_perf_data' => nagios_boolean(settings['default_host']['process_perf_data']),
               'retain_status_information' => 1,
               'retain_nonstatus_information' => 1,
               'notification_period' => '24x7',
               'register' => 0,
-              'action_url' => node['nagios']['default_host']['action_url']
+              'action_url' => settings['default_host']['action_url']
     end
 
     nagios_host 'server' do
       options 'name' => 'server',
               'use' => 'default-host',
-              'check_period' => node['nagios']['default_host']['check_period'],
-              'check_interval' => nagios_interval(node['nagios']['default_host']['check_interval']),
-              'retry_interval' => nagios_interval(node['nagios']['default_host']['retry_interval']),
-              'max_check_attempts' => node['nagios']['default_host']['max_check_attempts'],
-              'check_command' => node['nagios']['default_host']['check_command'],
-              'notification_interval' => nagios_interval(node['nagios']['default_host']['notification_interval']),
-              'notification_options' => node['nagios']['default_host']['notification_options'],
-              'contact_groups' => node['nagios']['default_contact_groups'],
+              'check_period' => settings['default_host']['check_period'],
+              'check_interval' => nagios_interval(settings['default_host']['check_interval'], interval_length),
+              'retry_interval' => nagios_interval(settings['default_host']['retry_interval'], interval_length),
+              'max_check_attempts' => settings['default_host']['max_check_attempts'],
+              'check_command' => settings['default_host']['check_command'],
+              'notification_interval' => nagios_interval(settings['default_host']['notification_interval'], interval_length),
+              'notification_options' => settings['default_host']['notification_options'],
+              'contact_groups' => settings['default_contact_groups'],
               'register' => 0
     end
 
-    Nagios.instance.default_host = node['nagios']['host_template']
+    Nagios.instance.default_host = settings['host_template']
   end
 
   def create_default_services
@@ -183,21 +189,21 @@ action_class do
               'check_freshness' => 0,
               'notifications_enabled' => 1,
               'event_handler_enabled' => 1,
-              'flap_detection_enabled' => nagios_boolean(node['nagios']['default_service']['flap_detection']),
-              'process_perf_data' => nagios_boolean(node['nagios']['default_service']['process_perf_data']),
+              'flap_detection_enabled' => nagios_boolean(settings['default_service']['flap_detection']),
+              'process_perf_data' => nagios_boolean(settings['default_service']['process_perf_data']),
               'retain_status_information' => 1,
               'retain_nonstatus_information' => 1,
               'is_volatile' => 0,
               'check_period' => '24x7',
-              'max_check_attempts' => node['nagios']['default_service']['max_check_attempts'],
-              'check_interval' => nagios_interval(node['nagios']['default_service']['check_interval']),
-              'retry_interval' => nagios_interval(node['nagios']['default_service']['retry_interval']),
-              'contact_groups' => node['nagios']['default_contact_groups'],
+              'max_check_attempts' => settings['default_service']['max_check_attempts'],
+              'check_interval' => nagios_interval(settings['default_service']['check_interval'], interval_length),
+              'retry_interval' => nagios_interval(settings['default_service']['retry_interval'], interval_length),
+              'contact_groups' => settings['default_contact_groups'],
               'notification_options' => 'w,u,c,r',
-              'notification_interval' => nagios_interval(node['nagios']['default_service']['notification_interval']),
+              'notification_interval' => nagios_interval(settings['default_service']['notification_interval'], interval_length),
               'notification_period' => '24x7',
               'register' => 0,
-              'action_url' => node['nagios']['default_service']['action_url']
+              'action_url' => settings['default_service']['action_url']
     end
 
     Nagios.instance.default_service = 'default-service'
@@ -207,9 +213,9 @@ action_class do
               'use' => 'default-service',
               'check_period' => '24x7',
               'max_check_attempts' => 1,
-              'check_interval' => nagios_interval(node['nagios']['default_service']['check_interval']),
-              'retry_interval' => nagios_interval(node['nagios']['default_service']['retry_interval']),
-              'contact_groups' => node['nagios']['default_contact_groups'],
+              'check_interval' => nagios_interval(settings['default_service']['check_interval'], interval_length),
+              'retry_interval' => nagios_interval(settings['default_service']['retry_interval'], interval_length),
+              'contact_groups' => settings['default_contact_groups'],
               'notification_options' => 'w,u,c,r',
               'notification_period' => '24x7',
               'register' => 0,
@@ -218,11 +224,15 @@ action_class do
 
     nagios_service 'service-template' do
       options 'name' => 'service-template',
-              'max_check_attempts' => node['nagios']['default_service']['max_check_attempts'],
-              'check_interval' => nagios_interval(node['nagios']['default_service']['check_interval']),
-              'retry_interval' => nagios_interval(node['nagios']['default_service']['retry_interval']),
-              'notification_interval' => nagios_interval(node['nagios']['default_service']['notification_interval']),
+              'max_check_attempts' => settings['default_service']['max_check_attempts'],
+              'check_interval' => nagios_interval(settings['default_service']['check_interval'], interval_length),
+              'retry_interval' => nagios_interval(settings['default_service']['retry_interval'], interval_length),
+              'notification_interval' => nagios_interval(settings['default_service']['notification_interval'], interval_length),
               'register' => 0
     end
+  end
+
+  def interval_length
+    settings['conf']['interval_length']
   end
 end
