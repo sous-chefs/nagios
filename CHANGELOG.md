@@ -5,6 +5,18 @@ This file is used to list changes made in each version of the nagios cookbook.
 Standardise files with files in sous-chefs/repo-management
 Standardise files with files in sous-chefs/repo-management
 
+## [14.0.0](https://github.com/sous-chefs/nagios/compare/v13.0.2...v14.0.0) (2026-07-28)
+
+
+### ⚠ BREAKING CHANGES
+
+* migrate nagios to custom resources ([#710](https://github.com/sous-chefs/nagios/issues/710))
+
+### Features
+
+* allow explicit Nagios server users with no databag ([#697](https://github.com/sous-chefs/nagios/issues/697)) ([f7660bd](https://github.com/sous-chefs/nagios/commit/f7660bd44e00ae27c2e691933dac5abfac3672c5))
+* migrate nagios to custom resources ([#710](https://github.com/sous-chefs/nagios/issues/710)) ([280b3ec](https://github.com/sous-chefs/nagios/commit/280b3ec4c0fd4bb3cd8c478a73580ec9afe6a502))
+
 ## [13.0.2](https://github.com/sous-chefs/nagios/compare/v13.0.1...v13.0.2) (2026-07-02)
 
 
