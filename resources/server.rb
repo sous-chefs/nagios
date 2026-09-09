@@ -170,5 +170,6 @@ action :delete do
 end
 
 action_class do
+  include Apache2::Cookbook::Helpers
   include NagiosCookbook::Helpers
 end

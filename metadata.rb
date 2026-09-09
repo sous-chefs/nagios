@@ -10,7 +10,7 @@ issues_url       'https://github.com/sous-chefs/nagios/issues'
 source_url       'https://github.com/sous-chefs/nagios'
 chef_version     '>= 15.3'
 
-depends 'apache2', '>= 9.0'
+depends 'apache2', '>= 10.0'
 depends 'nginx', '>= 11.2'
 depends 'php', '>= 10.0'
 depends 'yum-epel'
