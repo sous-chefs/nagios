@@ -34,3 +34,20 @@ nagios_pagerduty 'default' do
   key 'pagerduty-service-key'
 end
 ```
+
+## Notes on current behaviour
+
+- The PagerDuty contact (`pagerduty`, plus any contacts from `contact_data_bag`) is **created as a contact only** — it is **not** automatically added to the admin users group or to any contact group. In older versions the recipe added the PagerDuty user to the admin group; that is no longer the case.
+- To receive notifications, add the contact to a contact group explicitly, for example:
+
+```ruby
+nagios_contactgroup 'admins' do
+  options(
+    'alias' => 'Admins',
+    'members' => 'pagerduty'
+  )
+end
+```
+
+- Contacts loaded from `contact_data_bag` can declare their own groups via a `contactgroups` field in the data bag item; the standalone `key` contact (`pagerduty`) has no group membership unless you add it yourself.
+
